@@ -1,0 +1,37 @@
+
+#'
+#' Compounding Functinos
+#'
+
+Compounding <- (function () {
+    compounded <- 'compounded'
+    attr(compounded, 'compound') <- function (value, term, dib) (1 + value)^(term/dib)
+    attr(compounded, 'implied.rate') <- function (value, term, dib) value^(dib/term) - 1
+    simple <- 'simple'
+    attr(simple, 'compound') <- function (value, term, dib) (1 + value*term/dib)
+    attr(simple, 'implied.rate') <- function (value, term, dib) (value - 1)*(dib/term)
+    continuous <- 'continuous'
+    attr(continuous, 'compound') <- function (value, term, dib) exp(value*term/dib)
+    attr(continuous, 'implied.rate') <- function (value, term, dib) log(value)*(dib/term)
+    list(
+        compounded=compounded,
+        simple=simple,
+        continuous=continuous
+        # compounded=list(
+        #     compounding='compounded',
+        #     compound=function (value, term, dib) (1 + value)^(term/dib),
+        #     implied.rate=function (value, term, dib) value^(dib/term)-1
+        # ),
+        # simple=list(
+        #     compounding='simple',
+        #     compound=function (value, term, dib) (1 + value*term/dib),
+        #     implied.rate=function (value, term, dib) (value - 1)*(dib/term)
+        # ),
+        # continuous=list(
+        #     compounding='continuous',
+        #     compound=function (value, term, dib) exp(value*term/dib),
+        #     implied.rate=function (value, term, dib) log(value)*(dib/term)
+        # )
+    )
+})()
+

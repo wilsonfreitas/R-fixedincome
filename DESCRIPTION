@@ -1,0 +1,20 @@
+Package: fixedincome
+Title: Tools for fixed income mathematics
+Description: fixedincome has a set of funtions which helps with the
+    mathematics of interest rates. It handles the interest rates and compounding
+    factors as objects and provides a bunch of methods to tackle specific issues
+    like compute discount factors, find equivalent rates and forward rates,
+    and so on. It also has a class which represents a term structure of interest
+    rates and a sort of methods to execute simple tasks, like interpolation.
+Version: 0.1.0
+Date: 2013-09-15
+Author: Wilson Freitas <wilson.freitas@gmail.com>
+Maintainer: Wilson Freitas <wilson.freitas@gmail.com>
+License: MIT
+Collate:
+    'CompoundFactor.R'
+    'Compounding.R'
+    'InterestRate.R'
+    'SpotRate.R'
+    'SpotRateCurve.R'
+    'fixedincome-internal.R'
