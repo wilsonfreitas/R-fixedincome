@@ -24,7 +24,7 @@
 		- Natural Spline
 		- Constrained Spline
 
-
+![](interestrateRpackage.gif)
 
 
 		interp.Linear <- function(object, ...) UseMethod('interp.Linear', object)
