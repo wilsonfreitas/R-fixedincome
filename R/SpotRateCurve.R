@@ -38,6 +38,14 @@ forward.rate.SpotRateCurve <- function(curve, from.term, to.term=NULL, forward.t
     as.SpotRate(ir.p, ir.i)
 }
 
+neighbors <- function(object, ...) UseMethod('neighbors', object)
+
+neighbors.default <- function(object, ...)  stop('No default implementation')
+
+neighbors.SpotRateCurve <- function(curve, term) {
+    curve$terms[c(max(which(curve$terms <= term)), min(which(curve$terms >= term)))]
+}
+
 interp.FlatForward <- function(object, ...) UseMethod('interp.FlatForward', object)
 
 interp.FlatForward.default <- function(object, ...)  stop('No default implementation')
