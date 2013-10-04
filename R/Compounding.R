@@ -17,21 +17,6 @@ Compounding <- (function () {
         compounded=compounded,
         simple=simple,
         continuous=continuous
-        # compounded=list(
-        #     compounding='compounded',
-        #     compound=function (value, term, dib) (1 + value)^(term/dib),
-        #     implied.rate=function (value, term, dib) value^(dib/term)-1
-        # ),
-        # simple=list(
-        #     compounding='simple',
-        #     compound=function (value, term, dib) (1 + value*term/dib),
-        #     implied.rate=function (value, term, dib) (value - 1)*(dib/term)
-        # ),
-        # continuous=list(
-        #     compounding='continuous',
-        #     compound=function (value, term, dib) exp(value*term/dib),
-        #     implied.rate=function (value, term, dib) log(value)*(dib/term)
-        # )
     )
 })()
 
