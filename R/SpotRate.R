@@ -16,8 +16,7 @@ SpotRate <- function(value, term, dib=252, compounding='compounded') {
 
 #'
 #' Methods assignments
-#' 
-
+#'
 rate <- function(object, ...) UseMethod('rate', object)
 term <- function(object, ...) UseMethod('term', object)
 dib <- function(object, ...) UseMethod('dib', object)
