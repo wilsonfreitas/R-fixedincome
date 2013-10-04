@@ -28,10 +28,10 @@ length.SpotRateCurve <- function(object) {
     SpotRate(object$interp.FUN(object, term), term)
 }
 
-forward.rate.SpotRateCurve <- function(curve, from.term, to.term=NA, forward.term=1) {
+forward.rate.SpotRateCurve <- function(curve, from.term, to.term=NULL, forward.term=1) {
     if (from.term == 1) return( curve[1] )
     ir.i <- curve$interp.FUN(curve, from.term)
-    if ( !is.na(to.term) )
+    if ( !is.null(to.term) )
         ir.p <- curve$interp.FUN(curve, to.term)
     else
         ir.p <- curve$interp.FUN(curve, from.term+1)
