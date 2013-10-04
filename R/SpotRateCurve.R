@@ -38,6 +38,14 @@ forward.rate.SpotRateCurve <- function(curve, from.term, to.term=NULL, forward.t
     as.SpotRate(ir.p, ir.i)
 }
 
+as.data.frame.SpotRateCurve <- function(curve, ...) {
+    data.frame(terms=curve$terms, rates=curve$rates, list(...))
+}
+
+plot.SpotRateCurve <- function(curve, list(...)) {
+    plot(curve$terms, curve$rates, list(...))
+}
+
 neighbors <- function(object, ...) UseMethod('neighbors', object)
 
 neighbors.default <- function(object, ...)  stop('No default implementation')

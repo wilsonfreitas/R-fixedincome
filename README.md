@@ -14,8 +14,8 @@
 - vectorized operations for SpotRate functions
 - functions to sum a Curve
 - function to shift a curve
-- plot interest rate
-- as.data.frame.SpotRateCurve
+- CHECK plot interest rate
+- CHECK as.data.frame.SpotRateCurve
 - other interpolation methods
 		- Linear
 		- LogLinear
