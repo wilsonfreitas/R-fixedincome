@@ -43,7 +43,11 @@ neighbors <- function(object, ...) UseMethod('neighbors', object)
 neighbors.default <- function(object, ...)  stop('No default implementation')
 
 neighbors.SpotRateCurve <- function(curve, term) {
-    curve$terms[c(max(which(curve$terms <= term)), min(which(curve$terms >= term)))]
+    curve$terms[neighbors.indexes(curve, term)]
+}
+
+neighbors.indexes <- function(curve, term) {
+    c(max(which(curve$terms <= term)), min(which(curve$terms >= term)))
 }
 
 interp.FlatForward <- function(object, ...) UseMethod('interp.FlatForward', object)
@@ -51,19 +55,16 @@ interp.FlatForward <- function(object, ...) UseMethod('interp.FlatForward', obje
 interp.FlatForward.default <- function(object, ...)  stop('No default implementation')
 
 interp.FlatForward.SpotRateCurve <- function(curve, term) {
-    if ( any( idx <- curve$terms == term ) ) {
-        return(curve$rates[idx])
-    } else {
-        idx.u <- min(which(curve$terms > term))
-        idx.d <- max(which(curve$terms < term))
-        ir.u <- SpotRate(curve$rates[idx.u], curve$terms[idx.u])
-        ir.d <- SpotRate(curve$rates[idx.d], curve$terms[idx.d])
-        ir.fwd <- forward.rate(ir.d, ir.u)
-        # use forward rate with new term
-        ir.fwd.adj <- as.SpotRate(ir.fwd, term-term(ir.d))
-        new.cf <- as.CompoundFactor(ir.d) * as.CompoundFactor(ir.fwd.adj)
-        return( rate(as.SpotRate(new.cf)) )
-    }
+    idx <- neighbors.indexes(curve, term)
+    ir.u <- SpotRate(curve$rates[idx[2]], curve$terms[idx[2]])
+    ir.d <- SpotRate(curve$rates[idx[1]], curve$terms[idx[1]])
+    rate(flat.forward.interpolation(ir.d, ir.u, term))
+}
+
+flat.forward.interpolation <- function(ir.d, ir.u, term) {
+    ir.fwd.adj <- as.SpotRate(forward.rate(ir.d, ir.u), term-term(ir.d))
+    new.cf <- as.CompoundFactor(ir.d) * as.CompoundFactor(ir.fwd.adj)
+    as.SpotRate(new.cf)
 }
 
 'insert<-' <- function(object, ...) UseMethod('insert<-', object)
