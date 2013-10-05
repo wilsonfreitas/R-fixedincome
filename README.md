@@ -15,6 +15,7 @@
 - functions to sum a Curve
 - function to shift a curve
 - CHECK plot interest rate
+- plot spot rate curve with interpolated points
 - CHECK as.data.frame.SpotRateCurve
 - other interpolation methods
 	- CHECK Linear
