@@ -13,15 +13,21 @@ SpotRateCurve <- function(rates, terms, interp='FlatForward') {
     return(that)
 }
 
+terms <- function(object, ...) UseMethod('terms', object)
+
 terms.SpotRateCurve <- function(object) object$terms
 
 rates <- function(object, ...) UseMethod('rates', object)
 
 rates.SpotRateCurve <- function(object) object$rates
 
-length.SpotRateCurve <- function(object) {
-	length(object$terms)
-}
+length.SpotRateCurve <- function(object) length(object$terms)
+
+interp <- function(object, ...) UseMethod('interp', object)
+
+interp.default <- function(object, ...)  stop('No default implementation')
+
+interp.SpotRateCurve <- function(curve, term) curve$interp.FUN(curve, term)
 
 '[.SpotRateCurve' <- function(object, term, forward.term=NA, to.term=NA) {
     if ( !is.na(to.term) || !is.na(forward.term) )
