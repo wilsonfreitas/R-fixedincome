@@ -2,12 +2,13 @@
 #' InterestRate Curve
 #' 
 
-SpotRateCurve <- function(rates, terms, interp.FUN=interp.FlatForward) {
+SpotRateCurve <- function(rates, terms, interp='FlatForward') {
     that <- list()
     stopifnot(length(rates) == length(terms))
     that$rates <- rates
     that$terms <- terms
-    that$interp.FUN <- interp.FUN
+    that$interp.method <- interp
+    that$interp.FUN <- eval(parse(text=paste('interp.', interp, sep='')))
     class(that) <- 'SpotRateCurve'
     return(that)
 }
@@ -42,7 +43,7 @@ as.data.frame.SpotRateCurve <- function(curve, ...) {
     data.frame(terms=curve$terms, rates=curve$rates, list(...))
 }
 
-plot.SpotRateCurve <- function(curve, list(...)) {
+plot.SpotRateCurve <- function(curve, ...) {
     plot(curve$terms, curve$rates, list(...))
 }
 
