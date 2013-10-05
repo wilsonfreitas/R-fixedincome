@@ -11,11 +11,7 @@ neighbors.indexes <- function(curve, term) {
     c(max(which(curve$terms <= term)), min(which(curve$terms >= term)))
 }
 
-interp.FlatForward <- function(object, ...) UseMethod('interp.FlatForward', object)
-
-interp.FlatForward.default <- function(object, ...)  stop('No default implementation')
-
-interp.FlatForward.SpotRateCurve <- function(curve, term) {
+interp.FlatForward <- function(curve, term) {
     idx <- neighbors.indexes(curve, term)
     ir.u <- SpotRate(curve$rates[idx[2]], curve$terms[idx[2]])
     ir.d <- SpotRate(curve$rates[idx[1]], curve$terms[idx[1]])
