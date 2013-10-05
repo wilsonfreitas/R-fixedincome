@@ -17,11 +17,11 @@
 - CHECK plot interest rate
 - CHECK as.data.frame.SpotRateCurve
 - other interpolation methods
-	- Linear
+	- CHECK Linear
 	- LogLinear
-	- CubicSpline
-	- Hermite
-	- Natural Spline
+	- CHECK Monotone Cubic Spline (Hyman)
+	- CHECK Hermite
+	- CHECK Natural Spline
 	- Constrained Spline
 
 ![](interestrateRpackage.gif)

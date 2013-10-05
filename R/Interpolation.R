@@ -24,3 +24,18 @@ flat.forward.interpolation <- function(ir.d, ir.u, term) {
     as.SpotRate(new.cf)
 }
 
+interp.Linear <- function(curve, term) {
+    approx(curve$terms, curve$rates, term)$y
+}
+
+interp.Spline <- function(curve, term) {
+    spline(curve$terms, curve$rates, xout=term, method='natural')$y
+}
+
+interp.Hermite <- function(curve, term) {
+    splinefun(curve$terms, curve$rates, method='monoH.FC')(term)
+}
+
+interp.Monotone <- function(curve, term) {
+    splinefun(curve$terms, curve$rates, method='hyman')(term)
+}
