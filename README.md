@@ -3,10 +3,10 @@
 - CHECK create interest rate curve
 - CHECK append rates to an interest rate curve
 - InterestRate class
-    - rate
-    - Compounding
-    - DayCount
-    - Frequency
+	- rate
+	- Compounding
+	- DayCount
+	- Frequency
 - CHECK implement indexes
 - CHECK test curve size
 - CHECK test curve's rates and terms sizes
@@ -17,12 +17,12 @@
 - CHECK plot interest rate
 - CHECK as.data.frame.SpotRateCurve
 - other interpolation methods
-		- Linear
-		- LogLinear
-		- CubicSpline
-		- Hermite
-		- Natural Spline
-		- Constrained Spline
+	- Linear
+	- LogLinear
+	- CubicSpline
+	- Hermite
+	- Natural Spline
+	- Constrained Spline
 
 ![](interestrateRpackage.gif)
 
