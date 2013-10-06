@@ -5,10 +5,12 @@
 SpotRateCurve <- function(rates, terms, interp='FlatForward') {
     that <- list()
     stopifnot(length(rates) == length(terms))
+    stopifnot(length(rates) > 2)
     that$rates <- rates
     that$terms <- terms
     that$interp.method <- interp
     that$interp.FUN <- eval(parse(text=paste('interp.', interp, sep='')))
+    that$interp.FUN2 <- eval(parse(text=paste('interp.', interp, '.prepare', sep='')))(that)
     class(that) <- 'SpotRateCurve'
     return(that)
 }

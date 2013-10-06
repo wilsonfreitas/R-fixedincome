@@ -24,6 +24,7 @@
 	- CHECK Hermite
 	- CHECK Natural Spline
 	- Constrained Spline
+- Figure out a way of defining flat curve
 
 ![](interestrateRpackage.gif)
 
