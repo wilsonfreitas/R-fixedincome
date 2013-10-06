@@ -2,7 +2,7 @@
 context('SpotRateCurve calculations')
 
 test_that("it should create an interest rate curve", {
-    curve <- SpotRateCurve(rep(1, 10), numeric(10))
+    curve <- SpotRateCurve(numeric(10), 1:10, interp='Linear')
     expect_is( curve, "SpotRateCurve" )
 })
 
