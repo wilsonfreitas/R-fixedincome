@@ -19,7 +19,7 @@
 - CHECK as.data.frame.SpotRateCurve
 - other interpolation methods
 	- CHECK Linear
-	- LogLinear
+	- CHECK LogLinear
 	- CHECK Monotone Cubic Spline (Hyman)
 	- CHECK Hermite
 	- CHECK Natural Spline

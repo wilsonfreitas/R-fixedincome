@@ -55,3 +55,13 @@ test_that("it should interpolate the interest rate curve using Monotone Preservi
     expect_equal( interp(curve, 21), 0.9977778, tolerance=1e-6 )
     expect_equal( interp(curve, 40), 0.9957667, tolerance=1e-6 )
 })
+
+test_that("it should interpolate the interest rate curve using Log-Linear interpolation", {
+    curve <- SpotRateCurve(
+        rates=seq(1, 0.98, length.out=10),
+        terms=c(1, seq(21, by=21, length.out=9)),
+        interp='LogLinear'
+    )
+    expect_equal( interp(curve, 21), 0.9977778, tolerance=1e-6 )
+    expect_equal( interp(curve, 40), 0.9957118, tolerance=1e-6 )
+})

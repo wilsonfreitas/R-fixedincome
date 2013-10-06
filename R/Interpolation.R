@@ -46,6 +46,15 @@ interp.Linear.prepare <- function(curve) {
     approxfun(interp.coords, method='linear')
 }
 
+interp.LogLinear <- function(curve, term) {
+    exp(curve$interp.FUN2(log(term)))
+}
+
+interp.LogLinear.prepare <- function(curve) {
+    interp.coords <- xy.coords(log(curve$terms), log(curve$rates))
+    approxfun(interp.coords, method='linear')
+}
+
 interp.Spline <- function(curve, term) {
     curve$interp.FUN2(term)
 }
