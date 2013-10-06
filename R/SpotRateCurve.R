@@ -32,20 +32,18 @@ interp.default <- function(object, ...)  stop('No default implementation')
 
 interp.SpotRateCurve <- function(curve, term) curve$interp.FUN(curve, term)
 
-'[.SpotRateCurve' <- function(object, term, forward.term=NA, to.term=NA) {
-    if ( !is.na(to.term) || !is.na(forward.term) )
-        return( forward.rate(object, term, to.term, forward.term) )
+'[.SpotRateCurve' <- function(object, term, forward.term=NULL, to.term=NULL) {
+    if ( !is.null(to.term) || !is.null(forward.term) )
+        return( forward.rate(object, term, forward.term, to.term) )
     SpotRate(object$interp.FUN(object, term), term, dib=object$dib)
 }
 
-forward.rate.SpotRateCurve <- function(curve, from.term, to.term=NULL, forward.term=1) {
-    if (from.term == 1) return( curve[1] )
-    ir.i <- curve$interp.FUN(curve, from.term)
-    if ( !is.null(to.term) )
-        ir.p <- curve$interp.FUN(curve, to.term)
-    else
-        ir.p <- curve$interp.FUN(curve, from.term+1)
-    as.SpotRate(ir.p, ir.i)
+forward.rate.SpotRateCurve <- function(curve, from.term, forward.term=1, to.term=NULL) {
+    ir.i <- SpotRate(curve$interp.FUN(curve, from.term), from.term)
+    if ( is.null(to.term) )
+        to.term <- from.term + forward.term
+    ir.p <- SpotRate(curve$interp.FUN(curve, to.term), to.term)
+    forward.rate(ir.i, ir.p)
 }
 
 as.data.frame.SpotRateCurve <- function(curve, ...) {
