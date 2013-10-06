@@ -12,15 +12,15 @@ neighbors.indexes <- function(curve, term) {
 }
 
 interp.FlatForward <- function(curve, term) {
-    log.PU <- curve$interp.FUN2(log(term/252))
+    log.PU <- curve$interp.FUN2(log(term/curve$dib))
     PU <- exp(log.PU)
-    r <- PU^(252/term) - 1
+    r <- PU^(curve$dib/term) - 1
     r
 }
 
 interp.FlatForward.prepare <- function(curve) {
-    pus <- (1 + curve$rates)^(curve$terms/252)
-    interp.coords <- xy.coords(log(curve$terms/252), log(pus))
+    pus <- (1 + curve$rates)^(curve$terms/curve$dib)
+    interp.coords <- xy.coords(log(curve$terms/curve$dib), log(pus))
     approxfun(interp.coords, method='linear')
 }
 
