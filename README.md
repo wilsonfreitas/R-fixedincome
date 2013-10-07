@@ -25,6 +25,8 @@
 	- CHECK Natural Spline
 	- Constrained Spline
 - Figure out a way of defining flat curve
+- length method for SpotRateCurve
+- indexation `[<-` should allow updating
 
 ![](interestrateRpackage.gif)
 
@@ -52,3 +54,16 @@
 
 
 
+## Group Methods - Math
+
+In fact most of R’s mathematical functions would require an
+almost identical deﬁnition. Fortunately, there is a short-hand
+way of deﬁning all the methods with one function deﬁnition.
+
+	Math.vcoords = function(x)
+		vcoords(xcoords(x),
+		ycoords(x),
+		get(.Generic)(values(x)))
+
+The expression get(.Generic) gets the function with the
+name that Math.vcoords was invoked under.
