@@ -21,4 +21,4 @@ rates <- rates[seq(2, length(rates), 2)]/100
 
 # cbind(terms, rates)
 crv <- as.SpotRateCurve(cbind(terms, rates))
-plot(crv)
+plot(crv, type='l')

@@ -61,7 +61,7 @@ forward.rate.SpotRateCurve <- function(curve, from.term, forward.term=1, to.term
 }
 
 plot.SpotRateCurve <- function(curve, ...) {
-    plot(curve$terms, curve$rates)
+    plot(curve$terms, curve$rates, ...)
 }
 
 'insert<-' <- function(object, ...) UseMethod('insert<-', object)
