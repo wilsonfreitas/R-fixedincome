@@ -16,6 +16,20 @@ SpotRateCurve <- function(rates, terms, interp='FlatForward', dib=252) {
     return(that)
 }
 
+as.SpotRateCurve <- function(object, ...) UseMethod('as.SpotRateCurve', object)
+
+as.SpotRateCurve.data.frame <- function(df, ...) {
+    SpotRateCurve(terms=df$terms, rates=df$rates)
+}
+
+as.SpotRateCurve.matrix <- function(df, ...) {
+    SpotRateCurve(terms=df[,'terms'], rates=df[,'rates'])
+}
+
+as.data.frame.SpotRateCurve <- function(curve, ...) {
+    data.frame(terms=curve$terms, rates=curve$rates, list(...))
+}
+
 terms <- function(object, ...) UseMethod('terms', object)
 
 terms.SpotRateCurve <- function(object) object$terms
@@ -46,12 +60,8 @@ forward.rate.SpotRateCurve <- function(curve, from.term, forward.term=1, to.term
     forward.rate(ir.i, ir.p)
 }
 
-as.data.frame.SpotRateCurve <- function(curve, ...) {
-    data.frame(terms=curve$terms, rates=curve$rates, list(...))
-}
-
 plot.SpotRateCurve <- function(curve, ...) {
-    plot(curve$terms, curve$rates, list(...))
+    plot(curve$terms, curve$rates)
 }
 
 'insert<-' <- function(object, ...) UseMethod('insert<-', object)
