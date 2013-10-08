@@ -19,3 +19,4 @@ Collate:
     'SpotRate.R'
     'SpotRateCurve.R'
     'fixedincome-internal.R'
+    'Interpolation.R'
