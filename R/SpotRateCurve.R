@@ -1,7 +1,19 @@
-#'
-#' InterestRate Curve
+#' Creates a SpotRateCurve
 #' 
-
+#' SpotRateCurve abstracts a term structure class providing methods to operate 
+#' on the term structure.
+#'
+#' @param rates a vector with the interest rates
+#' @param terms a vector with the terms
+#' @param interp defines which interpolation method to use: Linear, 
+#' FlatForward, LogLinear, 
+#' @export
+#' @examples
+#' # holidays has iso-formated dates
+#' data(holidaysANBIMA)
+#' cal <- Calendar(holidaysANBIMA)
+#' # For empty calendar just pass nothing
+#' cal <- Calendar()
 SpotRateCurve <- function(rates, terms, interp='FlatForward', dib=252) {
     that <- list()
     stopifnot(length(rates) == length(terms))
