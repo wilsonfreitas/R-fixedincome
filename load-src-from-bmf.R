@@ -14,11 +14,13 @@ num <- sapply(num, function(x) {
     as.numeric(gsub(',', '.', x))
 }, USE.NAMES=FALSE)
 
-terms <- seq(1, length(num), 3)
-idx.r <- ! (seq(1, length(num)) %in% terms)
+idx.t <- seq(1, length(num), 3)
+terms <- num[idx.t]
+idx.r <- ! (seq(1, length(num)) %in% idx.t)
 rates <- num[idx.r]
 rates <- rates[seq(2, length(rates), 2)]/100
 
 # cbind(terms, rates)
 crv <- as.SpotRateCurve(cbind(terms, rates))
 plot(crv, type='l')
+
