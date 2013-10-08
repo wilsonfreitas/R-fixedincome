@@ -12,7 +12,7 @@ neighbors.indexes <- function(curve, term) {
 }
 
 interp.FlatForward <- function(curve, term) {
-    log.PU <- curve$interp.FUN2(log(term/curve$dib))
+    log.PU <- curve$interp.FUN2(term/curve$dib)
     PU <- exp(log.PU)
     r <- PU^(curve$dib/term) - 1
     r
@@ -20,22 +20,9 @@ interp.FlatForward <- function(curve, term) {
 
 interp.FlatForward.prepare <- function(curve) {
     pus <- (1 + curve$rates)^(curve$terms/curve$dib)
-    interp.coords <- xy.coords(log(curve$terms/curve$dib), log(pus))
+    interp.coords <- xy.coords(curve$terms/curve$dib, log(pus))
     approxfun(interp.coords, method='linear')
 }
-
-# interp.FlatForward <- function(curve, term) {
-#     idx <- neighbors.indexes(curve, term)
-#     ir.u <- SpotRate(curve$rates[idx[2]], curve$terms[idx[2]])
-#     ir.d <- SpotRate(curve$rates[idx[1]], curve$terms[idx[1]])
-#     rate(flat.forward.interpolation(ir.d, ir.u, term))
-# }
-# 
-# flat.forward.interpolation <- function(ir.d, ir.u, term) {
-#     ir.fwd.adj <- as.SpotRate(forward.rate(ir.d, ir.u), term-term(ir.d))
-#     new.cf <- as.CompoundFactor(ir.d) * as.CompoundFactor(ir.fwd.adj)
-#     as.SpotRate(new.cf)
-# }
 
 interp.Linear <- function(curve, term) {
     curve$interp.FUN2(term)
