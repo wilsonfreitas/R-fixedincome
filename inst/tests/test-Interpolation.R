@@ -63,5 +63,5 @@ test_that("it should interpolate the interest rate curve using Log-Linear interp
         interp='LogLinear'
     )
     expect_equal( interp(curve, 21), 0.9977778, tolerance=1e-6 )
-    expect_equal( interp(curve, 40), 0.9957118, tolerance=1e-6 )
+    expect_equal( interp(curve, 40), 0.995767, tolerance=1e-6 )
 })
