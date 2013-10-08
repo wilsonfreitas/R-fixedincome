@@ -34,11 +34,11 @@ interp.Linear.prepare <- function(curve) {
 }
 
 interp.LogLinear <- function(curve, term) {
-    exp(curve$interp.FUN2(log(term)))
+    exp(curve$interp.FUN2(term))
 }
 
 interp.LogLinear.prepare <- function(curve) {
-    interp.coords <- xy.coords(log(curve$terms), log(curve$rates))
+    interp.coords <- xy.coords(curve$terms, log(curve$rates))
     approxfun(interp.coords, method='linear')
 }
 
