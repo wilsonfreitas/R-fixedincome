@@ -5,6 +5,9 @@
   CompoundFactor(value, term)
 }
 \description{
-  CompoundFactor
+  [Blah]
+}
+\details{
+  [Bleh]
 }
 

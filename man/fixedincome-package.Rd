@@ -1,42 +1,26 @@
-\name{fixedincome-package}
-\alias{fixedincome-package}
-\alias{fixedincome}
 \docType{package}
-\title{
-What the package does (short line)
-~~ package title ~~
-}
+\name{fixedincome-package}
+\alias{fixedincome}
+\alias{fixedincome-package}
+\title{Tools for fixed income calculations}
 \description{
-More about what it does (maybe more than one line)
-~~ A concise (1-5 lines) description of the package ~~
+  Tools for calculations on fixed income, term structure
+  and interest rate.
 }
 \details{
-\tabular{ll}{
-Package: \tab fixedincome\cr
-Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2013-09-14\cr
-License: \tab What license is it under?\cr
-}
-~~ An overview of how to use the package, including the most important ~~
-~~ functions ~~
+  \code{fixedincome} brings a rich set of tools to make the
+  life of any fixed income analyst less miserable. Fixed
+  income calculations have many specific rules which deal
+  with subjects ranging from compounding regimes to
+  business days rules to compute the amount of non-working
+  days between maturities.
 }
 \author{
-Who wrote it
-
-Maintainer: Who to complain to <yourfault@somewhere.net>
-~~ The author and/or maintainer of the package ~~
+  Wilson Freitas \email{wilson.freitas@gmail.com}
 }
 \references{
-~~ Literature or other references for background information ~~
+  Frank Fabozzi. Fixed Income Mathematics, Wiley, 1994.
+
+  Bruce Tuckman. Fixed Income Securities, Wiley, 1994.
 }
-~~ Optionally other standard keywords, one per line, from file KEYWORDS in ~~
-~~ the R documentation directory ~~
-\keyword{ package }
-\seealso{
-~~ Optional links to other man pages, e.g. ~~
-~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
-}
-\examples{
-~~ simple examples of the most important functions ~~
-}
+

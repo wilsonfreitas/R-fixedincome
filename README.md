@@ -29,6 +29,14 @@
 - indexation `[<-` should allow updating
 - `interp` function should accept a parameter `method` to define the interpolation method to use, if it is `NULL` the curve's default is used.
 
+
+#### try
+
+		as.SpotRateCurve.data.frame <- function(df, ...) {
+		    SpotRateCurve(terms=df$terms, rates=df$rates, ...)
+		}
+
+
 ![](interestrateRpackage.gif)
 
 

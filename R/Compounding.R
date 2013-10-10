@@ -1,8 +1,4 @@
 
-#'
-#' Compounding Functinos
-#'
-
 Compounding <- (function () {
     compounded <- 'compounded'
     attr(compounded, 'compound') <- function (value, term, dib) (1 + value)^(term/dib)
