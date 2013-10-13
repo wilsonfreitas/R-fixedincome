@@ -1,15 +1,32 @@
 
+#' neighbors
+#' 
+#' Neighbors for a given term
+#' 
+#' @export
 neighbors <- function(object, ...) UseMethod('neighbors', object)
 
-neighbors.default <- function(object, ...)  stop('No default implementation')
-
+#' @S3method neighbors SpotRateCurve
 neighbors.SpotRateCurve <- function(curve, term) {
     curve$terms[neighbors.indexes(curve, term)]
 }
 
+# return the neighbors indexes in a SpotRateCurve
 neighbors.indexes <- function(curve, term) {
     c(max(which(curve$terms <= term)), min(which(curve$terms >= term)))
 }
+
+#' interp
+#' 
+#' Interpolate curves
+#' 
+#' @export
+interp <- function(object, ...) UseMethod('interp', object)
+
+#' @rdname interp
+#' @method interp SpotRateCurve
+#' @S3method interp SpotRateCurve
+interp.SpotRateCurve <- function(curve, term) curve$interp.FUN(curve, term)
 
 interp.FlatForward <- function(curve, term) {
     log.PU <- curve$interp.FUN2(term/curve$dib)

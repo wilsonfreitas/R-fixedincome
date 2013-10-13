@@ -28,6 +28,8 @@
 - length method for SpotRateCurve
 - indexation `[<-` should allow updating
 - `interp` function should accept a parameter `method` to define the interpolation method to use, if it is `NULL` the curve's default is used.
+- The SpotRateCurve should have the same parameters as SpotRate
+- The SpotRateCurve `insert` should check if the SpotRate's parameters are compatible with SpotRateCurve's parameters (parameters like `dib` and `compounding`)
 
 
 #### try

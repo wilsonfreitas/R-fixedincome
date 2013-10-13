@@ -1,4 +1,22 @@
 
+#' @title compounding
+#' 
+#' @description
+#' Compounding
+#' 
+#' @export compounding
+compounding <- function(object, ...) UseMethod('compounding', object)
+
+#' @rdname compounding
+#' @method compounding SpotRate
+#' @S3method compounding SpotRate
+compounding.SpotRate <- function (object) object$compounding
+
+#' @rdname compounding
+#' @method compounding SpotRateCurve
+#' @S3method compounding SpotRateCurve
+compounding.SpotRateCurve <- function (object) object$compounding
+
 Compounding <- (function () {
     compounded <- 'compounded'
     attr(compounded, 'compound') <- function (value, term, dib) (1 + value)^(term/dib)

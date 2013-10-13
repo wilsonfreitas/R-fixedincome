@@ -14,14 +14,27 @@
   Linear, FlatForward, LogLinear, Hermite Cubic Spline,
   Monotone Cubic Spline, Natural Cubi Spline}
 }
+\value{
+  SpotRateCurve object.
+}
 \description{
   SpotRateCurve abstracts a term structure class providing
-  methods to operate on the term structure internals
-  executing calculations on its interest rates. Actually,
-  the class SpotRateCurve represents a zero curve and for a
-  given interpolation method (\code{interp} parameter),
-  users can get zero interest rates for any day into the
-  range deimited by its terms.
+  methods to operate on the term structure internals.
+}
+\details{
+  Actually, the class SpotRateCurve represents a zero
+  curve. A zero curve is a set of \code{rates} indexed by
+  \code{terms}. Each pair (rate,term) is a spot rate
+  (\code{\link{SpotRate}}) and it defines the cost of a
+  loan maturing in the term. Once a SpotRateCurve is
+  created, any rate can be retrieved by its term through
+  the index operator (\code{`[`}) which returns a
+  \code{\link{SpotRate}}. For those terms which don't have
+  a corresponding rate, the interpolation method is used to
+  generate a rate. The parameter \code{interp} specifies
+  the interpolation method to use. Since the operator
+  \code{`[`} returns a SpotRate the \code{dib} must be
+  provided to generate spot rates accordingly.
 }
 \examples{
 # Creating a zero curve

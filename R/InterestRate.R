@@ -1,3 +1,10 @@
+
+#' @title InterestRate
+#' 
+#' @description
+#' InterestRate class
+#' 
+#' @export
 InterestRate <- function(value, daycount='business/252', compounding='compounded', frequency='annual') {
     that <- list()
     that$value <- value

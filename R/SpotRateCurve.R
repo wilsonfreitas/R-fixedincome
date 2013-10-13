@@ -1,16 +1,26 @@
 #' Creates a SpotRateCurve
 #' 
 #' SpotRateCurve abstracts a term structure class providing methods to operate 
-#' on the term structure internals executing calculations on its interest rates.
-#' Actually, the class SpotRateCurve represents a zero curve and for a given 
-#' interpolation method (\code{interp} parameter), users can get zero interest 
-#' rates for any day into the range deimited by its terms.
+#' on the term structure internals.
+#' 
+#' Actually, the class SpotRateCurve represents a zero curve.
+#' A zero curve is a set of \code{rates} indexed by \code{terms}.
+#' Each pair (rate,term) is a spot rate (\code{\link{SpotRate}}) and
+#' it defines the cost of a loan maturing in the term.
+#' Once a SpotRateCurve is created, any rate can be retrieved by its term 
+#' through the index operator (\code{`[`}) which returns a \code{\link{SpotRate}}.
+#' For those terms which don't have a corresponding rate, the interpolation 
+#' method is used to generate a rate.
+#' The parameter \code{interp} specifies the interpolation method to use.
+#' Since the operator \code{`[`} returns a SpotRate the \code{dib} must be
+#' provided to generate spot rates accordingly.
 #'
 #' @param rates a vector with the interest rates
 #' @param terms a vector with the terms
 #' @param interp defines which interpolation method to use: 
 #' Linear, FlatForward, LogLinear, Hermite Cubic Spline, Monotone Cubic Spline,
 #' Natural Cubi Spline
+#' @return SpotRateCurve object.
 #' @export
 #' @examples
 #' # Creating a zero curve 
@@ -31,73 +41,81 @@ SpotRateCurve <- function(rates, terms, interp='FlatForward', dib=252) {
     return(that)
 }
 
-#' @export
+#' Coerce objects to SpotRateCurve
+#' 
+#' A SpotRateCurve can be coerced from \code{matrix} and \code{data.frame}.
+#'
+#' @param object should be a \code{matrix} or a \code{data.frame}
+#' @param ... other SpotRateCurve's parameters
+#' @return SpotRateCurve object
+#' @rdname as.SpotRateCurve
+#' @export as.SpotRateCurve
 as.SpotRateCurve <- function(object, ...) UseMethod('as.SpotRateCurve', object)
 
-#' @export
-as.SpotRateCurve.data.frame <- function(df, ...) {
-    SpotRateCurve(terms=df$terms, rates=df$rates)
+#' @return SpotRateCurve object
+#' 
+#' @rdname as.SpotRateCurve
+#' @method as.SpotRateCurve data.frame
+#' @S3method as.SpotRateCurve data.frame
+#' @examples
+#' # creating a SpotRateCurve from a data.frame
+#' df <- data.frame(rates=c(0.08, 0.083, 0.089, 0.093, 0.095), terms=c(0.5, 1, 1.5, 2, 2.5))
+#' curve <- as.SpotRateCurve(df, interp='Linear', dib=360)
+as.SpotRateCurve.data.frame <- function(object, ...) {
+    SpotRateCurve(rates=object[,1], terms=object[,2], ...)
 }
 
-#' @export
-as.SpotRateCurve.matrix <- function(df, ...) {
-    SpotRateCurve(terms=df[,'terms'], rates=df[,'rates'])
+#' @return SpotRateCurve object
+#' 
+#' @rdname as.SpotRateCurve
+#' @method as.SpotRateCurve data.frame
+#' @S3method as.SpotRateCurve data.frame
+#' @examples
+#' # creating a SpotRateCurve from a matrix
+#' mat <- cbind(c(0.08, 0.083, 0.089, 0.093, 0.095), c(0.5, 1, 1.5, 2, 2.5))
+#' curve <- as.SpotRateCurve(mat, interp='Spline', dib=365)
+as.SpotRateCurve.matrix <- function(object, ...) {
+    SpotRateCurve(rates=object[,1], terms=object[,2], ...)
 }
 
-#' @export
+#' @S3method as.data.frame SpotRateCurve
 as.data.frame.SpotRateCurve <- function(curve, ...) {
     data.frame(terms=curve$terms, rates=curve$rates, list(...))
 }
 
-#' @export
-terms <- function(object, ...) UseMethod('terms', object)
-
-#' @export
-terms.SpotRateCurve <- function(object) object$terms
-
-#' @export
-rates <- function(object, ...) UseMethod('rates', object)
-
-#' @export
-rates.SpotRateCurve <- function(object) object$rates
-
-#' @export
+#' @S3method length SpotRateCurve
 length.SpotRateCurve <- function(object) length(object$terms)
 
-#' @export
-interp <- function(object, ...) UseMethod('interp', object)
-
-#' @export
-interp.default <- function(object, ...)  stop('No default implementation')
-
-#' @export
-interp.SpotRateCurve <- function(curve, term) curve$interp.FUN(curve, term)
-
-#' @export
+#' @S3method plot SpotRateCurve
 '[.SpotRateCurve' <- function(object, term, forward.term=NULL, to.term=NULL) {
     if ( !is.null(to.term) || !is.null(forward.term) )
         return( forward.rate(object, term, forward.term, to.term) )
     SpotRate(object$interp.FUN(object, term), term, dib=object$dib)
 }
 
-#' @export
-forward.rate.SpotRateCurve <- function(curve, from.term, forward.term=1, to.term=NULL) {
-    ir.i <- SpotRate(curve$interp.FUN(curve, from.term), from.term)
-    if ( is.null(to.term) )
-        to.term <- from.term + forward.term
-    ir.p <- SpotRate(curve$interp.FUN(curve, to.term), to.term)
-    forward.rate(ir.i, ir.p)
-}
-
-#' @export
+#' @S3method plot SpotRateCurve
 plot.SpotRateCurve <- function(curve, ...) {
     plot(curve$terms, curve$rates, ...)
 }
 
+#' Insert a SpotRate into the SpotRate.
+#'
+#' A SpotRateCurve can be expanded by inserting other SpotRate objects into it.
+#'
+#' @rdname insert
 #' @export
 'insert<-' <- function(object, ...) UseMethod('insert<-', object)
 
-#' @export
+#' @rdname insert
+#' @method insert<- SpotRateCurve
+#' @S3method insert<- SpotRateCurve
+#' @param object SpotRateCurve on which the SpotRate has to be inserted
+#' @param value SpotRate to be inserted
+#' @examples
+#' # creating a SpotRateCurve from a matrix
+#' mat <- cbind(c(0.08, 0.083, 0.089, 0.093, 0.095), c(0.5, 1, 1.5, 2, 2.5))
+#' curve <- as.SpotRateCurve(mat, interp='Spline', dib=365)
+#' insert(curve) <- SpotRate(0.085, 1.25, dib=365)
 'insert<-.SpotRateCurve' <- function(object, value) {
     object$terms <- append(object$terms, value$term)
     object$rates <- append(object$rates, value$value)

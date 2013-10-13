@@ -1,4 +1,6 @@
 
+#' Create a SpotRate object.
+#' 
 #' Creates a spot rate that is an interest rate related to a specific term.
 #' It can be interpreted as the interest amount asked to for investments 
 #' maturing at the term.
@@ -26,90 +28,43 @@ SpotRate <- function(value, term, dib=252, compounding='compounded') {
     return(that)
 }
 
-#' @export
-rate <- function(object, ...) UseMethod('rate', object)
-
-#' @export
-term <- function(object, ...) UseMethod('term', object)
-
-#' @export
-dib <- function(object, ...) UseMethod('dib', object)
-
-#' @export
-compounding <- function(object, ...) UseMethod('compounding', object)
-
-#' @export
-forward.rate <- function(object, ...) UseMethod('forward.rate', object)
-
-#' @export
-as.SpotRate <- function(object, ...) UseMethod('as.SpotRate', object)
-
-#' @export
-as.CompoundFactor <- function(object, ...) UseMethod('as.CompoundFactor', object)
-
-#' @export
-compound.factor <- function(object, ...) UseMethod('compound.factor', object)
-
-#' @export
-compound <- function(object, ...) UseMethod('compound', object)
-
-#' @export
-discount <- function(object, ...) UseMethod('discount', object)
-
+#' is.SpotRate
+#' 
+#' Checks if is a SpotRate
+#' 
 #' @export
 is.SpotRate <- function(object) class(object) == 'SpotRate'
 
+#' as.SpotRate
+#' 
+#' Coerces to a SpotRate
+#' 
 #' @export
-rate.SpotRate <- function (object) object$value
+as.SpotRate <- function(object, ...) UseMethod('as.SpotRate', object)
 
-#' @export
-term.SpotRate <- function (object) object$term
-
-#' @export
-dib.SpotRate <- function (object) object$dib
-
-#' @export
-compounding.SpotRate <- function (object) object$compounding
-
-#' @export
-forward.rate.default <- function (object, ...) stop('No default implementation')
-
-#' @export
-forward.rate.SpotRate <- function (object, other) {
-    if (object$term > other$term)
-        stop('First parameter must have the smaller term.')
-    fact.1 <- as.CompoundFactor(object)
-    fact.2 <- as.CompoundFactor(other)
-    as.SpotRate(fact.2/fact.1)
-}
-
-#' @export
-as.SpotRate.default <- function(object, ...) stop('No default implementation')
-
-#' @export
+#' @rdname as.SpotRate
+#' @method as.SpotRate SpotRate
+#' @S3method as.SpotRate SpotRate
 as.SpotRate.SpotRate <- function(object, term=object$term) {
     SpotRate(value=object$value, term=term, dib=object$dib)
 }
 
-#' @export
-as.CompoundFactor.SpotRate <- function(object) {
-    fact <- attr(Compounding[[object$compounding]], 'compound')(object$value, object$term, object$dib)
-    return( CompoundFactor(fact, object$term) )
+#' @rdname as.SpotRate
+#' @method as.SpotRate CompoundFactor
+#' @S3method as.SpotRate CompoundFactor
+as.SpotRate.CompoundFactor <- function(object, dib=252, compounding='compounded') {
+    rate <- attr(Compounding[[compounding]], 'implied.rate')(object$value, object$term, dib)
+    SpotRate(rate, object$term, dib=dib, compounding=compounding)
 }
 
-#' @export
-compound.factor.SpotRate <- function (object) {
-    compound.factor(as.CompoundFactor(object))
-}
-
-#' @export
+#' @S3method all.equal SpotRate
 all.equal.SpotRate <- function(target, current, tolerance=.Machine$double.eps^0.5, ...) {
     target$term == current$term &&
         target$dib == current$dib &&
         abs(target$value - current$value) <= tolerance
 }
 
-#' @export
+#' @S3method print SpotRate
 print.SpotRate <- function(object) {
     cat('\nrate =', object$value, '\nterm =', object$term,
         '\ndays in base =', object$dib, '\n')
