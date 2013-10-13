@@ -9,22 +9,34 @@ test_that("it should create an interest rate curve", {
     expect_is( curve, "SpotRateCurve" )
 })
 
-test_that("it should verify if terms and rates have the same length", {
-    expect_error( SpotRateCurve(numeric(10), numeric(11)) )
+test_that("it should check if terms and rates have the same length", {
+    expect_error( SpotRateCurve(numeric(10), 1:11) )
+    SpotRateCurve(numeric(10), 1:10)
 })
 
-test_that("it should access the rates attribute", {
-    curve <- SpotRateCurve(rates=seq(1, 0.98, length.out=10),
-                    terms=c(1, seq(21, 100, length.out=9)))
-    expect_equal( rates(curve), seq(1, 0.98, length.out=10) )
+test_that("it should check if terms has unique elements", {
+    expect_error( SpotRateCurve(numeric(10), numeric(10)) )
+    SpotRateCurve(numeric(10), 1:10)
+})
+
+test_that("it should check if terms is an ascending ordered collection", {
+    expect_error( SpotRateCurve(numeric(10), sample(1:10)) )
+    SpotRateCurve(numeric(10), 1:10)
+})
+
+test_that("it should access rates attribute", {
+    curve <- SpotRateCurve(rates, terms)
+    expect_equal( rates(curve), rates )
+})
+
+test_that("it should access terms attribute", {
+    curve <- SpotRateCurve(rates, terms)
+    expect_equal( terms(curve), terms )
 })
 
 test_that("it should return the interest rate curve length", {
-    # curve <- SpotRateCurve(numeric(0), numeric(0))
-    # expect_equal( length(curve), 0 )
-    curve <- SpotRateCurve(rates=seq(1, 0.98, length.out=10),
-                    terms=c(1, seq(21, 100, length.out=9)))
-    expect_equal( length(curve), 10 )
+    curve <- SpotRateCurve(rates, terms)
+    expect_equal( length(curve), 5 )
 })
 
 test_that("it should access the elements by its indexes", {

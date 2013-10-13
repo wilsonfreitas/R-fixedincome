@@ -2,8 +2,8 @@
 \alias{SpotRateCurve}
 \title{Creates a SpotRateCurve}
 \usage{
-  SpotRateCurve(rates, terms, interp = "FlatForward",
-    dib = 252)
+  SpotRateCurve(rates, terms, dib = 252,
+    compounding = "compounded")
 }
 \arguments{
   \item{rates}{a vector with the interest rates}
@@ -40,6 +40,6 @@
 # Creating a zero curve
 curve <- SpotRateCurve(c(0.08, 0.083, 0.089, 0.093, 0.095), c(0.5, 1, 1.5, 2, 2.5))
 # Creating a zero curve with linear interpolation and 360 days in base (days per year)
-curve <- SpotRateCurve(c(0.08, 0.083, 0.089, 0.093, 0.095), c(0.5, 1, 1.5, 2, 2.5), interp='Linear', dib=360)
+curve <- SpotRateCurve(c(0.08, 0.083, 0.089, 0.093, 0.095), c(0.5, 1, 1.5, 2, 2.5), dib=360, compounding='simple')
 }
 

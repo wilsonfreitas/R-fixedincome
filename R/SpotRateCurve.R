@@ -26,12 +26,13 @@
 #' # Creating a zero curve 
 #' curve <- SpotRateCurve(c(0.08, 0.083, 0.089, 0.093, 0.095), c(0.5, 1, 1.5, 2, 2.5))
 #' # Creating a zero curve with linear interpolation and 360 days in base (days per year)
-#' curve <- SpotRateCurve(c(0.08, 0.083, 0.089, 0.093, 0.095), c(0.5, 1, 1.5, 2, 2.5), interp='Linear', dib=360)
+#' curve <- SpotRateCurve(c(0.08, 0.083, 0.089, 0.093, 0.095), c(0.5, 1, 1.5, 2, 2.5), dib=360, compounding='simple')
 SpotRateCurve <- function(rates, terms, dib=252, compounding='compounded') {
-
-    that <- list()
     stopifnot(length(rates) == length(terms))
     stopifnot(length(rates) > 2)
+    stopifnot(length(terms) == length(unique(terms)))
+    stopifnot(all(diff(terms) > 0))
+    that <- list()
     that$rates <- rates
     that$terms <- terms
     that$dib <- dib
@@ -39,7 +40,7 @@ SpotRateCurve <- function(rates, terms, dib=252, compounding='compounded') {
     # that$interp.FUN <- eval(parse(text=paste('interp.', interp, sep='')))
     # that$interp.FUN2 <- eval(parse(text=paste('interp.', interp, '.prepare', sep='')))(that)
     class(that) <- 'SpotRateCurve'
-    return(that)
+    invisible(that)
 }
 
 #' Coerce objects to SpotRateCurve
@@ -87,7 +88,7 @@ as.data.frame.SpotRateCurve <- function(curve, ...) {
 #' @S3method length SpotRateCurve
 length.SpotRateCurve <- function(object) length(object$terms)
 
-#' @S3method plot SpotRateCurve
+#' @S3method [ SpotRateCurve
 '[.SpotRateCurve' <- function(object, term, forward.term=NULL, to.term=NULL) {
     if ( !is.null(to.term) || !is.null(forward.term) )
         return( forward.rate(object, term, forward.term, to.term) )
