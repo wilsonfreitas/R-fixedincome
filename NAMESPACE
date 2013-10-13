@@ -1,5 +1,6 @@
 S3method("*",CompoundFactor)
 S3method("/",CompoundFactor)
+S3method("[",SpotRateCurve)
 S3method("insert<-",SpotRateCurve)
 S3method(all.equal,CompoundFactor)
 S3method(all.equal,SpotRate)
