@@ -31,7 +31,10 @@
 - The SpotRateCurve should have the same parameters as SpotRate
 - The SpotRateCurve `insert` should check if the SpotRate's parameters are compatible with SpotRateCurve's parameters (parameters like `dib` and `compounding`)
 - SpotRateCurve should have a name
-
+- SpotRateCurve should be sliced
+	- head(src, n)
+	- src[1:10]
+	- src[1:10, offset=1] -> daily forward curve
 
 #### try
 
