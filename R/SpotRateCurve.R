@@ -27,16 +27,17 @@
 #' curve <- SpotRateCurve(c(0.08, 0.083, 0.089, 0.093, 0.095), c(0.5, 1, 1.5, 2, 2.5))
 #' # Creating a zero curve with linear interpolation and 360 days in base (days per year)
 #' curve <- SpotRateCurve(c(0.08, 0.083, 0.089, 0.093, 0.095), c(0.5, 1, 1.5, 2, 2.5), interp='Linear', dib=360)
-SpotRateCurve <- function(rates, terms, interp='FlatForward', dib=252) {
+SpotRateCurve <- function(rates, terms, dib=252, compounding='compounded') {
+
     that <- list()
     stopifnot(length(rates) == length(terms))
     stopifnot(length(rates) > 2)
     that$rates <- rates
     that$terms <- terms
     that$dib <- dib
-    that$interp.method <- interp
-    that$interp.FUN <- eval(parse(text=paste('interp.', interp, sep='')))
-    that$interp.FUN2 <- eval(parse(text=paste('interp.', interp, '.prepare', sep='')))(that)
+    # that$interp.method <- interp
+    # that$interp.FUN <- eval(parse(text=paste('interp.', interp, sep='')))
+    # that$interp.FUN2 <- eval(parse(text=paste('interp.', interp, '.prepare', sep='')))(that)
     class(that) <- 'SpotRateCurve'
     return(that)
 }

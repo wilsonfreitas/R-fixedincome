@@ -1,8 +1,11 @@
 
 context('SpotRateCurve calculations')
 
+terms <- c(1, 11, 26, 27, 28)
+rates <- c(0.0736, 0.0724, 0.0723, 0.0723, 0.0723)
+
 test_that("it should create an interest rate curve", {
-    curve <- SpotRateCurve(numeric(10), 1:10, interp='Linear')
+    curve <- SpotRateCurve(rates, terms, dib=360, compounding='compounded')
     expect_is( curve, "SpotRateCurve" )
 })
 
