@@ -21,11 +21,16 @@ forward.rate.SpotRate <- function (object, other) {
 #' @rdname forward.rate
 #' @method forward.rate SpotRateCurve
 #' @S3method forward.rate SpotRateCurve
-forward.rate.SpotRateCurve <- function(curve, from.term, forward.term=1, to.term=NULL) {
-    ir.i <- SpotRate(curve$interp.FUN(curve, from.term), from.term)
-    if ( is.null(to.term) )
-        to.term <- from.term + forward.term
-    ir.p <- SpotRate(curve$interp.FUN(curve, to.term), to.term)
-    forward.rate(ir.i, ir.p)
+forward.rate.SpotRateCurve <- function(curve, from.term, to.term=NULL,
+    forward.term=NULL) {
+
+    stopifnot(!is.null(to.term) || !is.null(forward.term))
+    to.term <- if (!is.null(to.term)) to.term else from.term + forward.term
+    stopifnot(to.term > from.term)
+    sr.first <- SpotRate(curve[from.term], from.term, dib(curve),
+        compounding(curve))
+    sr.second <- SpotRate(curve[to.term], to.term, dib(curve),
+        compounding(curve))
+    forward.rate(sr.first, sr.second)
 }
 

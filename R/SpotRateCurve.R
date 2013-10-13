@@ -36,6 +36,7 @@ SpotRateCurve <- function(rates, terms, dib=252, compounding='compounded') {
     that$rates <- rates
     that$terms <- terms
     that$dib <- dib
+    that$compounding <- compounding
     # that$interp.method <- interp
     # that$interp.FUN <- eval(parse(text=paste('interp.', interp, sep='')))
     # that$interp.FUN2 <- eval(parse(text=paste('interp.', interp, '.prepare', sep='')))(that)
@@ -88,42 +89,47 @@ as.data.frame.SpotRateCurve <- function(curve, ...) {
 #' @S3method length SpotRateCurve
 length.SpotRateCurve <- function(object) length(object$terms)
 
-#' @S3method [ SpotRateCurve
-'[.SpotRateCurve' <- function(object, term, forward.term=NULL, to.term=NULL) {
-    if ( !is.null(to.term) || !is.null(forward.term) )
-        return( forward.rate(object, term, forward.term, to.term) )
-    SpotRate(object$interp.FUN(object, term), term, dib=object$dib)
-}
-
 #' @S3method plot SpotRateCurve
 plot.SpotRateCurve <- function(curve, ...) {
     plot(curve$terms, curve$rates, ...)
+}
+
+#' @rdname open-brace.SpotRateCurve
+#' @method [ SpotRateCurve
+#' @S3method [ SpotRateCurve
+'[.SpotRateCurve' <- function(object, term) {
+    stopifnot(any(terms(object) == term))
+    rates(object)[terms(object) == term]
 }
 
 #' Insert a SpotRate into the SpotRate.
 #'
 #' A SpotRateCurve can be expanded by inserting other SpotRate objects into it.
 #'
-#' @rdname insert
-#' @export
-'insert<-' <- function(object, ...) UseMethod('insert<-', object)
-
-#' @rdname insert
-#' @method insert<- SpotRateCurve
-#' @S3method insert<- SpotRateCurve
+#' @rdname open-brace.SpotRateCurve
+#' @method [<- SpotRateCurve
+#' @S3method [<- SpotRateCurve
 #' @param object SpotRateCurve on which the SpotRate has to be inserted
 #' @param value SpotRate to be inserted
 #' @examples
 #' # creating a SpotRateCurve from a matrix
 #' mat <- cbind(c(0.08, 0.083, 0.089, 0.093, 0.095), c(0.5, 1, 1.5, 2, 2.5))
 #' curve <- as.SpotRateCurve(mat, interp='Spline', dib=365)
-#' insert(curve) <- SpotRate(0.085, 1.25, dib=365)
-'insert<-.SpotRateCurve' <- function(object, value) {
-    object$terms <- append(object$terms, value$term)
-    object$rates <- append(object$rates, value$value)
-    idx <- order(object$terms)
-    object$terms <- object$terms[idx]
-    object$rates <- object$rates[idx]
+#' curve[1.25] <- 0.085
+'[<-.SpotRateCurve' <- function(object, i, value) {
+    contained.idx <- i %in% object$terms
+    if (any(contained.idx)) {
+        idx <- object$terms %in% i
+        object$terms[idx] <- i[contained.idx]
+        object$rates[idx] <- value[contained.idx]
+    }
+    if (any(!contained.idx)) {
+        object$terms <- append(object$terms, i[!contained.idx])
+        object$rates <- append(object$rates, value[!contained.idx])
+        idx <- order(object$terms)
+        object$terms <- object$terms[idx]
+        object$rates <- object$rates[idx]
+    }
     object
 }
 

@@ -9,7 +9,7 @@
   \method{forward.rate}{SpotRate} (object, other)
 
   \method{forward.rate}{SpotRateCurve} (curve, from.term,
-    forward.term = 1, to.term = NULL)
+    to.term = NULL, forward.term = NULL)
 }
 \description{
   Forward rate

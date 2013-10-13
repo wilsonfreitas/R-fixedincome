@@ -2,7 +2,8 @@
 context('SpotRateCurve calculations')
 
 terms <- c(1, 11, 26, 27, 28)
-rates <- c(0.0736, 0.0724, 0.0723, 0.0723, 0.0723)
+rates <- c(0.0719, 0.056, 0.0674, 0.0687, 0.07)
+curve <- SpotRateCurve(rates, terms)
 
 test_that("it should create an interest rate curve", {
     curve <- SpotRateCurve(rates, terms, dib=360, compounding='compounded')
@@ -25,54 +26,53 @@ test_that("it should check if terms is an ascending ordered collection", {
 })
 
 test_that("it should access rates attribute", {
-    curve <- SpotRateCurve(rates, terms)
     expect_equal( rates(curve), rates )
 })
 
 test_that("it should access terms attribute", {
-    curve <- SpotRateCurve(rates, terms)
     expect_equal( terms(curve), terms )
 })
 
 test_that("it should return the interest rate curve length", {
-    curve <- SpotRateCurve(rates, terms)
     expect_equal( length(curve), 5 )
 })
 
 test_that("it should access the elements by its indexes", {
-    curve <- SpotRateCurve(rates=seq(1, 0.98, length.out=10),
-        terms=c(1, seq(21, by=21, length.out=9)))
-    expect_equal( curve[1], SpotRate(1,1) )
-    expect_equal( curve[21], SpotRate(0.9977778, 21), tolerance=1e-6 )
-    expect_equal( curve[40], SpotRate(0.9956666, 40) )
+    expect_equal( curve[1], 0.0719 )
+    expect_equal( curve[11], 0.056 )
+    expect_error( curve[21] )
 })
 
 test_that("it should compute forward rates", {
-    curve <- SpotRateCurve(rates=seq(1, 0.98, length.out=10),
-        terms=c(1, seq(21, by=21, length.out=9)))
-    expect_equal( forward.rate(curve, 1, 1), SpotRate(1,1) )
-    expect_equal( curve[1, 1], SpotRate(1,1) )
+    expect_error( forward.rate(curve, 1, 1) )
+    expect_equal( forward.rate(curve, 1, 11), SpotRate(0.05442303, 10) )
+    expect_equal( forward.rate(curve, 1, forward.term=10), SpotRate(0.05442303, 10) )
+    expect_error( forward.rate(curve, 1, forward.term=11) )
 })
 
 test_that('it should append a SpotRate to a SpotRateCurve', {
-    curve <- SpotRateCurve(rates=seq(0.99, 0.98, length.out=4), terms=seq(2,5))
-    expect_equal(length(curve), 4)
-    insert(curve) <- SpotRate(1,1)
-    expect_equal(length(curve), 5)
-    expect_equal(terms(curve), 1:5)
-    expect_equal(rates(curve), c(1, seq(0.99, 0.98, length.out=4)))
-    
-    curve <- SpotRateCurve(rates=c(0.9, 0.8, 0.6, 0.5), terms=c(1,2,4,5))
-    insert(curve) <- SpotRate(0.7, 3)
-    expect_equal(terms(curve), 1:5)
-    expect_equal(rates(curve), c(0.9, 0.8, 0.7, 0.6, 0.5))
+    curve[32] <- 0.0643
+    expect_equal(length(curve), 6)
+    expect_equal(terms(curve), c(1, 11, 26, 27, 28, 32))
+    expect_equal(rates(curve), c(0.0719, 0.056, 0.0674, 0.0687, 0.07, 0.0643))
 
-    expect_error( insert(1) <- 2 )
+    curve[3] <- 0.07
+    expect_equal(length(curve), 7)
+    expect_equal(terms(curve), c(1, 3, 11, 26, 27, 28, 32))
+    expect_equal(rates(curve), c(0.0719, 0.07, 0.056, 0.0674, 0.0687, 0.07, 0.0643))
+
+    curve[3] <- 0.06
+    expect_equal(length(curve), 7)
+    expect_equal(terms(curve), c(1, 3, 11, 26, 27, 28, 32))
+    expect_equal(rates(curve), c(0.0719, 0.06, 0.056, 0.0674, 0.0687, 0.07, 0.0643))
+
+    curve[c(3,7,6)] <- c(0.059, 0.058, 0.057)
+    expect_equal(length(curve), 9)
+    expect_equal(terms(curve), c(1, 3, 6, 7, 11, 26, 27, 28, 32))
+    expect_equal(rates(curve), c(0.0719, 0.059, 0.057, 0.058, 0.056, 0.0674, 0.0687, 0.07, 0.0643))
 })
 
 test_that('it should find the neighbors for a given term', {
-    curve <- SpotRateCurve(rates=seq(1, 0.98, length.out=10),
-        terms=c(1, seq(21, by=21, length.out=9)))
-    expect_equal(neighbors(curve, 30), c(21, 42))
-    expect_equal(neighbors(curve, 21), c(21, 21))
+    expect_equal(neighbors(curve, 11), c(11, 11))
+    expect_equal(neighbors(curve, 21), c(11, 26))
 })
