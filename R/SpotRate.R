@@ -67,6 +67,7 @@ all.equal.SpotRate <- function(target, current, tolerance=.Machine$double.eps^0.
 #' @S3method print SpotRate
 print.SpotRate <- function(object) {
     cat('\nrate =', object$value, '\nterm =', object$term,
-        '\ndays in base =', object$dib, '\n')
+        '\ndays in base =', object$dib,
+        '\ncompounding =', object$compounding, '\n')
 }
 
