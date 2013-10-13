@@ -81,19 +81,6 @@ as.SpotRateCurve.matrix <- function(object, ...) {
     SpotRateCurve(rates=object[,1], terms=object[,2], ...)
 }
 
-#' @S3method as.data.frame SpotRateCurve
-as.data.frame.SpotRateCurve <- function(curve, ...) {
-    data.frame(terms=curve$terms, rates=curve$rates, list(...))
-}
-
-#' @S3method length SpotRateCurve
-length.SpotRateCurve <- function(object) length(object$terms)
-
-#' @S3method plot SpotRateCurve
-plot.SpotRateCurve <- function(curve, ...) {
-    plot(curve$terms, curve$rates, ...)
-}
-
 #' @rdname open-brace.SpotRateCurve
 #' @method [ SpotRateCurve
 #' @S3method [ SpotRateCurve
@@ -133,4 +120,30 @@ plot.SpotRateCurve <- function(curve, ...) {
     object
 }
 
+#' SpotRateCurve generic extensions
+#' 
+#' SpotRateCurve generic extensions
+#' 
+#' @rdname generic-SpotRateCurve
+#' @name generic-SpotRateCurve
+NULL
+
+#' @rdname generic-SpotRateCurve
+#' @method as.data.frame SpotRateCurve
+#' @S3method as.data.frame SpotRateCurve
+as.data.frame.SpotRateCurve <- function(curve, ...) {
+    data.frame(terms=curve$terms, rates=curve$rates, list(...))
+}
+
+#' @rdname generic-SpotRateCurve
+#' @method length SpotRateCurve
+#' @S3method length SpotRateCurve
+length.SpotRateCurve <- function(curve) length(curve$terms)
+
+#' @rdname generic-SpotRateCurve
+#' @method plot SpotRateCurve
+#' @S3method plot SpotRateCurve
+plot.SpotRateCurve <- function(curve, ...) {
+    plot(curve$terms, curve$rates, ...)
+}
 
