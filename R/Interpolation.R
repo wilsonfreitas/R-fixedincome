@@ -42,11 +42,6 @@ method.CurveInterpolation <- function(curve) curve$method
 #' @export
 interp <- function(object, ...) UseMethod('interp', object)
 
-#' @rdname interp
-#' @method interp SpotRateCurve
-#' @S3method interp SpotRateCurve
-interp.SpotRateCurve <- function(curve, term) curve$interp.FUN(curve, term)
-
 interpolationMethods <- list(
     flatforward=list(
         interp=function(curve, term, interp.FUN) {
