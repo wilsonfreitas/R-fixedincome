@@ -35,6 +35,14 @@ method.CurveInterpolation <- function(curve) curve$method
     curve$interp(curve, term, curve$interp.FUN)
 }
 
+#' @S3method [<- CurveInterpolation
+'[<-.CurveInterpolation' <- function(curve, i, value) {
+    obj <- NextMethod("[<-")
+    interp.method <- interpolationMethods[[method(obj)]]
+    obj$interp.FUN <- interp.method$prepare(obj)
+    obj
+}
+
 #' interp
 #' 
 #' Interpolate curves
@@ -68,32 +76,26 @@ interpolationMethods <- list(
             interp.coords <- xy.coords(terms(curve), log(rates(curve)))
             approxfun(interp.coords, method='linear')
         }
+    ),
+    spline=list(
+        interp=function(curve, term, interp.FUN) interp.FUN(term),
+        prepare=function(curve) {
+            interp.coords <- xy.coords(terms(curve), rates(curve))
+            splinefun(interp.coords, method='natural')
+        }
+    ),
+    hermite=list(
+        interp=function(curve, term, interp.FUN) interp.FUN(term),
+        prepare=function(curve) {
+            interp.coords <- xy.coords(terms(curve), rates(curve))
+            splinefun(interp.coords, method='monoH.FC')
+        }
+    ),
+    monotone=list(
+        interp=function(curve, term, interp.FUN) interp.FUN(term),
+        prepare=function(curve) {
+            interp.coords <- xy.coords(terms(curve), rates(curve))
+            splinefun(interp.coords, method='hyman')
+        }
     )
 )
-
-interp.Spline <- function(curve, term) {
-    curve$interp.FUN2(term)
-}
-
-interp.Spline.prepare <- function(curve) {
-    interp.coords <- xy.coords(curve$terms, curve$rates)
-    splinefun(interp.coords, method='natural')
-}
-
-interp.Hermite <- function(curve, term) {
-    curve$interp.FUN2(term)
-}
-
-interp.Hermite.prepare <- function(curve) {
-    interp.coords <- xy.coords(curve$terms, curve$rates)
-    splinefun(interp.coords, method='monoH.FC')
-}
-
-interp.Monotone <- function(curve, term) {
-    curve$interp.FUN2(term)
-}
-
-interp.Monotone.prepare <- function(curve) {
-    interp.coords <- xy.coords(curve$terms, curve$rates)
-    splinefun(interp.coords, method='hyman')
-}
