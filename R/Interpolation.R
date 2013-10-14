@@ -1,4 +1,40 @@
 
+#' CurveInterpolation
+#' 
+#' Creates a curve interpolation class
+#' 
+#' @param curve curve
+#' @param method \code{flatforward}, \code{linear}, \code{loglinear},
+#' \code{spline}, \code{hermite}, \code{monotone}
+#' @return \code{CurveInterpolation} class
+#' @export
+CurveInterpolation <- function(curve, method='flatforward') {
+    curve$method <- method
+    interp.method <- interpolationMethods[[method]]
+    curve$interp.FUN <- interp.method$prepare(curve)
+    curve$interp <- interp.method$interp
+    class(curve) <- c('CurveInterpolation', 'SpotRateCurve')
+    invisible(curve)
+}
+
+#' Interpolation method
+#' 
+#' Interpolation method
+#' 
+#' @export
+method <- function(obj, ...) UseMethod('method', obj)
+
+#' @S3method method CurveInterpolation
+method.CurveInterpolation <- function(curve) curve$method
+
+#' @S3method [ CurveInterpolation
+'[.CurveInterpolation' <- function(curve, term) {
+    # if (any(terms(curve) %in% term))
+    #     NextMethod("[")
+    #  else
+    curve$interp(curve, term, curve$interp.FUN)
+}
+
 #' interp
 #' 
 #' Interpolate curves
@@ -11,36 +47,34 @@ interp <- function(object, ...) UseMethod('interp', object)
 #' @S3method interp SpotRateCurve
 interp.SpotRateCurve <- function(curve, term) curve$interp.FUN(curve, term)
 
-interp.FlatForward <- function(curve, term) {
-    log.PU <- curve$interp.FUN2(term/curve$dib)
-    PU <- exp(log.PU)
-    r <- PU^(curve$dib/term) - 1
-    r
-}
-
-interp.FlatForward.prepare <- function(curve) {
-    pus <- (1 + curve$rates)^(curve$terms/curve$dib)
-    interp.coords <- xy.coords(curve$terms/curve$dib, log(pus))
-    approxfun(interp.coords, method='linear')
-}
-
-interp.Linear <- function(curve, term) {
-    curve$interp.FUN2(term)
-}
-
-interp.Linear.prepare <- function(curve) {
-    interp.coords <- xy.coords(curve$terms, curve$rates)
-    approxfun(interp.coords, method='linear')
-}
-
-interp.LogLinear <- function(curve, term) {
-    exp(curve$interp.FUN2(term))
-}
-
-interp.LogLinear.prepare <- function(curve) {
-    interp.coords <- xy.coords(curve$terms, log(curve$rates))
-    approxfun(interp.coords, method='linear')
-}
+interpolationMethods <- list(
+    flatforward=list(
+        interp=function(curve, term, interp.FUN) {
+            log.price <- interp.FUN(term)
+            price <- exp(log.price)
+            price^(dib(curve)/term) - 1
+        },
+        prepare=function(curve) {
+            prices <- (1 + rates(curve))^(terms(curve)/dib(curve))
+            interp.coords <- xy.coords(terms(curve), log(prices))
+            approxfun(interp.coords, method='linear')
+        }
+    ),
+    linear=list(
+        interp=function(curve, term, interp.FUN) interp.FUN(term),
+        prepare=function(curve) {
+            interp.coords <- xy.coords(terms(curve), rates(curve))
+            approxfun(interp.coords, method='linear')
+        }
+    ),
+    loglinear=list(
+        interp=function(curve, term, interp.FUN) exp(interp.FUN(term)),
+        prepare=function(curve) {
+            interp.coords <- xy.coords(terms(curve), log(rates(curve)))
+            approxfun(interp.coords, method='linear')
+        }
+    )
+)
 
 interp.Spline <- function(curve, term) {
     curve$interp.FUN2(term)

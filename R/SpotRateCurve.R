@@ -85,8 +85,8 @@ as.SpotRateCurve.matrix <- function(object, ...) {
 #' @method [ SpotRateCurve
 #' @S3method [ SpotRateCurve
 '[.SpotRateCurve' <- function(object, term) {
-    stopifnot(any(terms(object) == term))
-    rates(object)[terms(object) == term]
+    stopifnot(any(terms(object) %in% term))
+    rates(object)[terms(object) %in% term]
 }
 
 #' Insert a SpotRate into the SpotRate.
