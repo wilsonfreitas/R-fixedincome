@@ -49,7 +49,7 @@ test_that("it should interpolate Linearly the interest rate curve", {
     expect_equal( curve[c(1, 11, 14, 21)], c(0.0719, 0.056, 0.05828, 0.0636) )
 })
 
-test_that("it should not extrapolate FlatForwardly the interest rate curve", {
+test_that("it should not extrapolate Linearly the interest rate curve", {
     curve <- CurveInterpolation(curve, method='linear')
     expect_true( is.na(curve[30]) )
 })
@@ -62,6 +62,18 @@ test_that("it should interpolate the interest rate curve using Log-Linear interp
     expect_equal( curve[21], 0.06336303 )
     expect_equal( curve[c(14, 21)], c(0.058114218, 0.06336303) )
     expect_equal( curve[c(1, 11, 14, 21)], c(0.0719, 0.056, 0.058114218, 0.06336303) )
+})
+
+test_that("it should not extrapolate Log-Linearly the interest rate curve", {
+    curve <- CurveInterpolation(curve, method='loglinear')
+    expect_true( is.na(curve[30]) )
+})
+
+test_that("it should add an element and interpolate FlatForwardly", {
+    curve <- CurveInterpolation(curve)
+    curve[32] <- 0.0643
+    expect_equal( curve[32], 0.0643 )
+    expect_equal( curve[30], 0.066956211 )
 })
 
 test_that("it should interpolate the interest rate curve using Natural Cubic Spline", {
