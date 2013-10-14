@@ -36,6 +36,7 @@
 	- head(src, n)
 	- src[1:10]
 	- src[1:10, offset=1] -> daily forward curve
+- A SpotRate should be removed from a SpotRateCurve: curve[-10]
 
 #### try
 
