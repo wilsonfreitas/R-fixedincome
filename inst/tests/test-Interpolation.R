@@ -77,32 +77,42 @@ test_that("it should add an element and interpolate FlatForwardly", {
 })
 
 test_that("it should interpolate the interest rate curve using Natural Cubic Spline", {
-    curve <- SpotRateCurve(
-        rates=seq(1, 0.98, length.out=10),
-        terms=c(1, seq(21, by=21, length.out=9)),
-        interp='Spline'
-    )
-    expect_equal( interp(curve, 21), 0.9977778, tolerance=1e-6 )
-    expect_equal( interp(curve, 40), 0.9957657, tolerance=1e-6 )
+    curve <- CurveInterpolation(curve, method='spline')
+    expect_equal( curve[1], 0.0719 )
+    expect_equal( curve[11], 0.056 )
+    expect_equal( curve[c(1, 11)], c(0.0719, 0.056) )
+    expect_equal( curve[21], 0.06085015, tolerance=1e-6 )
+    expect_equal( curve[c(14, 21)], c(0.05537827, 0.06085015), tolerance=1e-6 )
+    expect_equal( curve[c(1, 11, 14, 21)], c(0.0719, 0.056, 0.05537827, 0.06085015), tolerance=1e-6 )
 })
 
 test_that("it should interpolate the interest rate curve using Hermite Spline", {
-    curve <- SpotRateCurve(
-        rates=seq(1, 0.98, length.out=10),
-        terms=c(1, seq(21, by=21, length.out=9)),
-        interp='Hermite'
-    )
-    expect_equal( interp(curve, 21), 0.9977778, tolerance=1e-6 )
-    expect_equal( interp(curve, 40), 0.9957667, tolerance=1e-6 )
+    curve <- CurveInterpolation(curve, method='hermite')
+    expect_equal( curve[1], 0.0719 )
+    expect_equal( curve[11], 0.056 )
+    expect_equal( curve[c(1, 11)], c(0.0719, 0.056) )
+    expect_equal( curve[21], 0.06169444, tolerance=1e-6 )
+    expect_equal( curve[c(14, 21)], c(0.05589440, 0.06169444), tolerance=1e-6 )
+    expect_equal( curve[c(1, 11, 14, 21)], c(0.0719, 0.056, 0.05589440, 0.06169444), tolerance=1e-6 )
 })
+
+test_that("it should fail on creating the interest rate curve with Monotone Preserving Cubic Spline, y must be increasing or decreasing", {
+    terms <- c(1, 11, 26, 27, 28)
+    rates <- c(0.0719, 0.056, 0.0674, 0.0687, 0.07)
+    curve <- SpotRateCurve(rates, terms)
+    expect_error(CurveInterpolation(curve, method='monotone'))
+})
+
+terms <- c(1, 11, 26, 27, 28)
+rates <- c(0.0519, 0.056, 0.0674, 0.0687, 0.07)
+curve <- SpotRateCurve(rates, terms)
 
 test_that("it should interpolate the interest rate curve using Monotone Preserving Cubic Spline", {
-    curve <- SpotRateCurve(
-        rates=seq(1, 0.98, length.out=10),
-        terms=c(1, seq(21, by=21, length.out=9)),
-        interp='Monotone'
-    )
-    expect_equal( interp(curve, 21), 0.9977778, tolerance=1e-6 )
-    expect_equal( interp(curve, 40), 0.9957667, tolerance=1e-6 )
+    curve <- CurveInterpolation(curve, method='monotone')
+    expect_equal( curve[1], 0.0519 )
+    expect_equal( curve[11], 0.056 )
+    expect_equal( curve[c(1, 11)], c(0.0519, 0.056) )
+    expect_equal( curve[21], 0.06209733, tolerance=1e-6 )
+    expect_equal( curve[c(14, 21)], c(0.05740306, 0.06209733), tolerance=1e-6 )
+    expect_equal( curve[c(1, 11, 14, 21)], c(0.0519, 0.056, 0.05740306, 0.06209733), tolerance=1e-6 )
 })
-
