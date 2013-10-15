@@ -37,9 +37,6 @@ SpotRateCurve <- function(rates, terms, dib=252, compounding='compounded') {
     that$terms <- terms
     that$dib <- dib
     that$compounding <- compounding
-    # that$interp.method <- interp
-    # that$interp.FUN <- eval(parse(text=paste('interp.', interp, sep='')))
-    # that$interp.FUN2 <- eval(parse(text=paste('interp.', interp, '.prepare', sep='')))(that)
     class(that) <- 'SpotRateCurve'
     invisible(that)
 }
