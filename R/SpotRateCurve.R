@@ -89,6 +89,15 @@ as.SpotRateCurve.matrix <- function(object, ...) {
     rates(object)[terms(object) %in% term]
 }
 
+#' Get the SpotRate for a given term
+#' 
+#' Get the SpotRate for a given term
+#' 
+#' @export
+getSpotRate <- function(curve, term) {
+    SpotRate(curve[term], term, dib=dib(curve), compounding=compounding(curve))
+}
+
 #' Insert a SpotRate into the SpotRate.
 #'
 #' A SpotRateCurve can be expanded by inserting other SpotRate objects into it.

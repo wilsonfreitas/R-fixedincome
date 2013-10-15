@@ -44,6 +44,19 @@ test_that("it should access the elements by its indexes", {
     expect_error( curve[21] )
 })
 
+test_that("it should return a new curve with remaining elements", {
+    expect_equal( curve[-1], length(curve)-1 )
+})
+
+test_that("it should return a SpotRate for the given term", {
+    expect_is( getSpotRate(curve, 11), 'SpotRate' )
+    expect_equal( rate(getSpotRate(curve, 11)), curve[11] )
+    expect_equal( term(getSpotRate(curve, 11)), 11 )
+    expect_equal( dib(getSpotRate(curve, 11)), dib(curve) )
+    expect_equal( compounding(getSpotRate(curve, 11)), compounding(curve) )
+    expect_error( getSpotRate(curve, 21) )
+})
+
 test_that("it should compute forward rates", {
     expect_error( forward.rate(curve, 1, 1) )
     expect_equal( forward.rate(curve, 1, 11), SpotRate(0.05442303, 10) )
