@@ -25,18 +25,26 @@
 	- CHECK Natural Spline
 	- Constrained Spline
 - Figure out a way of defining flat curve
-- length method for SpotRateCurve
-- indexation `[<-` should allow updating
-- `interp` function should accept a parameter `method` to define the interpolation method to use, if it is `NULL` the curve's default is used.
-- The SpotRateCurve should have the same parameters as SpotRate
-- SpotRateCurve should have a get.SpotRate method (or something alike)
-- The SpotRateCurve `insert` should check if the SpotRate's parameters are compatible with SpotRateCurve's parameters (parameters like `dib` and `compounding`)
+- CHECK length method for SpotRateCurve
+- CHECK indexation `[<-` should allow updating
+- FORGET `interp` function should accept a parameter `method` to define the interpolation method to use, if it is `NULL` the curve's default is used.
+- CHECK The SpotRateCurve should have the same parameters as SpotRate
+- CHECK SpotRateCurve should have a get.SpotRate method (or something alike)
+- FORGET The SpotRateCurve `insert` should check if the SpotRate's parameters are compatible with SpotRateCurve's parameters (parameters like `dib` and `compounding`)
 - SpotRateCurve should have a name
 - SpotRateCurve should be sliced
 	- head(src, n)
-	- src[1:10]
-	- src[1:10, offset=1] -> daily forward curve
+	- CHECK src[1:10]
+	- FORGET src[1:10, offset=1] -> daily forward curve
 - A SpotRate should be removed from a SpotRateCurve: curve[-10]
+	- Not so simple: curve[n] returns a rate
+	- curve[-n] should return a SpotRateCurve without the removed SpotRate
+	- So this doesn't fit, different returns for the same operation
+	- Proposal: curve[n] <- NA or curve[n] <- NULL
+- SpotRateCurve should be a matrix, terms would be rownames, rates values and the rest attributes, like xts
+	- dim
+	- dimnames(curve) <- list(terms, curve_name)
+	- ???
 
 #### try
 
