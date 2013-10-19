@@ -41,11 +41,15 @@ test_that("it should access the elements by its indexes", {
     expect_equal( curve[1], 0.0719 )
     expect_equal( curve[11], 0.056 )
     expect_equal( curve[c(1, 11)], c(0.0719, 0.056) )
+    expect_is( curve[-c(1,11)], 'SpotRateCurve' )
     expect_error( curve[21] )
 })
 
 test_that("it should return a new curve with remaining elements", {
-    expect_equal( curve[-1], length(curve)-1 )
+    expect_equal( length(curve[-11]), length(curve)-1 )
+    expect_equal( length(curve[-c(1,11)]), length(curve)-2 )
+    expect_is( curve[-c(1,11)], 'SpotRateCurve' )
+    expect_error( curve[-21] )
 })
 
 test_that("it should return a SpotRate for the given term", {

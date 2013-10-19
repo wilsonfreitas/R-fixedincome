@@ -32,13 +32,12 @@ SpotRateCurve <- function(rates, terms, dib=252, compounding='compounded') {
     stopifnot(length(rates) > 2)
     stopifnot(length(terms) == length(unique(terms)))
     stopifnot(all(diff(terms) > 0))
-    that <- list()
-    that$rates <- rates
-    that$terms <- terms
-    that$dib <- dib
-    that$compounding <- compounding
-    class(that) <- 'SpotRateCurve'
-    invisible(that)
+    dim(rates) <- c(length(rates), 1)
+    rownames(rates) <- terms
+    attr(rates, 'dib') <- dib
+    attr(rates, 'compounding') <- compounding
+    class(rates) <- 'SpotRateCurve'
+    invisible(rates)
 }
 
 #' Coerce objects to SpotRateCurve
@@ -82,8 +81,14 @@ as.SpotRateCurve.matrix <- function(object, ...) {
 #' @method [ SpotRateCurve
 #' @S3method [ SpotRateCurve
 '[.SpotRateCurve' <- function(object, term) {
-    stopifnot(any(terms(object) %in% term))
-    rates(object)[terms(object) %in% term]
+    stopifnot(any(terms(object) %in% abs(term)))
+    if (any(term > 0)) {
+        rates(object)[terms(object) %in% term]
+    } else {
+        term <- abs(term)
+        idx <- which(terms(object) %in% term)
+        rates(object)[-idx]
+    }
 }
 
 #' Get the SpotRate for a given term
@@ -110,20 +115,22 @@ getSpotRate <- function(curve, term) {
 #' curve <- as.SpotRateCurve(mat, interp='Spline', dib=365)
 #' curve[1.25] <- 0.085
 '[<-.SpotRateCurve' <- function(object, i, value) {
-    contained.idx <- i %in% object$terms
+    terms <- terms(object)
+    rates <- rates(object)
+    contained.idx <- i %in% terms
     if (any(contained.idx)) {
-        idx <- object$terms %in% i
-        object$terms[idx] <- i[contained.idx]
-        object$rates[idx] <- value[contained.idx]
+        idx <- terms %in% i
+        terms[idx] <- i[contained.idx]
+        rates[idx] <- value[contained.idx]
     }
     if (any(!contained.idx)) {
-        object$terms <- append(object$terms, i[!contained.idx])
-        object$rates <- append(object$rates, value[!contained.idx])
-        idx <- order(object$terms)
-        object$terms <- object$terms[idx]
-        object$rates <- object$rates[idx]
+        rates <- append(rates, value[!contained.idx])
+        terms <- append(terms, i[!contained.idx])
+        idx <- order(terms)
+        terms <- terms[idx]
+        rates <- rates[idx]
     }
-    object
+    SpotRateCurve(rates, terms, dib(object), compounding(object))
 }
 
 #' SpotRateCurve generic extensions
@@ -138,18 +145,18 @@ NULL
 #' @method as.data.frame SpotRateCurve
 #' @S3method as.data.frame SpotRateCurve
 as.data.frame.SpotRateCurve <- function(curve, ...) {
-    data.frame(terms=curve$terms, rates=curve$rates, list(...))
+    data.frame(terms=terms(curve), rates=rates(curve), ...)
 }
 
 #' @rdname generic-SpotRateCurve
 #' @method length SpotRateCurve
 #' @S3method length SpotRateCurve
-length.SpotRateCurve <- function(curve) length(curve$terms)
+length.SpotRateCurve <- function(curve) dim(curve)[1]
 
 #' @rdname generic-SpotRateCurve
 #' @method plot SpotRateCurve
 #' @S3method plot SpotRateCurve
 plot.SpotRateCurve <- function(curve, ...) {
-    plot(curve$terms, curve$rates, ...)
+    plot(terms(curve), rates(curve), ...)
 }
 

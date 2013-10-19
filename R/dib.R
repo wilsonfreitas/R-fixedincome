@@ -15,5 +15,5 @@ dib.SpotRate <- function (object) object$dib
 #' @rdname dib
 #' @method dib SpotRateCurve
 #' @S3method dib SpotRateCurve
-dib.SpotRateCurve <- function (object) object$dib
+dib.SpotRateCurve <- function (object) attr(object, 'dib')
 

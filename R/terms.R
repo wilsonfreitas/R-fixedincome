@@ -7,4 +7,4 @@
 terms <- function(object, ...) UseMethod('terms', object)
 
 #' @S3method terms SpotRateCurve
-terms.SpotRateCurve <- function(object) object$terms
+terms.SpotRateCurve <- function(object) as.numeric(rownames(object))

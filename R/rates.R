@@ -15,5 +15,5 @@ rates <- function(object, ...) UseMethod('rates', object)
 #' @rdname rates
 #' @method rates SpotRateCurve
 #' @S3method rates SpotRateCurve
-rates.SpotRateCurve <- function(object) object$rates
+rates.SpotRateCurve <- function(object) as.numeric(object)
 
