@@ -38,11 +38,16 @@ test_that("it should return the interest rate curve length", {
 })
 
 test_that("it should access the elements by its indexes", {
-    expect_equal( curve[1], 0.0719 )
-    expect_equal( curve[11], 0.056 )
-    expect_equal( curve[c(1, 11)], c(0.0719, 0.056) )
+    expect_equal( as.numeric(curve[1]), 0.0719 )
+    expect_equal( as.numeric(curve[11]), 0.056 )
+    expect_equal( as.numeric(curve[c(1, 11)]), c(0.0719, 0.056) )
     expect_is( curve[-c(1,11)], 'SpotRateCurve' )
     expect_error( curve[21] )
+})
+
+test_that("it should execute indexing operations", {
+    expect_equal( which(curve == 0.0719), 1 )
+    expect_equal( which(curve < 0.0719), c(2, 3, 4, 5) )
 })
 
 test_that("it should return a new curve with remaining elements", {

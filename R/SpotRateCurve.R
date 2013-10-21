@@ -29,7 +29,7 @@
 #' curve <- SpotRateCurve(c(0.08, 0.083, 0.089, 0.093, 0.095), c(0.5, 1, 1.5, 2, 2.5), dib=360, compounding='simple')
 SpotRateCurve <- function(rates, terms, dib=252, compounding='compounded') {
     stopifnot(length(rates) == length(terms))
-    stopifnot(length(rates) > 2)
+    # stopifnot(length(rates) > 2)
     stopifnot(length(terms) == length(unique(terms)))
     stopifnot(all(diff(terms) > 0))
     dim(rates) <- c(length(rates), 1)
@@ -83,11 +83,14 @@ as.SpotRateCurve.matrix <- function(object, ...) {
 '[.SpotRateCurve' <- function(object, term) {
     stopifnot(any(terms(object) %in% abs(term)))
     if (any(term > 0)) {
-        rates(object)[terms(object) %in% term]
+        SpotRateCurve(rates(object)[terms(object) %in% term],
+            term, dib=dib(curve), compounding=compounding(curve))
     } else {
         term <- abs(term)
         idx <- which(terms(object) %in% term)
-        rates(object)[-idx]
+        SpotRateCurve(rates(object)[-idx],
+            terms(object)[-idx],
+            dib=dib(curve), compounding=compounding(curve))
     }
 }
 
