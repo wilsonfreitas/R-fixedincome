@@ -9,10 +9,10 @@
 #' @return \code{CurveInterpolation} class
 #' @export
 CurveInterpolation <- function(curve, method='flatforward') {
-    curve$method <- method
+    attr(curve, 'method') <- method
     interp.method <- interpolationMethods[[method]]
-    curve$interp.FUN <- interp.method$prepare(curve)
-    curve$interp <- interp.method$interp
+    attr(curve, 'interp.FUN') <- interp.method$prepare(curve)
+    attr(curve, 'interp') <- interp.method$interp
     class(curve) <- c('CurveInterpolation', 'SpotRateCurve')
     invisible(curve)
 }
@@ -25,22 +25,23 @@ CurveInterpolation <- function(curve, method='flatforward') {
 method <- function(obj, ...) UseMethod('method', obj)
 
 #' @S3method method CurveInterpolation
-method.CurveInterpolation <- function(curve) curve$method
+method.CurveInterpolation <- function(curve) attr(curve, 'method')
 
 #' @S3method [ CurveInterpolation
 '[.CurveInterpolation' <- function(curve, term) {
     # if (any(terms(curve) %in% term))
     #     NextMethod("[")
     #  else
-    curve$interp(curve, term, curve$interp.FUN)
+    interp <- attr(curve, 'interp')
+    interp(curve, term, attr(curve, 'interp.FUN'))
 }
 
 #' @S3method [<- CurveInterpolation
 '[<-.CurveInterpolation' <- function(curve, i, value) {
     obj <- NextMethod("[<-")
-    interp.method <- interpolationMethods[[method(obj)]]
-    obj$interp.FUN <- interp.method$prepare(obj)
-    obj
+    interp.method <- interpolationMethods[[method(curve)]]
+    # attr(obj, 'interp.FUN') <- interp.method$prepare(obj)
+    CurveInterpolation(obj, method(curve))
 }
 
 #' interp
