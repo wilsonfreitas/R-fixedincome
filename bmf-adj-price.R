@@ -23,6 +23,8 @@ tab <- transform(tab,
 	Variacao=to.numeric(Variacao),
 	Ajuste.Contr=to.numeric(Ajuste.Contr))
 
+head(tab)
+
 for (i in seq_along(tab$Mercadoria)) {
 	if (is.na(tab$Mercadoria[i])) {
 		tab$Mercadoria[i] <- Mercadoria.ID
@@ -30,3 +32,6 @@ for (i in seq_along(tab$Mercadoria)) {
 		Mercadoria.ID <- tab$Mercadoria[i]
 	}
 }
+
+head(tab)
+
