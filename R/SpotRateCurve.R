@@ -85,13 +85,13 @@ as.SpotRateCurve.matrix <- function(object, ...) {
     stopifnot(any(terms(object) %in% abs(term)))
     if (any(term > 0)) {
         SpotRateCurve(rates(object)[terms(object) %in% term],
-            term, dib=dib(curve), compounding=compounding(curve))
+            term, dib=dib(object), compounding=compounding(object))
     } else {
         term <- abs(term)
         idx <- which(terms(object) %in% term)
         SpotRateCurve(rates(object)[-idx],
             terms(object)[-idx],
-            dib=dib(curve), compounding=compounding(curve))
+            dib=dib(object), compounding=compounding(object))
     }
 }
 
