@@ -28,15 +28,16 @@
 #' # Creating a zero curve with linear interpolation and 360 days in base (days per year)
 #' curve <- SpotRateCurve(c(0.08, 0.083, 0.089, 0.093, 0.095), c(0.5, 1, 1.5, 2, 2.5), dib=360, compounding='simple')
 SpotRateCurve <- function(rates, terms,
-		dib=252, compounding='compounded', dates=NULL) {
+		dib=252, compounding='compounded', dates=NULL,
+		datum=NULL, calendar=NULL) {
 	stopifnot(length(rates) == length(terms))
-	# stopifnot(length(rates) > 2)
 	stopifnot(length(terms) == length(unique(terms)))
 	stopifnot(all(diff(terms) > 0))
 	dim(rates) <- c(length(rates), 1)
 	rownames(rates) <- terms
 	attr(rates, 'dib') <- dib
 	attr(rates, 'compounding') <- compounding
+	attr(rates, 'datum') <- if (is.null(datum)) datum else as.Date(datum)
 	class(rates) <- 'SpotRateCurve'
 	invisible(rates)
 }

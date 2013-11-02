@@ -3,7 +3,8 @@
 \title{Creates a SpotRateCurve}
 \usage{
   SpotRateCurve(rates, terms, dib = 252,
-    compounding = "compounded")
+    compounding = "compounded", dates = NULL, datum = NULL,
+    calendar = NULL)
 }
 \arguments{
   \item{rates}{a vector with the interest rates}
