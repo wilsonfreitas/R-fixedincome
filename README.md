@@ -45,6 +45,22 @@
 	- dim
 	- dimnames(curve) <- list(terms, curve_name)
 	- ???
+- Curve interpolation should return a SpotRateCurve or a CurveInterpolation
+	curve <- CurveInterpolation(curve, method='flatforward')
+	expect_equal( curve[c(1, 11, 14, 21)], c(0.0719, 0.056, 0.060220003, 0.065400693) )
+	It is tough or even unnecessary call SpotRateCurve and call CurveInterpolation …
+	CurveInterpolation(SpotRateCurve(rates, terms,
+	    dib=252, compounding='compounding'))
+- Flat forward interpolation should use the compounding curve’s attribute instead of assuming compounded rates.
+	interp=function(curve, term, interp.FUN) {
+	    log.price <- interp.FUN(term)
+	    price <- exp(log.price)
+	    price^(dib(curve)/term) - 1
+	},
+- For a given curve with a defined compounding, create a new curve with different compounding, or even different settings as dib and compounding.
+- The intep.method should always be provided, instead of method only. This makes the constructor more flexible, avoiding inner and hidden behaviors.
+
+
 
 #### try
 
