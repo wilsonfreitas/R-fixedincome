@@ -166,3 +166,20 @@ plot.SpotRateCurve <- function(curve, ...) {
     plot(terms(curve), rates(curve), ...)
 }
 
+#' @rdname generic-SpotRateCurve
+#' @method head SpotRateCurve
+#' @S3method head SpotRateCurve
+head.SpotRateCurve <- function(curve, n=6L, ...) {
+	stopifnot(length(curve) >= n)
+	curve[terms(curve)[seq_len(n)]]
+}
+
+#' @rdname generic-SpotRateCurve
+#' @method tail SpotRateCurve
+#' @S3method tail SpotRateCurve
+tail.SpotRateCurve <- function(curve, n=6L, ...) {
+	stopifnot(length(curve) >= n)
+	.terms <- tail(seq_along(terms(curve)), n)
+	.terms <- terms(curve)[.terms]
+	curve[.terms]
+}

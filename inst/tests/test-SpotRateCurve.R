@@ -113,3 +113,23 @@ test_that('it should define a name to a curve', {
 	curve <- SpotRateCurve(rates, terms, name='CURVE')
 	expect_equal(name(curve), 'CURVE')
 })
+
+test_that('it should return the curve\'s head', {
+	terms <- c(1, 11, 26, 27, 28, 30)
+	rates <- c(0.0719, 0.056, 0.0674, 0.0687, 0.07, 0.07)
+	curve <- SpotRateCurve(rates, terms)
+	expect_is(head(curve), 'SpotRateCurve')
+	expect_equal(length(head(curve)), 6)
+	expect_equal(head(curve), curve)
+	expect_error(head(curve, 10))
+})
+
+test_that('it should return the curve\'s tail', {
+	terms <- c(1, 11, 26, 27, 28, 30)
+	rates <- c(0.0719, 0.056, 0.0674, 0.0687, 0.07, 0.07)
+	curve <- SpotRateCurve(rates, terms)
+	expect_is(tail(curve), 'SpotRateCurve')
+	expect_equal(length(tail(curve, 3)), 3)
+	expect_equal(tail(curve), curve)
+	expect_error(tail(curve, 10))
+})
