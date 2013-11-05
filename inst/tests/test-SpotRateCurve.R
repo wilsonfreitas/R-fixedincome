@@ -106,3 +106,10 @@ test_that('it should define a datum and a Calendar to a curve', {
 	curve <- SpotRateCurve(rates, terms, datum='2013-10-28')
 	expect_equal(datum(curve), as.Date('2013-10-28'))
 })
+
+test_that('it should define a name to a curve', {
+	terms <- c(1, 11, 26, 27, 28)
+	rates <- c(0.0719, 0.056, 0.0674, 0.0687, 0.07)
+	curve <- SpotRateCurve(rates, terms, name='CURVE')
+	expect_equal(name(curve), 'CURVE')
+})
