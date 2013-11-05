@@ -59,7 +59,7 @@
 	},
 - For a given curve with a defined compounding, create a new curve with different compounding, or even different settings as dib and compounding.
 - The intep.method should always be provided, instead of method only. This makes the constructor more flexible, avoiding inner and hidden behaviors.
-
+- Implement head and tail
 
 
 #### try
