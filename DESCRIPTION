@@ -31,3 +31,4 @@ Collate:
     'terms.R'
     'neighbors.R'
     'datum.R'
+    'name.R'

@@ -2,7 +2,7 @@
 \alias{dib}
 \alias{dib.SpotRate}
 \alias{dib.SpotRateCurve}
-\title{dib}
+\title{Days in base}
 \usage{
   dib(object, ...)
 
@@ -11,6 +11,6 @@
   \method{dib}{SpotRateCurve} (object)
 }
 \description{
-  Days in base
+  Annual rates must have an amount of days to compound
 }
 
