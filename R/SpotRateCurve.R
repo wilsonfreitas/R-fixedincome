@@ -183,3 +183,8 @@ tail.SpotRateCurve <- function(curve, n=6L, ...) {
 	.terms <- terms(curve)[.terms]
 	curve[.terms]
 }
+
+#' @rdname generic-SpotRateCurve
+#' @method terms SpotRateCurve
+#' @S3method terms SpotRateCurve
+terms.SpotRateCurve <- function(object) as.numeric(rownames(object))
