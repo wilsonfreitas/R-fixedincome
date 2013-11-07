@@ -13,7 +13,12 @@ CurveInterpolation <- function(curve, method='flatforward') {
     interp.method <- interpolationMethods[[method]]
     attr(curve, 'interp.FUN') <- tryCatch(
         interp.method$prepare(curve),
-        error=function(e) NULL)
+        error=function(e) {
+            if (grepl('at least two', conditionMessage(e)))
+                NULL
+            else
+                stop(e)
+        })
     attr(curve, 'interp') <- interp.method$interp
     class(curve) <- c('CurveInterpolation', 'SpotRateCurve')
     invisible(curve)
