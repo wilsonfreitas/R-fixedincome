@@ -11,7 +11,9 @@
 CurveInterpolation <- function(curve, method='flatforward') {
     attr(curve, 'method') <- method
     interp.method <- interpolationMethods[[method]]
-    attr(curve, 'interp.FUN') <- interp.method$prepare(curve)
+    attr(curve, 'interp.FUN') <- tryCatch(
+        interp.method$prepare(curve),
+        error=function(e) NULL)
     attr(curve, 'interp') <- interp.method$interp
     class(curve) <- c('CurveInterpolation', 'SpotRateCurve')
     invisible(curve)
@@ -29,11 +31,15 @@ method.CurveInterpolation <- function(curve) attr(curve, 'method')
 
 #' @S3method [ CurveInterpolation
 '[.CurveInterpolation' <- function(curve, term) {
-    # if (any(terms(curve) %in% term))
-    #     NextMethod("[")
-    #  else
-    interp <- attr(curve, 'interp')
-    interp(curve, term, attr(curve, 'interp.FUN'))
+    if (is.null(attr(curve, 'interp.FUN'))) {
+        obj <- NextMethod("[")
+    } else {
+        interp <- attr(curve, 'interp')
+        values <- interp(curve, term, attr(curve, 'interp.FUN'))
+        obj <- SpotRateCurve(values, term,
+            dib=dib(curve), compounding=compounding(curve))
+    }
+    CurveInterpolation(obj, method(curve))
 }
 
 #' @S3method [<- CurveInterpolation
