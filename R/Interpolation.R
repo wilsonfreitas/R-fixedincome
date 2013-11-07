@@ -18,7 +18,6 @@ CurveInterpolation <- function(curve, method=flatforward) {
             else
                 stop(e)
         })
-    # attr(curve, 'interp') <- interp.method$interp
     class(curve) <- c('CurveInterpolation', 'SpotRateCurve')
     invisible(curve)
 }
