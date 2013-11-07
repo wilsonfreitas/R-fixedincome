@@ -2,7 +2,7 @@
 \alias{CurveInterpolation}
 \title{CurveInterpolation}
 \usage{
-  CurveInterpolation(curve, method = "flatforward")
+  CurveInterpolation(curve, method = flatforward)
 }
 \arguments{
   \item{curve}{curve}
