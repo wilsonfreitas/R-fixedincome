@@ -103,7 +103,15 @@ as.SpotRateCurve.matrix <- function(object, ...) {
 #' 
 #' @export
 getSpotRate <- function(curve, term) {
+    stopifnot(length(term) == 1)
     SpotRate(curve[term], term, dib=dib(curve), compounding=compounding(curve))
+}
+
+#' @rdname getSpotRate
+#' @method [[ SpotRateCurve
+#' @S3method [[ SpotRateCurve
+'[[.SpotRateCurve' <- function(curve, term) {
+    getSpotRate(curve, term)
 }
 
 #' Insert a SpotRate into the SpotRate.

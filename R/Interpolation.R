@@ -51,6 +51,13 @@ method.CurveInterpolation <- function(curve) attr(curve, 'method')
     CurveInterpolation(obj, method(curve))
 }
 
+#' @rdname getSpotRate
+#' @method [[ CurveInterpolation
+#' @S3method [[ CurveInterpolation
+'[[.CurveInterpolation' <- function(curve, term) {
+    getSpotRate(curve, term)
+}
+
 #' @export
 flatforward <- function(curve) {
     prices <- (1 + rates(curve))^(terms(curve)/dib(curve))

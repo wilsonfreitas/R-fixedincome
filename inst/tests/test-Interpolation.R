@@ -41,6 +41,16 @@ test_that("it should create a CurveInterpolation with a single element, add an e
     expect_equal(as.numeric(curve[2]), 0.08374783, tolerance=1e-6)
 })
 
+test_that("it should return a SpotRate for the given term using [[", {
+    curve <- CurveInterpolation(curve, method='spline')
+    expect_is( curve[[11]], 'SpotRate' )
+    expect_is( curve[[21]], 'SpotRate' )
+    expect_equal( rate(curve[[21]]), curve[21] )
+    expect_equal( term(curve[[21]]), 21 )
+    expect_equal( dib(curve[[21]]), dib(curve) )
+    expect_equal( compounding(curve[[21]]), compounding(curve) )
+})
+
 test_that("it should interpolate FlatForwardly the interest rate curve", {
     curve <- CurveInterpolation(curve, method='flatforward')
     expect_is( curve[1], 'SpotRateCurve' )

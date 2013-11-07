@@ -66,6 +66,11 @@ test_that("it should return a SpotRate for the given term", {
     expect_error( getSpotRate(curve, 21) )
 })
 
+test_that("it should return a SpotRate for the given term using [[", {
+    expect_is( curve[[11]], 'SpotRate' )
+    expect_error( curve[[21]] )
+})
+
 test_that("it should compute forward rates", {
     expect_error( forward.rate(curve, 1, 1) )
     expect_equal( forward.rate(curve, 1, 11), SpotRate(0.05442303, 10) )
