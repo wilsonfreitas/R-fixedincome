@@ -14,7 +14,7 @@ CurveInterpolation <- function(curve, method='flatforward') {
     attr(curve, 'interp.FUN') <- tryCatch(
         interp.method$prepare(curve),
         error=function(e) {
-            if (grepl('at least two', conditionMessage(e)))
+            if (grepl('at least two', as.character(e)))
                 NULL
             else
                 stop(e)
