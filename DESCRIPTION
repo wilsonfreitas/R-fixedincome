@@ -28,7 +28,6 @@ Collate:
     'rate.R'
     'rates.R'
     'term.R'
-    'terms.R'
     'neighbors.R'
     'datum.R'
     'name.R'

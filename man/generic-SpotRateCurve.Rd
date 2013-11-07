@@ -5,6 +5,7 @@
 \alias{length.SpotRateCurve}
 \alias{plot.SpotRateCurve}
 \alias{tail.SpotRateCurve}
+\alias{terms.SpotRateCurve}
 \title{SpotRateCurve generic extensions}
 \usage{
   \method{as.data.frame}{SpotRateCurve} (curve, ...)
@@ -16,6 +17,8 @@
   \method{head}{SpotRateCurve} (curve, n = 6L, ...)
 
   \method{tail}{SpotRateCurve} (curve, n = 6L, ...)
+
+  \method{terms}{SpotRateCurve} (object)
 }
 \description{
   SpotRateCurve generic extensions
