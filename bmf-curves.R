@@ -23,17 +23,19 @@ str_supplant <- function (string, repl) {
 	string
 }
 
+# "DIC" DIxIPCA compounded 1
+# "DIM" DIxIGP-M compounded 1
+# "DOL" DIxUSD simple 1
+# "BRP" IBrX-50 ind 1
+# "PRE" DIxPRE compounded 2
+
 # "ACC" Ajuste cupom simple 1
 # "ALD" Aluminio US$/t 1
 # "AN" DIxAnbid compounded 2
 # "ANP" AnbidxPRE compounded 2
 # "APR" Ajuste PRE compounded 2
-# "BRP" IBrX-50 ind 1
 # "CBD" Cobre US$/t 1
-# "DIC" DIxIPCA compounded 1
-# "DIM" DIxIGP-M compounded 1
 # "DOC" Cupom limpo simple 1
-# "DOL" DIxUSD simple 1
 # "DP" USDxPRE compounded 2
 # "EUC" DIxEUR simple 1 
 # "EUR" EUR price 1
@@ -45,7 +47,6 @@ str_supplant <- function (string, repl) {
 # "NID" Niquel US$/t 1
 # "PBD" Chumbo US$/t 1
 # "PDN" Prob. no-default 1
-# "PRE" DIxPRE compounded 2
 # "PTX" USD price 1
 # "SDE" Spread Libor EURxUSD additive 1
 # "SLP" SELIC compounded 1
@@ -90,8 +91,27 @@ tickers_map <- list(
 		dib=360,
 		weight=0.01,
 		days_between=business_days_between),
-	'IGPM'='DIM',
-	'IPCA'='DIC'
+	'IGPM'=list(
+		ticker='DIM',
+		columns=1,
+		compounding='compounded',
+		dib=252,
+		weight=0.01,
+		days_between=business_days_between),
+	'IPCA'=list(
+		ticker='DIC',
+		columns=1,
+		compounding='compounded',
+		dib=252,
+		weight=0.01,
+		days_between=business_days_between)
+	'IBRX'=list(
+		ticker='BRP',
+		columns=1,
+		compounding='simple',
+		dib=252,
+		weight=0.01,
+		days_between=business_days_between)
 )
 
 #' selic_curve <- getCurve('SELIC', '2013-01-10')
@@ -109,8 +129,8 @@ getCurve <- function(ticker, date) {
 	value <- value*bmf_ticker$weight
 	terms <- bmf_ticker$days_between(as.Date(date), as.Date(date) + terms)
 	SpotRateCurve(value, terms,
-		dib=bmf_ticker$dib,
-		compounding=bmf_ticker$compounding, name=bmf_ticker$ticker)
+		dib=bmf_ticker$dib, compounding=bmf_ticker$compounding,
+        name=bmf_ticker$ticker, datum=date)
 }
 
 downloadData <- function (url) {
@@ -122,3 +142,16 @@ downloadData <- function (url) {
 		as.numeric(gsub(',', '.', x))
 	}, USE.NAMES=FALSE)
 }
+
+# code examples
+# require(ggplot2)
+# selic <- getCurve('SELIC', '2013-10-18')
+# ff_selic <- CurveInterpolation(selic)
+# h_selic <- CurveInterpolation(selic, hermite)
+# m_selic <- CurveInterpolation(selic, monotone)
+# ggplot(as.data.frame(head(selic, 20)), aes(x=terms, y=rates)) +
+#     geom_line(data=as.data.frame(ff_selic[1:91]), aes(x=terms, y=rates), colour='red') +
+#     geom_line(data=as.data.frame(h_selic[1:91]), aes(x=terms, y=rates), colour='green') +
+#     geom_line(data=as.data.frame(m_selic[1:91]), aes(x=terms, y=rates), colour='blue') +
+#     geom_point(colour='black', shape=16) +
+#     theme_bw() 
