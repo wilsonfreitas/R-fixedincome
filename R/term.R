@@ -9,7 +9,7 @@ term <- function(object, ...) UseMethod('term', object)
 #' @rdname term
 #' @method term SpotRate
 #' @S3method term SpotRate
-term.SpotRate <- function (object) object$term
+term.SpotRate <- function (object) attr(object, 'term')
 
 #' @rdname term
 #' @method term CompoundFactor

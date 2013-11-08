@@ -16,7 +16,7 @@ rate <- function(object, ...) UseMethod('rate', object)
 #' @rdname rate
 #' @method rate SpotRate
 #' @S3method rate SpotRate
-rate.SpotRate <- function (object) object$value
+rate.SpotRate <- function (object) as.numeric(object)
 
 #' @return \code{implied interest rate}
 #' 

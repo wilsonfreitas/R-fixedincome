@@ -11,7 +11,7 @@ forward.rate <- function(object, ...) UseMethod('forward.rate', object)
 #' @method forward.rate SpotRate
 #' @S3method forward.rate SpotRate
 forward.rate.SpotRate <- function (object, other) {
-    if (object$term > other$term)
+    if (term(object) > term(other))
         stop('First parameter must have the smaller term.')
     fact.1 <- as.CompoundFactor(object)
     fact.2 <- as.CompoundFactor(other)
@@ -27,10 +27,8 @@ forward.rate.SpotRateCurve <- function(curve, from.term, to.term=NULL,
     stopifnot(!is.null(to.term) || !is.null(forward.term))
     to.term <- if (!is.null(to.term)) to.term else from.term + forward.term
     stopifnot(to.term > from.term)
-    sr.first <- SpotRate(curve[from.term], from.term, dib(curve),
-        compounding(curve))
-    sr.second <- SpotRate(curve[to.term], to.term, dib(curve),
-        compounding(curve))
+    sr.first <- curve[[from.term]]
+    sr.second <- curve[[to.term]]
     forward.rate(sr.first, sr.second)
 }
 

@@ -3,8 +3,8 @@ context('SpotRate class')
 
 test_that("it should create a SpotRate", {
     spr <- SpotRate(1, 1)
-    expect_that(spr$value, equals(1))
-    expect_that(spr$term, equals(1))
+    expect_that(rate(spr), equals(1))
+    expect_that(term(spr), equals(1))
     expect_that(class(spr), equals('SpotRate'))
 })
 

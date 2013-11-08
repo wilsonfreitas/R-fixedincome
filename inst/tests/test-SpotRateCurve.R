@@ -59,7 +59,7 @@ test_that("it should return a new curve with remaining elements", {
 
 test_that("it should return a SpotRate for the given term", {
     expect_is( getSpotRate(curve, 11), 'SpotRate' )
-    expect_equal( rate(getSpotRate(curve, 11)), curve[11] )
+    expect_equal( getSpotRate(curve, 11), curve[[11]] )
     expect_equal( term(getSpotRate(curve, 11)), 11 )
     expect_equal( dib(getSpotRate(curve, 11)), dib(curve) )
     expect_equal( compounding(getSpotRate(curve, 11)), compounding(curve) )

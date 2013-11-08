@@ -19,13 +19,12 @@
 #' @return a SpotRate object
 #' @export
 SpotRate <- function(value, term, dib=252, compounding='compounded') {
-    that <- list()
-    that$value <- value
-    that$term <- term
-    that$dib <- dib
-    that$compounding <- compounding
-    class(that) <- 'SpotRate'
-    return(that)
+    stopifnot(is.numeric(value))
+    attr(value, 'term') <- term
+    attr(value, 'dib') <- dib
+    attr(value, 'compounding') <- compounding
+    class(value) <- 'SpotRate'
+    return(value)
 }
 
 #' is.SpotRate
@@ -45,29 +44,33 @@ as.SpotRate <- function(object, ...) UseMethod('as.SpotRate', object)
 #' @rdname as.SpotRate
 #' @method as.SpotRate SpotRate
 #' @S3method as.SpotRate SpotRate
-as.SpotRate.SpotRate <- function(object, term=object$term) {
-    SpotRate(value=object$value, term=term, dib=object$dib)
+as.SpotRate.SpotRate <- function(object, term=term(object)) {
+    SpotRate(value=rate(object), term=term, dib=dib(object))
 }
 
 #' @rdname as.SpotRate
 #' @method as.SpotRate CompoundFactor
 #' @S3method as.SpotRate CompoundFactor
-as.SpotRate.CompoundFactor <- function(object, dib=252, compounding='compounded') {
-    rate <- attr(Compounding[[compounding]], 'implied.rate')(object$value, object$term, dib)
+as.SpotRate.CompoundFactor <- function(object, dib=252,
+        compounding='compounded') {
+    rate <- attr(Compounding[[compounding]], 'implied.rate')(object$value,
+        object$term, dib)
     SpotRate(rate, object$term, dib=dib, compounding=compounding)
 }
 
 #' @S3method all.equal SpotRate
-all.equal.SpotRate <- function(target, current, tolerance=.Machine$double.eps^0.5, ...) {
-    target$term == current$term &&
-        target$dib == current$dib &&
-        abs(target$value - current$value) <= tolerance
+all.equal.SpotRate <- function(target, current,
+        tolerance=.Machine$double.eps^0.5, ...) {
+    term(target) == term(current) &&
+        dib(target) == dib(current) &&
+        abs(rate(target) - rate(current)) <= tolerance
 }
 
 #' @S3method print SpotRate
 print.SpotRate <- function(object) {
-    cat('\nrate =', object$value, '\nterm =', object$term,
-        '\ndays in base =', object$dib,
-        '\ncompounding =', object$compounding, '\n')
+    cat('rate =', rate(object),
+        '\nterm =', term(object),
+        '\ndays in base =', dib(object),
+        '\ncompounding =', compounding(object), '\n')
 }
 

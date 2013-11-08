@@ -45,7 +45,7 @@ test_that("it should return a SpotRate for the given term using [[", {
     curve <- CurveInterpolation(curve, method='spline')
     expect_is( curve[[11]], 'SpotRate' )
     expect_is( curve[[21]], 'SpotRate' )
-    expect_equal( rate(curve[[21]]), curve[21] )
+    expect_equal( rate(curve[[21]]), rates(curve[21]) )
     expect_equal( term(curve[[21]]), 21 )
     expect_equal( dib(curve[[21]]), dib(curve) )
     expect_equal( compounding(curve[[21]]), compounding(curve) )

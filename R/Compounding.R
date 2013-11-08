@@ -10,7 +10,7 @@ compounding <- function(object, ...) UseMethod('compounding', object)
 #' @rdname compounding
 #' @method compounding SpotRate
 #' @S3method compounding SpotRate
-compounding.SpotRate <- function (object) object$compounding
+compounding.SpotRate <- function (object) attr(object, 'compounding')
 
 #' @rdname compounding
 #' @method compounding SpotRateCurve

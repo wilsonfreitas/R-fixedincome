@@ -41,8 +41,8 @@ as.CompoundFactor <- function(object, ...) UseMethod('as.CompoundFactor', object
 #' @method as.CompoundFactor SpotRate
 #' @S3method as.CompoundFactor SpotRate
 as.CompoundFactor.SpotRate <- function(object) {
-    fact <- attr(Compounding[[object$compounding]], 'compound')(object$value, object$term, object$dib)
-    return( CompoundFactor(fact, object$term) )
+    fact <- attr(Compounding[[compounding(object)]], 'compound')(rate(object), term(object), dib(object))
+    return( CompoundFactor(fact, term(object)) )
 }
 
 #' @rdname as.CompoundFactor
