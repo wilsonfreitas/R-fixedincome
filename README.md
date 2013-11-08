@@ -61,6 +61,7 @@
 - The intep.method should always be provided, instead of method only. This makes the constructor more flexible, avoiding inner and hidden behaviors.
 - Implement head and tail
 - Conversion function as.SpotRateCurve.SpotRateCurve(curve, dib, compounding, name, ...)
+- Need a price curve
 
 
 #### try
