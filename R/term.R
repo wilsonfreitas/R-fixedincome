@@ -14,5 +14,5 @@ term.SpotRate <- function (object) attr(object, 'term')
 #' @rdname term
 #' @method term CompoundFactor
 #' @S3method term CompoundFactor
-term.CompoundFactor <- function(object) object$term
+term.CompoundFactor <- function(object) attr(object, 'term')
 

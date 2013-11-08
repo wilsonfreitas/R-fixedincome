@@ -53,9 +53,9 @@ as.SpotRate.SpotRate <- function(object, term=term(object)) {
 #' @S3method as.SpotRate CompoundFactor
 as.SpotRate.CompoundFactor <- function(object, dib=252,
         compounding='compounded') {
-    rate <- attr(Compounding[[compounding]], 'implied.rate')(object$value,
-        object$term, dib)
-    SpotRate(rate, object$term, dib=dib, compounding=compounding)
+    rate <- attr(Compounding[[compounding]], 'implied.rate')(
+        compound.factor(object), term(object), dib)
+    SpotRate(rate, term(object), dib=dib, compounding=compounding)
 }
 
 #' @S3method all.equal SpotRate

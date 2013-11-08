@@ -21,12 +21,9 @@
 #' 
 #' @export
 CompoundFactor <- function(value, term) {
-    that <- list()
-    that$value <- value
-    that$term <- term
-    
-    class(that) <- 'CompoundFactor'
-    return(that)
+    attr(value, 'term') <- term
+    class(value) <- 'CompoundFactor'
+    return(value)
 }
 
 #' @title as.CompoundFactor
@@ -49,7 +46,7 @@ as.CompoundFactor.SpotRate <- function(object) {
 #' @method as.CompoundFactor CompoundFactor
 #' @S3method as.CompoundFactor CompoundFactor
 as.CompoundFactor.CompoundFactor <- function(object) {
-    CompoundFactor(value=object$value, term=object$term)
+    CompoundFactor(value=compound.factor(object), term=term(object))
 }
 
 #' @S3method * CompoundFactor
@@ -59,17 +56,20 @@ as.CompoundFactor.CompoundFactor <- function(object) {
 
 #' @S3method / CompoundFactor
 '/.CompoundFactor' <- function(cf.2, cf.1) {
-    CompoundFactor(cf.2$value/cf.1$value, cf.2$term - cf.1$term)
+    CompoundFactor(compound.factor(cf.2)/compound.factor(cf.1),
+        term(cf.2) - term(cf.1))
 }
 
 #' @S3method all.equal CompoundFactor
-all.equal.CompoundFactor <- function(target, current, tolerance=.Machine$double.eps^0.5, ...) {
-    target$term == current$term &&
-        abs(target$value - current$value) <= tolerance
+all.equal.CompoundFactor <- function(target, current,
+        tolerance=.Machine$double.eps^0.5, ...) {
+    term(target) == term(current) &&
+        abs(compound.factor(target) - compound.factor(current)) <= tolerance
 }
 
 #' @S3method print CompoundFactor
 print.CompoundFactor <- function(object) {
-    cat('\ncompounding factor =', object$value, '\nterm =', object$term, '\n')
+    cat('compounding factor =', compound.factor(object),
+        '\nterm =', term(object), '\n')
 }
 
