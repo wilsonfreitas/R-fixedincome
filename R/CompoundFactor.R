@@ -56,8 +56,7 @@ as.CompoundFactor.CompoundFactor <- function(object) {
 
 #' @S3method / CompoundFactor
 '/.CompoundFactor' <- function(cf.2, cf.1) {
-    CompoundFactor(compound.factor(cf.2)/compound.factor(cf.1),
-        term(cf.2) - term(cf.1))
+    discount(cf.1, cf.2)
 }
 
 #' @S3method all.equal CompoundFactor
