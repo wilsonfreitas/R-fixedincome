@@ -37,8 +37,7 @@ method.CurveInterpolation <- function(curve) attr(curve, 'method')
     if (is.null(attr(curve, 'interp'))) {
         obj <- NextMethod("[")
     } else {
-        interp <- attr(curve, 'interp')
-        values <- interp(term)
+        values <- rates(curve, term)
         obj <- SpotRateCurve(values, term,
             dib=dib(curve), compounding=compounding(curve))
     }

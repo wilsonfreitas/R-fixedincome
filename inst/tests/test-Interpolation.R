@@ -71,8 +71,9 @@ test_that("it should not extrapolate FlatForwardly the interest rate curve", {
 
 test_that("it should interpolate Linearly the interest rate curve", {
     curve <- CurveInterpolation(curve, method='linear')
-    expect_equal( as.numeric(curve[1]), 0.0719 )
-    expect_equal( as.numeric(curve[11]), 0.056 )
+    expect_equal( rates(curve[1]), 0.0719 )
+    expect_equal( rates(curve[11]), 0.056 )
+    expect_equal( rates(curve, c(1, 11)), c(0.0719, 0.056) )
     expect_equal( as.numeric(curve[c(1, 11)]), c(0.0719, 0.056) )
     expect_equal( as.numeric(curve[21]), 0.0636 )
     expect_equal( as.numeric(curve[c(14, 21)]), c(0.05828, 0.0636) )
