@@ -1,5 +1,4 @@
 
-
 library(stringr)
 library(fixedincome)
 library(XML)
@@ -70,42 +69,42 @@ business_days_between <- function(from, to) bizdays(from, to)
 actual_days_between <- function(from, to) to - from
 
 tickers_map <- list(
-	'SELIC'=list(
+	SELIC=list(
 		ticker='SLP',
 		columns=1,
 		compounding='compounded',
 		dib=252,
 		weight=0.01,
 		days_between=business_days_between),
-	'DI1'=list(
+	DI1=list(
 		ticker='PRE',
 		columns=2,
 		compounding='compounded',
 		dib=252,
 		weight=0.01,
 		days_between=business_days_between),
-	'CC'=list(
+	CC=list(
 		ticker='DOL',
 		columns=1,
 		compounding='simple',
 		dib=360,
 		weight=0.01,
 		days_between=business_days_between),
-	'IGPM'=list(
+	IGPM=list(
 		ticker='DIM',
 		columns=1,
 		compounding='compounded',
 		dib=252,
 		weight=0.01,
 		days_between=business_days_between),
-	'IPCA'=list(
+	IPCA=list(
 		ticker='DIC',
 		columns=1,
 		compounding='compounded',
 		dib=252,
 		weight=0.01,
-		days_between=business_days_between)
-	'IBRX'=list(
+		days_between=business_days_between),
+	IBRX=list(
 		ticker='BRP',
 		columns=1,
 		compounding='simple',
