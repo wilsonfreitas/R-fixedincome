@@ -25,10 +25,23 @@ forward.rate.SpotRateCurve <- function(curve, from.term, to.term=NULL,
     forward.term=NULL) {
 
     stopifnot(!is.null(to.term) || !is.null(forward.term))
-    to.term <- if (!is.null(to.term)) to.term else from.term + forward.term
-    stopifnot(to.term > from.term)
-    sr.first <- curve[[from.term]]
-    sr.second <- curve[[to.term]]
-    forward.rate(sr.first, sr.second)
+    if (!is.null(to.term)) {
+        stopifnot(to.term > from.term)
+        sr.first <- curve[[from.term]]
+        sr.second <- curve[[to.term]]
+        forward.rate(sr.first, sr.second)
+    } else {
+        if (forward.term == 1 && from.term == 1)
+            curve[[1]]
+        else if (forward.term == 1) {
+            sr.first <- curve[[from.term - 1]]
+            sr.second <- curve[[from.term]]
+            forward.rate(sr.first, sr.second)
+        } else {
+            sr.first <- curve[[from.term]]
+            sr.second <- curve[[from.term + forward.term]]
+            forward.rate(sr.first, sr.second)
+        }
+    }
 }
 
