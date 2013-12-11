@@ -61,8 +61,19 @@
 - The intep.method should always be provided, instead of method only. This makes the constructor more flexible, avoiding inner and hidden behaviors.
 - Implement head and tail
 - Conversion function as.SpotRateCurve.SpotRateCurve(curve, dib, compounding, name, ...)
-- Need a price curve
+- Need a price curve: indexcurve, pricecurve
+- Rename classes:
+	- zerocurve src irc spotratecurve
+	- forwardcurve fwdcurve frc
+	- indexcurve pricecurve ixc
+	- yieldcurve
+	- historicaldata
+	- spotrate
+	- compoundfactor compfactor compound
+- Remove compound and discount, use * and / instead
 
+		(refdate, rates, daycounter, compounding, frequency)
+		(terms, rates, daycounter, compounding, frequency)
 
 #### try
 
