@@ -22,6 +22,14 @@ CurveInterpolation <- function(curve, method=flatforward) {
     invisible(curve)
 }
 
+#' @S3method as.SpotRateCurve CurveInterpolation
+as.SpotRateCurve.CurveInterpolation <- function(curve, ...) {
+    attr(curve, 'method') <- NULL
+    attr(curve, 'interp') <- NULL
+    class(curve) <- c('SpotRateCurve')
+    curve
+}
+
 #' Interpolation method
 #' 
 #' Interpolation method
