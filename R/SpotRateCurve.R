@@ -43,14 +43,6 @@ SpotRateCurve <- function(rates, terms,
 	invisible(rates)
 }
 
-#' @S3method print SpotRateCurve
-print.SpotRateCurve <- function(x, ...) {
-    m <- as.matrix(rates(x), ncol=1)
-    rownames(m) <- terms(x)
-    colnames(m) <- attr(x, 'name')
-    print(m)
-}
-
 #' Coerce objects to SpotRateCurve
 #' 
 #' A SpotRateCurve can be coerced from \code{matrix} and \code{data.frame}.
@@ -162,6 +154,16 @@ getSpotRate <- function(curve, term) {
 #' @rdname generic-SpotRateCurve
 #' @name generic-SpotRateCurve
 NULL
+
+#' @rdname generic-SpotRateCurve
+#' @method print SpotRateCurve
+#' @S3method print SpotRateCurve
+print.SpotRateCurve <- function(x, ...) {
+    m <- as.matrix(rates(x), ncol=1)
+    rownames(m) <- terms(x)
+    colnames(m) <- attr(x, 'name')
+    print(m)
+}
 
 #' @rdname generic-SpotRateCurve
 #' @method as.data.frame SpotRateCurve
