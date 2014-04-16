@@ -4,10 +4,13 @@
 \alias{head.SpotRateCurve}
 \alias{length.SpotRateCurve}
 \alias{plot.SpotRateCurve}
+\alias{print.SpotRateCurve}
 \alias{tail.SpotRateCurve}
 \alias{terms.SpotRateCurve}
 \title{SpotRateCurve generic extensions}
 \usage{
+  \method{print}{SpotRateCurve} (x, ...)
+
   \method{as.data.frame}{SpotRateCurve} (curve, ...)
 
   \method{length}{SpotRateCurve} (curve)
