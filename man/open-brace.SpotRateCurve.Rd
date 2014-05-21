@@ -3,9 +3,9 @@
 \alias{[<-.SpotRateCurve}
 \title{Insert a SpotRate into the SpotRate.}
 \usage{
-  \method{[}{SpotRateCurve} (object, term)
+\method{[}{SpotRateCurve}(object, term)
 
-  \method{[}{SpotRateCurve} (object, i, value) <- value
+\method{[}{SpotRateCurve}(object, i) <- value
 }
 \arguments{
   \item{object}{SpotRateCurve on which the SpotRate has to
@@ -14,8 +14,8 @@
   \item{value}{SpotRate to be inserted}
 }
 \description{
-  A SpotRateCurve can be expanded by inserting other
-  SpotRate objects into it.
+A SpotRateCurve can be expanded by inserting other SpotRate
+objects into it.
 }
 \examples{
 # creating a SpotRateCurve from a matrix

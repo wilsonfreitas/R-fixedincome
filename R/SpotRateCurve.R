@@ -8,7 +8,8 @@
 #' Each pair (rate,term) is a spot rate (\code{\link{SpotRate}}) and
 #' it defines the cost of a loan maturing in the term.
 #' Once a SpotRateCurve is created, any rate can be retrieved by its term 
-#' through the index operator (\code{`[`}) which returns a \code{\link{SpotRate}}.
+#' through the index operator (\code{`[`}) which returns a
+#' \code{\link{SpotRate}}.
 #' For those terms which don't have a corresponding rate, the interpolation 
 #' method is used to generate a rate.
 #' The parameter \code{interp} specifies the interpolation method to use.

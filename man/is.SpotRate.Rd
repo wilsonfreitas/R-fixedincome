@@ -2,9 +2,9 @@
 \alias{is.SpotRate}
 \title{is.SpotRate}
 \usage{
-  is.SpotRate(object)
+is.SpotRate(object)
 }
 \description{
-  Checks if is a SpotRate
+Checks if is a SpotRate
 }
 

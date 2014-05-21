@@ -4,22 +4,21 @@
 \alias{rate.SpotRate}
 \title{rate}
 \usage{
-  rate(object, ...)
+rate(object, ...)
 
-  \method{rate}{SpotRate} (object)
+\method{rate}{SpotRate}(object)
 
-  \method{rate}{CompoundFactor} (object, dib = 252,
-    compounding = "compounded")
+\method{rate}{CompoundFactor}(object, dib = 252, compounding = "compounded")
 }
 \value{
-  \code{interest rate}
+\code{interest rate}
 
-  \code{implied interest rate}
+\code{implied interest rate}
 }
 \description{
-  Interest rate
+Interest rate
 }
 \details{
-  Interest rate
+Interest rate
 }
 

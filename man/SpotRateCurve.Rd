@@ -2,9 +2,8 @@
 \alias{SpotRateCurve}
 \title{Creates a SpotRateCurve}
 \usage{
-  SpotRateCurve(rates, terms, dib = 252,
-    compounding = "compounded", dates = NULL, datum = NULL,
-    calendar = NULL, name = NULL)
+SpotRateCurve(rates, terms, dib = 252, compounding = "compounded",
+  dates = NULL, datum = NULL, calendar = NULL, name = NULL)
 }
 \arguments{
   \item{rates}{a vector with the interest rates}
@@ -16,26 +15,26 @@
   Monotone Cubic Spline, Natural Cubi Spline}
 }
 \value{
-  SpotRateCurve object.
+SpotRateCurve object.
 }
 \description{
-  SpotRateCurve abstracts a term structure class providing
-  methods to operate on the term structure internals.
+SpotRateCurve abstracts a term structure class providing
+methods to operate on the term structure internals.
 }
 \details{
-  Actually, the class SpotRateCurve represents a zero
-  curve. A zero curve is a set of \code{rates} indexed by
-  \code{terms}. Each pair (rate,term) is a spot rate
-  (\code{\link{SpotRate}}) and it defines the cost of a
-  loan maturing in the term. Once a SpotRateCurve is
-  created, any rate can be retrieved by its term through
-  the index operator (\code{`[`}) which returns a
-  \code{\link{SpotRate}}. For those terms which don't have
-  a corresponding rate, the interpolation method is used to
-  generate a rate. The parameter \code{interp} specifies
-  the interpolation method to use. Since the operator
-  \code{`[`} returns a SpotRate the \code{dib} must be
-  provided to generate spot rates accordingly.
+Actually, the class SpotRateCurve represents a zero curve.
+A zero curve is a set of \code{rates} indexed by
+\code{terms}. Each pair (rate,term) is a spot rate
+(\code{\link{SpotRate}}) and it defines the cost of a loan
+maturing in the term. Once a SpotRateCurve is created, any
+rate can be retrieved by its term through the index
+operator (\code{`[`}) which returns a
+\code{\link{SpotRate}}. For those terms which don't have a
+corresponding rate, the interpolation method is used to
+generate a rate. The parameter \code{interp} specifies the
+interpolation method to use. Since the operator \code{`[`}
+returns a SpotRate the \code{dib} must be provided to
+generate spot rates accordingly.
 }
 \examples{
 # Creating a zero curve

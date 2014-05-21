@@ -4,11 +4,11 @@
 \alias{as.SpotRateCurve.matrix}
 \title{Coerce objects to SpotRateCurve}
 \usage{
-  as.SpotRateCurve(object, ...)
+as.SpotRateCurve(object, ...)
 
-  \method{as.SpotRateCurve}{data.frame} (object, ...)
+\method{as.SpotRateCurve}{data.frame}(object, ...)
 
-  \method{as.SpotRateCurve}{data.frame} (object, ...)
+\method{as.SpotRateCurve}{data.frame}(object, ...)
 }
 \arguments{
   \item{object}{should be a \code{matrix} or a
@@ -17,15 +17,15 @@
   \item{...}{other SpotRateCurve's parameters}
 }
 \value{
-  SpotRateCurve object
+SpotRateCurve object
 
-  SpotRateCurve object
+SpotRateCurve object
 
-  SpotRateCurve object
+SpotRateCurve object
 }
 \description{
-  A SpotRateCurve can be coerced from \code{matrix} and
-  \code{data.frame}.
+A SpotRateCurve can be coerced from \code{matrix} and
+\code{data.frame}.
 }
 \examples{
 # creating a SpotRateCurve from a data.frame

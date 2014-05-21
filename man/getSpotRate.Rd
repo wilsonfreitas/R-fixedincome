@@ -1,16 +1,16 @@
-\name{getSpotRate}
+\name{[[.CurveInterpolation}
 \alias{[[.CurveInterpolation}
 \alias{[[.SpotRateCurve}
 \alias{getSpotRate}
 \title{Get the SpotRate for a given term}
 \usage{
-  getSpotRate(curve, term)
+\method{[[}{CurveInterpolation}(curve, term)
 
-  \method{[[}{SpotRateCurve} (curve, term)
+getSpotRate(curve, term)
 
-  \method{[[}{CurveInterpolation} (curve, term)
+\method{[[}{SpotRateCurve}(curve, term)
 }
 \description{
-  Get the SpotRate for a given term
+Get the SpotRate for a given term
 }
 

@@ -4,21 +4,21 @@
 \alias{rates.SpotRateCurve}
 \title{rates}
 \usage{
-  rates(object, ...)
+rates(object, ...)
 
-  \method{rates}{SpotRateCurve} (object)
+\method{rates}{SpotRateCurve}(object)
 
-  \method{rates}{CurveInterpolation} (object, terms = NULL)
+\method{rates}{CurveInterpolation}(object, terms = NULL)
 }
 \value{
-  \code{interest rates}
+\code{interest rates}
 
-  \code{interest rates}
+\code{interest rates}
 }
 \description{
-  Interest rates
+Interest rates
 }
 \details{
-  Interest rates
+Interest rates
 }
 

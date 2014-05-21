@@ -4,13 +4,13 @@
 \alias{as.CompoundFactor.SpotRate}
 \title{as.CompoundFactor}
 \usage{
-  as.CompoundFactor(object, ...)
+as.CompoundFactor(object, ...)
 
-  \method{as.CompoundFactor}{SpotRate} (object)
+\method{as.CompoundFactor}{SpotRate}(object)
 
-  \method{as.CompoundFactor}{CompoundFactor} (object)
+\method{as.CompoundFactor}{CompoundFactor}(object)
 }
 \description{
-  Compound factor
+Compound factor
 }
 

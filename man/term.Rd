@@ -4,13 +4,13 @@
 \alias{term.SpotRate}
 \title{term}
 \usage{
-  term(object, ...)
+term(object, ...)
 
-  \method{term}{SpotRate} (object)
+\method{term}{SpotRate}(object)
 
-  \method{term}{CompoundFactor} (object)
+\method{term}{CompoundFactor}(object)
 }
 \description{
-  Given term
+Given term
 }
 

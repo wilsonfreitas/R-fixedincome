@@ -2,9 +2,9 @@
 \alias{discount}
 \title{discount}
 \usage{
-  discount(object, ...)
+discount(object, ...)
 }
 \description{
-  Discount
+Discount
 }
 

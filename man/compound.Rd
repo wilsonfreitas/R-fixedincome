@@ -2,9 +2,9 @@
 \alias{compound}
 \title{compound}
 \usage{
-  compound(object, ...)
+compound(object, ...)
 }
 \description{
-  Compound
+Compound
 }
 

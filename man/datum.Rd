@@ -3,11 +3,11 @@
 \alias{datum.SpotRateCurve}
 \title{curve's reference date}
 \usage{
-  datum(object, ...)
+datum(object, ...)
 
-  \method{datum}{SpotRateCurve} (object)
+\method{datum}{SpotRateCurve}(object)
 }
 \description{
-  \code{datum} represents the curve's reference date
+\code{datum} represents the curve's reference date
 }
 

@@ -2,9 +2,9 @@
 \alias{neighbors}
 \title{neighbors}
 \usage{
-  neighbors(object, ...)
+neighbors(object, ...)
 }
 \description{
-  Neighbors for a given term
+Neighbors for a given term
 }
 

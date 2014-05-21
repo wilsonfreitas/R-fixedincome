@@ -12,23 +12,3 @@ Author: Wilson Freitas <wilson.freitas@gmail.com>
 Maintainer: Wilson Freitas <wilson.freitas@gmail.com>
 URL: https://github.com/wilsonfreitas/R-fixedincome
 License: MIT
-Collate:
-    'CompoundFactor.R'
-    'Compounding.R'
-    'InterestRate.R'
-    'SpotRate.R'
-    'SpotRateCurve.R'
-    'Interpolation.R'
-    'fixedincome-internal.R'
-    'compound.R'
-    'compound.factor.R'
-    'dib.R'
-    'discount.R'
-    'forward.rate.R'
-    'rate.R'
-    'rates.R'
-    'term.R'
-    'neighbors.R'
-    'datum.R'
-    'name.R'
-    'irc.R'

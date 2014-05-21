@@ -2,7 +2,7 @@
 \alias{CurveInterpolation}
 \title{CurveInterpolation}
 \usage{
-  CurveInterpolation(curve, method = flatforward)
+CurveInterpolation(curve, method = flatforward)
 }
 \arguments{
   \item{curve}{curve}
@@ -12,9 +12,9 @@
   \code{monotone}}
 }
 \value{
-  \code{CurveInterpolation} class
+\code{CurveInterpolation} class
 }
 \description{
-  Creates a curve interpolation class
+Creates a curve interpolation class
 }
 

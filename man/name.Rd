@@ -3,11 +3,11 @@
 \alias{name.SpotRateCurve}
 \title{curve's name}
 \usage{
-  name(object, ...)
+name(object, ...)
 
-  \method{name}{SpotRateCurve} (object)
+\method{name}{SpotRateCurve}(object)
 }
 \description{
-  \code{name} represents the curve's name
+\code{name} represents the curve's name
 }
 

@@ -4,13 +4,13 @@
 \alias{compounding.SpotRateCurve}
 \title{compounding}
 \usage{
-  compounding(object, ...)
+compounding(object, ...)
 
-  \method{compounding}{SpotRate} (object)
+\method{compounding}{SpotRate}(object)
 
-  \method{compounding}{SpotRateCurve} (object)
+\method{compounding}{SpotRateCurve}(object)
 }
 \description{
-  Compounding
+Compounding
 }
 

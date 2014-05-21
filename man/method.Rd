@@ -2,9 +2,9 @@
 \alias{method}
 \title{Interpolation method}
 \usage{
-  method(obj, ...)
+method(obj, ...)
 }
 \description{
-  Interpolation method
+Interpolation method
 }
 

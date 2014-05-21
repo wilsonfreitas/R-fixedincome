@@ -9,21 +9,21 @@
 \alias{terms.SpotRateCurve}
 \title{SpotRateCurve generic extensions}
 \usage{
-  \method{print}{SpotRateCurve} (x, ...)
+\method{print}{SpotRateCurve}(x, ...)
 
-  \method{as.data.frame}{SpotRateCurve} (curve, ...)
+\method{as.data.frame}{SpotRateCurve}(curve, ...)
 
-  \method{length}{SpotRateCurve} (curve)
+\method{length}{SpotRateCurve}(curve)
 
-  \method{plot}{SpotRateCurve} (curve, ...)
+\method{plot}{SpotRateCurve}(curve, ...)
 
-  \method{head}{SpotRateCurve} (curve, n = 6L, ...)
+\method{head}{SpotRateCurve}(curve, n = 6L, ...)
 
-  \method{tail}{SpotRateCurve} (curve, n = 6L, ...)
+\method{tail}{SpotRateCurve}(curve, n = 6L, ...)
 
-  \method{terms}{SpotRateCurve} (object)
+\method{terms}{SpotRateCurve}(object)
 }
 \description{
-  SpotRateCurve generic extensions
+SpotRateCurve generic extensions
 }
 
