@@ -2,7 +2,7 @@
 #' @export
 irc <- function(terms, rates, calendar=NULL, compound=NULL,
 	interpolation=linear, refdate=Sys.Date(),
-	name=NULL) {
+	name=NULL, frequency=NULL) {
 	# rates and terms must have the same length
 	# stopifnot(length(rates) == length(terms))
 	# terms must not have duplicated elements
