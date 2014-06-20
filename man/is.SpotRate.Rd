@@ -1,10 +1,10 @@
-\name{is.SpotRate}
-\alias{is.SpotRate}
-\title{is.SpotRate}
+\name{is.spotrate}
+\alias{is.spotrate}
+\title{is.spotrate}
 \usage{
-is.SpotRate(object)
+is.spotrate(object)
 }
 \description{
-Checks if is a SpotRate
+Checks if is a spotrate
 }
 

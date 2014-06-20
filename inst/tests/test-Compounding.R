@@ -1,23 +1,23 @@
 
-context('Compounding Functions')
+context('compounding functions')
 
-test_that("it should compute Compounded compounding", {
-    Compounded <- Compounding[['compounded']]
-    expect_true(Compounded == 'compounded')
-    expect_that(attr(Compounded, 'compound')(0,1,1), equals(1))
-    expect_that(attr(Compounded, 'implied.rate')(1,1,1), equals(0))
+test_that("it should compute discrete compounding", {
+	comp <- discreteCompounding()
+	expect_true(comp == 'discrete')
+	expect_equal(compound(comp, 0.05, 2), 1.1025)
+	expect_equal(rates(comp, 1.1025, 2), 0.05)
 })
 
-test_that("it should compute Simple compounding", {
-    Simple <- Compounding[['simple']]
-    expect_true(Simple == 'simple')
-    expect_that(attr(Simple, 'compound')(0,1,1), equals(1))
-    expect_that(attr(Simple, 'implied.rate')(1,1,1), equals(0))
+test_that("it should compute simple compounding", {
+	comp <- simpleCompounding()
+	expect_true(comp == 'simple')
+	expect_equal(compound(comp, 0.05, 2), 1.1)
+	expect_equal(rates(comp, 1.1, 2), 0.05)
 })
 
 test_that("it should compute Continuous compounding", {
-    Continuous <- Compounding[['continuous']]
-    expect_true(Continuous == 'continuous')
-    expect_that(attr(Continuous, 'compound')(0,1,1), equals(1))
-    expect_that(attr(Continuous, 'implied.rate')(1,1,1), equals(0))
+	comp <- continuousCompounding()
+	expect_true(comp == 'continuous')
+	expect_equal(compound(comp, 0.05, 2), 1.105170918)
+	expect_equal(rates(comp, 1.105170918, 2), 0.05)
 })

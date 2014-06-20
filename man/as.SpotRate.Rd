@@ -1,17 +1,10 @@
-\name{as.SpotRate}
-\alias{as.SpotRate}
-\alias{as.SpotRate.CompoundFactor}
-\alias{as.SpotRate.SpotRate}
-\title{as.SpotRate}
+\name{as.spotrate}
+\alias{as.spotrate}
+\title{as.spotrate}
 \usage{
-as.SpotRate(object, ...)
-
-\method{as.SpotRate}{SpotRate}(object, term = term(object))
-
-\method{as.SpotRate}{CompoundFactor}(object, dib = 252,
-  compounding = "compounded")
+as.spotrate(object, ...)
 }
 \description{
-Coerces to a SpotRate
+Coerces to a spotrate
 }
 

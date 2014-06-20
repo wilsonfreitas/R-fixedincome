@@ -1,14 +1,14 @@
 \name{compounding}
 \alias{compounding}
-\alias{compounding.SpotRate}
 \alias{compounding.SpotRateCurve}
+\alias{compounding.spotrate}
 \title{compounding}
 \usage{
 compounding(object, ...)
 
-\method{compounding}{SpotRate}(object)
-
 \method{compounding}{SpotRateCurve}(object)
+
+\method{compounding}{spotrate}(spr)
 }
 \description{
 Compounding
