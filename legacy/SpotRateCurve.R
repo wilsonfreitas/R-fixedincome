@@ -207,3 +207,23 @@ tail.SpotRateCurve <- function(curve, n=6L, ...) {
 #' @method terms SpotRateCurve
 #' @S3method terms SpotRateCurve
 terms.SpotRateCurve <- function(object) as.numeric(rownames(object))
+
+#' @return \code{interest rates}
+#' @rdname rates
+#' @method rates SpotRateCurve
+#' @S3method rates SpotRateCurve
+rates.SpotRateCurve <- function(object) as.numeric(object)
+
+#' @return \code{interest rates}
+#' @rdname rates
+#' @method rates CurveInterpolation
+#' @S3method rates CurveInterpolation
+rates.CurveInterpolation <- function(object, terms=NULL) {
+	if (is.null(terms))
+		NextMethod('rates', object)
+	else {
+		interp <- attr(object, 'interp')
+		interp(terms)
+	}
+}
+
