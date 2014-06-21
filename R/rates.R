@@ -1,4 +1,12 @@
-
+#' Compound function
+#' 
+#' Computes the compounding factor
+#' 
+#' Compounding factor
+#' 
+#' @param obj .
+#' @param ... .
+#' 
 #' @export
-rates <- function(object, ...) UseMethod('rates', object)
+rates <- function(obj, ...) UseMethod('rates', obj)
 

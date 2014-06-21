@@ -17,10 +17,11 @@
 #' 
 #' The term class inherits from the difftime class (base package).
 #' 
-#' @param term can be another \code{term} instance, a string specifing a 
+#' @param obj can be another \code{term} instance, a string specifing a 
 #' \code{term} or a number, and if the last a \code{units} must be provided.
 #' @param units one of the valid \code{units}: \code{days}, \code{monts}, 
 #' \code{years}.
+#' @param ... extra arguments
 #' 
 #' @name term-class
 #' @examples
@@ -30,54 +31,55 @@
 #' as.numeric(as.term('6 months'))
 NULL
 
+#' @rdname term-class
 #' @export
-as.term <- function(object, ...) UseMethod('as.term', object)
+as.term <- function(obj, ...) UseMethod('as.term', obj)
 
 #' @rdname term-class
 #' @export
-as.term.numeric <- function(term, units) {
+as.term.numeric <- function(obj, units, ...) {
 	if (missing(units)) stop('Unknown units')
 	if (!any(units == c('years', 'months', 'days')))
 		stop('Unknown units: ', units)
-	attr(term, 'units') <- units
-	class(term) <- c('term', 'difftime')
-	term
+	attr(obj, 'units') <- units
+	class(obj) <- c('term', 'difftime')
+	obj
 }
 
 #' @rdname term-class
 #' @export
-as.term.character <- function(term, units=NULL) {
-	m <- regexec('^([0-9]+)(\\.[0-9]+)? (years|months|days)?$', term)
-	m <- unlist(regmatches(term, m))
+as.term.character <- function(obj, units=NULL, ...) {
+	m <- regexec('^([0-9]+)(\\.[0-9]+)? (years|months|days)?$', obj)
+	m <- unlist(regmatches(obj, m))
 	if (length(m))
 		t <- as.term(as.numeric(paste0(m[2], m[3])), m[4])
 	else
-		stop("Invalid term: ", term)
+		stop("Invalid term: ", obj)
 	if (is.null(units)) t
 	else as.term(t, units)
 }
 
 #' @rdname term-class
 #' @export
-as.term.term <- function(term, units=NULL) {
+as.term.term <- function(obj, units=NULL, ...) {
 	if (is.null(units))
-		return(term)
+		return(obj)
 	if (!any(units == c('years', 'months')))
 		stop('Cannot convert to given units: ', units)
 	r <- list(months=list(months=1, years=12), years=list(months=1/12, years=1))
-	as.term(as.numeric(term)*r[[units]][[units(term)]], units)
+	as.term(as.numeric(obj)*r[[units]][[units(obj)]], units)
 }
 
 #' @export
-as.character.term <- function(term) {
-	if (length(term) == 1)
-		paste(unclass(term), units(term))
+as.character.term <- function(x, ...) {
+	if (length(x) == 1)
+		paste(unclass(x), units(x))
 	else {
-		hdr <- paste('terms in', units(term))
-		paste(hdr, paste(unclass(term), collapse=' '), sep='\n')
+		hdr <- paste('terms in', units(x))
+		paste(hdr, paste(unclass(x), collapse=' '), sep='\n')
 	}
 }
 
 #' @export
-print.term <- function(term, ...) cat(as.character(term), '\n')
+print.term <- function(x, ...) cat(as.character(x), '\n')
 

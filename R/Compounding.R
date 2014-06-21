@@ -6,11 +6,17 @@
 #' @details
 #' Compounding class
 #' 
+#' @param obj an instance of compounding class
+#' @param value a numeric representing a compounding factor or a interest rate
+#' @param term a valid term 
+#' @param ... extra arguments
+#' 
 #' @name compounding-class
 NULL
 
+#' @rdname compounding-class
 #' @export
-compounding <- function(object, ...) UseMethod('compounding', object)
+compounding <- function(obj, ...) UseMethod('compounding', obj)
 
 #' @rdname compounding-class
 #' @export
@@ -44,15 +50,15 @@ continuousCompounding <- function() {
 
 #' @rdname compounding-class
 #' @export
-compound.compounding <- function(comp, value, term) {
-	compf <- attr(comp, 'compound')
+compound.compounding <- function(obj, value, term, ...) {
+	compf <- attr(obj, 'compound')
 	compf(value, term)
 }
 
 #' @rdname compounding-class
 #' @export
-rates.compounding <- function(comp, value, term) {
-	compf <- attr(comp, 'rates')
+rates.compounding <- function(obj, value, term, ...) {
+	compf <- attr(obj, 'rates')
 	compf(value, term)
 }
 

@@ -1,23 +1,28 @@
 \name{term-class}
+\alias{as.term}
 \alias{as.term.character}
 \alias{as.term.numeric}
 \alias{as.term.term}
 \alias{term-class}
 \title{Generic term class}
 \usage{
-\method{as.term}{numeric}(term, units)
+as.term(obj, ...)
 
-\method{as.term}{character}(term, units = NULL)
+\method{as.term}{numeric}(obj, units, ...)
 
-\method{as.term}{term}(term, units = NULL)
+\method{as.term}{character}(obj, units = NULL, ...)
+
+\method{as.term}{term}(obj, units = NULL, ...)
 }
 \arguments{
-  \item{term}{can be another \code{term} instance, a string
+  \item{obj}{can be another \code{term} instance, a string
   specifing a \code{term} or a number, and if the last a
   \code{units} must be provided.}
 
   \item{units}{one of the valid \code{units}: \code{days},
   \code{monts}, \code{years}.}
+
+  \item{...}{extra arguments}
 }
 \description{
 Terms creation, printing, and some arithmetic.

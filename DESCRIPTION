@@ -11,4 +11,6 @@ Date: 2013-09-15
 Author: Wilson Freitas <wilson.freitas@gmail.com>
 Maintainer: Wilson Freitas <wilson.freitas@gmail.com>
 URL: https://github.com/wilsonfreitas/R-fixedincome
-License: MIT
+License: MIT + file LICENSE
+Imports:
+    bizdays

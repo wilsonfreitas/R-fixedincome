@@ -2,20 +2,20 @@
 context('spotrate class')
 
 test_that("it should create a spotrate", {
-	spr <- spotrate(0.06, simpleCompounding(), as.daycount('actual/365'))
+	spr <- as.spotrate(0.06, simpleCompounding(), as.daycount('actual/365'))
 	expect_true(spr == 0.06)
 	expect_is(spr, 'spotrate')
 })
 
 test_that("it should coerce a spotrate to string", {
-	spr <- spotrate(0.06, simpleCompounding(), as.daycount('actual/365'))
+	spr <- as.spotrate(0.06, simpleCompounding(), as.daycount('actual/365'))
 	expect_true(as.character(spr) == '0.06 simple actual/365')
-	spr <- spotrate(0.06, continuousCompounding(), as.daycount('actual/365'), Calendar(name='actual'))
+	spr <- as.spotrate(0.06, continuousCompounding(), as.daycount('actual/365'), Calendar(name='actual'))
 	expect_true(as.character(spr) == '0.06 continuous actual/365 actual')
 })
 
 test_that("it should compute a compounding factor for fixed periods", {
-	spr <- spotrate(0.06, simpleCompounding(), as.daycount('actual/365'))
+	spr <- as.spotrate(0.06, simpleCompounding(), as.daycount('actual/365'))
 	expect_equal(compound(spr, 10), 1.001643836)
 	expect_equal(compound(spr, 1, 'years'), 1.06)
 	expect_equal(compound(spr, as.term(10, 'days')), 1.001643836)
@@ -25,43 +25,43 @@ test_that("it should compute a compounding factor for fixed periods", {
 })
 
 test_that("it should raise an error: Invalid term", {
-	spr <- spotrate(0.06, simpleCompounding(), as.daycount('actual/365'))
+	spr <- as.spotrate(0.06, simpleCompounding(), as.daycount('actual/365'))
 	expect_error(compound(spr, '1 month'), 'Invalid term: 1 month')
 })
 
 test_that("it should compute a compounding factor between dates", {
 	library(bizdays)
-	spr <- spotrate(0.06, continuousCompounding(), as.daycount('actual/365'), Calendar(name='actual'))
+	spr <- as.spotrate(0.06, continuousCompounding(), as.daycount('actual/365'), Calendar(name='actual'))
 	expect_equal(compound(spr, from='2013-01-01', to='2013-01-02'), 1.000164397)
 })
 
 test_that("it should raise an error for trying to compound factor between dates without calendar", {
-	spr <- spotrate(0.06, continuousCompounding(), as.daycount('actual/365'))
+	spr <- as.spotrate(0.06, continuousCompounding(), as.daycount('actual/365'))
 	expect_error(compound(spr, from='2013-01-01', to='2013-01-02'), 'Missing calendar')
 })
 
 test_that("it should create a spotrate vectorized", {
-	spr <- spotrate(c(0.06, 0.07, 0.08), simpleCompounding(), as.daycount('actual/365'))
+	spr <- as.spotrate(c(0.06, 0.07, 0.08), simpleCompounding(), as.daycount('actual/365'))
 	expect_true(all(spr == c(0.06, 0.07, 0.08)))
 })
 
 test_that("it should create a spotrate vectorized with NAs", {
-	spr <- spotrate(c(0.06, NA, 0.08), simpleCompounding(), as.daycount('actual/365'))
+	spr <- as.spotrate(c(0.06, NA, 0.08), simpleCompounding(), as.daycount('actual/365'))
 	expect_true(all(spr == c(0.06, NA, 0.08), na.rm=TRUE))
 })
 
 test_that("it should coerce a spotrate to string (vectorized)", {
-	spr <- spotrate(c(0.06, 0.07, 0.08), simpleCompounding(), as.daycount('actual/365'))
+	spr <- as.spotrate(c(0.06, 0.07, 0.08), simpleCompounding(), as.daycount('actual/365'))
 	expect_true(as.character(spr) == 'simple actual/365\n0.06 0.07 0.08')
-	spr <- spotrate(c(0.06, NA, 0.08), continuousCompounding(), as.daycount('actual/365'), Calendar(name='actual'))
+	spr <- as.spotrate(c(0.06, NA, 0.08), continuousCompounding(), as.daycount('actual/365'), Calendar(name='actual'))
 	expect_true(as.character(spr) == 'continuous actual/365 actual\n0.06 NA 0.08')
 })
 
 test_that("it should compute a compounding factor for fixed periods (vectorized)", {
-	spr <- spotrate(c(0.06, 0.07, 0.08), simpleCompounding(), as.daycount('actual/365'))
+	spr <- as.spotrate(c(0.06, 0.07, 0.08), simpleCompounding(), as.daycount('actual/365'))
 	expect_equal(compound(spr, 10), c(1.001643836, 1.001917808, 1.002191781))
 	expect_equal(compound(spr, c(10, 10, 10)), c(1.001643836, 1.001917808, 1.002191781))
-	spr <- spotrate(0.06, simpleCompounding(), as.daycount('actual/365'))
+	spr <- as.spotrate(0.06, simpleCompounding(), as.daycount('actual/365'))
 	expect_equal(compound(spr, c(10, 10, 10)), c(1.001643836, 1.001643836, 1.001643836))
 })
 

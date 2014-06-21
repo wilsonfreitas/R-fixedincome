@@ -10,64 +10,56 @@
 #' The spotrate can be compounded to generate a CompoundFactor, and that 
 #' can be used in many calculations, for example, computing equivalent rates.
 #' 
-#' @param value the value of the underlying interest rate
+#' @param obj the value of the underlying interest rate
 #' @param term the term related to the interest paid
-#' @param dib days in base (the number of days within a year)
+#' @param daycount daycount instance
+#' @param calendar calendar instance
 #' @param compounding the compounding regime can assume the following values:
 #' \code{simple}, \code{compounded} and \code{continuous}
+#' @param units units
+#' @param from dates
+#' @param to dates
+#' @param ... extra arguments
+#' 
 #' @return a spotrate spr
 #' @name spotrate-class
 NULL
 
+#' @rdname spotrate-class
 #' @export
-spotrate <- function(value, compounding, daycount, calendar=NULL) {
-	if (!is.numeric(value))
-	    stop('Invalid given rate:', value)
-	structure(value, compounding=compounding, daycount=daycount, 
+as.spotrate <- function(obj, ...) UseMethod('as.spotrate', obj)
+
+#' @rdname spotrate-class
+#' @export
+as.spotrate.default <- function(obj, compounding, daycount, calendar=NULL, ...) {
+	if (!is.numeric(obj))
+	    stop('Invalid given rate:', obj)
+	structure(obj, compounding=compounding, daycount=daycount, 
 		calendar=calendar, class='spotrate')
 }
 
+#' @rdname spotrate-class
 #' @export
-as.character.spotrate <- function(spr) {
-	if (length(spr) == 1)
-		sub(' +$', '', paste(rates(spr), compounding(spr), daycount(spr), 
-			calendar(spr)$name))
-	else {
-		hdr <- sub(' +$', '', paste(compounding(spr), daycount(spr), 
-			calendar(spr)$name))
-		paste(hdr, paste(rates(spr), collapse=' '), sep='\n')
-	}
-}
+rates.spotrate <- function(obj, ...) as.numeric(obj)
 
+#' @rdname spotrate-class
 #' @export
-print.spotrate <- function(x, ...) cat(as.character(x), '\n')
+compounding.spotrate <- function (obj, ...) attr(obj, 'compounding')
 
+#' @rdname spotrate-class
 #' @export
-is.spotrate <- function(object) class(object) == 'spotrate'
+daycount.spotrate <- function (obj, ...) attr(obj, 'daycount')
 
+#' @rdname spotrate-class
 #' @export
-as.spotrate <- function(object, ...) UseMethod('as.spotrate', object)
+calendar.spotrate <- function (obj, ...) attr(obj, 'calendar')
 
+#' @rdname spotrate-class
 #' @export
-rates.spotrate <- function(spr) as.numeric(spr)
-
-#' @export
-frequency.spotrate <- function(spr) attr(spr, 'frequency')
-
-#' @export
-compounding.spotrate <- function (spr) attr(spr, 'compounding')
-
-#' @export
-daycount.spotrate <- function (spr) attr(spr, 'daycount')
-
-#' @export
-calendar.spotrate <- function (spr) attr(spr, 'calendar')
-
-#' @export
-compound.spotrate <- function(spr, term, units=NULL, from=NULL, to=NULL) {
+compound.spotrate <- function(obj, term, units=NULL, from=NULL, to=NULL, ...) {
 	term <- if (missing(term)) {
-		if (is.null(calendar(spr))) stop("Missing calendar")
-		as.term(bizdays(from, to, calendar(spr)), 'days')
+		if (is.null(calendar(obj))) stop("Missing calendar")
+		as.term(bizdays::bizdays(from, to, calendar(obj)), 'days')
 	} else {
 		tryCatch(as.term(term), error=function(e) {
 			if (conditionMessage(e) == "Unknown units")
@@ -75,9 +67,9 @@ compound.spotrate <- function(spr, term, units=NULL, from=NULL, to=NULL) {
 			else stop(e)
 		})
 	}
-	comp <- compounding(spr)
-	tf <- timefactor(daycount(spr), term=term)
-	compound(comp, rates(spr), tf)
+	comp <- compounding(obj)
+	tf <- timefactor(daycount(obj), term=term)
+	compound(comp, rates(obj), tf)
 }
 
 #' @export
@@ -115,4 +107,19 @@ as.data.frame.spotrate <- function (x, row.names=NULL, optional=FALSE, ..., nm=p
 
 #' @export
 format.spotrate <- function (x, ...) as.character(x)
+
+#' @export
+as.character.spotrate <- function(x, ...) {
+	if (length(x) == 1)
+		sub(' +$', '', paste(rates(x), compounding(x), daycount(x), 
+			calendar(x)$name))
+	else {
+		hdr <- sub(' +$', '', paste(compounding(x), daycount(x), 
+			calendar(x)$name))
+		paste(hdr, paste(rates(x), collapse=' '), sep='\n')
+	}
+}
+
+#' @export
+print.spotrate <- function(x, ...) cat(as.character(x), '\n')
 

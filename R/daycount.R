@@ -29,11 +29,12 @@
 #' valid string defining a term. The argument \code{units} is the resulting 
 #' units.
 #' 
-#' @param daycount an instance of \code{daycount}
+#' @param obj an instance of \code{daycount}
 #' @param dcspec a string defining the day count convention: \code{30/360},
 #' \code{30E/360}, \code{actual/365}, \code{actual/360}, \code{business/252}
 #' @param term a valid term
 #' @param units a valid units (\code{days}, \code{months}, \code{years})
+#' @param ... extra arguments
 #' 
 #' @name daycount-class
 #' @examples
@@ -51,8 +52,9 @@ NULL
 	'business/252' = 252
 )
 
+#' @rdname daycount-class
 #' @export
-daycount <- function(object, ...) UseMethod('daycount', object)
+daycount <- function(obj, ...) UseMethod('daycount', obj)
 
 #' @rdname daycount-class
 #' @export
@@ -66,40 +68,45 @@ as.daycount <- function(dcspec) {
 }
 
 #' @export
-as.character.daycount <- function(daycount) {
-	attributes(daycount) <- NULL
-	as.character(daycount)
+as.character.daycount <- function(x, ...) {
+	attributes(x) <- NULL
+	as.character(x)
 }
 
 #' @export
-print.daycount <- function(daycount, ...) cat(daycount, '\n')
+print.daycount <- function(x, ...) cat(x, '\n')
 
 #' @rdname daycount-class
 #' @export
-dib.daycount <- function(daycount) attr(daycount, 'dib')
-
-#' @export
-timefactor <- function(object, ...) UseMethod('timefactor', object)
+dib <- function(obj, ...) UseMethod('dib', obj)
 
 #' @rdname daycount-class
 #' @export
-timefactor.daycount <- function(daycount, term, units=NULL) {
+dib.daycount <- function(obj, ...) attr(obj, 'dib')
+
+#' @rdname daycount-class
+#' @export
+timefactor <- function(obj, ...) UseMethod('timefactor', obj)
+
+#' @rdname daycount-class
+#' @export
+timefactor.daycount <- function(obj, term, units=NULL, ...) {
 	tm <- as.term(term, units)
-	if (units(tm) == 'days') as.numeric(tm)/dib(daycount)
+	if (units(tm) == 'days') as.numeric(tm)/dib(obj)
 	else as.numeric(as.term(tm, units='years'))
 }
 
 #' @rdname daycount-class
 #' @export
-as.term.daycount <- function(daycount, term, units) {
+as.term.daycount <- function(obj, term, units, ...) {
 	tm <- as.term(term)
 	if (units(tm) == 'days') {
-		tm <- switch(units, years=as.numeric(tm)/dib(daycount),
-			months=as.numeric(tm)/(dib(daycount)/12),
+		tm <- switch(units, years=as.numeric(tm)/dib(obj),
+			months=as.numeric(tm)/(dib(obj)/12),
 			days=as.numeric(tm))
 	} else if (units == 'days') {
-		tm <- switch(units(tm), years=as.numeric(tm)*dib(daycount),
-			months=as.numeric(tm)*(dib(daycount)/12),
+		tm <- switch(units(tm), years=as.numeric(tm)*dib(obj),
+			months=as.numeric(tm)*(dib(obj)/12),
 			days=as.numeric(tm))
 	}
 	as.term(tm, units)

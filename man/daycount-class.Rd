@@ -1,21 +1,30 @@
 \name{daycount-class}
 \alias{as.daycount}
 \alias{as.term.daycount}
+\alias{daycount}
 \alias{daycount-class}
+\alias{dib}
 \alias{dib.daycount}
+\alias{timefactor}
 \alias{timefactor.daycount}
 \title{Day count convention class}
 \usage{
+daycount(obj, ...)
+
 as.daycount(dcspec)
 
-\method{dib}{daycount}(daycount)
+dib(obj, ...)
 
-\method{timefactor}{daycount}(daycount, term, units = NULL)
+\method{dib}{daycount}(obj, ...)
 
-\method{as.term}{daycount}(daycount, term, units)
+timefactor(obj, ...)
+
+\method{timefactor}{daycount}(obj, term, units = NULL, ...)
+
+\method{as.term}{daycount}(obj, term, units, ...)
 }
 \arguments{
-  \item{daycount}{an instance of \code{daycount}}
+  \item{obj}{an instance of \code{daycount}}
 
   \item{dcspec}{a string defining the day count convention:
   \code{30/360}, \code{30E/360}, \code{actual/365},
@@ -25,6 +34,8 @@ as.daycount(dcspec)
 
   \item{units}{a valid units (\code{days}, \code{months},
   \code{years})}
+
+  \item{...}{extra arguments}
 }
 \description{
 \code{daycount} class computes terms used to discount and

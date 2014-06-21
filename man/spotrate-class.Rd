@@ -1,17 +1,50 @@
 \name{spotrate-class}
+\alias{as.spotrate}
+\alias{as.spotrate.default}
+\alias{calendar.spotrate}
+\alias{compound.spotrate}
+\alias{compounding.spotrate}
+\alias{daycount.spotrate}
+\alias{rates.spotrate}
 \alias{spotrate-class}
 \title{Create a spotrate spr.}
+\usage{
+as.spotrate(obj, ...)
+
+\method{as.spotrate}{default}(obj, compounding, daycount, calendar = NULL,
+  ...)
+
+\method{rates}{spotrate}(obj, ...)
+
+\method{compounding}{spotrate}(obj, ...)
+
+\method{daycount}{spotrate}(obj, ...)
+
+\method{calendar}{spotrate}(obj, ...)
+
+\method{compound}{spotrate}(obj, term, units = NULL, from = NULL,
+  to = NULL, ...)
+}
 \arguments{
-  \item{value}{the value of the underlying interest rate}
+  \item{obj}{the value of the underlying interest rate}
 
   \item{term}{the term related to the interest paid}
 
-  \item{dib}{days in base (the number of days within a
-  year)}
+  \item{daycount}{daycount instance}
+
+  \item{calendar}{calendar instance}
 
   \item{compounding}{the compounding regime can assume the
   following values: \code{simple}, \code{compounded} and
   \code{continuous}}
+
+  \item{units}{units}
+
+  \item{from}{dates}
+
+  \item{to}{dates}
+
+  \item{...}{extra arguments}
 }
 \value{
 a spotrate spr
