@@ -1,7 +1,4 @@
 
-#' Spot rate frequency
-#' 
-#' @export frequency
-#' @rdname frequency
+#' @export
 frequency <- function(object, ...) UseMethod('frequency', object)
 

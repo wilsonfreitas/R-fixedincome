@@ -1,7 +1,4 @@
 
-#' Spot rate calendar
-#' 
-#' @export calendar
-#' @rdname calendar
+#' @export
 calendar <- function(object, ...) UseMethod('calendar', object)
 

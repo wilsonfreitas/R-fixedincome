@@ -1,9 +1,4 @@
 
-#' @title compound
-#' 
-#' @description
-#' Compound
-#' 
-#' @export compound
+#' @export
 compound <- function(object, ...) UseMethod('compound', object)
 
