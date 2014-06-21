@@ -1,21 +1,47 @@
 #' Day count convention class
 #' 
 #' @description
-#' Day count convetion creation.
-#' 
-#' @details
-#' Day count convetion rules are used to compute terms used to discount and
+#' \code{daycount} class computes terms used to discount and
 #' compound interest rates.
 #' 
-#' @rdname daycount
+#' @details
+#' The day count convention determines the amount of days, in years, for a
+#' given term.
+#' 
+#' \code{as.daycount} creates a \code{daycount} object and accepts the
+#' following options: \code{30/360}, \code{30E/360}, \code{actual/365},
+#' \code{actual/360}, \code{business/252}
+#' 
+#' \code{dib} returns the days in base for a day count convention. Since we 
+#' work with annual rates the days in base define the amount of days in a year.
+#' Given that rule the amount of days in a month is obtained by the fraction of
+#' 1/12 of days in base \code{dib}.
+#' 
+#' \code{timefactor} returns the given term in years, since we are assuming we 
+#' work with annual rates. The \code{term} argument can be a term instance, 
+#' a string defining a term or a number, but in the last a \code{units} must be
+#' provided.
+#' 
+#' \code{as.term} is a convertion function, it converts terms units. Since we
+#' don't have the amount of days per year, while creating a term we can't make
+#' conversions involving days. That's the reason why that function exists, to 
+#' convert using days. The \code{term} argument must be a valid term or a 
+#' valid string defining a term. The argument \code{units} is the resulting 
+#' units.
+#' 
+#' @param daycount an instance of \code{daycount}
+#' @param dcspec a string defining the day count convention: \code{30/360},
+#' \code{30E/360}, \code{actual/365}, \code{actual/360}, \code{business/252}
+#' @param term a valid term
+#' @param units a valid units (\code{days}, \code{months}, \code{years})
+#' 
+#' @name daycount-class
 #' @examples
 #' dc <- as.daycount('actual/360')
 #' dib(dc)
 #' timefactor(dc, 10, 'days')
 #' as.term(dc, '10 days', 'months')
-
-#' @export
-daycount <- function(object, ...) UseMethod('daycount', object)
+NULL
 
 .daycounts.dib <- list(
 	'30/360' = 360,
@@ -25,15 +51,18 @@ daycount <- function(object, ...) UseMethod('daycount', object)
 	'business/252' = 252
 )
 
-#' @rdname daycount
 #' @export
-as.daycount <- function(daycount) {
-	if ( !any(daycount == names(.daycounts.dib)) )
-		stop('Unknown daycount: ', daycount)
-	dc_parts <- unlist(strsplit(daycount, '/'))
-	attr(daycount, "dib") <- as.numeric(dc_parts[2])
-	class(daycount) <- "daycount"
-	daycount
+daycount <- function(object, ...) UseMethod('daycount', object)
+
+#' @rdname daycount-class
+#' @export
+as.daycount <- function(dcspec) {
+	if ( !any(dcspec == names(.daycounts.dib)) )
+		stop('Unknown daycount: ', dcspec)
+	dc_parts <- unlist(strsplit(dcspec, '/'))
+	attr(dcspec, "dib") <- as.numeric(dc_parts[2])
+	class(dcspec) <- "daycount"
+	dcspec
 }
 
 #' @export
@@ -45,12 +74,14 @@ as.character.daycount <- function(daycount) {
 #' @export
 print.daycount <- function(daycount, ...) cat(daycount, '\n')
 
+#' @rdname daycount-class
 #' @export
 dib.daycount <- function(daycount) attr(daycount, 'dib')
 
 #' @export
 timefactor <- function(object, ...) UseMethod('timefactor', object)
 
+#' @rdname daycount-class
 #' @export
 timefactor.daycount <- function(daycount, term, units=NULL) {
 	tm <- as.term(term, units)
@@ -58,6 +89,7 @@ timefactor.daycount <- function(daycount, term, units=NULL) {
 	else as.numeric(as.term(tm, units='years'))
 }
 
+#' @rdname daycount-class
 #' @export
 as.term.daycount <- function(daycount, term, units) {
 	tm <- as.term(term)

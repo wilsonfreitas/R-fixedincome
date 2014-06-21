@@ -1,4 +1,3 @@
-
 #' Create a spotrate spr.
 #' 
 #' Creates a spot rate that is an interest rate related to a specific term.
@@ -17,6 +16,9 @@
 #' @param compounding the compounding regime can assume the following values:
 #' \code{simple}, \code{compounded} and \code{continuous}
 #' @return a spotrate spr
+#' @name spotrate-class
+NULL
+
 #' @export
 spotrate <- function(value, compounding, daycount, calendar=NULL) {
 	if (!is.numeric(value))
@@ -25,6 +27,7 @@ spotrate <- function(value, compounding, daycount, calendar=NULL) {
 		calendar=calendar, class='spotrate')
 }
 
+#' @export
 as.character.spotrate <- function(spr) {
 	if (length(spr) == 1)
 		sub(' +$', '', paste(rates(spr), compounding(spr), daycount(spr), 
@@ -36,48 +39,31 @@ as.character.spotrate <- function(spr) {
 	}
 }
 
-#' @S3method print spotrate
+#' @export
 print.spotrate <- function(x, ...) cat(as.character(x), '\n')
 
-#' is.spotrate
-#' 
-#' Checks if is a spotrate
-#' 
 #' @export
 is.spotrate <- function(object) class(object) == 'spotrate'
 
-#' as.spotrate
-#' 
-#' Coerces to a spotrate
-#' 
 #' @export
 as.spotrate <- function(object, ...) UseMethod('as.spotrate', object)
 
-#' @return \code{interest rate}
-#' 
-#' @rdname rates
-#' @method rates spotrate
-#' @S3method rates spotrate
+#' @export
 rates.spotrate <- function(spr) as.numeric(spr)
 
 #' @export
 frequency.spotrate <- function(spr) attr(spr, 'frequency')
 
-#' @rdname compounding
-#' @method compounding spotrate
-#' @S3method compounding spotrate
+#' @export
 compounding.spotrate <- function (spr) attr(spr, 'compounding')
 
-#' @rdname daycount
-#' @method daycount spotrate
-#' @S3method daycount spotrate
+#' @export
 daycount.spotrate <- function (spr) attr(spr, 'daycount')
 
-#' @rdname calendar
-#' @method calendar spotrate
-#' @S3method calendar spotrate
+#' @export
 calendar.spotrate <- function (spr) attr(spr, 'calendar')
 
+#' @export
 compound.spotrate <- function(spr, term, units=NULL, from=NULL, to=NULL) {
 	term <- if (missing(term)) {
 		if (is.null(calendar(spr))) stop("Missing calendar")
@@ -94,6 +80,7 @@ compound.spotrate <- function(spr, term, units=NULL, from=NULL, to=NULL) {
 	compound(comp, rates(spr), tf)
 }
 
+#' @export
 as.data.frame.spotrate <- function (x, row.names=NULL, optional=FALSE, ..., nm=paste(deparse(substitute(x), width.cutoff=500L), collapse=" ")) {
 	force(nm)
 	nrows <- length(x)
@@ -114,6 +101,7 @@ as.data.frame.spotrate <- function (x, row.names=NULL, optional=FALSE, ..., nm=p
 	value
 }
 
+#' @export
 `[.spotrate` <- function (x, ..., drop = TRUE) {
 	cl <- oldClass(x)
 	class(x) <- NULL
@@ -125,5 +113,6 @@ as.data.frame.spotrate <- function (x, row.names=NULL, optional=FALSE, ..., nm=p
 	val
 }
 
+#' @export
 format.spotrate <- function (x, ...) as.character(x)
 

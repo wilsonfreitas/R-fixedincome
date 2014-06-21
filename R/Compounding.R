@@ -1,12 +1,19 @@
-
-#' @title compounding
+#' Compounding class
 #' 
 #' @description
 #' Compounding
 #' 
-#' @export compounding
+#' @details
+#' Compounding class
+#' 
+#' @name compounding-class
+NULL
+
+#' @export
 compounding <- function(object, ...) UseMethod('compounding', object)
 
+#' @rdname compounding-class
+#' @export
 discreteCompounding <- function() {
 	comp <- 'discrete'
 	attr(comp, 'compound') <- function (value, term) (1 + value)^(term)
@@ -15,6 +22,8 @@ discreteCompounding <- function() {
 	comp
 }
 
+#' @rdname compounding-class
+#' @export
 simpleCompounding <- function() {
 	comp <- 'simple'
 	attr(comp, 'compound') <- function (value, term) (1 + value*term)
@@ -23,6 +32,8 @@ simpleCompounding <- function() {
 	comp
 }
 
+#' @rdname compounding-class
+#' @export
 continuousCompounding <- function() {
 	comp <- 'continuous'
 	attr(comp, 'compound') <- function (value, term) exp(value*term)
@@ -31,11 +42,15 @@ continuousCompounding <- function() {
 	comp
 }
 
+#' @rdname compounding-class
+#' @export
 compound.compounding <- function(comp, value, term) {
 	compf <- attr(comp, 'compound')
 	compf(value, term)
 }
 
+#' @rdname compounding-class
+#' @export
 rates.compounding <- function(comp, value, term) {
 	compf <- attr(comp, 'rates')
 	compf(value, term)

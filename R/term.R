@@ -3,13 +3,6 @@
 #' @description
 #' Terms creation, printing, and some arithmetic.
 #' 
-#' @param term the term definition can be character, numeric or term. numeric
-#' must provide the units argument. character is a string which concatenates
-#' a numeric and one of the following: days, months, years. term is to 
-#' convert between months and years units. Once the units arguments is provided
-#' for character it is also converted to the given units.
-#' @param units the units intended to be returned.
-#' 
 #' @details
 #' Terms are time intervals in days, months or years, which are appropriate
 #' for fixed income calculations.
@@ -24,21 +17,23 @@
 #' 
 #' The term class inherits from the difftime class (base package).
 #' 
-#' @rdname term
+#' @param term can be another \code{term} instance, a string specifing a 
+#' \code{term} or a number, and if the last a \code{units} must be provided.
+#' @param units one of the valid \code{units}: \code{days}, \code{monts}, 
+#' \code{years}.
+#' 
+#' @name term-class
 #' @examples
 #' as.term(6, 'months')
 #' as.term('6 months')
 #' as.term(as.term('6 months'), units='years')
 #' as.numeric(as.term('6 months'))
+NULL
 
-# #' @export
-# term <- function(object, ...) UseMethod('term', object)
-
-#' @rdname term
 #' @export
 as.term <- function(object, ...) UseMethod('as.term', object)
 
-#' @rdname term
+#' @rdname term-class
 #' @export
 as.term.numeric <- function(term, units) {
 	if (missing(units)) stop('Unknown units')
@@ -49,7 +44,7 @@ as.term.numeric <- function(term, units) {
 	term
 }
 
-#' @rdname term
+#' @rdname term-class
 #' @export
 as.term.character <- function(term, units=NULL) {
 	m <- regexec('^([0-9]+)(\\.[0-9]+)? (years|months|days)?$', term)
@@ -62,7 +57,7 @@ as.term.character <- function(term, units=NULL) {
 	else as.term(t, units)
 }
 
-#' @rdname term
+#' @rdname term-class
 #' @export
 as.term.term <- function(term, units=NULL) {
 	if (is.null(units))
@@ -72,9 +67,6 @@ as.term.term <- function(term, units=NULL) {
 	r <- list(months=list(months=1, years=12), years=list(months=1/12, years=1))
 	as.term(as.numeric(term)*r[[units]][[units(term)]], units)
 }
-
-# ' @export
-# units.term <- function(term) attr(term, 'units')
 
 #' @export
 as.character.term <- function(term) {
