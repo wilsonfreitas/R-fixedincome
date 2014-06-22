@@ -106,7 +106,11 @@ as.data.frame.spotrate <- function (x, row.names=NULL, optional=FALSE, ..., nm=p
 }
 
 #' @export
-format.spotrate <- function (x, ...) as.character(x)
+format.spotrate <- function (x, ...) {
+	hdr <- sub(' +$', '', paste(compounding(x), daycount(x), 
+		calendar(x)$name))
+	paste(format(unclass(x), ...), hdr)
+}
 
 #' @export
 as.character.spotrate <- function(x, ...) {
@@ -121,5 +125,8 @@ as.character.spotrate <- function(x, ...) {
 }
 
 #' @export
-print.spotrate <- function(x, ...) cat(as.character(x), '\n')
+print.spotrate <- function(x, ...) {
+	cat(as.character(x), '\n')
+	invisible(x)
+}
 
