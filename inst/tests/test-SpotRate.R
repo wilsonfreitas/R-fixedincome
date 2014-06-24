@@ -14,6 +14,16 @@ test_that("it should coerce a spotrate to string", {
 	expect_true(as.character(spr) == '0.06 continuous actual/365 actual')
 })
 
+test_that("it should parse a string to build a spotrate", {
+	spr <- as.spotrate('0.06 simple actual/365')[[1]]
+	expect_is(spr, 'spotrate')
+	expect_true(spr == 0.06)
+	expect_true(compounding(spr) == 'simple')
+	expect_true(daycount(spr) == 'actual/365')
+	expect_true(is.null(calendar(spr)))
+	expect_true(as.character(spr) == '0.06 simple actual/365')
+})
+
 test_that("it should compute a compounding factor for fixed periods", {
 	spr <- as.spotrate(0.06, simpleCompounding(), as.daycount('actual/365'))
 	expect_equal(compound(spr, 10), 1.001643836)

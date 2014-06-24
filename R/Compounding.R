@@ -20,6 +20,20 @@ compounding <- function(obj, ...) UseMethod('compounding', obj)
 
 #' @rdname compounding-class
 #' @export
+as.compounding <- function(obj, ...) UseMethod('as.compounding', obj)
+
+#' @rdname compounding-class
+#' @export
+as.compounding.character <- function(obj=c('discrete', 'simple', 'continuous'), ...) {
+	obj <- match.arg(obj)
+	switch(obj,
+		discrete=discreteCompounding(),
+		simple=simpleCompounding(),
+		continuous=continuousCompounding())
+}
+
+#' @rdname compounding-class
+#' @export
 discreteCompounding <- function() {
 	comp <- 'discrete'
 	attr(comp, 'compound') <- function (value, term) (1 + value)^(term)

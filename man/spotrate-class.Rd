@@ -1,5 +1,6 @@
 \name{spotrate-class}
 \alias{as.spotrate}
+\alias{as.spotrate.character}
 \alias{as.spotrate.default}
 \alias{calendar.spotrate}
 \alias{compound.spotrate}
@@ -13,6 +14,8 @@ as.spotrate(obj, ...)
 
 \method{as.spotrate}{default}(obj, compounding, daycount, calendar = NULL,
   ...)
+
+\method{as.spotrate}{character}(obj, ...)
 
 \method{rates}{spotrate}(obj, ...)
 

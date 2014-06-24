@@ -40,6 +40,17 @@ as.spotrate.default <- function(obj, compounding, daycount, calendar=NULL, ...) 
 
 #' @rdname spotrate-class
 #' @export
+as.spotrate.character <- function(obj, ...) {
+	lapply(strsplit(obj, '\\s+', perl=TRUE), function (x) {
+		value <- as.numeric(x[1])
+		compounding <- as.compounding(x[2])
+		daycount <- as.daycount(x[3])
+		as.spotrate(value, compounding, daycount)
+	})
+}
+
+#' @rdname spotrate-class
+#' @export
 rates.spotrate <- function(obj, ...) as.numeric(obj)
 
 #' @rdname spotrate-class

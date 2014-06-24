@@ -1,6 +1,12 @@
 
 context('compounding functions')
 
+test_that("it should create a compounding with a string", {
+	comp <- as.compounding('simple')
+	expect_true(comp == 'simple')
+	expect_is(comp, 'compounding')
+})
+
 test_that("it should compute discrete compounding", {
 	comp <- discreteCompounding()
 	expect_true(comp == 'discrete')
