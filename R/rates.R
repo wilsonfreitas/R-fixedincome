@@ -8,5 +8,6 @@
 #' @param ... .
 #' 
 #' @export
+#' @name rates
 rates <- function(obj, ...) UseMethod('rates', obj)
 

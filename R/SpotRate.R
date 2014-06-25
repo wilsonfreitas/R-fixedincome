@@ -1,36 +1,79 @@
-#' Create a spotrate spr.
+#' The spotrate object
 #' 
-#' Creates a spot rate that is an interest rate related to a specific term.
-#' It can be interpreted as the interest amount asked to for investments 
-#' maturing at the term.
+#' @description
+#' The \code{spotrate} represents a spot rate and stores the information needed
+#' to compound or discount that rate.
 #' 
-#' A spotrate is composed by the value of its interest rate, the term, the 
-#' amount of days in basis (days within a year) and the compounding regime
-#' on which the rate is compounded.
-#' The spotrate can be compounded to generate a CompoundFactor, and that 
-#' can be used in many calculations, for example, computing equivalent rates.
+#' @note
+#' The \code{spotrate} class represents a annual spot rates. That
+#' restriction might be removed in the future.
 #' 
-#' @param obj the value of the underlying interest rate
-#' @param term the term related to the interest paid
-#' @param daycount daycount instance
-#' @param calendar calendar instance
-#' @param compounding the compounding regime can assume the following values:
-#' \code{simple}, \code{compounded} and \code{continuous}
-#' @param units units
-#' @param from dates
-#' @param to dates
-#' @param ... extra arguments
+#' @details
 #' 
-#' @return a spotrate spr
+#' The \code{spotrate} class fully specifies spot rates.
+#' It has the 4 attributes necessary to manipulate spot rates:
+#' \itemize{
+#' \item the spot rate values which are numeric values representing the rate
+#' \item the compounding regime that specifies how to compound the spot 
+#' rate and is specified by a \code{compounding} object
+#' \item the daycount rule which computes the compounding periods right 
+#' adjusted to the spot rate frequency
+#' \item the calendar that is responsible for computing days between 2 dates
+#' }
+#' 
+#' The \code{spotrate} class is a numeric vector with attributes.
+#' Once it is a numeric vector it represents spot rates sharing the same 
+#' compounding, daycount and calendar attributes.
+#' The coercion function \code{as.list.spotrate} splits the vector into many 
+#' single spot rate objects.
+#' 
 #' @name spotrate-class
 NULL
 
-#' @rdname spotrate-class
+
+#' Crete a spotrate object
+#' 
+#' @description
+#' A factory method of \code{spotrate} objects.
+#' 
+#' @note
+#' The \code{spotrate} class represents a annual spot rates. That
+#' restriction might be removed in the future.
+#' 
+#' @param obj a numeric value which defines a rate or a string specifying
+#' a spot rate.
+#' @param compounding the compounding regime can assume the following values:
+#' \code{simple}, \code{compounded} and \code{continuous}
+#' @param daycount daycount instance
+#' @param calendar calendar instance
+#' @param ... unused extra arguments
+#' 
+#' @return a spotrate object
+#' @name as.spotrate
+#' @examples
+#' as.spotrate("0.06 simple actual/365")
+#' library(bizdays)
+#' as.spotrate(0.06, continuousCompounding(), as.daycount("actual/365"),
+#' Calendar(name="actual"))
+#' as.spotrate(c(0.06, 0.07, 0.08), simpleCompounding(),
+#' as.daycount("actual/365"))
+#' specs <- c("0.06 simple actual/365", "0.11 discrete business/252")
+#' lapply(specs, as.spotrate)
+NULL
+
+#' @rdname as.spotrate
 #' @export
 as.spotrate <- function(obj, ...) UseMethod('as.spotrate', obj)
 
-#' @rdname spotrate-class
+#' @rdname as.spotrate
 #' @export
+#' @details
+#' \code{as.spotrate.default} accepts any objects that coerce to numeric.
+#' The \code{compounding} and \code{daycount} arguments are necessary to
+#' create a spotrate.
+#' The \code{calendar} is only necessary if someone wants to compound 
+#' spot rates providing dates (\code{from} and \code{to}) instead of terms.
+#' 
 as.spotrate.default <- function(obj, compounding, daycount, calendar=NULL, ...) {
 	if (!is.numeric(obj))
 	    stop('Invalid given rate:', obj)
@@ -38,34 +81,58 @@ as.spotrate.default <- function(obj, compounding, daycount, calendar=NULL, ...) 
 		calendar=calendar, class='spotrate')
 }
 
-#' @rdname spotrate-class
+#' @rdname as.spotrate
 #' @export
+#' @details
+#' \code{as.spotrate.character} accepts a string in the format 
+#' \code{RATE COMPOUNDING DAYCOUNT}, where:
+#' \itemize{
+#' \item \code{RATE} a numeric value
+#' \item \code{COMPOUNDING} one of the following: \code{simple}, 
+#' \code{discrete}, \code{continuous}
+#' \item \code{DAYCOUNT} a valid day count rule, see 
+#' \code{\link{daycount-class}}
+#' }
+#' That function returns a single spotrate (length 1).
+#' If you have a character vector you should use the \code{lapply} function
+#' to create a list of spotrates.
+#' \preformatted{
+#' specs <- c("0.06 simple actual/365", "0.11 discrete business/252")
+#' lapply(specs, as.spotrate)
+#' }
+#' 
 as.spotrate.character <- function(obj, ...) {
-	lapply(strsplit(obj, '\\s+', perl=TRUE), function (x) {
+	if (length(obj) > 1)
+		warning('length(obj) > 1. as.spotrate.character uses only the first.')
+	lapply(strsplit(obj[1], '\\s+', perl=TRUE), function (x) {
 		value <- as.numeric(x[1])
 		compounding <- as.compounding(x[2])
 		daycount <- as.daycount(x[3])
 		as.spotrate(value, compounding, daycount)
-	})
+	})[[1]]
 }
 
-#' @rdname spotrate-class
+#' @details
+#' The \code{rates.spotrate} returns the numeric value representing the spot
+#' rates.
+#' 
+#' @rdname rates
 #' @export
 rates.spotrate <- function(obj, ...) as.numeric(obj)
 
-#' @rdname spotrate-class
+#' @rdname compounding
 #' @export
 compounding.spotrate <- function (obj, ...) attr(obj, 'compounding')
 
-#' @rdname spotrate-class
+#' @rdname daycount-class
 #' @export
 daycount.spotrate <- function (obj, ...) attr(obj, 'daycount')
 
-#' @rdname spotrate-class
+#' @rdname calendar
 #' @export
 calendar.spotrate <- function (obj, ...) attr(obj, 'calendar')
 
-#' @rdname spotrate-class
+#' @rdname compound
 #' @export
 compound.spotrate <- function(obj, term, units=NULL, from=NULL, to=NULL, ...) {
 	term <- if (missing(term)) {
@@ -81,6 +148,16 @@ compound.spotrate <- function(obj, term, units=NULL, from=NULL, to=NULL, ...) {
 	comp <- compounding(obj)
 	tf <- timefactor(daycount(obj), term=term)
 	compound(comp, rates(obj), tf)
+}
+
+## standard generics
+
+#' @export
+as.list.spotrate <- function(x, ...) {
+	dc <- daycount(x)
+	com <- compounding(x)
+	cal <- calendar(x)
+	lapply(x, function(s) as.spotrate(s, com, dc, cal))
 }
 
 #' @export

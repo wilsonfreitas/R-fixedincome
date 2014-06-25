@@ -2,7 +2,6 @@
 \alias{as.compounding}
 \alias{as.compounding.character}
 \alias{compound.compounding}
-\alias{compounding}
 \alias{compounding-class}
 \alias{continuousCompounding}
 \alias{discreteCompounding}
@@ -10,8 +9,6 @@
 \alias{simpleCompounding}
 \title{Compounding class}
 \usage{
-compounding(obj, ...)
-
 as.compounding(obj, ...)
 
 \method{as.compounding}{character}(obj = c("discrete", "simple",

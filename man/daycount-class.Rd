@@ -3,6 +3,7 @@
 \alias{as.term.daycount}
 \alias{daycount}
 \alias{daycount-class}
+\alias{daycount.spotrate}
 \alias{dib}
 \alias{dib.daycount}
 \alias{timefactor}
@@ -22,6 +23,8 @@ timefactor(obj, ...)
 \method{timefactor}{daycount}(obj, term, units = NULL, ...)
 
 \method{as.term}{daycount}(obj, term, units, ...)
+
+\method{daycount}{spotrate}(obj, ...)
 }
 \arguments{
   \item{obj}{an instance of \code{daycount}}

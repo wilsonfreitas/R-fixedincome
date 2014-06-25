@@ -14,7 +14,21 @@
 #' @name compounding-class
 NULL
 
-#' @rdname compounding-class
+#' Compounding accessor method
+#' 
+#' @description
+#' Compounding method
+#' 
+#' @details
+#' Compounding method
+#' 
+#' @param obj any object
+#' @param ... unused extra arguments
+#' 
+#' @name compounding
+NULL
+
+#' @rdname compounding
 #' @export
 compounding <- function(obj, ...) UseMethod('compounding', obj)
 

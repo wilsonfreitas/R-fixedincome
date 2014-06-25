@@ -1,68 +1,29 @@
 \name{spotrate-class}
-\alias{as.spotrate}
-\alias{as.spotrate.character}
-\alias{as.spotrate.default}
-\alias{calendar.spotrate}
-\alias{compound.spotrate}
-\alias{compounding.spotrate}
-\alias{daycount.spotrate}
-\alias{rates.spotrate}
 \alias{spotrate-class}
-\title{Create a spotrate spr.}
-\usage{
-as.spotrate(obj, ...)
-
-\method{as.spotrate}{default}(obj, compounding, daycount, calendar = NULL,
-  ...)
-
-\method{as.spotrate}{character}(obj, ...)
-
-\method{rates}{spotrate}(obj, ...)
-
-\method{compounding}{spotrate}(obj, ...)
-
-\method{daycount}{spotrate}(obj, ...)
-
-\method{calendar}{spotrate}(obj, ...)
-
-\method{compound}{spotrate}(obj, term, units = NULL, from = NULL,
-  to = NULL, ...)
-}
-\arguments{
-  \item{obj}{the value of the underlying interest rate}
-
-  \item{term}{the term related to the interest paid}
-
-  \item{daycount}{daycount instance}
-
-  \item{calendar}{calendar instance}
-
-  \item{compounding}{the compounding regime can assume the
-  following values: \code{simple}, \code{compounded} and
-  \code{continuous}}
-
-  \item{units}{units}
-
-  \item{from}{dates}
-
-  \item{to}{dates}
-
-  \item{...}{extra arguments}
-}
-\value{
-a spotrate spr
-}
+\title{The spotrate object}
 \description{
-Creates a spot rate that is an interest rate related to a
-specific term. It can be interpreted as the interest amount
-asked to for investments maturing at the term.
+The \code{spotrate} represents a spot rate and stores the
+information needed to compound or discount that rate.
 }
 \details{
-A spotrate is composed by the value of its interest rate,
-the term, the amount of days in basis (days within a year)
-and the compounding regime on which the rate is compounded.
-The spotrate can be compounded to generate a
-CompoundFactor, and that can be used in many calculations,
-for example, computing equivalent rates.
+The \code{spotrate} class fully specifies spot rates. It
+has the 4 attributes necessary to manipulate spot rates:
+\itemize{ \item the spot rate values which are numeric
+values representing the rate \item the compounding regime
+that specifies how to compound the spot rate and is
+specified by a \code{compounding} object \item the daycount
+rule which computes the compounding periods right adjusted
+to the spot rate frequency \item the calendar that is
+responsible for computing days between 2 dates }
+
+The \code{spotrate} class is a numeric vector with
+attributes. Once it is a numeric vector it represents spot
+rates sharing the same compounding, daycount and calendar
+attributes. The coercion function \code{as.list.spotrate}
+splits the vector into many single spot rate objects.
+}
+\note{
+The \code{spotrate} class represents a annual spot rates.
+That restriction might be removed in the future.
 }
 

@@ -15,7 +15,7 @@ test_that("it should coerce a spotrate to string", {
 })
 
 test_that("it should parse a string to build a spotrate", {
-	spr <- as.spotrate('0.06 simple actual/365')[[1]]
+	spr <- as.spotrate('0.06 simple actual/365')
 	expect_is(spr, 'spotrate')
 	expect_true(spr == 0.06)
 	expect_true(compounding(spr) == 'simple')
