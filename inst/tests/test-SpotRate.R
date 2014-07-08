@@ -75,3 +75,10 @@ test_that("it should compute a compounding factor for fixed periods (vectorized)
 	expect_equal(compound(spr, c(10, 10, 10)), c(1.001643836, 1.001643836, 1.001643836))
 })
 
+test_that("it should discount a spot rate", {
+	spr <- as.spotrate(0.06, simpleCompounding(), as.daycount('actual/365'))
+	expect_equal(discount(spr, 10), 0.9983588618)
+	library(bizdays)
+	spr <- as.spotrate(0.06, continuousCompounding(), as.daycount('actual/365'), Calendar(name='actual'))
+	expect_equal(discount(spr, from='2013-01-01', to='2013-01-02'), 0.99983563)
+})

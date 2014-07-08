@@ -1,11 +1,11 @@
-#' Compound function
+#' Return the numeric rates
 #' 
-#' Computes the compounding factor
+#' Return a numeric value which represents spot rates.
 #' 
-#' Compounding factor
+#' @param obj See Details
+#' @param ... extra arguments
 #' 
-#' @param obj .
-#' @param ... .
+#' @return a numeric value
 #' 
 #' @export
 #' @name rates

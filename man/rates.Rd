@@ -1,24 +1,38 @@
-\name{rates}
+\name{rates.compounding}
 \alias{rates}
+\alias{rates.compounding}
 \alias{rates.spotrate}
-\title{Compound function}
+\title{Return the numeric rates}
 \usage{
+\method{rates}{compounding}(obj, value, term, ...)
+
 rates(obj, ...)
 
 \method{rates}{spotrate}(obj, ...)
 }
 \arguments{
-  \item{obj}{.}
+  \item{value}{a numeric value representing a compounding
+  factor}
 
-  \item{...}{.}
+  \item{term}{a \code{\link{term-class}} instance}
+
+  \item{obj}{See Details}
+
+  \item{...}{extra arguments}
+}
+\value{
+a numeric value
 }
 \description{
-Computes the compounding factor
+Return a numeric value which represents spot rates.
 }
 \details{
-Compounding factor
+If the \code{obj} argument is a
+\code{\link{compounding-class}} the function
+\code{rates.compounding} computes the implied rate for the
+given compounding and term.
 
-The \code{rates.spotrate} returns the numeric value
-representing the spot rates.
+If the \code{obj} argument is a \code{spotrate} instance it
+returns a \code{numeric} representing the spot rates.
 }
 

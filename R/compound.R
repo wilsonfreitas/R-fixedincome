@@ -2,10 +2,11 @@
 #' 
 #' Computes the compounding factor
 #' 
-#' Compounding factor
+#' @param obj See Details
+#' @param term See Details
+#' @param ... extra arguments
 #' 
-#' @param obj .
-#' @param ... .
+#' @return a numeric value
 #' 
 #' @export
 compound <- function(obj, ...) UseMethod('compound', obj)

@@ -52,9 +52,6 @@ NULL
 	'business/252' = 252
 )
 
-#' @rdname daycount-class
-#' @export
-daycount <- function(obj, ...) UseMethod('daycount', obj)
 
 #' @rdname daycount-class
 #' @export
@@ -113,3 +110,19 @@ as.term.daycount <- function(obj, term, units, ...) {
 }
 
 
+#' Day count accessor
+#' 
+#' @description
+#' Method to access the \code{daycount} attribute.
+#' 
+#' @param obj any object which has a daycount attribute
+#' @param ... extra arguments
+#' 
+#' @return a \code{daycount} object
+#' 
+#' @name daycount
+NULL
+
+#' @rdname daycount
+#' @export
+daycount <- function(obj, ...) UseMethod('daycount', obj)

@@ -2,28 +2,33 @@
 \alias{as.spotrate}
 \alias{as.spotrate.character}
 \alias{as.spotrate.default}
-\title{Crete a spotrate object}
+\alias{as.spotrate.numeric}
+\title{Create a spotrate object}
 \usage{
 as.spotrate(obj, ...)
 
 \method{as.spotrate}{default}(obj, compounding, daycount, calendar = NULL,
   ...)
 
+\method{as.spotrate}{numeric}(obj, compounding, daycount, calendar = NULL,
+  ...)
+
 \method{as.spotrate}{character}(obj, ...)
 }
 \arguments{
-  \item{obj}{a numeric value which defines a rate or a
-  string specifying a spot rate.}
+  \item{obj}{numeric values defining rates or a string
+  specifying a spot rate}
 
-  \item{compounding}{the compounding regime can assume the
-  following values: \code{simple}, \code{compounded} and
-  \code{continuous}}
+  \item{compounding}{an instance of
+  \code{\link{compounding-class}}}
 
-  \item{daycount}{daycount instance}
+  \item{daycount}{an instance of
+  \code{\link{daycount-class}}}
 
-  \item{calendar}{calendar instance}
+  \item{calendar}{and instance of bizdays'
+  \code{\link[bizdays]{Calendar}}}
 
-  \item{...}{unused extra arguments}
+  \item{...}{extra arguments}
 }
 \value{
 a spotrate object
@@ -32,28 +37,27 @@ a spotrate object
 A factory method of \code{spotrate} objects.
 }
 \details{
-\code{as.spotrate.default} accepts any objects that coerce
-to numeric. The \code{compounding} and \code{daycount}
-arguments are necessary to create a spotrate. The
-\code{calendar} is only necessary if someone wants to
-compound spot rates providing dates (\code{from} and
-\code{to}) instead of terms.
+The \code{compounding} and \code{daycount} arguments are
+necessary to create a spotrate. The \code{calendar}
+argument is only necessary if someone wants to compound
+spot rates between dates.
 
 \code{as.spotrate.character} accepts a string in the format
-\code{RATE COMPOUNDING DAYCOUNT}, where: \itemize{ \item
-\code{RATE} a numeric value \item \code{COMPOUNDING} one of
-the following: \code{simple}, \code{discrete},
-\code{continuous} \item \code{DAYCOUNT} a valid day count
-rule, see \code{\link{daycount-class}} } That function
-returns a single spotrate (length 1). If you have a
-character vector you should use the \code{lapply} function
-to create a list of spotrates. \preformatted{ specs <-
-c("0.06 simple actual/365", "0.11 discrete business/252")
-lapply(specs, as.spotrate) }
-}
-\note{
-The \code{spotrate} class represents a annual spot rates.
-That restriction might be removed in the future.
+
+\preformatted{"RATE COMPOUNDING DAYCOUNT"}
+
+where: \itemize{ \item \code{RATE} is a numeric value \item
+\code{COMPOUNDING} is one of the following strings
+\code{simple}, \code{discrete}, \code{continuous} \item
+\code{DAYCOUNT} is a valid day count rule, see
+\code{\link{daycount-class}} }
+
+That function returns a single \code{spotrate} (length 1).
+If you have a character vector you should use the
+\code{lapply} function to create a list of \code{spotrate}.
+
+\preformatted{ specs <- c("0.06 simple actual/365", "0.11
+discrete business/252") lapply(specs, as.spotrate) }
 }
 \examples{
 as.spotrate("0.06 simple actual/365")

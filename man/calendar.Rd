@@ -8,14 +8,14 @@ calendar(obj, ...)
 \method{calendar}{spotrate}(obj, ...)
 }
 \arguments{
-  \item{obj}{.}
+  \item{obj}{any object which has a calendar attribute}
 
-  \item{...}{.}
+  \item{...}{extra arguments}
+}
+\value{
+a \code{calendar} object
 }
 \description{
-Returns the calendar
-}
-\details{
-calendar
+Method to access the \code{calendar} attribute.
 }
 

@@ -1,17 +1,13 @@
 \name{daycount-class}
 \alias{as.daycount}
 \alias{as.term.daycount}
-\alias{daycount}
 \alias{daycount-class}
-\alias{daycount.spotrate}
 \alias{dib}
 \alias{dib.daycount}
 \alias{timefactor}
 \alias{timefactor.daycount}
 \title{Day count convention class}
 \usage{
-daycount(obj, ...)
-
 as.daycount(dcspec)
 
 dib(obj, ...)
@@ -23,8 +19,6 @@ timefactor(obj, ...)
 \method{timefactor}{daycount}(obj, term, units = NULL, ...)
 
 \method{as.term}{daycount}(obj, term, units, ...)
-
-\method{daycount}{spotrate}(obj, ...)
 }
 \arguments{
   \item{obj}{an instance of \code{daycount}}

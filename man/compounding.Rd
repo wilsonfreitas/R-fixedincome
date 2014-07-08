@@ -1,21 +1,21 @@
 \name{compounding}
 \alias{compounding}
 \alias{compounding.spotrate}
-\title{Compounding accessor method}
+\title{Compounding accessor}
 \usage{
 compounding(obj, ...)
 
 \method{compounding}{spotrate}(obj, ...)
 }
 \arguments{
-  \item{obj}{any object}
+  \item{obj}{any object which has a compounding attribute}
 
-  \item{...}{unused extra arguments}
+  \item{...}{extra arguments}
+}
+\value{
+a compounding object
 }
 \description{
-Compounding method
-}
-\details{
-Compounding method
+Method to access the compounding attribute.
 }
 

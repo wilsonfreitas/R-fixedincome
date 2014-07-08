@@ -1,11 +1,11 @@
 #' Calendar accessor
 #' 
-#' Returns the calendar
+#' Method to access the \code{calendar} attribute.
 #' 
-#' calendar
+#' @param obj any object which has a calendar attribute
+#' @param ... extra arguments
 #' 
-#' @param obj .
-#' @param ... .
+#' @return a \code{calendar} object
 #' 
 #' @export
 calendar <- function(obj, ...) UseMethod('calendar', obj)

@@ -1,54 +1,60 @@
 #' The spotrate object
 #' 
 #' @description
-#' The \code{spotrate} represents a spot rate and stores the information needed
-#' to compound or discount that rate.
+#' The \code{spotrate} object abstracts a spot rate (or an interst rate) and
+#' stores all information needed to compound or discount that rate.
 #' 
 #' @note
-#' The \code{spotrate} class represents a annual spot rates. That
-#' restriction might be removed in the future.
+#' The \code{spotrate} objects are annual spot rates. 
+#' That restriction might be removed in the future.
 #' 
 #' @details
-#' 
 #' The \code{spotrate} class fully specifies spot rates.
-#' It has the 4 attributes necessary to manipulate spot rates:
+#' It has:
 #' \itemize{
-#' \item the spot rate values which are numeric values representing the rate
+#' \item the spot rate values which are numeric values representing the rate.
 #' \item the compounding regime that specifies how to compound the spot 
-#' rate and is specified by a \code{compounding} object
-#' \item the daycount rule which computes the compounding periods right 
-#' adjusted to the spot rate frequency
-#' \item the calendar that is responsible for computing days between 2 dates
+#' rate. This is a \code{compounding} object.
+#' \item the daycount rule to compute the compounding periods right 
+#' adjusted to the spot rate frequency (which is annual).
+#' \item the calendar which returns the number of days between 2 dates.
 #' }
 #' 
-#' The \code{spotrate} class is a numeric vector with attributes.
-#' Once it is a numeric vector it represents spot rates sharing the same 
-#' compounding, daycount and calendar attributes.
+#' The \code{spotrate} class is a \code{numeric} vector and 
+#' all values in a \code{spotrate} instance share the 
+#' \code{compounding}, \code{daycount} and \code{calendar} attributes.
 #' The coercion function \code{as.list.spotrate} splits the vector into many 
 #' single spot rate objects.
 #' 
+#' The \code{calendar} attribute is an instance of \code{bizdays}
+#' \code{\link[bizdays]{Calendar}} class.
+#' 
 #' @name spotrate-class
+#' @examples
+#' as.spotrate("0.06 simple actual/365")
+#' library(bizdays)
+#' as.spotrate(0.06, as.compounding('continuous'), as.daycount("actual/365"),
+#' Calendar(name="actual"))
+#' as.spotrate(c(0.06, 0.07, 0.08), as.compounding('simple'),
+#' as.daycount("actual/365"))
+#' specs <- c("0.06 simple actual/365", "0.11 discrete business/252")
+#' lapply(specs, as.spotrate)
 NULL
 
-
-#' Crete a spotrate object
+#' Create a spotrate object
 #' 
 #' @description
 #' A factory method of \code{spotrate} objects.
 #' 
-#' @note
-#' The \code{spotrate} class represents a annual spot rates. That
-#' restriction might be removed in the future.
-#' 
-#' @param obj a numeric value which defines a rate or a string specifying
-#' a spot rate.
-#' @param compounding the compounding regime can assume the following values:
-#' \code{simple}, \code{compounded} and \code{continuous}
-#' @param daycount daycount instance
-#' @param calendar calendar instance
-#' @param ... unused extra arguments
+#' @param obj numeric values defining rates or a string specifying
+#' a spot rate
+#' @param compounding an instance of \code{\link{compounding-class}}
+#' @param daycount an instance of \code{\link{daycount-class}}
+#' @param calendar and instance of bizdays' \code{\link[bizdays]{Calendar}}
+#' @param ... extra arguments
 #' 
 #' @return a spotrate object
+#' 
 #' @name as.spotrate
 #' @examples
 #' as.spotrate("0.06 simple actual/365")
@@ -67,16 +73,20 @@ as.spotrate <- function(obj, ...) UseMethod('as.spotrate', obj)
 
 #' @rdname as.spotrate
 #' @export
+as.spotrate.default <- function(obj, compounding, daycount, calendar=NULL, ...) {
+	as.spotrate(as.numeric(obj), compounding=compounding, daycount=daycount, 
+		calendar=calendar)
+}
+
+#' @rdname as.spotrate
+#' @export
 #' @details
-#' \code{as.spotrate.default} accepts any objects that coerce to numeric.
 #' The \code{compounding} and \code{daycount} arguments are necessary to
 #' create a spotrate.
-#' The \code{calendar} is only necessary if someone wants to compound 
-#' spot rates providing dates (\code{from} and \code{to}) instead of terms.
+#' The \code{calendar} argument is only necessary if someone wants to compound 
+#' spot rates between dates.
 #' 
-as.spotrate.default <- function(obj, compounding, daycount, calendar=NULL, ...) {
-	if (!is.numeric(obj))
-	    stop('Invalid given rate:', obj)
+as.spotrate.numeric <- function(obj, compounding, daycount, calendar=NULL, ...) {
 	structure(obj, compounding=compounding, daycount=daycount, 
 		calendar=calendar, class='spotrate')
 }
@@ -85,17 +95,22 @@ as.spotrate.default <- function(obj, compounding, daycount, calendar=NULL, ...) 
 #' @export
 #' @details
 #' \code{as.spotrate.character} accepts a string in the format 
-#' \code{RATE COMPOUNDING DAYCOUNT}, where:
+#' 
+#' \preformatted{"RATE COMPOUNDING DAYCOUNT"}
+#' 
+#' where:
 #' \itemize{
-#' \item \code{RATE} a numeric value
-#' \item \code{COMPOUNDING} one of the following: \code{simple}, 
+#' \item \code{RATE} is a numeric value
+#' \item \code{COMPOUNDING} is one of the following strings \code{simple}, 
 #' \code{discrete}, \code{continuous}
-#' \item \code{DAYCOUNT} a valid day count rule, see 
+#' \item \code{DAYCOUNT} is a valid day count rule, see 
 #' \code{\link{daycount-class}}
 #' }
-#' That function returns a single spotrate (length 1).
+#' 
+#' That function returns a single \code{spotrate} (length 1).
 #' If you have a character vector you should use the \code{lapply} function
-#' to create a list of spotrates.
+#' to create a list of \code{spotrate}.
+#' 
 #' \preformatted{
 #' specs <- c("0.06 simple actual/365", "0.11 discrete business/252")
 #' lapply(specs, as.spotrate)
@@ -113,8 +128,8 @@ as.spotrate.character <- function(obj, ...) {
 }
 
 #' @details
-#' The \code{rates.spotrate} returns the numeric value representing the spot
-#' rates.
+#' If the \code{obj} argument is a \code{spotrate} instance it 
+#' returns a \code{numeric} representing the spot rates.
 #' 
 #' @rdname rates
 #' @export
@@ -124,7 +139,7 @@ rates.spotrate <- function(obj, ...) as.numeric(obj)
 #' @export
 compounding.spotrate <- function (obj, ...) attr(obj, 'compounding')
 
-#' @rdname daycount-class
+#' @rdname daycount
 #' @export
 daycount.spotrate <- function (obj, ...) attr(obj, 'daycount')
 
@@ -132,9 +147,28 @@ daycount.spotrate <- function (obj, ...) attr(obj, 'daycount')
 #' @export
 calendar.spotrate <- function (obj, ...) attr(obj, 'calendar')
 
+#' @details
+#' If \code{obj} is a \code{\link{spotrate-class}} the \code{term} can be a 
+#' \code{\link{term-class}} or a numeric.
+#' For numeric term the \code{units} argument should be used or it defaults to
+#' \code{"days"}.
+#' When the \code{term} argument is missing the arguments \code{from} and 
+#' \code{to} must be provided and also the spot rate's \code{calendar}  
+#' attribute.
+#' The term is computed in days, the number of days between the two dates
+#' according to \code{calendar}.
+#' 
+#' @param units a valid term unit: \code{"days"}, \code{"months"}, 
+#' \code{"years"}
+#' @param from a date object. Since it uses \code{bizdays} package it accepts
+#' many date formats.
+#' @param to a date object. Since it uses \code{bizdays} package it accepts
+#' many date formats.
+#' 
 #' @rdname compound
 #' @export
-compound.spotrate <- function(obj, term, units=NULL, from=NULL, to=NULL, ...) {
+compound.spotrate <- function(obj, term, units=c('days', 'months', 'years'), from=NULL, to=NULL, ...) {
+	units <- match.arg(units)
 	term <- if (missing(term)) {
 		if (is.null(calendar(obj))) stop("Missing calendar")
 		as.term(bizdays::bizdays(from, to, calendar(obj)), 'days')
@@ -149,6 +183,14 @@ compound.spotrate <- function(obj, term, units=NULL, from=NULL, to=NULL, ...) {
 	tf <- timefactor(daycount(obj), term=term)
 	compound(comp, rates(obj), tf)
 }
+
+
+#' @rdname compound
+#' @export
+discount.spotrate <- function(obj, term, units=c('days', 'months', 'years'), from=NULL, to=NULL, ...) {
+	1/compound(obj, term, units, from, to)
+}
+
 
 ## standard generics
 
