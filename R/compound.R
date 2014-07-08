@@ -1,15 +1,13 @@
-
-#' @title compound
+#' Compound function
 #' 
-#' @description
-#' Compound
+#' Computes the compounding factor
 #' 
-#' @export compound
-compound <- function(object, ...) UseMethod('compound', object)
-
-#' @S3method compound CompoundFactor
-compound.CompoundFactor <- function(cf.1, cf.2) {
-    CompoundFactor(compound.factor(cf.1) * compound.factor(cf.2),
-        term(cf.1) + term(cf.2))
-}
+#' @param obj See Details
+#' @param term See Details
+#' @param ... extra arguments
+#' 
+#' @return a numeric value
+#' 
+#' @export
+compound <- function(obj, ...) UseMethod('compound', obj)
 

@@ -1,16 +1,21 @@
 \name{compounding}
 \alias{compounding}
-\alias{compounding.SpotRate}
-\alias{compounding.SpotRateCurve}
-\title{compounding}
+\alias{compounding.spotrate}
+\title{Compounding accessor}
 \usage{
-  compounding(object, ...)
+compounding(obj, ...)
 
-  \method{compounding}{SpotRate} (object)
+\method{compounding}{spotrate}(obj, ...)
+}
+\arguments{
+  \item{obj}{any object which has a compounding attribute}
 
-  \method{compounding}{SpotRateCurve} (object)
+  \item{...}{extra arguments}
+}
+\value{
+a compounding object
 }
 \description{
-  Compounding
+Method to access the compounding attribute.
 }
 

@@ -1,24 +1,38 @@
-\name{rates}
+\name{rates.compounding}
 \alias{rates}
-\alias{rates.CurveInterpolation}
-\alias{rates.SpotRateCurve}
-\title{rates}
+\alias{rates.compounding}
+\alias{rates.spotrate}
+\title{Return the numeric rates}
 \usage{
-  rates(object, ...)
+\method{rates}{compounding}(obj, value, term, ...)
 
-  \method{rates}{SpotRateCurve} (object)
+rates(obj, ...)
 
-  \method{rates}{CurveInterpolation} (object, terms = NULL)
+\method{rates}{spotrate}(obj, ...)
+}
+\arguments{
+  \item{value}{a numeric value representing a compounding
+  factor}
+
+  \item{term}{a \code{\link{term-class}} instance}
+
+  \item{obj}{See Details}
+
+  \item{...}{extra arguments}
 }
 \value{
-  \code{interest rates}
-
-  \code{interest rates}
+a numeric value
 }
 \description{
-  Interest rates
+Return a numeric value which represents spot rates.
 }
 \details{
-  Interest rates
+If the \code{obj} argument is a
+\code{\link{compounding-class}} the function
+\code{rates.compounding} computes the implied rate for the
+given compounding and term.
+
+If the \code{obj} argument is a \code{spotrate} instance it
+returns a \code{numeric} representing the spot rates.
 }
 
