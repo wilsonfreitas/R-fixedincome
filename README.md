@@ -1,6 +1,75 @@
 # fixedincome
 
+Tools for fixed income calculations.
 
+To declare an annual spot rate with a `simple` compounding and an `actual/360` day count.
+
+```r
+as.spotrate(0.06, as.compounding('simple'), as.daycount('actual/360'))
+# 0.06 simple actual/360 
+```
+
+Compound the spot rate for 7 months.
+
+```r
+sr <- as.spotrate(0.06, as.compounding('simple'), as.daycount('actual/360'))
+compound(sr, '7 months')
+# [1] 1.035
+```
+
+Spot rates can be created using a string representation
+
+```r
+as.spotrate('0.06 discrete actual/365')
+# 0.06 discrete actual/365
+```
+
+### Pricing bonds
+
+```r
+dc <- as.daycount('actual/360')
+comp <- as.compounding('continuous')
+days <- c(97, 242, 321)
+sr <- as.spotrate(rep(0.06, length(days)), comp, dc)
+notional <- 100000
+bonds <- data.frame(DaysToMaturity=days, Rate=sr)
+bonds
+#   DaysToMaturity                          Rate
+# 1             97 0.06 simple actual/360 ANBIMA
+# 2            242 0.06 simple actual/360 ANBIMA
+# 3            321 0.06 simple actual/360 ANBIMA
+within(bonds, {
+	PV <- 100000*discount(Rate, DaysToMaturity)
+})
+#   DaysToMaturity                       Rate       PV
+# 1             97 0.06 continuous actual/360 98396.33
+# 2            242 0.06 continuous actual/360 96046.92
+# 3            321 0.06 continuous actual/360 94790.59
+```
+
+### Pricing bonds using a calendar
+
+```r
+library(bizdays)
+cal <- Calendar(holidays=holidaysANBIMA, name='ANBIMA', weekdays=c('saturday', 'sunday'))
+dc <- as.daycount('business/252')
+comp <- as.compounding('discrete')
+dates <- as.Date(c('2014-09-07', '2015-03-07', '2015-09-07'))
+sr <- as.spotrate(rep(0.06, length(dates)), comp, dc, cal)
+bonds <- data.frame(RefDate=as.Date('2014-03-21'), Maturity=dates, Rate=sr)
+bonds
+#      RefDate   Maturity                              Rate
+# 1 2014-03-21 2014-09-07 0.06 discrete business/252 ANBIMA
+# 2 2014-03-21 2015-03-07 0.06 discrete business/252 ANBIMA
+# 3 2014-03-21 2015-09-07 0.06 discrete business/252 ANBIMA
+within(bonds, {
+	PV <- 100000*discount(Rate, from=RefDate, to=Maturity)
+})
+#      RefDate   Maturity                              Rate       PV
+# 1 2014-03-21 2014-09-07 0.06 discrete business/252 ANBIMA 97353.43
+# 2 2014-03-21 2015-03-07 0.06 discrete business/252 ANBIMA 94558.01
+# 3 2014-03-21 2015-09-07 0.06 discrete business/252 ANBIMA 91842.86
+```
 
 - new names:
 	- spotrate
