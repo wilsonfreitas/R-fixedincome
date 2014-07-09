@@ -82,3 +82,9 @@ test_that("it should discount a spot rate", {
 	spr <- as.spotrate(0.06, continuousCompounding(), as.daycount('actual/365'), Calendar(name='actual'))
 	expect_equal(discount(spr, from='2013-01-01', to='2013-01-02'), 0.99983563)
 })
+
+test_that("it should test zero term", {
+	spr <- as.spotrate(0.06, simpleCompounding(), as.daycount('actual/365'))
+	expect_equal(discount(spr, 0), 1)
+	expect_equal(discount(spr, 0, 'years'), 1)
+})
