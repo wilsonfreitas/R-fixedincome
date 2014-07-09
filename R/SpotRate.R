@@ -127,6 +127,43 @@ as.spotrate.character <- function(obj, ...) {
 	})[[1]]
 }
 
+#' @rdname as.spotrate
+#' @export
+as.spotrate.spotrate <- function(obj, term, compounding=NULL, daycount=NULL, calendar=NULL, ...) {
+	compounding <- if (is.null(compounding)) compounding(obj) else compounding
+	daycount <- if (is.null(daycount)) daycount(obj) else daycount
+	calendar <- if (is.null(calendar)) calendar(obj) else calendar
+	f <- compound(obj, term)
+	fun <- function(r) {
+		sr <- as.spotrate(r, compounding, daycount, calendar)
+		f - compound(sr, term)
+	}
+	eq_rate <- .imprate(fun, c(1e-10, 10), obj)
+	as.spotrate(eq_rate, compounding=compounding, daycount=daycount, 
+		calendar=calendar)
+}
+
+.imprate <- function(f, rng, ini, eps=.Machine$double.eps, max.iter=1000) {
+	r.up <- rng[2]*rep(1, length(ini))
+	r.down <- rng[1]*rep(1, length(ini))
+	r <- as.numeric(ini)
+	iter <- 0
+	err <- f(r)
+	## repeat until error is sufficiently small or counter hits 1000
+	while (all(abs(err) > eps) && iter < max.iter) {
+		idx.err <- err > 0
+		r.down[idx.err] <- r[idx.err]
+		r[idx.err] <- (r.up[idx.err] + r[idx.err])/2
+		idx.err <- !idx.err
+		r.up[idx.err] <- r[idx.err]
+		r[idx.err] <- (r.down[idx.err] + r[idx.err])/2
+		err <- f(r)
+		iter <- iter + 1
+	}
+	r
+}
+
+
 #' @details
 #' If the \code{obj} argument is a \code{spotrate} instance it 
 #' returns a \code{numeric} representing the spot rates.

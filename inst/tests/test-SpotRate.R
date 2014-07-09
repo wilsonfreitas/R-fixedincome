@@ -88,3 +88,20 @@ test_that("it should test zero term", {
 	expect_equal(discount(spr, 0), 1)
 	expect_equal(discount(spr, 0, 'years'), 1)
 })
+
+test_that("it should convert a spotrate to another spotrate", {
+	spr_s <- as.spotrate(0.06, simpleCompounding(), as.daycount('actual/365'))
+	spr_d <- as.spotrate(spr_s, as.term('1 years'), discreteCompounding())
+	expect_equal(as.numeric(spr_d), 0.06)
+	# simple change
+	spr_d <- as.spotrate(spr_s, as.term('1 months'), discreteCompounding())
+	expect_equal(as.numeric(spr_d), 0.06167781186)
+	# vectorized
+	spr_s <- as.spotrate(c(0.06, 0.07, 0.08), simpleCompounding(), as.daycount('actual/365'))
+	spr_d <- as.spotrate(spr_s, as.term('1 months'), discreteCompounding())
+	expect_equal(as.numeric(spr_d), c(0.06167781186, 0.07229008086, 0.08299950681))
+	# change daycount/calendar
+	# spr_s <- as.spotrate(10.68/100, discreteCompounding(), as.daycount('actual/360'))
+	# spr_d <- as.spotrate(spr_s, as.term('1 days'), daycount=as.daycount('business/252'))
+	# expect_equal(as.numeric(spr_d), 10.80/100)
+})
