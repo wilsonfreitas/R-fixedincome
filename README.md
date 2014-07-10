@@ -26,17 +26,23 @@ as.spotrate('0.06 discrete actual/365')
 
 ### Pricing bonds
 
+Bonds can be created using a `data.frame` and `spotrate` can be set as one of columns.
+
 ```r
-dc <- as.daycount('actual/360')
-comp <- as.compounding('continuous')
-days <- c(97, 242, 321)
-sr <- as.spotrate(rep(0.06, length(days)), comp, dc)
+# Declaring bonds
+dc <- as.daycount('actual/360') # daycount rule
+comp <- as.compounding('continuous') # compounding regime
+days <- c(97, 242, 321) # days to maturity
+sr <- as.spotrate(rep(0.06, length(days)), comp, dc) # discount rate
+
 bonds <- data.frame(DaysToMaturity=days, Rate=sr, Notional=100000)
 bonds
 #   DaysToMaturity                              Rate Notional
 # 1             97 0.06 discrete business/252 ANBIMA    1e+05
 # 2            242 0.06 discrete business/252 ANBIMA    1e+05
 # 3            321 0.06 discrete business/252 ANBIMA    1e+05
+
+# Pricing bond -- discounting their notional value
 within(bonds, {
 	PV <- Notional*discount(Rate, DaysToMaturity)
 })
