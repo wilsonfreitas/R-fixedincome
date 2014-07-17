@@ -67,13 +67,13 @@ as.spotratecurve.numeric <- function(obj, rates, refdate=NULL, interp=NULL, name
 	attr(rates, 'terms') <- obj
 	attr(rates, 'refdate') <- if (is.null(refdate)) refdate else as.Date(refdate)
 	attr(rates, 'name') <- name
-	attr(rates, 'interp') <- name
+	attr(rates, 'interp') <- interp
 	class(rates) <- c('spotratecurve', 'spotrate')
 	rates
 }
 
 #' @export
-terms.spotratecurve <- function(obj) attr(obj, 'terms')
+terms.spotratecurve <- function(x, ...) attr(x, 'terms')
 
 #' @return spotratecurve object
 #' 
