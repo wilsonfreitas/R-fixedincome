@@ -67,8 +67,9 @@ as.spotratecurve.numeric <- function(obj, rates, refdate=NULL, interp=NULL, name
 	attr(rates, 'terms') <- obj
 	attr(rates, 'refdate') <- if (is.null(refdate)) refdate else as.Date(refdate)
 	attr(rates, 'name') <- name
-	attr(rates, 'interp') <- interp
 	class(rates) <- c('spotratecurve', 'spotrate')
+	attr(rates, 'interp') <- interp
+	attr(rates, 'interp.handler') <- if (is.null(interp)) interp else interp(rates)
 	rates
 }
 
@@ -101,36 +102,18 @@ as.spotratecurve.matrix <- function(object, ...) {
     spotratecurve(rates=object[,1], terms=object[,2], ...)
 }
 
-#' @rdname open-brace.spotratecurve
-#' @export
-'[.spotratecurve' <- function(object, term) {
-    if (any(term > 0)) {
-        spotratecurve(rates(object)[terms(object) %in% term],
-            term, dib=dib(object), compounding=compounding(object))
-    } else {
-        term <- abs(term)
-        idx <- which(terms(object) %in% term)
-        spotratecurve(rates(object)[-idx],
-            terms(object)[-idx],
-            dib=dib(object), compounding=compounding(object))
-    }
-}
+# my <- function(x) UseMethod('my')
+# my.c1 <- function(x) {cat('c1\n'); NextMethod(); x}
+# my.c2 <- function(x) {cat('c2\n'); NextMethod(); x}
+# my.c3 <- function(x) {cat('c3\n'); x}
+# my.default <- function(x) {cat('default\n'); x}
+# x <- 1; class(x) <- c('c1', 'c2'); my(x)
 
-#' Get the SpotRate for a given term
-#' 
-#' Get the SpotRate for a given term
-#' 
 #' @export
-getSpotRate <- function(curve, term) {
-    stopifnot(length(term) == 1)
-    SpotRate(curve[term], term, dib=dib(curve), compounding=compounding(curve))
-}
-
-#' @rdname getSpotRate
-#' @method [[ spotratecurve
-#' @S3method [[ spotratecurve
-'[[.spotratecurve' <- function(curve, term) {
-    getSpotRate(curve, term)
+`[.spotratecurve` <- function(x, terms) {
+	sr <- attr(x, 'interp.handler')(terms)
+	as.spotrate(sr, compounding=compounding(x), daycount=daycount(x),
+		calendar(x))
 }
 
 #' Insert a SpotRate into the SpotRate.
@@ -147,23 +130,29 @@ getSpotRate <- function(curve, term) {
 #' mat <- cbind(c(0.08, 0.083, 0.089, 0.093, 0.095), c(0.5, 1, 1.5, 2, 2.5))
 #' curve <- as.spotratecurve(mat, interp='Spline', dib=365)
 #' curve[1.25] <- 0.085
-'[<-.spotratecurve' <- function(object, i, value) {
-    terms <- terms(object)
-    rates <- rates(object)
-    contained.idx <- i %in% terms
-    if (any(contained.idx)) {
-        idx <- terms %in% i
-        terms[idx] <- i[contained.idx]
-        rates[idx] <- value[contained.idx]
-    }
-    if (any(!contained.idx)) {
-        rates <- append(rates, value[!contained.idx])
-        terms <- append(terms, i[!contained.idx])
-        idx <- order(terms)
-        terms <- terms[idx]
-        rates <- rates[idx]
-    }
-    spotratecurve(rates, terms, dib(object), compounding(object))
+`[<-.spotratecurve` <- function(x, i, value) {
+	val <- cbind(i, value)
+	i <- val[,1]
+	value <- val[,2]
+	terms <- terms(x)
+	rates <- rates(x)
+	contained.idx <- i %in% terms
+	if (any(contained.idx)) {
+		idx <- terms %in% i
+		terms[idx] <- i[contained.idx]
+		rates[idx] <- value[contained.idx]
+	}
+	if (any(!contained.idx)) {
+		rates <- append(rates, value[!contained.idx])
+		terms <- append(terms, i[!contained.idx])
+		idx <- order(terms)
+		terms <- terms[idx]
+		rates <- rates[idx]
+	}
+	sr <- as.spotrate(rates, compounding=compounding(x), daycount=daycount(x),
+		calendar(x))
+	as.spotratecurve(terms, sr, name=attr(x, 'name'), interp=attr(x, 'interp'),
+		refdate=attr(x, 'refdate'))
 }
 
 #' spotratecurve generic extensions
@@ -174,12 +163,13 @@ getSpotRate <- function(curve, term) {
 #' @name generic-spotratecurve
 NULL
 
-# print.spotratecurve <- function(x, ...) {
-#     m <- as.matrix(rates(x), ncol=1)
-#     rownames(m) <- terms(x)
-#     colnames(m) <- attr(x, 'name')
-#     print(m)
-# }
+print.spotratecurve <- function(x, ...) {
+	m <- as.matrix(rates(x), ncol=1)
+	rownames(m) <- terms(x)
+	colnames(m) <- attr(x, 'name')
+	print.default(m)
+	invisible(x)
+}
 
 # as.data.frame.spotratecurve <- function(curve, ...) {
 #     data.frame(terms=terms(curve), rates=rates(curve), ...)
@@ -191,26 +181,26 @@ NULL
 #     plot(terms(curve), rates(curve), ...)
 # }
 
-# head.spotratecurve <- function(curve, n=6L, ...) {
-# 	stopifnot(length(curve) >= n)
-# 	curve[terms(curve)[seq_len(n)]]
-# }
+#' @export
+head.spotratecurve <- function(x, n=6L, ...) {
+	# stopifnot(length(curve) >= n)
+	# curve[terms(curve)[seq_len(n)]]
+	stopifnot(length(n) == 1L)
+	n <- if (n < 0L) max(length(x) + n, 0L) else min(n, length(x))
+	idx <- terms(x)[seq_len(n)]
+	as.spotratecurve(idx, x[idx], name=attr(x, 'name'),
+		interp=attr(x, 'interp'),
+		refdate=attr(x, 'refdate'))
+}
 
-# tail.spotratecurve <- function(curve, n=6L, ...) {
-# 	stopifnot(length(curve) >= n)
-# 	.terms <- tail(seq_along(terms(curve)), n)
-# 	.terms <- terms(curve)[.terms]
-# 	curve[.terms]
-# }
-
-# rates.spotratecurve <- function(object) as.numeric(object)
-
-# rates.CurveInterpolation <- function(object, terms=NULL) {
-# 	if (is.null(terms))
-# 		NextMethod('rates', object)
-# 	else {
-# 		interp <- attr(object, 'interp')
-# 		interp(terms)
-# 	}
-# }
+#' @export
+tail.spotratecurve <- function(x, n=6L, ...) {
+	stopifnot(length(n) == 1L)
+	xlen <- length(x)
+	n <- if (n < 0L) max(xlen + n, 0L) else min(n, xlen)
+	idx <- terms(x)[seq.int(to = xlen, length.out = n)]
+	as.spotratecurve(idx, x[idx], name=attr(x, 'name'),
+		interp=attr(x, 'interp'),
+		refdate=attr(x, 'refdate'))
+}
 

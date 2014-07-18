@@ -55,14 +55,31 @@ test_that("it should return the curve's length", {
 	expect_equal(length(curve), 5)
 })
 
+test_that("it should check if indexed the elements is spotrate", {
+	spr <- as.spotrate(rates, simpleCompounding(), as.daycount('actual/365'))
+	curve <- as.spotratecurve(terms, spr, interp=linear)
+	expect_is(curve[1], 'spotrate')
+})
+
 test_that("it should index the elements", {
 	spr <- as.spotrate(rates, simpleCompounding(), as.daycount('actual/365'))
-	curve <- as.spotratecurve(terms, spr)
-	expect_equal( curve[1], 0.0719 )
-	# expect_equal( curve[11], 0.056 )
-	# expect_equal( curve[c(1, 11)], c(0.0719, 0.056) )
+	curve <- as.spotratecurve(terms, spr, interp=linear)
+	expect_true(curve[1] == 0.0719)
+	expect_true(curve[11] == 0.056)
+	expect_true(all(curve[c(1, 11)] == c(0.0719, 0.056)))
+})
+
+test_that("it should remove elements", {
+	# spr <- as.spotrate(rates, simpleCompounding(), as.daycount('actual/365'))
+	# curve <- as.spotratecurve(terms, spr)
 	# expect_is( curve[-c(1,11)], 'SpotRateCurve' ) # remove elements
-	# expect_error( curve[21] ) # interpolate
+})
+
+test_that("it should interpolate", {
+	spr <- as.spotrate(rates, simpleCompounding(), as.daycount('actual/365'))
+	curve <- as.spotratecurve(terms, spr, interp=linear)
+	expect_true(curve[21] == 0.0636)
+	expect_true(all(curve[c(11, 21, 26)] == c(0.0560, 0.0636, 0.0674)))
 })
 
 # test_that("it should execute indexing operations", {
