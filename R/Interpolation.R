@@ -1,16 +1,4 @@
 
-#' CurveInterpolation
-#' 
-#' Creates a curve interpolation class
-#' 
-#' @param curve curve
-#' @param method \code{flatforward}, \code{linear}, \code{loglinear},
-#' \code{spline}, \code{hermite}, \code{monotone}
-#' @return numeric
-#' @export
-#' @name interpolation
-NULL
-
 #' @export
 flatforward <- function(curve) {
     prices <- (1 + rates(curve))^(terms(curve)/dib(curve))

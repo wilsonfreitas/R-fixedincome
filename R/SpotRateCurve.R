@@ -51,6 +51,7 @@ NULL
 #' @export
 as.spotratecurve <- function(obj, ...) UseMethod('as.spotratecurve', obj)
 
+#' @export
 as.spotratecurve.numeric <- function(obj, rates, refdate=NULL, interp=NULL, name=NULL) {
 	if (length(obj) != length(rates))
 		stop("rates and terms must have the same length.")
@@ -62,8 +63,6 @@ as.spotratecurve.numeric <- function(obj, rates, refdate=NULL, interp=NULL, name
 		stop("terms must be ordered ascending.")
 	if (! is(rates, 'spotrate'))
 		stop("rates must be an instance of spotrate.")
-	# dim(rates) <- c(length(rates), 1)
-	# rownames(rates) <- terms
 	attr(rates, 'terms') <- obj
 	attr(rates, 'refdate') <- if (is.null(refdate)) refdate else as.Date(refdate)
 	attr(rates, 'name') <- name
@@ -76,60 +75,18 @@ as.spotratecurve.numeric <- function(obj, rates, refdate=NULL, interp=NULL, name
 #' @export
 terms.spotratecurve <- function(x, ...) attr(x, 'terms')
 
-#' @return spotratecurve object
-#' 
-#' @rdname as.spotratecurve
-#' @method as.spotratecurve data.frame
-#' @S3method as.spotratecurve data.frame
-#' @examples
-#' # creating a spotratecurve from a data.frame
-#' df <- data.frame(rates=c(0.08, 0.083, 0.089, 0.093, 0.095), terms=c(0.5, 1, 1.5, 2, 2.5))
-#' curve <- as.spotratecurve(df, interp='Linear', dib=360)
-as.spotratecurve.data.frame <- function(object, ...) {
-    spotratecurve(rates=object[,1], terms=object[,2], ...)
-}
-
-#' @return spotratecurve object
-#' 
-#' @rdname as.spotratecurve
-#' @method as.spotratecurve data.frame
-#' @S3method as.spotratecurve data.frame
-#' @examples
-#' # creating a spotratecurve from a matrix
-#' mat <- cbind(c(0.08, 0.083, 0.089, 0.093, 0.095), c(0.5, 1, 1.5, 2, 2.5))
-#' curve <- as.spotratecurve(mat, interp='Spline', dib=365)
-as.spotratecurve.matrix <- function(object, ...) {
-    spotratecurve(rates=object[,1], terms=object[,2], ...)
-}
-
-# my <- function(x) UseMethod('my')
-# my.c1 <- function(x) {cat('c1\n'); NextMethod(); x}
-# my.c2 <- function(x) {cat('c2\n'); NextMethod(); x}
-# my.c3 <- function(x) {cat('c3\n'); x}
-# my.default <- function(x) {cat('default\n'); x}
-# x <- 1; class(x) <- c('c1', 'c2'); my(x)
-
 #' @export
-`[.spotratecurve` <- function(x, terms) {
-	sr <- attr(x, 'interp.handler')(terms)
+#' - units argument
+#' - index by date
+`[.spotratecurve` <- function(x, i) {
+	if (any(i < 0))
+		stop("spotratecurve does not handle negative subscripts.")
+	sr <- attr(x, 'interp.handler')(i)
 	as.spotrate(sr, compounding=compounding(x), daycount=daycount(x),
 		calendar(x))
 }
 
-#' Insert a SpotRate into the SpotRate.
-#'
-#' A spotratecurve can be expanded by inserting other SpotRate objects into it.
-#'
-#' @rdname open-brace.spotratecurve
-#' @method [<- spotratecurve
-#' @S3method [<- spotratecurve
-#' @param object spotratecurve on which the SpotRate has to be inserted
-#' @param value SpotRate to be inserted
-#' @examples
-#' # creating a spotratecurve from a matrix
-#' mat <- cbind(c(0.08, 0.083, 0.089, 0.093, 0.095), c(0.5, 1, 1.5, 2, 2.5))
-#' curve <- as.spotratecurve(mat, interp='Spline', dib=365)
-#' curve[1.25] <- 0.085
+#' @export
 `[<-.spotratecurve` <- function(x, i, value) {
 	val <- cbind(i, value)
 	i <- val[,1]
@@ -163,6 +120,7 @@ as.spotratecurve.matrix <- function(object, ...) {
 #' @name generic-spotratecurve
 NULL
 
+#' @export
 print.spotratecurve <- function(x, ...) {
 	m <- as.matrix(rates(x), ncol=1)
 	rownames(m) <- terms(x)
@@ -175,16 +133,12 @@ print.spotratecurve <- function(x, ...) {
 #     data.frame(terms=terms(curve), rates=rates(curve), ...)
 # }
 
-# length.spotratecurve <- function(curve) dim(curve)[1]
-
 # plot.spotratecurve <- function(curve, ...) {
 #     plot(terms(curve), rates(curve), ...)
 # }
 
 #' @export
 head.spotratecurve <- function(x, n=6L, ...) {
-	# stopifnot(length(curve) >= n)
-	# curve[terms(curve)[seq_len(n)]]
 	stopifnot(length(n) == 1L)
 	n <- if (n < 0L) max(length(x) + n, 0L) else min(n, length(x))
 	idx <- terms(x)[seq_len(n)]
