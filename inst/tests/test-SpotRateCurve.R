@@ -10,6 +10,7 @@ test_that("it should create an interest rate curve", {
 	curve <- as.spotratecurve(terms, spr)
 	expect_is(curve, "spotratecurve")
 	expect_is(curve, "spotrate")
+	expect_true(attr(curve, 'units') == "days")
 })
 
 test_that("it should check if terms and rates have the same length", {
@@ -47,6 +48,8 @@ test_that("it should access terms attribute", {
 	spr <- as.spotrate(rates, simpleCompounding(), as.daycount('actual/365'))
 	curve <- as.spotratecurve(terms, spr)
 	expect_equal(terms(curve), terms)
+	expect_equal(terms(curve, units='days'), terms)
+	expect_equal(terms(curve, units='years'), terms/365)
 })
 
 test_that("it should return the curve's length", {
@@ -82,32 +85,37 @@ test_that("it should interpolate", {
 	expect_true(all(curve[c(11, 21, 26)] == c(0.0560, 0.0636, 0.0674)))
 })
 
-# test_that("it should execute indexing operations", {
-#     expect_equal( which(curve == 0.0719), 1 )
-#     expect_equal( which(curve < 0.0719), c(2, 3, 4, 5) )
-# })
-#
-# test_that("it should return a new curve with remaining elements", {
-#     expect_equal( length(curve[-11]), length(curve)-1 )
-#     expect_equal( length(curve[-c(1,11)]), length(curve)-2 )
-#     expect_is( curve[-c(1,11)], 'SpotRateCurve' )
-#     expect_error( curve[-21] )
-# })
-#
-# test_that("it should return a SpotRate for the given term", {
-#     expect_is( getSpotRate(curve, 11), 'SpotRate' )
-#     expect_equal( getSpotRate(curve, 11), curve[[11]] )
-#     expect_equal( term(getSpotRate(curve, 11)), 11 )
-#     expect_equal( dib(getSpotRate(curve, 11)), dib(curve) )
-#     expect_equal( compounding(getSpotRate(curve, 11)), compounding(curve) )
-#     expect_error( getSpotRate(curve, 21) )
-# })
-#
-# test_that("it should return a SpotRate for the given term using [[", {
-#     expect_is( curve[[11]], 'SpotRate' )
-#     expect_error( curve[[21]] )
-# })
-#
+test_that("it should create a curve using dates", {
+	library(bizdays)
+	spr <- as.spotrate(rates, simpleCompounding(), as.daycount('actual/365'), Calendar(name='Actual'))
+	curve <- as.spotratecurve(terms+Sys.Date(), spr, refdate=Sys.Date(), interp=linear)
+	expect_is(curve, "spotratecurve")
+	expect_is(terms(curve), "Date")
+	expect_true(all(terms(curve) == terms+Sys.Date()))
+	expect_true(all(terms(curve, as.x=TRUE) == terms))
+})
+
+test_that("it should interpolate a curve using dates", {
+	library(bizdays)
+	spr <- as.spotrate(rates, simpleCompounding(), as.daycount('actual/365'), Calendar(name='Actual'))
+	curve <- as.spotratecurve(terms+as.Date('2014-07-01'), spr, refdate=as.Date('2014-07-01'))
+	expect_true(curve['2014-07-02'] == 0.0719)
+	expect_equal(rates(curve[c('2014-07-02', '2014-07-03')]), c(0.0719, 0.07031))
+	expect_true(curve['2014-07-04'] == curve[3])
+})
+
+test_that("it should replace a curve element using dates", {
+	library(bizdays)
+	spr <- as.spotrate(rates, simpleCompounding(), as.daycount('actual/365'), Calendar(name='Actual'))
+	curve <- as.spotratecurve(terms+as.Date('2014-07-01'), spr, refdate=as.Date('2014-07-01'))
+	curve['2014-07-02'] <- 1
+	expect_true(curve['2014-07-02'] == 1)
+	curve['2014-07-03'] <- 1
+	expect_true(curve[2] == 1)
+	curve[c('2014-07-04', '2014-07-05')] <- 1
+	expect_true(all(curve[c(3, 4)] == 1))
+})
+
 # test_that("it should compute forward rates", {
 #     expect_error( forward.rate(curve, 1, 1) )
 #     expect_equal( forward.rate(curve, 1, 11), SpotRate(0.05442303, 10) )

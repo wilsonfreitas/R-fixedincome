@@ -52,7 +52,7 @@ NULL
 as.spotratecurve <- function(obj, ...) UseMethod('as.spotratecurve', obj)
 
 #' @export
-as.spotratecurve.numeric <- function(obj, rates, refdate=NULL, interp=NULL, name=NULL) {
+as.spotratecurve.numeric <- function(obj, rates, units=c('days', 'months', 'years'), refdate=NULL, name=NULL, interp=linear) {
 	if (length(obj) != length(rates))
 		stop("rates and terms must have the same length.")
 	if (length(obj) != length(unique(obj)))
@@ -63,17 +63,43 @@ as.spotratecurve.numeric <- function(obj, rates, refdate=NULL, interp=NULL, name
 		stop("terms must be ordered ascending.")
 	if (! is(rates, 'spotrate'))
 		stop("rates must be an instance of spotrate.")
+	class(rates) <- c('spotratecurve', 'spotrate')
 	attr(rates, 'terms') <- obj
+	attr(rates, 'units') <- match.arg(units)
 	attr(rates, 'refdate') <- if (is.null(refdate)) refdate else as.Date(refdate)
 	attr(rates, 'name') <- name
-	class(rates) <- c('spotratecurve', 'spotrate')
 	attr(rates, 'interp') <- interp
 	attr(rates, 'interp.handler') <- if (is.null(interp)) interp else interp(rates)
 	rates
 }
 
+as.spotratecurve.Date <- function(obj, rates, refdate, name=NULL, interp=linear) {
+	class(rates) <- c('spotratecurve', 'spotrate')
+	attr(rates, 'terms') <- obj
+	attr(rates, 'units') <- 'days'
+	attr(rates, 'refdate') <- as.Date(refdate)
+	attr(rates, 'name') <- name
+	attr(rates, 'interp') <- interp
+	attr(rates, 'interp.handler') <- if (is.null(interp)) interp else interp(rates)
+	rates
+}
+
+as.spotratecurve.character <- function(obj, rates, refdate, name=NULL, interp=linear) {
+}
+
 #' @export
-terms.spotratecurve <- function(x, ...) attr(x, 'terms')
+terms.spotratecurve <- function(x, ..., units=NULL, as.x=FALSE) {
+	.terms <- attr(x, 'terms')
+	if (! is.null(units) || as.x) {
+		.terms <- if (is(.terms, 'numeric')) .terms else
+			bizdays(attr(x, 'refdate'), .terms, calendar(x))
+		.terms <- as.term(.terms, attr(x, 'units'))
+		if (! is.null(units))
+			.terms <- as.term(daycount(x), .terms, units)
+		.terms <- as.numeric(.terms)
+	}
+	.terms
+}
 
 #' @export
 #' - units argument
@@ -81,17 +107,20 @@ terms.spotratecurve <- function(x, ...) attr(x, 'terms')
 `[.spotratecurve` <- function(x, i) {
 	if (any(i < 0))
 		stop("spotratecurve does not handle negative subscripts.")
+	if (! is(i, 'numeric'))
+		i <- bizdays(attr(x, 'refdate'), i, calendar(x))
 	sr <- attr(x, 'interp.handler')(i)
-	as.spotrate(sr, compounding=compounding(x), daycount=daycount(x),
-		calendar(x))
+	as.spotrate(sr, compounding(x), daycount(x), calendar(x))
 }
 
 #' @export
 `[<-.spotratecurve` <- function(x, i, value) {
+	if (! is(i, 'numeric'))
+		i <- bizdays(attr(x, 'refdate'), i, calendar(x))
 	val <- cbind(i, value)
 	i <- val[,1]
 	value <- val[,2]
-	terms <- terms(x)
+	terms <- terms(x, as.x=TRUE)
 	rates <- rates(x)
 	contained.idx <- i %in% terms
 	if (any(contained.idx)) {
@@ -106,8 +135,7 @@ terms.spotratecurve <- function(x, ...) attr(x, 'terms')
 		terms <- terms[idx]
 		rates <- rates[idx]
 	}
-	sr <- as.spotrate(rates, compounding=compounding(x), daycount=daycount(x),
-		calendar(x))
+	sr <- as.spotrate(rates, compounding(x), daycount(x), calendar(x))
 	as.spotratecurve(terms, sr, name=attr(x, 'name'), interp=attr(x, 'interp'),
 		refdate=attr(x, 'refdate'))
 }
@@ -121,21 +149,24 @@ terms.spotratecurve <- function(x, ...) attr(x, 'terms')
 NULL
 
 #' @export
-print.spotratecurve <- function(x, ...) {
+print.spotratecurve <- function(x, ..., units=NULL) {
 	m <- as.matrix(rates(x), ncol=1)
-	rownames(m) <- terms(x)
+	rownames(m) <- format(terms(x, units=units), digits=4)
 	colnames(m) <- attr(x, 'name')
 	print.default(m)
+	cat(sub(' +$', '', paste(compounding(x), daycount(x), calendar(x)$name)), '\n')
 	invisible(x)
 }
 
-# as.data.frame.spotratecurve <- function(curve, ...) {
-#     data.frame(terms=terms(curve), rates=rates(curve), ...)
-# }
+as.data.frame.spotratecurve <- function(x, ...) {
+	data.frame(terms=terms(x), rates=rates(x), ...)
+}
 
-# plot.spotratecurve <- function(curve, ...) {
-#     plot(terms(curve), rates(curve), ...)
-# }
+
+plot.spotratecurve <- function(curve, ...) {
+	plot.default(x=terms(curve), y=rates(curve), xlab='Terms', ylab='Rates',
+		main='Spot Rate Curve', ...)
+}
 
 #' @export
 head.spotratecurve <- function(x, n=6L, ...) {
