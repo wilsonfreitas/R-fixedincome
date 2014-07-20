@@ -63,6 +63,13 @@ as.spotratecurve.numeric <- function(obj, rates, units=c('days', 'months', 'year
 		stop("terms must be ordered ascending.")
 	if (! is(rates, 'spotrate'))
 		stop("rates must be an instance of spotrate.")
+	if (! is.null(refdate)) {
+		cal <- calendar(rates)
+		if (is.null(cal))
+			warning("rates doesn't have a calendar, refdate will be ignored")
+		else
+			obj <- as.Date(sapply(obj, function(x) add.bizdays(refdate, x, cal)), origin=as.Date('1970-01-01'))
+	}
 	class(rates) <- c('spotratecurve', 'spotrate')
 	attr(rates, 'terms') <- obj
 	attr(rates, 'units') <- match.arg(units)
@@ -82,9 +89,6 @@ as.spotratecurve.Date <- function(obj, rates, refdate, name=NULL, interp=linear)
 	attr(rates, 'interp') <- interp
 	attr(rates, 'interp.handler') <- if (is.null(interp)) interp else interp(rates)
 	rates
-}
-
-as.spotratecurve.character <- function(obj, rates, refdate, name=NULL, interp=linear) {
 }
 
 #' @export

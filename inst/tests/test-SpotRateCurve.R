@@ -72,11 +72,11 @@ test_that("it should index the elements", {
 	expect_true(all(curve[c(1, 11)] == c(0.0719, 0.056)))
 })
 
-test_that("it should remove elements", {
+# test_that("it should remove elements", {
 	# spr <- as.spotrate(rates, simpleCompounding(), as.daycount('actual/365'))
 	# curve <- as.spotratecurve(terms, spr)
 	# expect_is( curve[-c(1,11)], 'SpotRateCurve' ) # remove elements
-})
+# })
 
 test_that("it should interpolate", {
 	spr <- as.spotrate(rates, simpleCompounding(), as.daycount('actual/365'))
@@ -114,6 +114,28 @@ test_that("it should replace a curve element using dates", {
 	expect_true(curve[2] == 1)
 	curve[c('2014-07-04', '2014-07-05')] <- 1
 	expect_true(all(curve[c(3, 4)] == 1))
+})
+
+test_that("it should create a curve using numeric and dates", {
+	library(bizdays)
+	cal <- Calendar(name='Actual')
+	spr <- as.spotrate(rates, simpleCompounding(), as.daycount('actual/365'), cal)
+	curve <- as.spotratecurve(terms, spr, refdate=Sys.Date(), interp=linear)
+	expect_is(curve, "spotratecurve")
+	expect_is(terms(curve), "Date")
+	.terms <- sapply(terms, function(x) add.bizdays(Sys.Date(), x, cal))
+	expect_true(all(terms(curve) == .terms))
+	expect_true(all(terms(curve, as.x=TRUE) == terms))
+})
+
+test_that("it should interpolate a curve using dates and numbers", {
+	library(bizdays)
+	cal <- Calendar(name='Actual')
+	spr <- as.spotrate(rates, simpleCompounding(), as.daycount('actual/365'), cal)
+	curve <- as.spotratecurve(terms, spr, refdate='2014-07-01', interp=linear)
+	expect_true(curve['2014-07-02'] == curve[1])
+	expect_equal(rates(curve[c('2014-07-02', '2014-07-03')]), rates(curve[c(1, 2)]))
+	expect_true(curve['2014-07-04'] == curve[3])
 })
 
 # test_that("it should compute forward rates", {
