@@ -1,15 +1,17 @@
 
 #' @export
 flatforward <- function(curve) {
-    prices <- (1 + rates(curve))^(terms(curve, as.x=TRUE)/dib(curve))
-    interp.coords <- xy.coords(terms(curve, as.x=TRUE), log(prices))
-    interp.FUN <- approxfun(interp.coords, method='linear')
-    dib <- dib(curve)
-    function (term) {
-        log.price <- interp.FUN(term)
-        price <- exp(log.price)
-        price^(dib/term) - 1
-    }
+	.terms <- terms(curve, as.x=TRUE)
+	prices <- compound(curve, .terms, units(curve))
+	interp.coords <- xy.coords(.terms, log(prices))
+	interp.FUN <- approxfun(interp.coords, method='linear')
+	dc <- daycount(curve)
+	comp <- compounding(curve)
+	function (term) {
+		log.price <- interp.FUN(term)
+		price <- exp(log.price)
+		rates(comp, price, timefactor(dc, term, units(curve)))
+	}
 }
 
 #' @export
