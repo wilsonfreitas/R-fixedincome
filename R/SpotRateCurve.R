@@ -207,3 +207,18 @@ subcurve <- function(x, i) {
 	as.spotratecurve(i, .rates, name=attr(x, 'name'), interp=attr(x, 'interp'),
 		refdate=refdate(x))
 }
+
+#' @export
+interp <- function(x) UseMethod('interp', x)
+`interp<-` <- function(x, value) UseMethod('interp<-', x)
+
+#' @export
+interp.spotratecurve <- function(x) attr(x, 'interp')
+
+#' @export
+`interp<-.spotratecurve` <- function(x, value) {
+	attr(x, 'interp') <- value
+	attr(x, 'interp.handler') <- value(x)
+	x
+}
+
