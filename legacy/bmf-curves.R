@@ -1,6 +1,7 @@
 
 library(stringr)
 library(fixedincome)
+library(bizdays)
 library(XML)
 
 # supplant('{media}logo.png', list(media='http://aboutwilson.net/'))
@@ -65,72 +66,60 @@ getURL <- function(ticker, date) {
 	paste0(url, query)
 }
 
-business_days_between <- function(from, to) bizdays(from, to)
-actual_days_between <- function(from, to) to - from
+calANBIMA <- Calendar(holidaysANBIMA, weekdays=c('saturday', 'sunday'), dib=252, name='ANBIMA')
+calACTUAL <- Calendar(name='Actual')
 
 tickers_map <- list(
-	SELIC=list(
-		ticker='SLP',
+	SLP=list(
 		columns=1,
-		compounding='compounded',
-		dib=252,
-		weight=0.01,
-		days_between=business_days_between),
-	DI1=list(
-		ticker='PRE',
+		compounding='discrete',
+		daycount='business/252',
+		calendar=calANBIMA,
+		interp=flatforward),
+	PRE=list(
 		columns=2,
-		compounding='compounded',
-		dib=252,
-		weight=0.01,
-		days_between=business_days_between),
-	CC=list(
-		ticker='DOL',
+		compounding='discrete',
+		daycount='business/252',
+		calendar=calANBIMA,
+		interp=flatforward),
+	DOL=list( # cupom sujo
 		columns=1,
 		compounding='simple',
-		dib=360,
-		weight=0.01,
-		days_between=business_days_between),
-	IGPM=list(
-		ticker='DIM',
+		daycount='actual/360',
+		calendar=calANBIMA,
+		interp=flatforward),
+	DIM=list( # cupom de IGPM
 		columns=1,
-		compounding='compounded',
-		dib=252,
-		weight=0.01,
-		days_between=business_days_between),
-	IPCA=list(
-		ticker='DIC',
+		compounding='discrete',
+		daycount='business/252',
+		calendar=calANBIMA,
+		interp=flatforward),
+	DIC=list( # cupom de IPCA
 		columns=1,
-		compounding='compounded',
-		dib=252,
-		weight=0.01,
-		days_between=business_days_between),
-	IBRX=list(
-		ticker='BRP',
-		columns=1,
-		compounding='simple',
-		dib=252,
-		weight=0.01,
-		days_between=business_days_between)
+		compounding='discrete',
+		daycount='business/252',
+		calendar=calANBIMA,
+		interp=flatforward)
 )
 
 #' selic_curve <- getCurve('SELIC', '2013-01-10')
 getCurve <- function(ticker, date) {
-	bmf_ticker <- tickers_map[[ticker]]
-	url <- getURL(bmf_ticker$ticker, date)
+	date <- as.Date(date)
+	ticker_info <- tickers_map[[ticker]]
+	url <- getURL(ticker, date)
 	num <- downloadData(url)
-	if (bmf_ticker$columns == 1) {
+	if (ticker_info$columns == 1) {
 		terms <- num[c(TRUE, FALSE)]
-		value <- num[c(FALSE, TRUE)]
-	} else if (bmf_ticker$columns == 2) {
+		value <- num[c(FALSE, TRUE)]/100
+	} else if (ticker_info$columns == 2) {
 		terms <- num[c(TRUE, FALSE, FALSE)]
-		value <- num[c(FALSE, FALSE, TRUE)]
+		value <- num[c(FALSE, FALSE, TRUE)]/100
 	}
-	value <- value*bmf_ticker$weight
-	terms <- bmf_ticker$days_between(as.Date(date), as.Date(date) + terms)
-	SpotRateCurve(value, terms,
-		dib=bmf_ticker$dib, compounding=bmf_ticker$compounding,
-        name=bmf_ticker$ticker, datum=date)
+	rates <- as.spotrate(value, as.compounding(ticker_info$compounding),
+		as.daycount(ticker_info$daycount), ticker_info$calendar)
+	as.spotratecurve(terms+date, rates, refdate=date, interp=ticker_info$interp, name=ticker)
 }
+print(selic)
 
 downloadData <- function (url) {
 	doc <- htmlTreeParse(url, useInternalNodes=TRUE)
@@ -143,14 +132,18 @@ downloadData <- function (url) {
 }
 
 # code examples
-# require(ggplot2)
-# selic <- getCurve('SELIC', '2013-10-18')
-# ff_selic <- CurveInterpolation(selic)
-# h_selic <- CurveInterpolation(selic, hermite)
-# m_selic <- CurveInterpolation(selic, monotone)
-# ggplot(as.data.frame(head(selic, 20)), aes(x=terms, y=rates)) +
-#     geom_line(data=as.data.frame(ff_selic[1:91]), aes(x=terms, y=rates), colour='red') +
+require(ggplot2)
+dt <- as.Date('2013-10-18')
+selic <- getCurve('PRE', '2014-07-10')
+selic.l <- head(selic, 20)
+.terms <- seq(1, max(terms(selic.l, as.x=TRUE)))
+s.selic.l <- subcurve(selic.l, .terms)
+interp(selic.l) <- natural.spline
+s.selic.li <- subcurve(selic.l, .terms)
+ggplot() +
+	geom_line(data=as.data.frame(s.selic.l), aes(x=terms, y=rates), colour='red')+
+	geom_line(data=as.data.frame(s.selic.li), aes(x=terms, y=rates), colour='magenta')+
+	geom_point(data=as.data.frame(selic.l), aes(x=terms, y=rates), colour='black', shape=16)
 #     geom_line(data=as.data.frame(h_selic[1:91]), aes(x=terms, y=rates), colour='green') +
 #     geom_line(data=as.data.frame(m_selic[1:91]), aes(x=terms, y=rates), colour='blue') +
-#     geom_point(colour='black', shape=16) +
 #     theme_bw() 
