@@ -193,3 +193,6 @@ tail.spotratecurve <- function(x, n=6L, ...) {
 		refdate=attr(x, 'refdate'))
 }
 
+
+#' @export
+units.spotratecurve <- function(x) attr(x, 'units')
