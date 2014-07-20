@@ -162,8 +162,8 @@ print.spotratecurve <- function(x, ..., units=NULL) {
 	invisible(x)
 }
 
-as.data.frame.spotratecurve <- function(x, ...) {
-	data.frame(terms=terms(x), rates=rates(x), ...)
+as.data.frame.spotratecurve <- function(x, ..., units=NULL, as.x=FALSE) {
+	data.frame(terms=terms(x, units=units, as.x=as.x), rates=rates(x), ...)
 }
 
 
@@ -196,3 +196,14 @@ tail.spotratecurve <- function(x, n=6L, ...) {
 
 #' @export
 units.spotratecurve <- function(x) attr(x, 'units')
+
+
+#' @export
+refdate <- function(x) attr(x, 'refdate')
+
+#' @export
+subcurve <- function(x, i) {
+	.rates <- x[i]
+	as.spotratecurve(i, .rates, name=attr(x, 'name'), interp=attr(x, 'interp'),
+		refdate=refdate(x))
+}
