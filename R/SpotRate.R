@@ -281,19 +281,21 @@ format.spotrate <- function (x, ...) {
 
 #' @export
 as.character.spotrate <- function(x, ...) {
+	parms <- list(...)
+	digits <- if (is.null(parms$digits)) options()$digits else parms$digits
 	if (length(x) == 1)
-		sub(' +$', '', paste(rates(x), compounding(x), daycount(x), 
-			calendar(x)$name))
+		sub(' +$', '', paste(format(rates(x), digits=digits), compounding(x),
+			daycount(x), calendar(x)$name))
 	else {
 		hdr <- sub(' +$', '', paste(compounding(x), daycount(x), 
 			calendar(x)$name))
-		paste(hdr, paste(rates(x), collapse=' '), sep='\n')
+		paste(hdr, paste(format(rates(x), digits=digits), collapse=' '), sep='\n')
 	}
 }
 
 #' @export
 print.spotrate <- function(x, ...) {
-	cat(as.character(x), '\n')
+	cat(as.character(x, ...), '\n')
 	invisible(x)
 }
 
