@@ -57,6 +57,16 @@ str_supplant <- function (string, repl) {
 # "ZND" Zinco US$/t 1
 # "TODOS"
 
+downloadData <- function (url) {
+	doc <- htmlTreeParse(url, useInternalNodes=TRUE)
+	tit <- xpathSApply(doc, "//td[contains(@class, 'tabelaTitulo')]", xmlValue)
+	num <- xpathSApply(doc, "//td[contains(@class, 'tabelaConteudo')]", 
+	    function(x) gsub('[\r\n \t]+', '', xmlValue(x)))
+	sapply(num, function(x) {
+		as.numeric(gsub(',', '.', x))
+	}, USE.NAMES=FALSE)
+}
+
 getURL <- function(ticker, date) {
 	url <- 'http://www2.bmf.com.br/pages/portal/bmfbovespa/boletim1/TxRef1.asp'
 	query <- str_supplant('?Data={date}&Data1={sysdate}&slcTaxa={ticker}',
@@ -115,35 +125,29 @@ getCurve <- function(ticker, date) {
 		terms <- num[c(TRUE, FALSE, FALSE)]
 		value <- num[c(FALSE, FALSE, TRUE)]/100
 	}
-	rates <- as.spotrate(value, as.compounding(ticker_info$compounding),
-		as.daycount(ticker_info$daycount), ticker_info$calendar)
-	as.spotratecurve(terms+date, rates, refdate=date, interp=ticker_info$interp, name=ticker)
+	rates <- as.spotrate(value, ticker_info$compounding, ticker_info$daycount,
+		ticker_info$calendar)
+	as.spotratecurve(terms+date, rates, refdate=date,
+		interp=ticker_info$interp, name=ticker)
 }
-print(selic)
 
-downloadData <- function (url) {
-	doc <- htmlTreeParse(url, useInternalNodes=TRUE)
-	tit <- xpathSApply(doc, "//td[contains(@class, 'tabelaTitulo')]", xmlValue)
-	num <- xpathSApply(doc, "//td[contains(@class, 'tabelaConteudo')]", 
-	    function(x) gsub('[\r\n \t]+', '', xmlValue(x)))
-	sapply(num, function(x) {
-		as.numeric(gsub(',', '.', x))
-	}, USE.NAMES=FALSE)
-}
 
 # code examples
 require(ggplot2)
-dt <- as.Date('2013-10-18')
-selic <- getCurve('PRE', '2014-07-10')
-selic.l <- head(selic, 20)
-.terms <- seq(1, max(terms(selic.l, as.x=TRUE)))
-s.selic.l <- subcurve(selic.l, .terms)
-interp(selic.l) <- natural.spline
-s.selic.li <- subcurve(selic.l, .terms)
+
+selic.ff <- head(getCurve('PRE', '2014-07-10'), 20)
+.terms <- seq(1, max(terms(selic.ff, as.x=TRUE)))
+
+selic.ff.terms <- subcurve(selic.ff, .terms)
+
+selic.ns <- as.spotratecurve(selic.ff, interp=natural.spline)
+selic.ns.terms <- subcurve(selic.ns, .terms)
+
+selic.hs <- as.spotratecurve(selic.ff, interp=hermite.spline)
+selic.hs.terms <- subcurve(selic.hs, .terms)
+
 ggplot() +
-	geom_line(data=as.data.frame(s.selic.l), aes(x=terms, y=rates), colour='red')+
-	geom_line(data=as.data.frame(s.selic.li), aes(x=terms, y=rates), colour='magenta')+
-	geom_point(data=as.data.frame(selic.l), aes(x=terms, y=rates), colour='black', shape=16)
-#     geom_line(data=as.data.frame(h_selic[1:91]), aes(x=terms, y=rates), colour='green') +
-#     geom_line(data=as.data.frame(m_selic[1:91]), aes(x=terms, y=rates), colour='blue') +
-#     theme_bw() 
+	geom_point(data=as.data.frame(selic.ff, units='days'), aes(x=terms, y=rates), colour=1, shape=16) +
+	geom_line(data=as.data.frame(selic.ff.terms, units='days'), aes(x=terms, y=rates), colour=2) +
+	geom_line(data=as.data.frame(selic.ns.terms, units='days'), aes(x=terms, y=rates), colour=3) +
+	geom_line(data=as.data.frame(selic.hs.terms, units='days'), aes(x=terms, y=rates), colour=4)
