@@ -23,7 +23,6 @@
 #' Linear, FlatForward, LogLinear, Hermite Cubic Spline, Monotone Cubic Spline,
 #' Natural Cubi Spline
 #' @return spotratecurve object.
-#' @export
 #' @examples
 #' # Creating a zero curve 
 #' curve <- spotratecurve(c(0.08, 0.083, 0.089, 0.093, 0.095), 
@@ -76,10 +75,11 @@ as.spotratecurve.numeric <- function(obj, rates, units=c('days', 'months', 'year
 	attr(rates, 'refdate') <- if (is.null(refdate)) refdate else as.Date(refdate)
 	attr(rates, 'name') <- name
 	attr(rates, 'interp') <- interp
-	attr(rates, 'interp.handler') <- if (is.null(interp)) interp else interp(rates)
+	attr(rates, 'interp.handler') <- interp(rates)
 	rates
 }
 
+#' @export
 as.spotratecurve.Date <- function(obj, rates, refdate, name=NULL, interp=linear) {
 	class(rates) <- c('spotratecurve', 'spotrate')
 	attr(rates, 'terms') <- obj
@@ -87,8 +87,21 @@ as.spotratecurve.Date <- function(obj, rates, refdate, name=NULL, interp=linear)
 	attr(rates, 'refdate') <- as.Date(refdate)
 	attr(rates, 'name') <- name
 	attr(rates, 'interp') <- interp
-	attr(rates, 'interp.handler') <- if (is.null(interp)) interp else interp(rates)
+	attr(rates, 'interp.handler') <- interp(rates)
 	rates
+}
+
+#' @export
+as.spotratecurve.spotratecurve <- function(obj, refdate=NULL, name=NULL, interp=NULL) {
+	if (! is.null(refdate))
+		attr(obj, 'refdate') <- refdate
+	if (! is.null(name))
+		attr(obj, 'name') <- name
+	if (! is.null(interp)) {
+		attr(obj, 'interp') <- interp
+		attr(obj, 'interp.handler') <- interp(obj)
+	}
+	obj
 }
 
 #' @export
@@ -106,8 +119,6 @@ terms.spotratecurve <- function(x, ..., units=NULL, as.x=FALSE) {
 }
 
 #' @export
-#' - units argument
-#' - index by date
 `[.spotratecurve` <- function(x, i) {
 	if (any(i < 0))
 		stop("spotratecurve does not handle negative subscripts.")
@@ -162,11 +173,13 @@ print.spotratecurve <- function(x, ..., units=NULL) {
 	invisible(x)
 }
 
+#' @export
 as.data.frame.spotratecurve <- function(x, ..., units=NULL, as.x=FALSE) {
 	data.frame(terms=terms(x, units=units, as.x=as.x), rates=rates(x), ...)
 }
 
 
+#' @export
 plot.spotratecurve <- function(curve, ...) {
 	plot.default(x=terms(curve), y=rates(curve), xlab='Terms', ylab='Rates',
 		main='Spot Rate Curve', ...)
@@ -196,7 +209,6 @@ tail.spotratecurve <- function(x, n=6L, ...) {
 
 #' @export
 units.spotratecurve <- function(x) attr(x, 'units')
-
 
 #' @export
 refdate <- function(x) attr(x, 'refdate')
