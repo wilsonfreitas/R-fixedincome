@@ -131,7 +131,7 @@ test_that("it should create a curve using numeric and dates", {
 test_that("it should interpolate a curve using dates and numbers", {
 	library(bizdays)
 	cal <- Calendar(name='Actual')
-	spr <- as.spotrate(rates, simpleCompounding(), as.daycount('actual/365'), cal)
+	spr <- as.spotrate(rates, 'simple', 'actual/365', cal)
 	curve <- as.spotratecurve(terms, spr, refdate='2014-07-01', interp=linear)
 	expect_true(curve['2014-07-02'] == curve[1])
 	expect_equal(rates(curve[c('2014-07-02', '2014-07-03')]), rates(curve[c(1, 2)]))
