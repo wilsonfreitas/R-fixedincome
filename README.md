@@ -32,9 +32,6 @@ Let's create a spot rate curve with 5 terms.
 rates <- as.spotrate(c(0.0719, 0.056, 0.0674, 0.0687, 0.07), 'simple', 'actual/365')
 curve <- as.spotratecurve(c(1, 11, 26, 47, 62), rates, units='days', name='TS')
 curve
-```
-<!-- print curve units -->
-```
 ##        TS
 ##  1 0.0719
 ## 11 0.0560
@@ -43,7 +40,7 @@ curve
 ## 62 0.0700
 ## simple actual/365 
 ```
-
+<!-- print curve units -->
 ```{r}
 require(ggplot2)
 ggplot(data=as.data.frame(curve), aes(x=terms, y=rates)) + geom_line() + geom_point()
