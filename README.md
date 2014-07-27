@@ -5,14 +5,14 @@ Tools for fixed income calculations.
 To declare an annual spot rate with a `simple` compounding and an `actual/360` day count.
 
 ```r
-as.spotrate(0.06, as.compounding('simple'), as.daycount('actual/360'))
+as.spotrate(0.06, 'simple', 'actual/360')
 # 0.06 simple actual/360 
 ```
 
 Compound the spot rate for 7 months.
 
 ```r
-sr <- as.spotrate(0.06, as.compounding('simple'), as.daycount('actual/360'))
+sr <- as.spotrate(0.06, 'simple', 'actual/360')
 compound(sr, '7 months')
 # [1] 1.035
 ```
@@ -23,6 +23,33 @@ Spot rates can be created using a string representation
 as.spotrate('0.06 discrete actual/365')
 # 0.06 discrete actual/365
 ```
+
+### Spot rate curves
+
+Let's create a spot rate curve with 5 terms.
+
+```r
+rates <- as.spotrate(c(0.0719, 0.056, 0.0674, 0.0687, 0.07), 'simple', 'actual/365')
+curve <- as.spotratecurve(c(1, 11, 26, 47, 62), rates, units='days', name='TS')
+curve
+```
+<!-- print curve units -->
+```
+##        TS
+##  1 0.0719
+## 11 0.0560
+## 26 0.0674
+## 47 0.0687
+## 62 0.0700
+## simple actual/365 
+```
+
+```{r}
+require(ggplot2)
+ggplot(data=as.data.frame(curve), aes(x=terms, y=rates)) + geom_line() + geom_point()
+```
+
+![Spot Rate Curve](TS.png "Spot Rate Curve")
 
 ### Pricing bonds
 
