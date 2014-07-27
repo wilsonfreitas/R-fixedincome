@@ -74,8 +74,7 @@ as.spotrate <- function(obj, ...) UseMethod('as.spotrate', obj)
 #' @rdname as.spotrate
 #' @export
 as.spotrate.default <- function(obj, compounding, daycount, calendar=NULL, ...) {
-	as.spotrate(as.numeric(obj), compounding=compounding, daycount=daycount, 
-		calendar=calendar)
+	as.spotrate(as.numeric(obj), compounding, daycount, calendar)
 }
 
 #' @rdname as.spotrate
@@ -87,7 +86,8 @@ as.spotrate.default <- function(obj, compounding, daycount, calendar=NULL, ...) 
 #' spot rates between dates.
 #' 
 as.spotrate.numeric <- function(obj, compounding, daycount, calendar=NULL, ...) {
-	structure(obj, compounding=compounding, daycount=daycount, 
+	structure(obj, compounding=as.compounding(compounding),
+		daycount=as.daycount(daycount), 
 		calendar=calendar, class='spotrate')
 }
 

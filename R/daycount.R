@@ -52,10 +52,13 @@ NULL
 	'business/252' = 252
 )
 
+#' @export
+as.daycount <- function(x, ...) UseMethod('as.daycount', x)
 
 #' @rdname daycount-class
 #' @export
-as.daycount <- function(dcspec) {
+as.daycount.character <- function(x, ...) {
+	dcspec <- x
 	if ( !any(dcspec == names(.daycounts.dib)) )
 		stop('Unknown daycount: ', dcspec)
 	dc_parts <- unlist(strsplit(dcspec, '/'))
@@ -63,6 +66,9 @@ as.daycount <- function(dcspec) {
 	class(dcspec) <- "daycount"
 	dcspec
 }
+
+#' @export
+as.daycount.daycount <- identity
 
 #' @export
 as.character.daycount <- function(x, ...) {

@@ -68,6 +68,9 @@ as.compounding.character <- function(obj=c('discrete', 'simple', 'continuous'), 
 		continuous=continuousCompounding())
 }
 
+#' @export
+as.compounding.compounding <- identity
+
 #' @rdname compounding-class
 #' @export
 discreteCompounding <- function() {
