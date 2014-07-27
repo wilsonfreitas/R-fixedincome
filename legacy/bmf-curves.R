@@ -147,7 +147,7 @@ selic.hs <- as.spotratecurve(selic.ff, interp=hermite.spline)
 selic.hs.terms <- subcurve(selic.hs, .terms)
 
 ggplot() +
-	geom_point(data=as.data.frame(selic.ff, units='days'), aes(x=terms, y=rates), colour=1, shape=16) +
 	geom_line(data=as.data.frame(selic.ff.terms, units='days'), aes(x=terms, y=rates), colour=2) +
 	geom_line(data=as.data.frame(selic.ns.terms, units='days'), aes(x=terms, y=rates), colour=3) +
-	geom_line(data=as.data.frame(selic.hs.terms, units='days'), aes(x=terms, y=rates), colour=4)
+	geom_line(data=as.data.frame(selic.hs.terms, units='days'), aes(x=terms, y=rates), colour=4) +
+	geom_point(data=as.data.frame(selic.ff, units='days'), aes(x=terms, y=rates), colour=1)
