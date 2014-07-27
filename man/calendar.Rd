@@ -1,11 +1,11 @@
-\name{calendar}
+\name{calendar.spotrate}
 \alias{calendar}
 \alias{calendar.spotrate}
 \title{Calendar accessor}
 \usage{
-calendar(obj, ...)
-
 \method{calendar}{spotrate}(obj, ...)
+
+calendar(obj, ...)
 }
 \arguments{
   \item{obj}{any object which has a calendar attribute}

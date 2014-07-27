@@ -3,6 +3,7 @@
 \alias{as.spotrate.character}
 \alias{as.spotrate.default}
 \alias{as.spotrate.numeric}
+\alias{as.spotrate.spotrate}
 \title{Create a spotrate object}
 \usage{
 as.spotrate(obj, ...)
@@ -14,6 +15,9 @@ as.spotrate(obj, ...)
   ...)
 
 \method{as.spotrate}{character}(obj, ...)
+
+\method{as.spotrate}{spotrate}(obj, term, compounding = NULL,
+  daycount = NULL, calendar = NULL, ...)
 }
 \arguments{
   \item{obj}{numeric values defining rates or a string

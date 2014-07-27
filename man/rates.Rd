@@ -6,9 +6,9 @@
 \usage{
 \method{rates}{compounding}(obj, value, term, ...)
 
-rates(obj, ...)
-
 \method{rates}{spotrate}(obj, ...)
+
+rates(obj, ...)
 }
 \arguments{
   \item{value}{a numeric value representing a compounding

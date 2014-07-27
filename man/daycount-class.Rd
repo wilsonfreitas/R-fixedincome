@@ -1,5 +1,5 @@
 \name{daycount-class}
-\alias{as.daycount}
+\alias{as.daycount.character}
 \alias{as.term.daycount}
 \alias{daycount-class}
 \alias{dib}
@@ -8,7 +8,7 @@
 \alias{timefactor.daycount}
 \title{Day count convention class}
 \usage{
-as.daycount(dcspec)
+\method{as.daycount}{character}(x, ...)
 
 dib(obj, ...)
 
