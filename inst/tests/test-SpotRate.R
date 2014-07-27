@@ -64,7 +64,7 @@ test_that("it should coerce a spotrate to string (vectorized)", {
 	spr <- as.spotrate(c(0.06, 0.07, 0.08), simpleCompounding(), as.daycount('actual/365'))
 	expect_true(as.character(spr) == 'simple actual/365\n0.06 0.07 0.08')
 	spr <- as.spotrate(c(0.06, NA, 0.08), continuousCompounding(), as.daycount('actual/365'), Calendar(name='actual'))
-	expect_true(as.character(spr) == 'continuous actual/365 actual\n0.06 NA 0.08')
+	expect_true(as.character(spr) == 'continuous actual/365 actual\n0.06   NA 0.08')
 })
 
 test_that("it should compute a compounding factor for fixed periods (vectorized)", {
