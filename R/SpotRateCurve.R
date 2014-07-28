@@ -166,7 +166,12 @@ NULL
 #' @export
 print.spotratecurve <- function(x, ..., units=NULL) {
 	m <- as.matrix(rates(x), ncol=1)
-	rownames(m) <- format(terms(x, units=units), digits=4)
+	.terms <- terms(x, units=units)
+	if (is.numeric(.terms)) {
+		.units <- if (is.null(units)) units(x) else units
+		.terms <- as.term(.terms, units=.units)
+	}
+	rownames(m) <- format(.terms, digits=4)
 	colnames(m) <- attr(x, 'name')
 	print.default(m)
 	cat(sub(' +$', '', paste(compounding(x), daycount(x), calendar(x)$name)), '\n')
