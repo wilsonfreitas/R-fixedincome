@@ -26,21 +26,22 @@ as.spotrate('0.06 discrete actual/365')
 
 ### Spot rate curves
 
-Let's create a spot rate curve with 5 terms.
+Let's create a spot rate curve.
+Firstly you need to create a `spotrate` vector and associate it to terms by creating a `spotratecurve`.
 
 ```r
 rates <- as.spotrate(c(0.0719, 0.056, 0.0674, 0.0687, 0.07), 'simple', 'actual/365')
 curve <- as.spotratecurve(c(1, 11, 26, 47, 62), rates, units='days', name='TS')
 curve
-##        TS
-##  1 0.0719
-## 11 0.0560
-## 26 0.0674
-## 47 0.0687
-## 62 0.0700
+##             TS
+##  1 days 0.0719
+## 11 days 0.0560
+## 26 days 0.0674
+## 47 days 0.0687
+## 62 days 0.0700
 ## simple actual/365 
 ```
-<!-- print curve units -->
+
 ```{r}
 require(ggplot2)
 ggplot(data=as.data.frame(curve), aes(x=terms, y=rates)) + geom_line() + geom_point()
