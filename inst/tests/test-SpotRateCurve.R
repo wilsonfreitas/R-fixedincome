@@ -138,13 +138,27 @@ test_that("it should interpolate a curve using dates and numbers", {
 	expect_true(curve['2014-07-04'] == curve[3])
 })
 
-# test_that("it should compute forward rates", {
-#     expect_error( forward.rate(curve, 1, 1) )
-#     expect_equal( forward.rate(curve, 1, 11), SpotRate(0.05442303, 10) )
-#     expect_equal( forward.rate(curve, 1, forward.term=10), SpotRate(0.05442303, 10) )
-#     expect_error( forward.rate(curve, 1, forward.term=11) )
-# })
-#
+test_that("it should compute forward rates", {
+	spr <- as.spotrate(rates, 'simple', 'actual/365')
+	curve <- as.spotratecurve(terms, spr)
+	expect_error( forwardrate(curve, 1, 1), "to term must be greater than from." )
+	expect_equal( forwardrate(curve, 1, 11),
+				  as.spotrate(0.05439928, 'simple', 'actual/365'),
+				  tolerance=1e-6)
+	expect_equal( forwardrate(curve, 1, forward=1), curve[1])
+	expect_equal( forwardrate(curve, 1, forward=10),
+				  as.spotrate(0.05439928, 'simple', 'actual/365'),
+				  tolerance=1e-6)
+	f1 <- curve[10]
+	f2 <- forwardrate(curve, 10, forward=1)
+	expect_equal( compound(f1, 10) * compound(f2, 1), compound(curve[11], 11) )
+	f1 <- curve[1]
+	f2 <- forwardrate(curve, 1, forward=1)
+	expect_equal( compound(f1, 1) * compound(f2, 1), compound(curve[2], 2),
+				  tolerance=1e-5)
+	# expect_error( forward.rate(curve, 1, forward.term=11) )
+})
+
 # test_that('it should append a SpotRate to a SpotRateCurve', {
 #     curve[32] <- 0.0643
 #     expect_equal(length(curve), 6)

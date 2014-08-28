@@ -239,3 +239,37 @@ interp.spotratecurve <- function(x) attr(x, 'interp')
 	x
 }
 
+#' @export
+forwardrate <- function(obj, ...) UseMethod('forwardrate', obj)
+
+# forwardrate.spotrate <- function(obj, from, rate.to, to,
+# 								 units=c('days', 'months', 'years')) {
+# 	units = match.arg(units)
+# 	cf <- compound(rate.to, to)/compound(obj, from)
+# 	comp <- compounding(obj)
+# 	tf <- timefactor(daycount(obj), term=to-from, units=units(obj))
+# 	as.spotrate(rates(comp, cf, tf), comp, daycount(obj), calendar(obj))
+# }
+
+#' @export
+forwardrate.spotratecurve <- function(obj, from, to=NULL, forward=NULL) {
+	# stopifnot(!is.null(to.term) || !is.null(forward.term))
+	if ( ! is.null(to) ) {
+		if (to <= from)
+			stop("to term must be greater than from.")
+		cf <- compound(obj[to], to)/compound(obj[from], from)
+		comp <- compounding(obj)
+		tf <- timefactor(daycount(obj), term=to-from, units=units(obj))
+		as.spotrate(rates(comp, cf, tf), comp, daycount(obj), calendar(obj))
+	} else {
+		if (forward == 1 && from == 1)
+			obj[1]
+		else {
+			to <- from+forward
+			cf <- compound(obj[to], to)/compound(obj[from], from)
+			comp <- compounding(obj)
+			tf <- timefactor(daycount(obj), term=to-from, units=units(obj))
+			as.spotrate(rates(comp, cf, tf), comp, daycount(obj), calendar(obj))
+		}
+	}
+}
