@@ -139,25 +139,75 @@ test_that("it should interpolate a curve using dates and numbers", {
 })
 
 test_that("it should compute forward rates", {
-	spr <- as.spotrate(rates, 'simple', 'actual/365')
-	curve <- as.spotratecurve(terms, spr)
-	expect_error( forwardrate(curve, 1, 1), "to term must be greater than from." )
-	expect_equal( forwardrate(curve, 1, 11),
-				  as.spotrate(0.05439928, 'simple', 'actual/365'),
-				  tolerance=1e-6)
-	expect_equal( forwardrate(curve, 1, forward=1), curve[1])
-	expect_equal( forwardrate(curve, 1, forward=10),
-				  as.spotrate(0.05439928, 'simple', 'actual/365'),
-				  tolerance=1e-6)
-	f1 <- curve[10]
-	f2 <- forwardrate(curve, 10, forward=1)
-	expect_equal( compound(f1, 10) * compound(f2, 1), compound(curve[11], 11) )
-	f1 <- curve[1]
-	f2 <- forwardrate(curve, 1, forward=1)
-	expect_equal( compound(f1, 1) * compound(f2, 1), compound(curve[2], 2),
-				  tolerance=1e-5)
-	# expect_error( forward.rate(curve, 1, forward.term=11) )
+  spr <- as.spotrate(rates, 'simple', 'actual/365')
+  curve <- as.spotratecurve(terms, spr)
+  rate <- as.spotrate(0.05439928, 'simple', 'actual/365')
+  expect_error(forwardrate(curve, 1, 1), "to term must be greater than from." )
+  expect_equal(forwardrate(curve, 1, 11), rate, tolerance=1e-6)
+  expect_equal(forwardrate(curve, 1, forward=1), curve[1])
+  expect_equal(forwardrate(curve, 1, forward=10), rate, tolerance=1e-6)
+  
+  f1 <- curve[10]
+  f2 <- forwardrate(curve, 10, forward=1)
+  expect_equal(compound(f1, 10) * compound(f2, 1), compound(curve[11], 11) )
+  f1 <- curve[1]
+  f2 <- forwardrate(curve, 1, forward=1)
+  expect_equal(compound(f1, 1) * compound(f2, 1), compound(curve[2], 2),
+    tolerance=1e-5)
+  expect_error(forwardrate(curve, 1),
+    "to or forward arguments must be provided." )
 })
+
+test_that("it should compute forward rates (vectorized)", {
+  spr <- as.spotrate(rates, 'simple', 'actual/365')
+  curve <- as.spotratecurve(terms, spr)
+  rate <- as.spotrate(c(0.05439928, 0.05439928), 'simple', 'actual/365')
+  expect_equal(forwardrate(curve, 1, c(11, 11)), rate, tolerance=1e-6)
+  expect_equal(forwardrate(curve, c(1, 1), c(11, 11)), rate, tolerance=1e-6)
+  expect_equal(forwardrate(curve, c(1, 1), 11), rate, tolerance=1e-6)
+  # expect_equal(forwardrate(curve, 1, forward=c(1, 1)), curve[c(1, 1)])
+  # expect_equal(forwardrate(curve, 1, forward=10), rate, tolerance=1e-6)
+})
+
+test_that("it should compute forward rates using dates", {
+  library(bizdays)
+  cal <- Calendar(name='Actual')
+  spr <- as.spotrate(rates, 'simple', 'actual/365', cal)
+  refdate <- as.Date('2014-07-01')
+  curve <- as.spotratecurve(terms+refdate, spr, refdate=refdate)
+  rate <- as.spotrate(0.05439928, 'simple', 'actual/365', cal)
+
+  expect_error(forwardrate(curve, refdate+1, refdate+1),
+    "to term must be greater than from.")
+  expect_equal(forwardrate(curve, refdate+1, refdate+11), rate, tolerance=1e-6)
+  expect_equal(forwardrate(curve, refdate+1, forward=1), curve[1])
+  expect_equal(forwardrate(curve, refdate+1, forward=10), rate, tolerance=1e-6)
+  
+  f1 <- curve[refdate+10]
+  f2 <- forwardrate(curve, refdate+10, forward=1)
+  expect_equal(compound(f1, 10) * compound(f2, 1),
+    compound(curve[refdate+11], 11) )
+  f1 <- curve[refdate+1]
+  f2 <- forwardrate(curve, refdate+1, forward=1)
+  expect_equal( compound(f1, 1) * compound(f2, 1),
+    compound(curve[refdate+2], 2), tolerance=1e-5)
+})
+
+test_that("it should compound curve", {
+  spr <- as.spotrate(rates, 'simple', 'actual/365')
+  curve <- as.spotratecurve(terms, spr)
+  expect_equal(compound(curve, 11), 1.00168767)
+  expect_equal(compound(curve, c(11, 26)), c(1.00168767, 1.004801096))
+
+  library(bizdays)
+  cal <- Calendar(name='Actual')
+  spr <- as.spotrate(rates, 'simple', 'actual/365', cal)
+  curve <- as.spotratecurve(terms, spr, refdate='2014-07-01', interp=linear)
+  expect_equal(compound(curve, '2014-07-12'), 1.00168767)
+  expect_equal(compound(curve, c('2014-07-12', '2014-07-27')),
+    c(1.00168767, 1.004801096))
+})
+
 
 # test_that('it should append a SpotRate to a SpotRateCurve', {
 #     curve[32] <- 0.0643
