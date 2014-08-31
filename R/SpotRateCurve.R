@@ -109,8 +109,8 @@ terms.spotratecurve <- function(x, ..., units=NULL, as.x=FALSE) {
   .terms <- attr(x, 'terms')
   if (! is.null(units) || as.x) {
     .terms <- if (is(.terms, 'numeric')) .terms else
-    bizdays(attr(x, 'refdate'), .terms, calendar(x))
-    .terms <- as.term(.terms, attr(x, 'units'))
+    bizdays(refdate(x), .terms, calendar(x))
+    .terms <- as.term(.terms, units(x))
     if (! is.null(units))
       .terms <- as.term(daycount(x), .terms, units)
     .terms <- as.numeric(.terms)
@@ -123,7 +123,7 @@ terms.spotratecurve <- function(x, ..., units=NULL, as.x=FALSE) {
   if (any(i < 0))
     stop("spotratecurve does not handle negative subscripts.")
   if (! is(i, 'numeric'))
-    i <- bizdays(attr(x, 'refdate'), i, calendar(x))
+    i <- bizdays(refdate(x), i, calendar(x))
   sr <- attr(x, 'interp.handler')(i)
   as.spotrate(sr, compounding(x), daycount(x), calendar(x))
 }
@@ -131,7 +131,7 @@ terms.spotratecurve <- function(x, ..., units=NULL, as.x=FALSE) {
 #' @export
 `[<-.spotratecurve` <- function(x, i, value) {
   if (! is(i, 'numeric'))
-    i <- bizdays(attr(x, 'refdate'), i, calendar(x))
+    i <- bizdays(refdate(x), i, calendar(x))
   val <- cbind(i, value)
   i <- val[,1]
   value <- val[,2]
@@ -151,8 +151,8 @@ terms.spotratecurve <- function(x, ..., units=NULL, as.x=FALSE) {
     rates <- rates[idx]
   }
   sr <- as.spotrate(rates, compounding(x), daycount(x), calendar(x))
-  as.spotratecurve(terms, sr, name=attr(x, 'name'), interp=attr(x, 'interp'),
-    refdate=attr(x, 'refdate'))
+  as.spotratecurve(terms, sr, name=attr(x, 'name'), interp=interp(x),
+    refdate=refdate(x))
 }
 
 #' @export
@@ -162,7 +162,7 @@ terms.spotratecurve <- function(x, ..., units=NULL, as.x=FALSE) {
   if (i <= 0)
     stop("spotratecurve[[]] does not handle negative or zero subscripts.")
   if (! is(i, 'numeric'))
-    i <- bizdays(attr(x, 'refdate'), i, calendar(x))
+    i <- bizdays(refdate(x), i, calendar(x))
   as.numeric(attr(x, 'interp.handler')(i))
 }
 
@@ -207,8 +207,8 @@ head.spotratecurve <- function(x, n=6L, ...) {
   n <- if (n < 0L) max(length(x) + n, 0L) else min(n, length(x))
   idx <- terms(x)[seq_len(n)]
   as.spotratecurve(idx, x[idx], name=attr(x, 'name'),
-    interp=attr(x, 'interp'),
-      refdate=attr(x, 'refdate'))
+    interp=interp(x),
+      refdate=refdate(x))
 }
 
 #' @export
@@ -218,8 +218,8 @@ tail.spotratecurve <- function(x, n=6L, ...) {
   n <- if (n < 0L) max(xlen + n, 0L) else min(n, xlen)
   idx <- terms(x)[seq.int(to = xlen, length.out = n)]
   as.spotratecurve(idx, x[idx], name=attr(x, 'name'),
-    interp=attr(x, 'interp'),
-      refdate=attr(x, 'refdate'))
+    interp=interp(x),
+      refdate=refdate(x))
 }
 
 
@@ -232,12 +232,14 @@ refdate <- function(x) attr(x, 'refdate')
 #' @export
 subcurve <- function(x, i) {
   .rates <- x[i]
-  as.spotratecurve(i, .rates, name=attr(x, 'name'), interp=attr(x, 'interp'),
+  as.spotratecurve(i, .rates, name=attr(x, 'name'), interp=interp(x),
     refdate=refdate(x))
 }
 
 #' @export
 interp <- function(x) UseMethod('interp', x)
+
+#' @export
 `interp<-` <- function(x, value) UseMethod('interp<-', x)
 
 #' @export
