@@ -208,6 +208,15 @@ test_that("it should compound curve", {
     c(1.00168767, 1.004801096))
 })
 
+test_that('it should call [[ which returns a numeric value', {
+  spr <- as.spotrate(rates, 'simple', 'actual/365')
+  curve <- as.spotratecurve(terms, spr)
+  i <- curve[[21]]
+  expect_true(is.numeric(i))
+  expect_true(i == 0.0636)
+  expect_error(curve[[1:10]])
+  expect_error(curve[[-1]])
+})
 
 # test_that('it should append a SpotRate to a SpotRateCurve', {
 #     curve[32] <- 0.0643

@@ -155,6 +155,17 @@ terms.spotratecurve <- function(x, ..., units=NULL, as.x=FALSE) {
     refdate=attr(x, 'refdate'))
 }
 
+#' @export
+`[[.spotratecurve` <- function(x, i) {
+  if (length(i) > 1)
+    stop("spotratecurve[[]] does not handle vectorized subscripts.")
+  if (i <= 0)
+    stop("spotratecurve[[]] does not handle negative or zero subscripts.")
+  if (! is(i, 'numeric'))
+    i <- bizdays(attr(x, 'refdate'), i, calendar(x))
+  as.numeric(attr(x, 'interp.handler')(i))
+}
+
 #' spotratecurve generic extensions
 #' 
 #' spotratecurve generic extensions
