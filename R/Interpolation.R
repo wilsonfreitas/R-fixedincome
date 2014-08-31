@@ -2,7 +2,7 @@
 #' @export
 flatforward <- function(curve) {
 	.terms <- terms(curve, as.x=TRUE)
-	prices <- compound(curve, .terms, units(curve))
+	prices <- compound(curve, .terms)
 	interp.coords <- xy.coords(.terms, log(prices))
 	interp.FUN <- approxfun(interp.coords, method='linear')
 	dc <- daycount(curve)
