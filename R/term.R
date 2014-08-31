@@ -38,36 +38,37 @@ as.term <- function(obj, ...) UseMethod('as.term', obj)
 #' @rdname term-class
 #' @export
 as.term.numeric <- function(obj, units, ...) {
-	if (missing(units)) stop('Unknown units')
-	if (!any(units == c('years', 'months', 'days')))
-		stop('Unknown units: ', units)
-	attr(obj, 'units') <- units
-	class(obj) <- c('term', 'difftime')
-	obj
+  if (missing(units))
+    stop('Unknown units')
+  if (!any(units == c('years', 'months', 'days')))
+    stop('Unknown units: ', units)
+  attr(obj, 'units') <- units
+  class(obj) <- c('term', 'difftime')
+  obj
 }
 
 #' @rdname term-class
 #' @export
 as.term.character <- function(obj, units=NULL, ...) {
-	m <- regexec('^([0-9]+)(\\.[0-9]+)? (years|months|days)?$', obj)
-	m <- unlist(regmatches(obj, m))
-	if (length(m))
-		t <- as.term(as.numeric(paste0(m[2], m[3])), m[4])
-	else
-		stop("Invalid term: ", obj)
-	if (is.null(units)) t
-	else as.term(t, units)
+  m <- regexec('^([0-9]+)(\\.[0-9]+)? (years|months|days)?$', obj)
+  m <- unlist(regmatches(obj, m))
+  if (length(m))
+    t <- as.term(as.numeric(paste0(m[2], m[3])), m[4])
+  else
+    stop("Invalid term: ", obj)
+  if (is.null(units)) t
+    else as.term(t, units)
 }
 
 #' @rdname term-class
 #' @export
 as.term.term <- function(obj, units=NULL, ...) {
-	if (is.null(units))
-		return(obj)
-	if (!any(units == c('years', 'months')))
-		stop('Cannot convert to given units: ', units)
-	r <- list(months=list(months=1, years=12), years=list(months=1/12, years=1))
-	as.term(as.numeric(obj)*r[[units]][[units(obj)]], units)
+  if (is.null(units))
+    return(obj)
+  if (!any(units == c('years', 'months')))
+    stop('Cannot convert to given units: ', units)
+  r <- list(months=list(months=1, years=12), years=list(months=1/12, years=1))
+  as.term(as.numeric(obj)*r[[units]][[units(obj)]], units)
 }
 
 #' @rdname term-class
@@ -81,12 +82,12 @@ as.term.difftime <- function(obj, ...) {
 
 #' @export
 as.character.term <- function(x, ...) {
-	if (length(x) == 1)
-		paste(unclass(x), units(x))
-	else {
-		hdr <- paste('terms in', units(x))
-		paste(hdr, paste(unclass(x), collapse=' '), sep='\n')
-	}
+  if (length(x) == 1)
+    paste(unclass(x), units(x))
+  else {
+    hdr <- paste('terms in', units(x))
+    paste(hdr, paste(unclass(x), collapse=' '), sep='\n')
+  }
 }
 
 #' @export
