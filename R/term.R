@@ -70,6 +70,15 @@ as.term.term <- function(obj, units=NULL, ...) {
 	as.term(as.numeric(obj)*r[[units]][[units(obj)]], units)
 }
 
+#' @rdname term-class
+#' @export
+as.term.difftime <- function(obj, ...) {
+  units <- units(obj)
+  if (!any(units == c('years', 'months', 'days')))
+    stop('Cannot handle given units: ', units)
+  as.term(as.numeric(obj), units)
+}
+
 #' @export
 as.character.term <- function(x, ...) {
 	if (length(x) == 1)
