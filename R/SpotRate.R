@@ -143,6 +143,10 @@ as.spotrate.spotrate <- function(obj, term, compounding=NULL, daycount=NULL, cal
 		calendar=calendar)
 }
 
+#' @rdname as.spotrate
+#' @export
+spotrate <- as.spotrate
+
 .imprate <- function(f, rng, ini, eps=.Machine$double.eps, max.iter=1000) {
 	r.up <- rng[2]*rep(1, length(ini))
 	r.down <- rng[1]*rep(1, length(ini))
