@@ -240,7 +240,8 @@ as.list.spotrate <- function(x, ...) {
 	dc <- daycount(x)
 	com <- compounding(x)
 	cal <- calendar(x)
-	lapply(x, function(s) as.spotrate(s, com, dc, cal))
+  x <- rates(x)
+  lapply(x, function(s) as.spotrate(s, com, dc, cal))
 }
 
 #' @export
