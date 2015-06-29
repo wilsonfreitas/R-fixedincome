@@ -86,9 +86,7 @@ as.spotrate.default <- function(obj, compounding, daycount, calendar=NULL, ...) 
 #' spot rates between dates.
 #' 
 as.spotrate.numeric <- function(obj, compounding, daycount, calendar=NULL, ...) {
-	structure(obj, compounding=as.compounding(compounding),
-		daycount=as.daycount(daycount), 
-		calendar=calendar, class='spotrate')
+	spotrate(obj, compounding, daycount, calendar)
 }
 
 #' @rdname as.spotrate
@@ -143,9 +141,18 @@ as.spotrate.spotrate <- function(obj, term, compounding=NULL, daycount=NULL, cal
 		calendar=calendar)
 }
 
-#' @rdname as.spotrate
 #' @export
-spotrate <- as.spotrate
+spotrate <- function(value, compounding, daycount, calendar=NULL, ...) {
+	if (is.null(value))
+		stop('Invalid spot rate value.')
+	if (!is.numeric(value) || length(value) == 0)
+		stop('spotrate value has to be numeric with length.')
+	structure(value,
+		compounding=as.compounding(compounding),
+		daycount=as.daycount(daycount),
+		calendar=calendar,
+		class='spotrate')
+}
 
 .imprate <- function(f, rng, ini, eps=.Machine$double.eps, max.iter=1000) {
 	r.up <- rng[2]*rep(1, length(ini))

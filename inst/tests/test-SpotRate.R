@@ -15,7 +15,7 @@ test_that("it should coerce a spotrate to string", {
 })
 
 test_that("it should parse a string to build a spotrate", {
-	spr <- spotrate('0.06 simple actual/365')
+	spr <- as.spotrate('0.06 simple actual/365')
 	expect_is(spr, 'spotrate')
 	expect_true(spr == 0.06)
 	expect_true(compounding(spr) == 'simple')
@@ -91,14 +91,14 @@ test_that("it should test zero term", {
 
 test_that("it should convert a spotrate to another spotrate", {
 	spr_s <- spotrate(0.06, 'simple', 'actual/365')
-	spr_d <- spotrate(spr_s, as.term('1 years'), 'discrete')
+	spr_d <- as.spotrate(spr_s, as.term('1 years'), 'discrete')
 	expect_equal(as.numeric(spr_d), 0.06)
 	# simple change
-	spr_d <- spotrate(spr_s, as.term('1 months'), 'discrete')
+	spr_d <- as.spotrate(spr_s, as.term('1 months'), 'discrete')
 	expect_equal(as.numeric(spr_d), 0.06167781186)
 	# vectorized
 	spr_s <- spotrate(c(0.06, 0.07, 0.08), 'simple', 'actual/365')
-	spr_d <- spotrate(spr_s, as.term('1 months'), 'discrete')
+	spr_d <- as.spotrate(spr_s, as.term('1 months'), 'discrete')
 	expect_equal(as.numeric(spr_d), c(0.06167781186, 0.07229008086, 0.08299950681))
 	# change daycount/calendar
 	# spr_s <- as.spotrate(10.68/100, discreteCompounding(), as.daycount('actual/360'))
