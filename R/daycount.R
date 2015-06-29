@@ -59,7 +59,7 @@ as.daycount <- function(x, ...) UseMethod('as.daycount', x)
 #' @export
 as.daycount.character <- function(x, ...) {
 	dcspec <- x
-	if ( !any(dcspec == names(.daycounts.dib)) )
+	if ( !any(dcspec == names(.daycounts.dib)) && !grepl('fixed/', dcspec))
 		stop('Unknown daycount: ', dcspec)
 	dc_parts <- unlist(strsplit(dcspec, '/'))
 	attr(dcspec, "dib") <- as.numeric(dc_parts[2])

@@ -35,3 +35,8 @@ test_that("it should convert days to years term", {
 	expect_equal(as.term(dc, '2 years', 'months'), as.term(24, 'months'))
 	expect_equal(as.term(dc, '10 months', 'years'), as.term(10/12, 'years'))
 })
+
+test_that('it should test fixed period day counts', {
+	dc <- as.daycount('fixed/22')
+	expect_equal(dib(dc), 22)
+})
