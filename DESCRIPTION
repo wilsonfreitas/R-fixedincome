@@ -1,16 +1,31 @@
 Package: fixedincome
-Title: Tools for fixed income mathematics
-Description: fixedincome has a set of funtions which helps with the
-    mathematics of interest rates. It handles the interest rates and compounding
-    factors as objects and provides a bunch of methods to tackle specific issues
-    like compute discount factors, find equivalent rates and forward rates,
-    and so on. It also has a class which represents a term structure of interest
-    rates and a sort of methods to execute simple tasks, like interpolation.
-Version: 0.1.0
-Date: 2013-09-15
-Author: Wilson Freitas <wilson.freitas@gmail.com>
-Maintainer: Wilson Freitas <wilson.freitas@gmail.com>
-URL: https://github.com/wilsonfreitas/R-fixedincome
+Title: Fixed income models, calculations, data structures and instruments
+Version: 0.2.0.9000
+Depends:
+    R (>= 3.2.0)
+Authors@R: person("Wilson", "Freitas", email = "wilson.freitas@gmail.com",
+    role = c("aut", "cre"))
 License: MIT + file LICENSE
+Description: fixedincome has a set of funtions which helps with the mathematics
+    of interest rates and fixed income. It handles the interest rates and
+    compounding factors as objects and provides many methods to tackle specific
+    issues like compute discount factors, find equivalent rates, forward rates, and
+    so on. It also has classes to represent commom fixed income entities such as a
+    term structure of interest rates, spot rates and day count rules. This package
+    also supports methods and models commom used by practitioners to do fixed income
+    calculations.
+URL: https://github.com/wilsonfreitas/R-fixedincome
+BugReports: https://github.com/wilsonfreitas/R-fixedincome/issues
 Imports:
-    bizdays
+    bizdays (>= 1.0.0),
+    methods
+Collate:
+    "fixedincome-internal.R"
+    "term-class.R"
+    "daycount-class.R"
+    "compounding-class.R"
+    "spotrate-class.R"
+    "spotratecurve-class.R"
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 6.0.1
+LazyData: true

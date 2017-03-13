@@ -1,29 +1,31 @@
 
 context('compounding functions')
 
-test_that("it should create a compounding with a string", {
-	comp <- as.compounding('simple')
-	expect_true(comp == 'simple')
-	expect_is(comp, 'compounding')
+test_that("it should create a compounding class", {
+  expect_is(compounding("simple"), "compounding")
+  expect_is(compounding("simple"), "simple")
+  expect_is(compounding("discrete"), "compounding")
+  expect_is(compounding("discrete"), "discrete")
+  expect_is(compounding("continuous"), "compounding")
+  expect_is(compounding("continuous"), "continuous")
+  expect_error(compounding("nada"))
 })
 
-test_that("it should compute discrete compounding", {
-	comp <- discreteCompounding()
-	expect_true(comp == 'discrete')
-	expect_equal(compound(comp, 0.05, 2), 1.1025)
-	expect_equal(rates(comp, 1.1025, 2), 0.05)
+test_that("it should compute compounding factor", {
+  expect_equal(compound("simple", 2, 0.05), 1.1)
+  expect_equal(compound("discrete", 2, 0.05), 1.1025)
+  expect_equal(compound("continuous", 2, 0.05), 1.105170918)
 })
 
-test_that("it should compute simple compounding", {
-	comp <- simpleCompounding()
-	expect_true(comp == 'simple')
-	expect_equal(compound(comp, 0.05, 2), 1.1)
-	expect_equal(rates(comp, 1.1, 2), 0.05)
+test_that("it should compute compounding implied rate", {
+  expect_equal(rates("simple", 2, 1.1), 0.05)
+  expect_equal(rates("discrete", 2, 1.1025), 0.05)
+  expect_equal(rates("continuous", 2, 1.105170918), 0.05)
 })
 
-test_that("it should compute Continuous compounding", {
-	comp <- continuousCompounding()
-	expect_true(comp == 'continuous')
-	expect_equal(compound(comp, 0.05, 2), 1.105170918)
-	expect_equal(rates(comp, 1.105170918, 2), 0.05)
+test_that("it should coece compounding to character", {
+  expect_equal(as(compounding("simple"), "character"), "simple")
+  expect_equal(as(compounding("discrete"), "character"), "discrete")
+  expect_equal(as(compounding("continuous"), "character"), "continuous")
 })
+

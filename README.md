@@ -1,37 +1,44 @@
 # fixedincome
 
-Tools for fixed income calculations.
+Calculations involving interest rates are usually very easy and straightforward, but sometimes it involves specific issues regarding compounding and day counting rules that make it annoying.
+The `fixedincome` package brings many functions to create and handle with interest rates and term structure of interest rates.
 
-To declare an annual spot rate with a `simple` compounding and an `actual/360` day count.
+Below there are a few examples on how to create and make calculations with interest rates using `fixedincome`.
+
+## Examples
+
+Let's declare an annual spot rate with a `simple` compounding, an `actual/360` day count which stands for current days between two dates and 360 days per year and an `actual` calendar.
 
 ```r
-as.spotrate(0.06, 'simple', 'actual/360')
-# 0.06 simple actual/360 
+sr <- spotrate(0.06, 'simple', 'actual/360', 'actual')
+sr
+# simple actual/360 actual 
+# 0.06 
 ```
 
 Compound the spot rate for 7 months.
 
 ```r
-sr <- as.spotrate(0.06, 'simple', 'actual/360')
-compound(sr, '7 months')
+> compound(sr, 7, 'months')
 # [1] 1.035
 ```
 
 Spot rates can be created using a string representation
 
 ```r
-as.spotrate('0.06 discrete actual/365')
+as.spotrate('0.06 discrete actual/365 actual')
 # 0.06 discrete actual/365
 ```
 
 ### Spot rate curves
 
 Let's create a spot rate curve.
-Firstly you need to create a `spotrate` vector and associate it to terms by creating a `spotratecurve`.
 
 ```r
-rates <- as.spotrate(c(0.0719, 0.056, 0.0674, 0.0687, 0.07), 'simple', 'actual/365')
-curve <- as.spotratecurve(c(1, 11, 26, 47, 62), rates, units='days', name='TS')
+curve <- spotratecurve(c(1, 11, 26, 47, 62),
+                       c(0.0719, 0.056, 0.0674, 0.0687, 0.07),
+                       compounding='simple', daycount='actual/365',
+                       units='days', name='TS')
 curve
 ##             TS
 ##  1 days 0.0719
@@ -49,104 +56,4 @@ ggplot(data=as.data.frame(curve), aes(x=terms, y=rates)) + geom_line() + geom_po
 
 ![Spot Rate Curve](TS.png "Spot Rate Curve")
 
-### Pricing bonds
-
-Bonds can be created using a `data.frame` and `spotrate` can be set as one of columns.
-
-```r
-# Declaring bonds
-dc <- as.daycount('actual/360') # daycount rule
-comp <- as.compounding('continuous') # compounding regime
-days <- c(97, 242, 321) # days to maturity
-sr <- as.spotrate(rep(0.06, length(days)), comp, dc) # discount rate
-
-bonds <- data.frame(DaysToMaturity=days, Rate=sr, Notional=100000)
-bonds
-#   DaysToMaturity                              Rate Notional
-# 1             97 0.06 discrete business/252 ANBIMA    1e+05
-# 2            242 0.06 discrete business/252 ANBIMA    1e+05
-# 3            321 0.06 discrete business/252 ANBIMA    1e+05
-
-# Pricing bond -- discounting their notional value
-within(bonds, {
-	PV <- Notional*discount(Rate, DaysToMaturity)
-})
-#   DaysToMaturity                       Rate Notional       PV
-# 1             97 0.06 continuous actual/360    1e+05 98396.33
-# 2            242 0.06 continuous actual/360    1e+05 96046.92
-# 3            321 0.06 continuous actual/360    1e+05 94790.59
-```
-
-### Pricing bonds using a calendar
-
-```r
-library(bizdays)
-cal <- Calendar(holidays=holidaysANBIMA, name='ANBIMA', weekdays=c('saturday', 'sunday'))
-dc <- as.daycount('business/252')
-comp <- as.compounding('discrete')
-dates <- as.Date(c('2014-09-07', '2015-03-07', '2015-09-07'))
-sr <- as.spotrate(rep(0.06, length(dates)), comp, dc, cal)
-bonds <- data.frame(RefDate=as.Date('2014-03-21'), Maturity=dates, Rate=sr, Notional=100000)
-bonds
-#      RefDate   Maturity                              Rate Notional
-# 1 2014-03-21 2014-09-07 0.06 discrete business/252 ANBIMA    1e+05
-# 2 2014-03-21 2015-03-07 0.06 discrete business/252 ANBIMA    1e+05
-# 3 2014-03-21 2015-09-07 0.06 discrete business/252 ANBIMA    1e+05
-within(bonds, {
-	PV <- Notional*discount(Rate, from=RefDate, to=Maturity)
-})
-#      RefDate   Maturity                              Rate Notional       PV
-# 1 2014-03-21 2014-09-07 0.06 discrete business/252 ANBIMA    1e+05 97353.43
-# 2 2014-03-21 2015-03-07 0.06 discrete business/252 ANBIMA    1e+05 94558.01
-# 3 2014-03-21 2015-09-07 0.06 discrete business/252 ANBIMA    1e+05 91842.86
-```
-
-- new names:
-	- spotrate
-	- zerocurve
-	- fwdcurve
-	- indexcurve
-	- historicaldata: zoo
-- create 30/360 daycount
-- create spot rate curve
-- append rates to an spot rate curve
-- set interpolation to curve, as an attribute: why interpolate explicitly when the curve knows which interpolation it should use
-- vectorized operations for SpotRate functions
-- functions to sum a curve
-- function to shift a curve
-- plot interest rate
-- plot spot rate curve with interpolated points
-- as.data.frame.spotratecurve
-- other interpolation methods
-	- Linear
-	- LogLinear
-	- Monotone Cubic Spline (Hyman)
-	- Hermite
-	- Natural Spline
-	- Constrained Spline
-- create an interp class
-	- implement print method
-	- interp is a spotratecurve attribute
-- length method for spotratecurve
-- The spotratecurve should have the same parameters as spotrate
-- spotratecurve should have a name
-- spotratecurve should be sliced
-	- head(src, n)
-	- tail(src, n)
-	- CHECK src[1:10]
-	- src[1:10, offset=1] -> daily forward curve
-	- how to compute forward curves
-- A SpotRate should be removed from a SpotRateCurve: curve[-10]
-	- Not so simple: curve[n] returns a rate
-	- curve[-n] should return a SpotRateCurve without the removed SpotRate
-	- So this doesn't fit, different returns for the same operation
-	- Proposal: curve[n] <- NA or curve[n] <- NULL
-- SpotRateCurve should be a matrix, terms would be rownames, rates values and the rest attributes, like xts
-	- dim
-	- dimnames(curve) <- list(terms, curve_name)
-	- ???
-- Need a price curve: indexcurve, pricecurve
-
-
-![](interestrateRpackage.gif)
 

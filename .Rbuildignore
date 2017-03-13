@@ -14,3 +14,7 @@ ms140617.txt
 runtests.R
 selic.py
 slcTaxa.R
+^.*\.Rproj$
+^\.Rproj\.user$
+TS.png
+aux

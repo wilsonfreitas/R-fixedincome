@@ -1,25 +1,23 @@
-.First <-
-function () 
-{
-    options(repos = c(CRAN = "http://cran.rstudio.com/"), browserNLdisabled = TRUE, 
-        deparse.max.lines = 2)
-}
 
-#' Tools for calculations on fixed income, term structure and interest rate.
+#' Fixed income models, calculations, data structures and instruments
 #' 
-#' \code{fixedincome} brings a rich set of tools to make fixed income 
-#' calculations fairly easy.
-#' Fixed income calculations have many specific rules which deal with subjects
-#' ranging from compounding regimes to business days rules to compute the 
-#' amount of non-working days between maturities.
+#' \code{fixedincome} has a set of funtions which helps with the
+#' mathematics of interest rates and fixed income.
+#' It handles the interest rates and compounding 
+#' factors as objects and provides many methods to tackle specific issues
+#' like compute discount factors, find equivalent rates, forward rates,
+#' and so on. It also has classes to represent commom fixed income entities such as
+#' a term structure of interest rates, spot rates and day count rules.
+#' This package also supports methods and models commom used by practitioners to 
+#' do fixed income calculations.
 #'
 #' @name fixedincome-package
 #' @aliases fixedincome
-#' @title Tools for fixed income calculations
 #' @author Wilson Freitas \email{wilson.freitas@@gmail.com}
 #' @references Frank Fabozzi. Fixed Income Mathematics, Wiley, 1994.
 #' @references Bruce Tuckman. Fixed Income Securities, Wiley, 1994.
 #' @import bizdays
+#' @import methods
 #' @docType package
 NULL
 
@@ -40,3 +38,9 @@ NULL
 #' @rdname datasets
 #' @name ZeroCurveBRL
 NULL
+
+# check if bizdays has actual calendar
+if (! "actual" %in% names(bizdays::calendars())) {
+  bizdays::create.calendar("actual")
+  message("Created \"actual\" calendar")
+}
