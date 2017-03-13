@@ -1,4 +1,5 @@
 
 .Rapp.history
 .Rproj.user
-legacy
+aux
+.Rhistory
