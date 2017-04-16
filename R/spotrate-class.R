@@ -44,8 +44,23 @@ setMethod(
   }
 )
 
+#' @export
+setMethod(
+  "as.list", "spotrate",
+  function(x) {
+    list(
+      value = x@value,
+      compounding = as(x@compounding, "character"),
+      daycount = as(x@daycount, "character"),
+      calendar = x@calendar
+    )
+  }
+)
+
+
 setAs("spotrate", "character", function(from) as.character(from))
 setAs("spotrate", "numeric", function(from) as.numeric(from))
+setAs("spotrate", "list", function(from) as.list(from))
 
 #' @export
 setGeneric(
@@ -80,6 +95,15 @@ setMethod(
         spotrate(value, specs[1], specs[2], specs[3])
       } else .parse_spotrate(x)
     } else .parse_spotrate(x)
+  }
+)
+
+#' @export
+setMethod(
+  "as.spotrate",
+  "list",
+  function(x, ...) {
+    spotrate(x$value, x$compounding, x$daycount, x$calendar)
   }
 )
 
