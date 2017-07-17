@@ -9,7 +9,7 @@ test_that("it should create an interest rate curve", {
   curve <- spotratecurve(rates, terms, "discrete", "actual/365", "actual")
   expect_is(curve, "spotratecurve")
   expect_is(curve, "spotrate")
-  expect_equal(curve@value, rates)
+  expect_equal(as.numeric(curve), rates)
   expect_equal(curve@terms, terms)
   expect_is(curve@compounding, "discrete")
   expect_is(curve@daycount, "daycount")
@@ -37,7 +37,7 @@ test_that("it should check if terms positive", {
 test_that("it should create a spotratecurve using a spotrate", {
   spr <- spotrate(rates, "simple", 'actual/365', 'actual')
   curve <- spotratecurve(spr, terms)
-  expect_equal(curve@value, rates)
+  expect_equal(as.numeric(curve), rates)
   expect_equal(curve@terms, terms)
   expect_is(curve@compounding, "simple")
   expect_is(curve@daycount, "daycount")
@@ -49,7 +49,7 @@ test_that("it should handle terms if they are not ordered", {
   .terms <- sample(terms)
   ix <- order(.terms)
   curve <- spotratecurve(spr, .terms)
-  expect_equal(curve@value, rates[ix])
+  expect_equal(as.numeric(curve), rates[ix])
   expect_equal(curve@terms, terms)
 })
 
@@ -66,10 +66,10 @@ test_that("it should check if indexed the elements is spotrate", {
 
 test_that("it should index the elements", {
   curve <- spotratecurve(rates, terms, "simple", "actual/365", "actual")
-  expect_equal(curve[11]@value, 0.056)
+  expect_equal(as.numeric(curve[11]), 0.056)
   expect_equal(curve[11]@terms, 11)
   expect_equal(curve[c(1, 11)]@terms, c(1, 11))
-  expect_equal(curve[c(1, 11)]@value, c(0.0719, 0.056))
+  expect_equal(as.numeric(curve[c(1, 11)]), c(0.0719, 0.056))
 })
 
 test_that("it should return a NA spotrate for unexistent indexes", {
@@ -78,7 +78,7 @@ test_that("it should return a NA spotrate for unexistent indexes", {
   expect_true(is.na(curve[10]))
   expect_equal(curve[10]@terms, 10)
   expect_equal(length(curve[10]), 1)
-  expect_equal(curve[c(10, 11)]@value, c(NA, 0.056))
+  expect_equal(as.numeric(curve[c(10, 11)]), c(NA, 0.056))
   expect_equal(length(curve[c(10, 11)]), 2)
 })
 
@@ -87,44 +87,44 @@ test_that("it should replace or insert elements into the curve", {
   # insert one new element
   curve[10] <- 0.051
   expect_is(curve[10], "spotratecurve")
-  expect_equal(curve[10]@value, 0.051)
+  expect_equal(as.numeric(curve[10]), 0.051)
   expect_equal(length(curve), length(terms)+1)
   expect_equal(match(10, curve@terms), 2)
   # insert more new elements
   curve[c(8, 9)] <- c(0.048, 0.049)
-  expect_equal(curve[c(8, 9)]@value, c(0.048, 0.049))
+  expect_equal(as.numeric(curve[c(8, 9)]), c(0.048, 0.049))
   expect_equal(match(c(8, 9), curve@terms), c(2, 3))
   # 2
   curve[c(12, 13)] <- 0.049
-  expect_equal(curve[c(12, 13)]@value, c(0.049, 0.049))
+  expect_equal(as.numeric(curve[c(12, 13)]), c(0.049, 0.049))
   # replace one element
   len_ <- length(curve)
   curve[11] <- 0.051
-  expect_equal(curve[11]@value, 0.051)
+  expect_equal(as.numeric(curve[11]), 0.051)
   expect_equal(length(curve), len_)
   # replace more elements
   len_ <- length(curve)
   curve[c(1, 11)] <- c(0.051, 0.051)
-  expect_equal(curve[c(1, 11)]@value, c(0.051, 0.051))
+  expect_equal(as.numeric(curve[c(1, 11)]), c(0.051, 0.051))
   expect_equal(length(curve), len_)
   # 2
   curve[c(1, 11)] <- 0.05
-  expect_equal(curve[c(1, 11)]@value, c(0.05, 0.05))
+  expect_equal(as.numeric(curve[c(1, 11)]), c(0.05, 0.05))
   expect_equal(length(curve), len_)
   # insert and replace
   len_ <- length(curve)
   curve[c(29, 26, 25)] <- 0.07
-  expect_equal(curve[c(25, 26, 29)]@value, c(0.07, 0.07, 0.07))
+  expect_equal(as.numeric(curve[c(25, 26, 29)]), c(0.07, 0.07, 0.07))
   expect_equal(length(curve), len_+2)
   # 2
   curve[c(31, 28, 35)] <- c(0.071, 0.072, 0.073)
-  expect_equal(curve[c(31, 28, 35)]@value, c(0.072, 0.071, 0.073))
+  expect_equal(as.numeric(curve[c(31, 28, 35)]), c(0.072, 0.071, 0.073))
   # replace one element with another spotrate
   curve <- spotratecurve(rates, terms, "simple", "actual/365", "actual")
   curve[13] <- curve[1]
-  expect_equal(curve[13]@value, curve[1]@value)
+  expect_equal(as.numeric(curve[13]), as.numeric(curve[1]))
   curve[c(31, 28, 35)] <- curve[c(1, 11, 26)]
-  expect_equal(curve[c(31, 28, 35)]@value, curve[c(1, 11, 26)]@value[c(2, 1, 3)])
+  expect_equal(as.numeric(curve[c(31, 28, 35)]), as.numeric(curve[c(1, 11, 26)])[c(2, 1, 3)])
   curve[11] <- curve[100]
   expect_true(is.na(curve[11]))
 })
@@ -134,7 +134,7 @@ test_that('it should return the curve\'s head', {
   hr <- head(curve, 3)
   expect_is(hr, 'spotratecurve')
   expect_equal(length(hr), 3)
-  expect_equal(hr@value, head(rates, 3))
+  expect_equal(as.numeric(hr), head(rates, 3))
   expect_equal(hr@terms, head(terms, 3))
 })
 
@@ -143,7 +143,7 @@ test_that('it should return the curve\'s tail', {
   hr <- tail(curve, 3)
   expect_is(hr, 'spotratecurve')
   expect_equal(length(hr), 3)
-  expect_equal(hr@value, tail(rates, 3))
+  expect_equal(as.numeric(hr), tail(rates, 3))
   expect_equal(hr@terms, tail(terms, 3))
 })
 
@@ -157,7 +157,7 @@ test_that("it should subset the curve with boolean index", {
   curve1 <- curve[ix]
   expect_is(curve1, 'spotratecurve')
   expect_equal(curve1@terms, terms[ix])
-  expect_equal(curve1@value, rates[ix])
+  expect_equal(as.numeric(curve1), rates[ix])
 })
 
 test_that("it should coerce a spotratecurve into a data.frame", {

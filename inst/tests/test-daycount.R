@@ -4,7 +4,7 @@ context('daycount class')
 test_that("it should create a daycount object", {
   dc <- daycount('actual/360')
   expect_is(dc, "daycount")
-  expect_true(dc@spec == 'actual/360')
+  expect_true(as.character(dc) == 'actual/360')
 })
 
 test_that("it should test daycount dib", {
@@ -18,12 +18,12 @@ test_that("it should test daycount dib", {
 
 test_that("it should call timefactor with a fixed period", {
   dc <- daycount('actual/360')
-  expect_true(timefactor(dc, 1, 'days') == 1/360)
-  expect_true(timefactor(dc, '1 days') == 1/360)
-  expect_true(timefactor(dc, term(1, "days")) == 1/360)
-  expect_true(timefactor(dc, 6, 'months') == 1/2)
-  expect_true(timefactor(dc, '6 months') == 1/2)
-  expect_true(timefactor(dc, term(6, "months")) == 1/2)
+  expect_true(timefactor(dc, 1, 'day') == 1/360)
+  expect_true(timefactor(dc, '1 day') == 1/360)
+  expect_true(timefactor(dc, term(1, "day")) == 1/360)
+  expect_true(timefactor(dc, 6, 'month') == 1/2)
+  expect_true(timefactor(dc, '6 month') == 1/2)
+  expect_true(timefactor(dc, term(6, "month")) == 1/2)
 })
 
 test_that("it should coerce a daycount to character", {

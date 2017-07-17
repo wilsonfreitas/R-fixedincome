@@ -4,8 +4,8 @@ context('spotrate class')
 test_that("it should create a spotrate", {
   spr <- spotrate(0.06, 'simple', 'actual/365')
   expect_is(spr, 'spotrate')
-  expect_equal(spr@value, 0.06)
-  expect_equal(spr@daycount@spec, "actual/365")
+  expect_equal(as.numeric(spr), 0.06)
+  expect_equal(as.character(spr@daycount), "actual/365")
   expect_is(spr@daycount, "daycount")
   expect_is(spr@compounding, "compounding")
   expect_equal(spr@calendar, "actual")
@@ -13,11 +13,11 @@ test_that("it should create a spotrate", {
 
 test_that("it should compute a compounding factor for fixed periods", {
   spr <- spotrate(0.06, 'simple', 'actual/365')
-  expect_equal(compound(spr, 10, "days"), 1.001643836)
-  expect_equal(compound(spr, 1, "years"), 1.06)
-  expect_equal(compound(spr, term(10, "days")), 1.001643836)
-  expect_equal(compound(spr, rep(10, 5), "days"), rep(1.001643836, 5))
-  expect_equal(compound(spr, term(rep(10, 5), "days")), rep(1.001643836, 5))
+  expect_equal(compound(spr, 10, "day"), 1.001643836)
+  expect_equal(compound(spr, 1, "year"), 1.06)
+  expect_equal(compound(spr, term(10, "day")), 1.001643836)
+  expect_equal(compound(spr, rep(10, 5), "day"), rep(1.001643836, 5))
+  expect_equal(compound(spr, term(rep(10, 5), "day")), rep(1.001643836, 5))
 
   expect_equal(compound(spr, Sys.Date(), Sys.Date()+10), 1.001643836)
   expect_equal(compound(spr, Sys.Date()+(0:9), Sys.Date()+(10:19)), rep(1.001643836, 10))
@@ -57,7 +57,7 @@ test_that("it should do arithmetic operations with spotrate", {
   spr2 <- spotrate(0.06, 'simple', 'actual/365')
   # spotrate vs spotrate
   expect_is(spr + spr2, "spotrate")
-  expect_true((spr + spr2)@value == 0.12)
+  expect_true(as.numeric(spr + spr2) == 0.12)
   # check type
   expect_is(spr + 0.01, "spotrate")
   expect_is(spr - 0.01, "spotrate")
@@ -65,9 +65,9 @@ test_that("it should do arithmetic operations with spotrate", {
   expect_is(spr / 0.01, "spotrate")
   expect_is(spr ^ 0.01, "spotrate")
   # spotrate vs numeric
-  expect_true((spr + 0.06)@value == 0.12)
+  expect_true(as.numeric(spr + 0.06) == 0.12)
   # numeric vs spotrate
-  expect_true((0.06 + spr)@value == 0.12)
+  expect_true(as.numeric(0.06 + spr) == 0.12)
   # vectorized
   spr <- spotrate(c(0.06, 0.07, 0.08), 'simple', 'actual/365')
   expect_true( all((spr + 0.01) - (c(0.06, 0.07, 0.08)+0.01) < 1e-10) )
@@ -136,50 +136,50 @@ test_that("it should coerce the spotrate object into others modes", {
 test_that("it should parse a string to build a spotrate", {
   spr <- as.spotrate('0.06 simple actual/365 actual')
   expect_is(spr, 'spotrate')
-  expect_true(spr@value == 0.06)
+  expect_true(as.numeric(spr) == 0.06)
   expect_true(is(spr@compounding, "simple"))
-  expect_true(spr@daycount@spec == 'actual/365')
+  expect_true(as.character(spr@daycount) == 'actual/365')
   expect_true(spr@calendar == "actual")
   # vectorized
   spr <- as.spotrate(c('0.06 simple actual/365 actual', '0.07 simple actual/365 actual'))
   expect_is(spr, 'spotrate')
   expect_true(length(spr) == 2)
-  expect_equal(spr@value, c(0.06, 0.07))
+  expect_equal(as.numeric(spr), c(0.06, 0.07))
   expect_true(is(spr@compounding, "simple"))
-  expect_true(spr@daycount@spec == 'actual/365')
+  expect_true(as.character(spr@daycount) == 'actual/365')
   expect_true(spr@calendar == "actual")
   # vectorized 2
   spr <- as.spotrate(c('0.06 discrete actual/365 actual', '0.07 simple actual/365 actual'))
   expect_is(spr, 'list')
   expect_true(length(spr) == 2)
   expect_is(spr[[2]]@compounding, "simple")
-  expect_true(spr[[1]]@daycount@spec == 'actual/365')
+  expect_true(as.character(spr[[1]]@daycount) == 'actual/365')
   expect_true(spr[[1]]@calendar == "actual")
   # simplify = FALSE
   spr <- as.spotrate('0.06 simple actual/365 actual', simplify = FALSE)
   expect_is(spr, 'list')
   expect_true(length(spr) == 1)
-  expect_equal(sapply(spr, function(x) x@value), 0.06)
+  expect_equal(sapply(spr, function(x) as.numeric(x)), 0.06)
   spr <- as.spotrate(c('0.06 simple actual/365 actual', '0.07 simple actual/365 actual'), simplify = FALSE)
   expect_is(spr, 'list')
   expect_true(length(spr) == 2)
-  expect_equal(sapply(spr, function(x) x@value), c(0.06, 0.07))
+  expect_equal(sapply(spr, function(x) as.numeric(x)), c(0.06, 0.07))
 })
 
 test_that("it should create the spotrate object copying some attributes of other object", {
   spr <- as.spotrate('0.06 simple actual/365 actual')
-  spr2 <- spotrate(0.07, copyfrom = spr)
+  spr2 <- spotrate(0.07, .copyfrom = spr)
   expect_equal(spr@compounding, spr2@compounding)
   expect_equal(spr@daycount, spr2@daycount)
   expect_equal(spr@calendar, spr2@calendar)
-  expect_equal(spr2@value, 0.07)
+  expect_equal(as.numeric(spr2), 0.07)
   # 
-  spr2 <- spotrate(c(0.07, 0.08), "continuous", copyfrom = spr)
+  spr2 <- spotrate(c(0.07, 0.08), "continuous", .copyfrom = spr)
   expect_is(spr2@compounding, "continuous")
   expect_equal(length(spr2), 2)
   expect_equal(spr@daycount, spr2@daycount)
   expect_equal(spr@calendar, spr2@calendar)
-  expect_equal(spr2@value, c(0.07, 0.08))
+  expect_equal(as.numeric(spr2), c(0.07, 0.08))
 })
 
 test_that("it should convert a spotrate to another spotrate", {
@@ -208,7 +208,7 @@ test_that("it should replicate a spotrate", {
   spr <- spotrate(0.06, 'simple', 'actual/365', 'actual')
   x <- rep(spr, 10)
   expect_equal(length(x), 10)
-  expect_equal(x@value, rep(0.06, 10))
+  expect_equal(as.numeric(x), rep(0.06, 10))
 })
 
 test_that('it should return the spotrate\'s head', {
@@ -218,7 +218,7 @@ test_that('it should return the spotrate\'s head', {
   hr <- head(spr, 3)
   expect_is(hr, 'spotrate')
   expect_equal(length(hr), 3)
-  expect_equal(hr@value, c(0.01, 0.06, 0.06))
+  expect_equal(as.numeric(hr), c(0.01, 0.06, 0.06))
 })
 
 test_that('it should return the spotrate\'s tail', {
@@ -228,5 +228,5 @@ test_that('it should return the spotrate\'s tail', {
   hr <- tail(spr, 3)
   expect_is(hr, 'spotrate')
   expect_equal(length(hr), 3)
-  expect_equal(hr@value, c(0.06, 0.06, 0.01))
+  expect_equal(as.numeric(hr), c(0.06, 0.06, 0.01))
 })

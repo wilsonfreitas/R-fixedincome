@@ -1,25 +1,35 @@
 # fixedincome
 
-Calculations involving interest rates are usually very easy and straightforward, but sometimes it involves specific issues regarding compounding and day counting rules that make it annoying.
-The `fixedincome` package brings many functions to create and handle with interest rates and term structure of interest rates.
+Calculations involving interest rates are usually very easy and straightforward, but sometimes it involves specific issues that makes the task of writing structured and reprodicible code for it chalenging and annoying.
+The `fixedincome` package brings many functions to strucutre and create facilities to handle with interest rates, term structure of interest rates and specific issues regarding compounding rates and day count rules, for example.
 
 Below there are a few examples on how to create and make calculations with interest rates using `fixedincome`.
 
 ## Examples
 
-Let's declare an annual spot rate with a `simple` compounding, an `actual/360` day count which stands for current days between two dates and 360 days per year and an `actual` calendar.
+To create an interest rate we need to specify 4 elements:
+
+- the value of the interest rate itself, a decimal number
+- the compounding regime of interest rate, that can be `simple`, `discrete` or `continuous` and we'll use `simple`.
+- the day count rule which defines how interest is accrued over time, we have a few options and we'll start with `actual/360` where the days between two dates are calculated as the difference and the year is assumed to be 360 days.
+- the calendar used to count the number of days between two dates of accrual, we will use the `actual` calendar that compute the Julian difference between two dates.
+
+There is another important topic that wasn't declared here that is the *frequency* of interest.
+To make things simple `fixedincome` handles only with *annual* rates since this represents the great majority of rates used in financial market contracts, but this restriction can be reviewed in the future.
+
+Given that let's declare an annual spot rate with a `simple` compounding, an `actual/360` and the `actual` calendar.
 
 ```r
 sr <- spotrate(0.06, 'simple', 'actual/360', 'actual')
 sr
 # simple actual/360 actual 
-# 0.06 
+# 0.06
 ```
 
 Compound the spot rate for 7 months.
 
 ```r
-> compound(sr, 7, 'months')
+compound(sr, 7, 'months')
 # [1] 1.035
 ```
 

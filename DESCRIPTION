@@ -18,7 +18,8 @@ URL: https://github.com/wilsonfreitas/R-fixedincome
 BugReports: https://github.com/wilsonfreitas/R-fixedincome/issues
 Imports:
     bizdays (>= 1.0.0),
-    methods
+    methods,
+    lubridate
 Collate:
     "fixedincome-internal.R"
     "term-class.R"

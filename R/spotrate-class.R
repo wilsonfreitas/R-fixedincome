@@ -1,46 +1,39 @@
 
 #' @export
-spotrate <- setClass(
+setClass(
   "spotrate",
   representation = representation(
-    value = "numeric",
     compounding = "compounding",
     daycount = "daycount",
     calendar = "character"
-  )
+  ),
+  contains = "numeric"
 )
 
-#' @export spotrate
-setMethod(
-  "initialize",
-  "spotrate",
-  function(.Object, .value, .compounding, .daycount, .calendar = "actual", copyfrom = NULL) {
-    if ( !is.null(copyfrom) ) {
-      .value <- if (missing(.value)) copyfrom@value else .value
-      .compounding <- if (missing(.compounding)) copyfrom@compounding else .compounding
-      .daycount <- if (missing(.daycount)) copyfrom@daycount else .daycount
-      .calendar <- if (missing(.calendar)) copyfrom@calendar else .calendar
-    }
-    .compounding <- if (is(.compounding, "character")) compounding(.compounding) else .compounding
-    .daycount <- if (is(.daycount, "character")) daycount(.daycount) else .daycount
-    .Object@value <- as.numeric(.value)
-    .Object@compounding <- .compounding
-    .Object@daycount <- .daycount
-    .Object@calendar <- .calendar
-    .Object
+#' @export
+spotrate <- function(.value, .compounding, .daycount, .calendar = "actual", .copyfrom = NULL) {
+  if ( !is.null(.copyfrom) ) {
+    .value <- if (missing(.value)) .copyfrom@.Data else .value
+    .compounding <- if (missing(.compounding)) .copyfrom@compounding else .compounding
+    .daycount <- if (missing(.daycount)) .copyfrom@daycount else .daycount
+    .calendar <- if (.calendar == "actual") .copyfrom@calendar else .calendar
   }
-)
+  
+  .compounding <- if (is.character(.compounding)) compounding(.compounding) else .compounding
+  .daycount <- if (is.character(.daycount)) daycount(.daycount) else .daycount
+  new("spotrate", .value, compounding = .compounding, daycount = .daycount, calendar = .calendar)
+}
 
 # coercion ----
 
 #' @export
-setMethod("as.numeric", "spotrate", function(x) x@value)
+setMethod("as.numeric", "spotrate", function(x) x@.Data)
 
 #' @export
 setMethod(
   "as.character", "spotrate",
   function(x) {
-    paste(x@value, as(x@compounding, "character"), as(x@daycount, "character"), x@calendar)
+    paste(x@.Data, as(x@compounding, "character"), as(x@daycount, "character"), x@calendar)
   }
 )
 
@@ -49,7 +42,7 @@ setMethod(
   "as.list", "spotrate",
   function(x) {
     list(
-      value = x@value,
+      value = x@.Data,
       compounding = as(x@compounding, "character"),
       daycount = as(x@daycount, "character"),
       calendar = x@calendar
@@ -107,14 +100,14 @@ setMethod(
   }
 )
 
-# print, show and format
+# print, show and format ----
 
 #' @export
 setMethod(
   "format", signature("spotrate"),
   function(x, ...) {
     hdr <- paste(as(x@compounding, "character"), as(x@daycount, "character"), x@calendar)
-    paste(callGeneric(x@value, ...), hdr)
+    paste(callGeneric(x@.Data, ...), hdr)
   }
 )
 
@@ -122,9 +115,7 @@ setMethod(
 setMethod(
   "show", signature("spotrate"),
   function(object) {
-    hdr <- paste(as(object@compounding, "character"), as(object@daycount, "character"), object@calendar)
-    cat(hdr, "\n")
-    cat(object@value, "\n")
+    print(format(object))
   }
 )
 
@@ -139,7 +130,7 @@ setMethod(
   def = function(x, .t, .v) {
     tm <- term(.t, .v)
     tf <- timefactor(x@daycount, tm)
-    compound(x@compounding, tf, x@value)
+    compound(x@compounding, tf, x@.Data)
   }
 )
 
@@ -149,7 +140,7 @@ setMethod(
   signature = c("spotrate", "term", "missing"),
   def = function(x, .t, .v) {
     tf <- timefactor(x@daycount, .t)
-    compound(x@compounding, tf, x@value)
+    compound(x@compounding, tf, x@.Data)
   }
 )
 
@@ -160,7 +151,7 @@ setMethod(
   def = function(x, .t, .v) {
     tm <- term(bizdays::bizdays(.t, .v, x@calendar), "days")
     tf <- timefactor(x@daycount, tm)
-    compound(x@compounding, tf, x@value)
+    compound(x@compounding, tf, x@.Data)
   }
 )
 
@@ -205,7 +196,7 @@ setMethod(
 setMethod(
   "Arith", signature("spotrate", "spotrate"),
   function(e1, e2) {
-    e1@value <- callGeneric(e1@value, e2@value)
+    e1@.Data <- callGeneric(e1@.Data, e2@.Data)
     e1
   }
 )
@@ -214,7 +205,7 @@ setMethod(
 setMethod(
   "Arith", signature("spotrate", "numeric"),
   function(e1, e2) {
-    e1@value <- callGeneric(e1@value, e2)
+    e1@.Data <- callGeneric(e1@.Data, e2)
     e1
   }
 )
@@ -223,7 +214,7 @@ setMethod(
 setMethod(
   "Arith", signature("numeric", "spotrate"),
   function(e1, e2) {
-    e2@value <- callGeneric(e1, e2@value)
+    e2@.Data <- callGeneric(e1, e2@.Data)
     e2
   }
 )
@@ -232,7 +223,7 @@ setMethod(
 setMethod(
   "Compare", signature("spotrate", "spotrate"),
   function(e1, e2) {
-    callGeneric(e1@value, e2@value)
+    callGeneric(e1@.Data, e2@.Data)
   }
 )
 
@@ -240,7 +231,7 @@ setMethod(
 setMethod(
   "Compare", signature("spotrate", "numeric"),
   function(e1, e2) {
-    callGeneric(e1@value, e2)
+    callGeneric(e1@.Data, e2)
   }
 )
 
@@ -248,7 +239,7 @@ setMethod(
 setMethod(
   "Compare", signature("numeric", "spotrate"),
   function(e1, e2) {
-    callGeneric(e1, e2@value)
+    callGeneric(e1, e2@.Data)
   }
 )
 
@@ -258,7 +249,7 @@ setMethod(
 setMethod(
   "is.na", signature("spotrate"),
   function(x) {
-    is.na(x@value)
+    is.na(x@.Data)
   }
 )
 
@@ -266,7 +257,7 @@ setMethod(
 setMethod(
   "is.infinite", signature("spotrate"),
   function(x) {
-    is.infinite(x@value)
+    is.infinite(x@.Data)
   }
 )
 
@@ -275,7 +266,7 @@ setMethod(
   "[",
   signature("spotrate"),
   function(x, i) {
-    spotrate(x@value[i], x@compounding, x@daycount, x@calendar)
+    spotrate(x@.Data[i], x@compounding, x@daycount, x@calendar)
   }
 )
 
@@ -284,7 +275,7 @@ setReplaceMethod(
   "[",
   signature("spotrate"),
   function(x, i, value) {
-    x@value[i] <- value
+    x@.Data[i] <- value
     x
   }
 )
@@ -294,7 +285,7 @@ setMethod(
   "length",
   "spotrate",
   function(x) {
-    length(x@value)
+    length(x@.Data)
   }
 )
 
@@ -302,7 +293,7 @@ setMethod(
 setMethod(
   "append", c("spotrate", "numeric"),
   function(x, values, after = length(x)) {
-    values_ <- append(x@value, values, after)
+    values_ <- append(x@.Data, values, after)
     spotrate(values_, x@compounding, x@daycount, x@calendar)
   }
 )
@@ -311,7 +302,7 @@ setMethod(
 setMethod(
   "append", c("spotrate", "spotrate"),
   function(x, values, after = length(x)) {
-    values_ <- append(x@value, values@value, after)
+    values_ <- append(x@.Data, values@.Data, after)
     spotrate(values_, x@compounding, x@daycount, x@calendar)
   }
 )
@@ -363,7 +354,7 @@ setMethod(
   "rep",
   "spotrate",
   function(x, times) {
-    n <- rep(x@value, times)
+    n <- rep(x@.Data, times)
     spotrate(n, x@compounding, x@daycount, x@calendar)
   }
 )
@@ -372,7 +363,7 @@ setMethod(
 #   "head",
 #   "spotrate",
 #   function(x, n = 6L) {
-#     y <- head(x@value, n)
+#     y <- head(x@.Data, n)
 #     spotrate(y, x@compounding, x@daycount, x@calendar)
 #   }
 # )

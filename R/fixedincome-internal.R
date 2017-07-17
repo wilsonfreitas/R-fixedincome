@@ -18,6 +18,7 @@
 #' @references Bruce Tuckman. Fixed Income Securities, Wiley, 1994.
 #' @import bizdays
 #' @import methods
+#' @import lubridate
 #' @docType package
 NULL
 
