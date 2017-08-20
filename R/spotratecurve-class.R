@@ -40,7 +40,7 @@ spotratecurve <- function(.value, .terms, .compounding, .daycount, .calendar = "
                  daycount = .underlying@daycount,
                  calendar = .underlying@calendar,
                  terms = .terms,
-                 refdate = if (is.null(.refdate)) as.Date(0, "1970-01-01") else .refdate)
+                 refdate = if (is.null(.refdate)) Sys.Date() else .refdate)
   
   ix <- order(.terms)
   .Object@terms <- .terms[ix]
