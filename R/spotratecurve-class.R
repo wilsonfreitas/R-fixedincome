@@ -7,17 +7,16 @@ setClass(
     refdate = "Date"
   ),
   validity = function(object) {
-    refdate_check <- if (is(object@terms, "Date")) object@refdate != as.Date(0, "1970-01-01") else TRUE
     len_check <- length(object@terms) == length(object@.Data)
     unique_check <- length(object@terms) == length(unique(object@terms))
     terms_positivity_check <- all(object@terms > 0)
-    len_check & refdate_check & unique_check & terms_positivity_check
+    len_check & unique_check & terms_positivity_check
   },
   contains = "spotrate"
 )
 
 #' @export
-spotratecurve <- function(.value, .terms, .compounding, .daycount, .calendar = "actual", .refdate = NULL, .copyfrom = NULL) {
+spotratecurve <- function(.value, .terms, .compounding, .daycount, .calendar = "actual", .refdate = Sys.Date(), .copyfrom = NULL) {
   if (length(.value) != length(.terms))
     stop("length(.value) must match length(.terms)")
   .underlying <- 
@@ -40,7 +39,7 @@ spotratecurve <- function(.value, .terms, .compounding, .daycount, .calendar = "
                  daycount = .underlying@daycount,
                  calendar = .underlying@calendar,
                  terms = .terms,
-                 refdate = if (is.null(.refdate)) Sys.Date() else .refdate)
+                 refdate = .refdate)
   
   ix <- order(.terms)
   .Object@terms <- .terms[ix]
