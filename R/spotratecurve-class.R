@@ -129,10 +129,11 @@ setMethod(
     m <- as.matrix(object@.Data, ncol=1)
     .terms <- term(object@terms, "days")
     rownames(m) <- as.character(.terms)
-    colnames(m) <- NULL
+    colnames(m) <- "spotratecurve"
     print.default(m)
     cat(hdr)
     cat("\n")
+    cat("Reference date:", format(object@refdate), "\n")
     invisible(object)
   }
 )
