@@ -53,7 +53,14 @@ setMethod(
   "[",
   signature(x = "spotratecurve", i = "numeric"),
   function(x, i) {
-    spotratecurve(x@.Data[match(i, x@terms)], i, x@compounding, x@daycount, x@calendar)
+    if (any(i < 0)) {
+      mx <- - match(abs(i), x@terms)
+      ix <- x@terms[mx]
+    } else {
+      mx <- match(i, x@terms)
+      ix <- i
+    }
+    spotratecurve(x@.Data[mx], ix, x@compounding, x@daycount, x@calendar)
   }
 )
 
