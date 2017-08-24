@@ -167,6 +167,11 @@ test_that("it should remove a term from spotrate curve by using negative index",
   expect_equal(as.numeric(curve[-11]), rates[-2])
 })
 
+test_that("it should index spotratecurve by strict position", {
+  curve <- spotratecurve(rates, terms, "simple", "actual/365", "actual")
+  expect_equal(curve[11], curve[2, strict = TRUE])
+})
+
 test_that("it should coerce a spotratecurve into a data.frame", {
   curve <- spotratecurve(rates, terms, "simple", "actual/365", "actual")
   expect_equal(as.data.frame(curve), data.frame(terms = terms, rates = rates))

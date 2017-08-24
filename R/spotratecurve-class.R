@@ -52,13 +52,18 @@ spotratecurve <- function(.value, .terms, .compounding, .daycount, .calendar = "
 setMethod(
   "[",
   signature(x = "spotratecurve", i = "numeric"),
-  function(x, i) {
-    if (any(i < 0)) {
-      mx <- - match(abs(i), x@terms)
+  function(x, i, strict = FALSE) {
+    if (strict) {
+      mx <- i
       ix <- x@terms[mx]
     } else {
-      mx <- match(i, x@terms)
-      ix <- i
+      if (any(i < 0)) {
+        mx <- - match(abs(i), x@terms)
+        ix <- x@terms[mx]
+      } else {
+        mx <- match(i, x@terms)
+        ix <- i
+      }
     }
     spotratecurve(x@.Data[mx], ix, x@compounding, x@daycount, x@calendar)
   }
