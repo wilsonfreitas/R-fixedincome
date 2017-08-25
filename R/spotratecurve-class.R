@@ -73,7 +73,7 @@ setMethod(
 setMethod(
   "[",
   signature(x = "spotratecurve", i = "logical"),
-  function(x, i) {
+  function(x, i, strict = FALSE) {
     spotratecurve(x@.Data[i], x@terms[i], x@compounding, x@daycount, x@calendar)
   }
 )
