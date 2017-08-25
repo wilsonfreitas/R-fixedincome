@@ -177,6 +177,25 @@ test_that("it should remove a spotratecurve element by its strict position", {
   expect_equal(curve[-11], curve[-2, strict = TRUE])
 })
 
+test_that("it should replace spotratecurve elements using its strict position", {
+  curve <- spotratecurve(rates, terms, "simple", "actual/365", "actual")
+  # test 1
+  curve[2, strict = TRUE] <- 0.051
+  expect_equal(as.numeric(curve[11]), 0.051)
+  expect_equal(length(curve), length(terms))
+  # test 2
+  curve[c(2, 3), strict = TRUE] <- c(0.051, 0.052)
+  expect_equal(as.numeric(curve[c(11, 26)]), c(0.051, 0.052))
+  expect_equal(length(curve), length(terms))
+})
+
+test_that("it should fail trying to replace spotratecurve elements using out of bounds strict index", {
+  curve <- spotratecurve(rates, terms, "simple", "actual/365", "actual")
+  # test 1
+  expect_error(curve[100, strict = TRUE] <- 0.051)
+  expect_error(curve[-2, strict = TRUE] <- 0.051)
+})
+
 test_that("it should coerce a spotratecurve into a data.frame", {
   curve <- spotratecurve(rates, terms, "simple", "actual/365", "actual")
   expect_equal(as.data.frame(curve), data.frame(terms = terms, rates = rates))

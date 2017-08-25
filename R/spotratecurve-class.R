@@ -82,18 +82,24 @@ setMethod(
 setReplaceMethod(
   "[",
   signature(x="spotratecurve", i="numeric", j="missing", value="numeric"),
-  function(x, i, value) {
-    contained.from <- i %in% x@terms
-    contained.to <- x@terms %in% i
-    if (any(contained.from)) {
-      x@.Data[contained.to] <- if (length(value) == 1) value else value[contained.from]
-    }
-    if (any(! contained.from)) {
-      value_ <- c(x@.Data, if (length(value) == 1) rep(value, sum(! contained.from)) else value[! contained.from])
-      terms_ <- c(x@terms, i[! contained.from])
-      ix <- order(terms_)
-      x@.Data <- value_[ix]
-      x@terms <- terms_[ix]
+  function(x, i, value, strict = FALSE) {
+    if (strict) {
+      if (any(i > length(x@.Data)) || any(i < 1))
+        stop("Index out of limits")
+      x@.Data[i] <- value
+    } else {
+      contained.from <- i %in% x@terms
+      contained.to <- x@terms %in% i
+      if (any(contained.from)) {
+        x@.Data[contained.to] <- if (length(value) == 1) value else value[contained.from]
+      }
+      if (any(! contained.from)) {
+        value_ <- c(x@.Data, if (length(value) == 1) rep(value, sum(! contained.from)) else value[! contained.from])
+        terms_ <- c(x@terms, i[! contained.from])
+        ix <- order(terms_)
+        x@.Data <- value_[ix]
+        x@terms <- terms_[ix]
+      }
     }
     x
   }
