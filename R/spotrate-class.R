@@ -177,7 +177,7 @@ setMethod(
   f = "discount",
   signature = c("spotrate", "term", "missing"),
   def = function(x, .t, .v) {
-    1 / compound(x, .t, .v)
+    1 / compound(x, .t)
   }
 )
 
