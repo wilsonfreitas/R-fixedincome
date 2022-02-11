@@ -1,23 +1,46 @@
 
-library(transmute)
 library(httr)
 library(dplyr)
 library(bizdays)
 library(purrr)
-library(rlist)
+library(stringr)
 
 bizdays.options$set(default.calendar = "Brazil/ANBIMA")
-
-tr_ <- transmuter(
-  match_regex("^\\d{8}$", function(text, match) as.Date(text, format="%Y%m%d"))
-)
 
 url <- modify_url("https://api.morph.io/wilsonfreitas/MorthIO_TitulosPublicos_ANBIMA/data.json",
                   query = list(key = "uIUD3TeyxgIVWhVwsFr0",
                                query = "select * from 'data' where data_referencia in (select max(data_referencia) from 'data') and titulo = 'NTN-F'"))
 res <- GET(url)
 df <- jsonlite::fromJSON(content(res, as = "text"))
-df <- transmute::transmute(tr_, df)
+df <- map_if(df, function(x) any(str_detect(x, "^\\d{8}$")), function(.x) as.Date(.x, format="%Y%m%d")) %>%
+  as_tibble()
+
+# %>%
+#   select(data_referencia, data_vencimento, taxa_ind, pu) %>%
+#   mutate(taxa_ind = spotrate(taxa_ind/100, "discrete", "business/252", "Brazil/ANBIMA")) %>%
+#   rename(spot_price = pu, yield_rate = taxa_ind, refdate = data_referencia, maturity_date = data_vencimento)
+
+instr <- df %>% mutate(
+  maturity_date = data_vencimento,
+  yield_rate = spotrate(taxa_ind/100, "discrete", "business/252", "Brazil/ANBIMA"),
+  issue_date = data_base,
+  notional_value = 1000,
+  coupon_rate = spotrate(0.1, "discrete", "business/252", "Brazil/ANBIMA"),
+  coupon_period = "6 months",
+  coupon_method = "backward",
+  calendar = "Brazil/ANBIMA",
+  instrument_type = "fixedratebond"
+) %>% select(
+  maturity_date,
+  yield_rate,
+  issue_date,
+  notional_value,
+  coupon_rate,
+  coupon_period,
+  coupon_method,
+  calendar,
+  instrument_type
+) %>% plyr::dlply(1, c)
 
 coupon_generation <- function(start_date, end_date, coupon_period, coupon_method) {
   if (coupon_method == "backward") {
@@ -35,7 +58,7 @@ compute_cash_flow <- function(bond, refdate) UseMethod("compute_cash_flow", bond
 compute_cash_flow.bond <- function(bond, refdate) {
   
   cf_dates <- coupon_generation(refdate, bond$maturity_date, bond$coupon_period, bond$coupon_method)
-  coupon_payment <- bond$notional_value * (compound(bond$coupon_rate, bond$coupon_period) - 1)
+  coupon_payment <- bond$notional_value * (compound(bond$coupon_rate, as.term(bond$coupon_period)) - 1)
   
   cf <- data.frame(
     coupon_dates = cf_dates,
@@ -46,9 +69,36 @@ compute_cash_flow.bond <- function(bond, refdate) {
   
   cf$business_days <- bizdays(refdate, cf$payment_dates)
   cf$amortization[nrow(cf)] <- bond$notional_value
-  bond$cash_flow <- cf
-  bond
+  cf
 }
+
+# ----
+
+cf <- by(instr, seq_len(dim(instr)[1]), compute_cash_flow.bond, refdate = df$data_referencia[1])
+attributes(cf) <- NULL
+instr$cash_flow <- cf
+
+# ----
+bond <- instr[5,]
+refdate <- df$data_referencia[1]
+cf_dates <- coupon_generation(refdate, bond$maturity_date, bond$coupon_period, bond$coupon_method)
+coupon_payment <- bond$notional_value * (compound(bond$coupon_rate, as.term(bond$coupon_period)) - 1)
+
+cf <- data.frame(
+  coupon_dates = cf_dates,
+  payment_dates = following(cf_dates),
+  coupon_payments = coupon_payment,
+  amortization = 0
+)
+
+cf$business_days <- bizdays(refdate, cf$payment_dates)
+cf$amortization[nrow(cf)] <- bond$notional_value
+bond$cash_flow <- list(cf)
+
+cf %>% str()
+I(cf) %>% str()
+
+# ----
 
 compute_cash_flow.list <- function(bond, refdate) {
   lapply(bond, compute_cash_flow, refdate)
@@ -121,4 +171,3 @@ df %>% setup_bond(
 
 map_dbl(bonds, "theoretical_value")
 
-list.map(bonds, c(t=theoretical_value, n=notional_value))
