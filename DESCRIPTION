@@ -28,5 +28,8 @@ Collate:
     "spotrate-class.R"
     "spotratecurve-class.R"
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.0.1
+RoxygenNote: 7.1.1
 LazyData: true
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
