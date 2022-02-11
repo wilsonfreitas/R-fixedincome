@@ -33,13 +33,18 @@ Mínimo (D0)	Máximo (D0)	Mínimo (D+1)	Máximo (D+1)
 ```{json}
 {
   "name": "LTN_20170401",
-  "issue_date": "2017-01-15",
+  "issue_date": "2016-01-15",
   "maturity_date": {
     "value": "2017-04-01",
     "calendar_adjustment": "following"
   },
   "spot_price": 992.723961,
-  "yield_rate": 12.1892,
+  "yield_rate": {
+    "value": 12.1892,
+    "compounding": "discrete",
+    "daycount": "business/252",
+    "calendar": "Brazil/ANBIMA"
+  },
   // ----
   "currency": "BRL",
   "instrument_type": "ZeroCouponBond",
@@ -53,8 +58,139 @@ Mínimo (D0)	Máximo (D0)	Mínimo (D+1)	Máximo (D+1)
 }
 ```
 
+```{r}
+ZeroCouponBond(
+  notional = 1000,
+  yield_rate = "0.121892 discrete business/252 Brazil/ANBIMA",
+  maturity_date = "2017-04-01",
+  issue_date = "2016-01-15",
+  calendar_adjustment = "following",
+  calendar = "Brazil/ANBIMA"
+)
+```
+
+
 
 ```{r}
+library(httr)
+url <- modify_url("https://api.morph.io/wilsonfreitas/MorthIO_VNATitulosPublicos_ANBIMA/data.json",
+                  query = list(key = "uIUD3TeyxgIVWhVwsFr0",
+                               query = "select * from 'data' where data_ref in (select max(data_ref) from 'data')"))
+res <- GET(url)
+jsonlite::fromJSON(content(res, as = "text"))
 
+url <- modify_url("https://api.morph.io/wilsonfreitas/MorthIO_TitulosPublicos_ANBIMA/data.json",
+                  query = list(key = "uIUD3TeyxgIVWhVwsFr0",
+                               query = "select * from 'data' where data_referencia in (select max(data_referencia) from 'data') and titulo = 'LTN'"))
+
+res <- GET(url)
+df <- jsonlite::fromJSON(content(res, as = "text"))
+
+url <- modify_url("https://api.morph.io/wilsonfreitas/MorthIO_TaxasVNATitulosPublicos_ANBIMA/data.json",
+                  query = list(key = "uIUD3TeyxgIVWhVwsFr0",
+                               query = "select * from 'data' where data_ref in (select max(data_ref) from 'data')"))
+res <- GET(url)
+jsonlite::fromJSON(content(res, as = "text"))
+
+```
+
+## LTN - ZeroCouponBond
+
+```{r}
+library(transmute)
+library(httr)
+
+url <- modify_url("https://api.morph.io/wilsonfreitas/MorthIO_TitulosPublicos_ANBIMA/data.json",
+                  query = list(key = "uIUD3TeyxgIVWhVwsFr0",
+                               query = "select * from 'data' where data_referencia in (select max(data_referencia) from 'data') and titulo = 'LTN'"))
+
+res <- GET(url)
+df <- jsonlite::fromJSON(content(res, as = "text"))
+
+tr_ <- transmuter(
+  match_regex("^\\d{8}$", function(text, match) as.Date(text, format="%Y%m%d"))
+)
+df <- transmute(tr_, df)
+
+yield_rate <- spotrate(df$taxa_ind/100, "discrete", "business/252", "Brazil/ANBIMA")
+
+1000 * discount(yield_rate, df$data_referencia, bizdays::following(df$data_vencimento, "Brazil/ANBIMA"))
+```
+
+## NTN-F - FixedRateBond
+
+```{r}
+url <- modify_url("https://api.morph.io/wilsonfreitas/MorthIO_TitulosPublicos_ANBIMA/data.json",
+                  query = list(key = "uIUD3TeyxgIVWhVwsFr0",
+                               query = "select * from 'data' where data_referencia in (select max(data_referencia) from 'data') and titulo = 'NTN-F'"))
+res <- GET(url)
+df <- jsonlite::fromJSON(content(res, as = "text"))
+df <- transmute(tr_, df)
+
+yield_rate <- spotrate(df$taxa_ind/100, "discrete", "business/252", "Brazil/ANBIMA")
+
+df_split <- split(df, df$data_vencimento)
+
+df_cf <- lapply(df_split, function(dx) {
+  cf_dates <- seq(dx$data_vencimento, dx$data_referencia, by = "-6 months")
+  cf_dates <- sort(cf_dates)
+  coupon_rate <- spotrate(0.1, "discrete", "business/252", "Brazil/ANBIMA")
+  coupon_payment <- 1000 * (compound(coupon_rate, 6, "months") - 1)
+  cf <- data.frame(
+    coupon_dates = cf_dates,
+    payment_dates = bizdays::following(cf_dates, "Brazil/ANBIMA"),
+    coupon_payments = coupon_payment,
+    amortization = 0
+  )
+  cf$business_days <- bizdays::bizdays(dx$data_referencia, cf$payment_dates, "Brazil/ANBIMA")
+  cf$amortization[dim(cf)[1]] <- 1000
+  cf
+})
+
+mapply(function(bx, cf) {
+  yield_rate <- spotrate(bx$taxa_ind/100, "discrete", "business/252", "Brazil/ANBIMA")
+  payments <- cf$coupon_payments + cf$amortization
+  sum( payments * discount(yield_rate, cf$business_days, "days") )
+}, df_split, df_cf) - df$pu
+
+url <- modify_url("https://api.morph.io/wilsonfreitas/MorthIO_TitulosPublicos_ANBIMA/data.json",
+                  query = list(key = "uIUD3TeyxgIVWhVwsFr0",
+                               query = "select * from 'data' where data_referencia = '20170404' and titulo = 'NTN-B'"))
+res <- GET(url)
+df <- jsonlite::fromJSON(content(res, as = "text"))
+df <- transmute(tr_, df)
+
+url <- modify_url("https://api.morph.io/wilsonfreitas/MorthIO_VNATitulosPublicos_ANBIMA/data.json",
+                  query = list(key = "uIUD3TeyxgIVWhVwsFr0",
+                               query = "select VNA from 'data' where data_ref = '2017-04-04' and titulo = 'NTNB'"))
+res <- GET(url)
+VNA <- jsonlite::fromJSON(content(res, as = "text"))
+
+vna_ntnb <- VNA$VNA
+yield_rate <- spotrate(df$taxa_ind/100, "discrete", "business/252", "Brazil/ANBIMA")
+
+df_split <- split(df, df$data_vencimento)
+
+df_cf <- lapply(df_split, function(dx) {
+  cf_dates <- seq(dx$data_vencimento, dx$data_referencia, by = "-6 months")
+  cf_dates <- sort(cf_dates)
+  coupon_rate <- spotrate(0.06, "discrete", "business/252", "Brazil/ANBIMA")
+  coupon_payment <- vna_ntnb * (compound(coupon_rate, 6, "months") - 1)
+  cf <- data.frame(
+    coupon_dates = cf_dates,
+    payment_dates = bizdays::following(cf_dates, "Brazil/ANBIMA"),
+    coupon_payments = coupon_payment,
+    amortization = 0
+  )
+  cf$business_days <- bizdays::bizdays(dx$data_referencia, cf$payment_dates, "Brazil/ANBIMA")
+  cf$amortization[dim(cf)[1]] <- vna_ntnb
+  cf
+})
+
+mapply(function(bx, cf) {
+  yield_rate <- spotrate(bx$taxa_ind/100, "discrete", "business/252", "Brazil/ANBIMA")
+  payments <- cf$coupon_payments + cf$amortization
+  sum( payments * discount(yield_rate, cf$business_days, "days") )
+}, df_split, df_cf) - df$pu
 ```
 
