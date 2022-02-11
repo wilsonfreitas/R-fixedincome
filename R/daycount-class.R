@@ -15,6 +15,9 @@ setClass(
 
 #' @export
 daycount <- function(spec, ...) {
+  spec_parts = strsplit(spec, '/')[[1]]
+  if (length(spec_parts) != 2)
+    stop("Invalid daycount specitication provided (", spec, ")")
   new("daycount", .Data = spec)
 }
 
@@ -103,3 +106,4 @@ setMethod(
     invisible(object)
   }
 )
+
