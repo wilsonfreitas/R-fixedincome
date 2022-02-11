@@ -93,3 +93,13 @@ setMethod(
     timefactor_(as(tm, "numeric"), units(tm), "year", dib(x))
   }
 )
+
+#' @export
+setMethod(
+  "show",
+  "daycount",
+  function(object) {
+    cat("<daycount:", object@.Data, "\b>", "\n")
+    invisible(object)
+  }
+)

@@ -125,6 +125,16 @@ setMethod(
   }
 )
 
+#' @export
+setMethod(
+  "show",
+  "compounding",
+  function(object) {
+    cat("<compounding:", as(object, "character"), "\b>", "\n")
+    invisible(object)
+  }
+)
+
 # compound
 # [character], term:[numeric], value
 # [compounding], term:[numeric], value
