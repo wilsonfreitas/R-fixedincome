@@ -42,17 +42,10 @@ units.Term <- function(x) {
 
 #' @export
 setMethod(
-  "units",
-  signature(x = "Term"),
-  units.Term
-)
-
-#' @export
-setMethod(
   "[",
   signature(x = "Term"),
   function(x, i, j, ..., drop = TRUE) {
-    .val <- x@value
+    .val <- x@.Data
     .unit <- units(x)
     term(.val[i], .unit[i])
   }
