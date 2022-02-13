@@ -1,10 +1,10 @@
 
-context('term class')
+# context('term class')
 
 test_that("it should create a term object", {
   t <- term(6, 'months')
-  expect_is(t, "term")
-  expect_s4_class(t, 'term')
+  expect_s4_class(t, "Term")
+  expect_s4_class(t, 'Term')
   expect_true(units(t) == 'month')
   t <- term(1:10, "days")
   expect_true(all(units(t) == 'day'))
@@ -14,6 +14,9 @@ test_that("it should test equality", {
   t <- term(6, 'months')
   expect_true(t == "6 months")
   expect_true("6 months" == t)
+  t <- term(1, 'months')
+  expect_true(t == "1 month")
+  expect_true("1 month" == t)
 })
 
 test_that("it should coerce term to numeric", {
@@ -23,11 +26,13 @@ test_that("it should coerce term to numeric", {
 
 test_that("it should coerce term to character", {
   t <- term(6, 'month')
-  expect_equal(as(t, "character"), "6M")
+  expect_equal(as(t, "character"), "6 months")
   t <- term(6:9, 'month')
-  expect_equal(as(t, "character"), c("6M", "7M", "8M", "9M"))
+  expect_equal(as(t, "character"),
+               c("6 months", "7 months", "8 months", "9 months"))
   t <- term(6:9, c("month", "year"))
-  expect_equal(as(t, "character"), c("6M", "7Y", "8M", "9Y"))
+  expect_equal(as(t, "character"),
+               c("6 months", "7 years", "8 months", "9 years"))
 })
 
 test_that("it should raise error", {
@@ -41,11 +46,25 @@ test_that("it should create a term object from a string", {
   expect_error(as.term('nada'))
 })
 
+test_that("it should check the length of a term", {
+  t <- term(1, "day")
+  expect_equal(length(t), 1)
+  t <- term(1:10, "day")
+  expect_equal(length(t), 10)
+})
+
+test_that("it should access elements of a term", {
+  t <- term(1, "day")
+  expect_equal(t[1], term(1, "day"))
+  t <- term(1:10, "day")
+  expect_equal(t[c(5,6)], term(c(5,6), "day"))
+})
+
 test_that("it should put a term object into a data.frame column", {
   t <- term(1:10, "day")
   df <- data.frame(term = t)
-  expect_is(df, "data.frame")
-  expect_is(df$term, "term")
+  expect_s3_class(df, "data.frame")
+  expect_s4_class(df$term, "Term")
   expect_equal(df[1,"term"], term(1, "day"))
   expect_equal(df[c(T, F),"term"], term(c(1, 3, 5, 7, 9), "day"))
 })

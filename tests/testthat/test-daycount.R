@@ -1,9 +1,9 @@
 
-context('daycount class')
+# context('daycount class')
 
 test_that("it should create a daycount object", {
   dc <- daycount('actual/360')
-  expect_is(dc, "daycount")
+  expect_s4_class(dc, "daycount")
   expect_true(as.character(dc) == 'actual/360')
 })
 
