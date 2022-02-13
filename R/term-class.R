@@ -36,6 +36,36 @@ setMethod(
 )
 
 #' @export
+setClass(
+  "DateRangeTerm",
+  slots = c(start_date = "Date", end_date = "Date", cal = "character"),
+  contains = "Term"
+)
+
+setMethod(
+  "initialize",
+  "DateRangeTerm",
+  function(.Object, ...) {
+    dots <- list(...)
+    start_date <- dots[[1]]
+    end_date <- dots[["end_date"]]
+    cal <- dots[["cal"]]
+    units <- "day"
+    
+    value <- bizdays(start_date, end_date, cal)
+    
+    slot(.Object, "start_date") <- start_date
+    slot(.Object, "end_date") <- end_date
+    slot(.Object, "cal") <- cal
+    slot(.Object, "units") <- units
+    slot(.Object, ".Data") <- value
+    
+    validObject(.Object)
+    .Object
+  }
+)
+
+#' @export
 units.Term <- function(x) {
   x@units
 }
@@ -203,8 +233,18 @@ setMethod(
   }
 )
 
+#' @export
+term <- function(x, ...) {
+  UseMethod("term")
+}
 
 #' @export
-term <- function(x, units = "days") {
+term.numeric <- function(x, units = "days") {
   new("Term", x, units = units)
 }
+
+#' @export
+term.Date <- function(x, end_date = NULL, cal = NULL) {
+  new("DateRangeTerm", x, end_date = end_date, cal = cal)
+}
+

@@ -84,3 +84,8 @@ test_that("it should compare terms with different units", {
   expect_equal(t1 < t2, c(TRUE, FALSE))
 })
 
+test_that("it should create a DateRangeTerm", {
+  t <- term(as.Date("2022-02-14"), as.Date("2022-02-18"), "actual")
+  expect_equal(units(t), "day")
+  expect_equal(as(t, "character"), "4 days")
+})
