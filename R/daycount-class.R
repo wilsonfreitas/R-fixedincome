@@ -37,7 +37,7 @@ setGeneric(
 #' @export
 setMethod(
   f = "dib",
-  signature = c("Daycount"),
+  signature = c(x = "Daycount"),
   def = function(x) {
     dc_parts <- unlist(strsplit(x@.Data, '/'))
     as.numeric(dc_parts[2])
@@ -90,7 +90,7 @@ setMethod(
 #' @export
 setMethod(
   f = "timefactor",
-  signature = c("Daycount", "numeric", "character"),
+  signature = c(x = "Daycount", .t = "numeric", .v = "character"),
   def = function(x, .t, .v) {
     tm <- term(.t, .v)
     timefactor_(as(tm, "numeric"), units(tm), "year", dib(x))
