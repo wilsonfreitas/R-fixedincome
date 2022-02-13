@@ -155,14 +155,3 @@ setMethod(
     invisible(object)
   }
 )
-
-# coercion ----
-
-#' @export
-setMethod(
-  "as.data.frame", "spotratecurve",
-  function(x, ...) {
-    data.frame(terms = x@terms, rates = x@.Data)
-  }
-)
-

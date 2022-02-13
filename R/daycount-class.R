@@ -71,7 +71,7 @@ timefactor_ <- function(term_value, from_units, to_units, dib) {
 #' @export
 setMethod(
   f = "timefactor",
-  signature = c(x = "daycount", .t = "term", .v = "missing"),
+  signature = c(x = "daycount", .t = "Term", .v = "missing"),
   def = function(x, .t, .v) {
     timefactor_(as(.t, "numeric"), units(.t), "year", dib(x))
   }
@@ -82,7 +82,7 @@ setMethod(
   f = "timefactor",
   signature = c(x = "daycount", .t = "character", .v = "missing"),
   def = function(x, .t, .v) {
-    tm <- as(.t, "term")
+    tm <- as(.t, "Term")
     timefactor_(as(tm, "numeric"), units(tm), "year", dib(x))
   }
 )

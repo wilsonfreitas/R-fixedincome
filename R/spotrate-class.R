@@ -102,14 +102,14 @@ setMethod(
 
 # print, show and format ----
 
-#' @export
-setMethod(
-  "format", signature("spotrate"),
-  function(x, ...) {
-    hdr <- paste(as(x@compounding, "character"), as(x@daycount, "character"), x@calendar)
-    paste(callGeneric(x@.Data, ...), hdr)
-  }
-)
+# #' @export
+# setMethod(
+#   "format", signature("spotrate"),
+#   function(x, ...) {
+#     hdr <- paste(as(x@compounding, "character"), as(x@daycount, "character"), x@calendar)
+#     paste(callGeneric(x@.Data, ...), hdr)
+#   }
+# )
 
 #' @export
 setMethod(
@@ -137,7 +137,7 @@ setMethod(
 #' @export
 setMethod(
   f = "compound",
-  signature = c("spotrate", "term", "missing"),
+  signature = c("spotrate", "Term", "missing"),
   def = function(x, .t, .v) {
     tf <- timefactor(x@daycount, .t)
     compound(x@compounding, tf, x@.Data)
@@ -175,7 +175,7 @@ setMethod(
 #' @export
 setMethod(
   f = "discount",
-  signature = c("spotrate", "term", "missing"),
+  signature = c("spotrate", "Term", "missing"),
   def = function(x, .t, .v) {
     1 / compound(x, .t)
   }
@@ -289,23 +289,23 @@ setMethod(
   }
 )
 
-#' @export
-setMethod(
-  "append", c("spotrate", "numeric"),
-  function(x, values, after = length(x)) {
-    values_ <- append(x@.Data, values, after)
-    spotrate(values_, x@compounding, x@daycount, x@calendar)
-  }
-)
-
-#' @export
-setMethod(
-  "append", c("spotrate", "spotrate"),
-  function(x, values, after = length(x)) {
-    values_ <- append(x@.Data, values@.Data, after)
-    spotrate(values_, x@compounding, x@daycount, x@calendar)
-  }
-)
+# #' @export
+# setMethod(
+#   "append", c("spotrate", "numeric"),
+#   function(x, values, after = length(x)) {
+#     values_ <- append(x@.Data, values, after)
+#     spotrate(values_, x@compounding, x@daycount, x@calendar)
+#   }
+# )
+# 
+# #' @export
+# setMethod(
+#   "append", c("spotrate", "spotrate"),
+#   function(x, values, after = length(x)) {
+#     values_ <- append(x@.Data, values@.Data, after)
+#     spotrate(values_, x@compounding, x@daycount, x@calendar)
+#   }
+# )
 
 # convert
 
@@ -315,7 +315,7 @@ setGeneric("convert", function(x, .t1, .t2, ...) standardGeneric("convert"))
 #' @export
 setMethod(
   "convert",
-  c("spotrate", "term", "missing"),
+  c("spotrate", "Term", "missing"),
   function (x, .t1, .t2, .compounding, .daycount, .calendar) {
     .compounding <- if (missing(.compounding)) x@compounding else .compounding
     .compounding <- if (is(.compounding, "character")) compounding(.compounding) else .compounding
