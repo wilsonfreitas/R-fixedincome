@@ -7,8 +7,9 @@
 #' @export
 setClass(
   "Term",
-  slots = c(value = "numeric", units = "character"),
-  prototype = prototype(units = "day", value = 1)
+  slots = c(units = "character"),
+  prototype = prototype(units = "day"),
+  contains = "numeric"
 )
 
 setMethod(
@@ -27,7 +28,7 @@ setMethod(
     value <- rep_len(value, max_len)
 
     slot(.Object, "units") <- units
-    slot(.Object, "value") <- value
+    slot(.Object, ".Data") <- value
     
     validObject(.Object)
     .Object
@@ -92,28 +93,6 @@ setAs(
     as.character(from)
   }
 )
-
-#' @export
-as.data.frame.Term <- function (x, row.names = NULL, optional = FALSE,
-                                ..., nm = deparse1(substitute(x)))  {
-  force(nm)
-  nrows <- length(x)
-  if (!(is.null(row.names) || (is.character(row.names) && length(row.names) == nrows))) {
-    warning(gettextf("'row.names' is not a character vector of length %d -- omitting it. Will be an error!",
-                     nrows), domain = NA)
-    row.names <- NULL
-  }
-  if (is.null(row.names)) {
-    if (nrows == 0L)
-      row.names <- character()
-    else if (length(row.names <- names(x)) != nrows || anyDuplicated(row.names))
-      row.names <- .set_row_names(nrows)
-  }
-  value <- list(x)
-  if (!optional)
-    names(value) <- nm
-  structure(value, row.names = row.names, class = "data.frame")
-}
 
 # coercion 2: from ANY to Term ----
 
@@ -187,9 +166,8 @@ setMethod(
 
 #' @export
 format.Term <- function(x, ...) {
-  unit <- units(x)
-  value <- x@value
-  abrev <- sapply(unit, .select_unit)
+  value <- x@.Data
+  abrev <- units(x)
   abrev <- ifelse(value > 1, paste0(abrev, "s"), abrev)
   paste(value, abrev, sep =" ")
 }
@@ -235,6 +213,6 @@ setMethod(
 
 
 #' @export
-term <- function(value, units = "days") {
-  new("Term", value = value, units = units)
+term <- function(x, units = "days") {
+  new("Term", x, units = units)
 }
