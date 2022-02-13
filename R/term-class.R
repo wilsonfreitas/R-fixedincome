@@ -58,7 +58,7 @@ setMethod(
   "as.numeric",
   signature(x = "Term"),
   function(x) {
-    unname(x@value)
+    unname(x@.Data)
   }
 )
 
@@ -141,13 +141,13 @@ setAs(
 
 # methods ----
 
-.select_unit <- function(x) {
-  switch(x, year = "year", month = "month", day = "day")
+.select_unit_size <- function(x) {
+  switch(x, year = 360L, month = 30L, day = 1L)
 }
 
 #' @export
 length.Term <- function(x) {
-  length(x@value)
+  length(x@.Data)
 }
 
 #' @export
@@ -174,15 +174,14 @@ setMethod(
   }
 )
 
-# TODO in compare it should take into account the periods: year, day and month
-#      year > month > day
-#      with a daycount a size for months and year can be assumed
 #' @export
 setMethod(
   "Compare",
   signature("Term", "Term"),
   function(e1, e2) {
-    callGeneric(as.character(e1), as.character(e2))
+    u1 <- vapply(units(e1), .select_unit_size, 1L, USE.NAMES = FALSE) * e1@.Data
+    u2 <- vapply(units(e2), .select_unit_size, 1L, USE.NAMES = FALSE) * e2@.Data
+    callGeneric(u1, u2)
   }
 )
 
