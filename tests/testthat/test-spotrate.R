@@ -6,7 +6,7 @@ test_that("it should create a spotrate", {
   expect_s4_class(spr, 'spotrate')
   expect_equal(as.numeric(spr), 0.06)
   expect_equal(as.character(spr@daycount), "actual/365")
-  expect_s4_class(spr@daycount, "daycount")
+  expect_s4_class(spr@daycount, "Daycount")
   expect_s4_class(spr@compounding, "compounding")
   expect_equal(spr@calendar, "actual")
 })

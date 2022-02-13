@@ -9,7 +9,7 @@
 
 #' @export
 setClass(
-  "daycount",
+  "Daycount",
   contains = "character"
 )
 
@@ -18,11 +18,11 @@ daycount <- function(spec, ...) {
   spec_parts = strsplit(spec, '/')[[1]]
   if (length(spec_parts) != 2)
     stop("Invalid daycount specitication provided (", spec, ")")
-  new("daycount", .Data = spec)
+  new("Daycount", .Data = spec)
 }
 
 setAs(
-  "daycount", "character",
+  "Daycount", "character",
   def = function(from) from@.Data
 )
 
@@ -37,7 +37,7 @@ setGeneric(
 #' @export
 setMethod(
   f = "dib",
-  signature = c("daycount"),
+  signature = c("Daycount"),
   def = function(x) {
     dc_parts <- unlist(strsplit(x@.Data, '/'))
     as.numeric(dc_parts[2])
@@ -71,7 +71,7 @@ timefactor_ <- function(term_value, from_units, to_units, dib) {
 #' @export
 setMethod(
   f = "timefactor",
-  signature = c(x = "daycount", .t = "Term", .v = "missing"),
+  signature = c(x = "Daycount", .t = "Term", .v = "missing"),
   def = function(x, .t, .v) {
     timefactor_(as(.t, "numeric"), units(.t), "year", dib(x))
   }
@@ -80,7 +80,7 @@ setMethod(
 #' @export
 setMethod(
   f = "timefactor",
-  signature = c(x = "daycount", .t = "character", .v = "missing"),
+  signature = c(x = "Daycount", .t = "character", .v = "missing"),
   def = function(x, .t, .v) {
     tm <- as(.t, "Term")
     timefactor_(as(tm, "numeric"), units(tm), "year", dib(x))
@@ -90,7 +90,7 @@ setMethod(
 #' @export
 setMethod(
   f = "timefactor",
-  signature = c("daycount", "numeric", "character"),
+  signature = c("Daycount", "numeric", "character"),
   def = function(x, .t, .v) {
     tm <- term(.t, .v)
     timefactor_(as(tm, "numeric"), units(tm), "year", dib(x))
@@ -100,7 +100,7 @@ setMethod(
 #' @export
 setMethod(
   "show",
-  "daycount",
+  "Daycount",
   function(object) {
     cat("<daycount:", object@.Data, "\b>", "\n")
     invisible(object)

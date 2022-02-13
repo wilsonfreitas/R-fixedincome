@@ -12,7 +12,7 @@ test_that("it should create an interest rate curve", {
   expect_equal(as.numeric(curve), rates)
   expect_equal(curve@terms, terms)
   expect_s4_class(curve@compounding, "discrete")
-  expect_s4_class(curve@daycount, "daycount")
+  expect_s4_class(curve@daycount, "Daycount")
   expect_equal(curve@calendar, "actual")
 })
 
@@ -40,7 +40,7 @@ test_that("it should create a spotratecurve using a spotrate", {
   expect_equal(as.numeric(curve), rates)
   expect_equal(curve@terms, terms)
   expect_s4_class(curve@compounding, "simple")
-  expect_s4_class(curve@daycount, "daycount")
+  expect_s4_class(curve@daycount, "Daycount")
   expect_equal(curve@calendar, "actual")
 })
 
