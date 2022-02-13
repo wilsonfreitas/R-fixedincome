@@ -1,168 +1,224 @@
 
+#' Term class
+#' 
+#' It is the time interval used in calculations with interest rates.
+#' 
+#' 
 #' @export
-term <- setClass(
-  "term",
-  slots = c(units = "character", day = "integer", month = "integer", year = "integer"),
-  prototype = prototype(units = "day", day = 0L, month = 0L, year = 0L),
-  contains = "matrix"
+setClass(
+  "Term",
+  slots = c(value = "numeric", units = "character"),
+  prototype = prototype(units = "day", value = 1)
 )
 
-#' @export term
 setMethod(
   "initialize",
-  "term",
+  "Term",
   function(.Object, ...) {
     dots <- list(...)
     value <- as.integer(dots[[1]])
-    unit <- dots[[2]]
+    units <- dots[[2]]
     
-    lx <- max(length(value), length(unit))
+    max_len <- max(length(value), length(units))
     
-    unit <- sub("^(.*)s$", "\\1", unit)
-    stopifnot(all(unit %in% c('year', 'month', 'day')))
-    unit <- rep_len(unit, lx)
-    
-    value <- rep_len(value, lx)
-    
-    x <- matrix(0L, nrow = lx, ncol = 3)
-    colnames(x) <- c("day", "month", "year")
-    
-    ix <- unit == "day"
-    x[ix, "day"] <- value[ix]
-    ix <- unit == "month"
-    x[ix, "month"] <- value[ix]
-    ix <- unit == "year"
-    x[ix, "year"] <- value[ix]
-    
-    slot(.Object, "units") <- unit
-    
-    slot(.Object, "day") <-   unname(x[, "day"])
-    slot(.Object, "month") <- unname(x[, "month"])
-    slot(.Object, "year") <-  unname(x[, "year"])
-    
-    # slot(.Object, "hour") <- numeric(lx)
-    # slot(.Object, "minute") <- numeric(lx)
-    slot(.Object, ".Data") <- x
+    units <- sub("^(.*)s$", "\\1", units)
+    stopifnot(all(units %in% c('year', 'month', 'day')))
+    units <- rep_len(units, max_len)
+    value <- rep_len(value, max_len)
+
+    slot(.Object, "units") <- units
+    slot(.Object, "value") <- value
     
     validObject(.Object)
     .Object
   }
 )
 
-find_out_term_value <- function(x) {
-  x@day + x@month + x@year
-}
-
-find_out_period_unit <- function(x) {
-  ix_day <- x@day != 0
-  ix_month <- x@month != 0
-  ix_year <- x@year != 0
-  unit <- character(length(x@.Data))
-  unit[ix_day] <- "day"
-  unit[ix_month] <- "month"
-  unit[ix_year] <- "year"
-  unit
+#' @export
+units.Term <- function(x) {
+  x@units
 }
 
 #' @export
-setMethod("units", signature(x = "term"), function(x) x@units)
-
-#' #' @export
-#' setMethod("c", signature(x = "term"), function(x, ...){
-#'   elements <- lapply(list(...), as.period)
-#'   seconds <- c(x@.Data, unlist(lapply(elements, slot, ".Data")))
-#'   years <- c(x@year, unlist(lapply(elements, slot, "year")))
-#'   months <- c(x@month, unlist(lapply(elements, slot, "month")))
-#'   days <- c(x@day, unlist(lapply(elements, slot, "day")))
-#'   hours <- c(x@hour, unlist(lapply(elements, slot, "hour")))
-#'   minutes <- c(x@minute, unlist(lapply(elements, slot, "minute")))
-#'   new("term", seconds, year = years, month = months, day = days,
-#'       hour = hours, minute = minutes)
-#' })
-#' 
-#' #' @export
-#' setMethod("rep", signature(x = "term"), function(x, ...){
-#'   new("term", rep(x@.Data, ...), year = rep(x@year, ...),
-#'       month = rep(x@month, ...), day = rep(x@day, ...),
-#'       hour = rep(x@hour, ...), minute = rep(x@minute, ...))
-#' })
+setMethod(
+  "units",
+  signature(x = "Term"),
+  units.Term
+)
 
 #' @export
-setMethod("[", signature(x = "term"),
-          function(x, i, j, ..., drop = TRUE) {
-            .val <- find_out_term_value(x)
-            .unit <- units(x)
-            term(.val[i], .unit[i])
-          })
+setMethod(
+  "[",
+  signature(x = "Term"),
+  function(x, i, j, ..., drop = TRUE) {
+    .val <- x@value
+    .unit <- units(x)
+    term(.val[i], .unit[i])
+  }
+)
+
+# coercion 1: from Term to ANY ----
 
 #' @export
-setMethod("[[", signature(x = "term"),
-          function(x, i, j, ..., exact = TRUE) {
-            .val <- find_out_term_value(x)
-            .unit <- units(x)
-            term(.val[i], .unit[i])
-          })
+setMethod(
+  "as.numeric",
+  signature(x = "Term"),
+  function(x) {
+    unname(x@value)
+  }
+)
 
-# coercion ----
-
-#' @export
-setMethod("as.numeric", signature(x = "term"), function(x) unname(find_out_term_value(x)))
-
-setAs("term", "numeric", function(from) as.numeric(from))
-
-#' @export
-setMethod("as.character", signature(x = "term"), function(x) format(x))
-
-setAs("term", "character", function(from) as.character(from))
+setAs(
+  "Term",
+  "numeric",
+  function(from) {
+    as.numeric(from)
+  }
+)
 
 #' @export
-format.term <- function(x, ...) {
+setMethod(
+  "as.character",
+  signature(x = "Term"),
+  function(x) {
+    format(x)
+  }
+)
+
+setAs(
+  "Term",
+  "character",
+  function(from) {
+    as.character(from)
+  }
+)
+
+#' @export
+as.data.frame.Term <- function (x, row.names = NULL, optional = FALSE,
+                                ..., nm = deparse1(substitute(x)))  {
+  force(nm)
+  nrows <- length(x)
+  if (!(is.null(row.names) || (is.character(row.names) && length(row.names) == nrows))) {
+    warning(gettextf("'row.names' is not a character vector of length %d -- omitting it. Will be an error!",
+                     nrows), domain = NA)
+    row.names <- NULL
+  }
+  if (is.null(row.names)) {
+    if (nrows == 0L)
+      row.names <- character()
+    else if (length(row.names <- names(x)) != nrows || anyDuplicated(row.names))
+      row.names <- .set_row_names(nrows)
+  }
+  value <- list(x)
+  if (!optional)
+    names(value) <- nm
+  structure(value, row.names = row.names, class = "data.frame")
+}
+
+# coercion 2: from ANY to Term ----
+
+#' @export
+setGeneric(
+  "as.term",
+  function(x, ...) {
+    standardGeneric("as.term")
+  }
+)
+
+as.term.character <- function(x, units=NULL, ...) {
+  m <- regexec('^([0-9]+)(\\.[0-9]+)? (years|months|days)?$', x)
+  m <- unlist(regmatches(x, m))
+  if (length(m))
+    t <- as.term(as.numeric(paste0(m[2], m[3])), m[4])
+  else
+    stop("Invalid term: ", x)
+  if (is.null(units)) t
+  else as.term(t, units)
+}
+
+
+setMethod(
+  "as.term",
+  signature(x = "character"),
+  function(x, ...) {
+    m <- regexec('^([0-9]+)(\\.[0-9]+)? (years|months|days|year|month|day)?$', x)
+    m <- unlist(regmatches(x, m))
+    if (length(m))
+      term(as.numeric(paste0(m[2], m[3])), m[4])
+    else
+      stop("Invalid term: ", x)
+  }
+)
+
+setAs(
+  "character",
+  "Term",
+  function(from) {
+    as.term(from)
+  }
+)
+
+setAs(
+  "Term",
+  "Period",
+  function(from) {
+    .ch <- as.character(from)
+    lubridate::as.period(.ch)
+  }
+)
+
+# methods ----
+
+.select_unit <- function(x) {
+  switch(x, year = "year", month = "month", day = "day")
+}
+
+#' @export
+length.Term <- function(x) {
+  length(x@value)
+}
+
+#' @export
+setMethod(
+  "length",
+  signature("Term"),
+  length.Term
+)
+
+#' @export
+format.Term <- function(x, ...) {
   unit <- units(x)
-  value <- find_out_term_value(x)
-  abrev <- sapply(unit, function(x) switch(x, year = "year", month = "month", day = "day"))
+  value <- x@value
+  abrev <- sapply(unit, .select_unit)
+  abrev <- ifelse(value > 1, paste0(abrev, "s"), abrev)
   paste(value, abrev, sep =" ")
 }
 
 #' @export
-setGeneric("as.term", function(x, ...) standardGeneric("as.term"))
-
-setMethod(
-  "as.term", signature(x = "character"),
-  function(x, ...) {
-    .p <- lubridate::as.period(x)
-    .val <- find_out_term_value(.p)
-    .unit <- find_out_period_unit(.p)
-    term(.val, .unit)
-  }
-)
-
-setAs("character", "term", function(from) as.term(from))
-
-setAs("term", "Period", function(from) {
-  .ch <- as.character(from)
-  lubridate::as.period(.ch)
-})
-
-#' @export
 setMethod(
   "show",
-  signature(object = "term"),
+  signature("Term"),
   function(object) {
     print(format(object))
   }
 )
 
+# TODO in compare it should take into account the periods: year, day and month
+#      year > month > day
+#      with a daycount a size for months and year can be assumed
 #' @export
 setMethod(
-  "Compare", signature("term", "term"),
+  "Compare",
+  signature("Term", "Term"),
   function(e1, e2) {
-    all(callGeneric(e1@.Data, e2@.Data))
+    callGeneric(as.character(e1), as.character(e2))
   }
 )
 
 #' @export
 setMethod(
-  "Compare", signature("term", "character"),
+  "Compare",
+  signature("Term", "character"),
   function(e1, e2) {
     callGeneric(as.character(e1), e2)
   }
@@ -170,8 +226,15 @@ setMethod(
 
 #' @export
 setMethod(
-  "Compare", signature("character", "term"),
+  "Compare",
+  signature("character", "Term"),
   function(e1, e2) {
     callGeneric(as.character(e2), e1)
   }
 )
+
+
+#' @export
+term <- function(value, units = "days") {
+  new("Term", value = value, units = units)
+}
