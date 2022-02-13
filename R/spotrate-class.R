@@ -3,7 +3,7 @@
 setClass(
   "spotrate",
   representation = representation(
-    compounding = "compounding",
+    compounding = "Compounding",
     daycount = "Daycount",
     calendar = "character"
   ),

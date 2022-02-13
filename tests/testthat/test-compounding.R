@@ -2,12 +2,12 @@
 # context('compounding functions')
 
 test_that("it should create a compounding class", {
-  expect_s4_class(compounding("simple"), "compounding")
-  expect_s4_class(compounding("simple"), "simple")
-  expect_s4_class(compounding("discrete"), "compounding")
-  expect_s4_class(compounding("discrete"), "discrete")
-  expect_s4_class(compounding("continuous"), "compounding")
-  expect_s4_class(compounding("continuous"), "continuous")
+  expect_s4_class(compounding("simple"), "Compounding")
+  expect_s4_class(compounding("simple"), "Simple")
+  expect_s4_class(compounding("discrete"), "Compounding")
+  expect_s4_class(compounding("discrete"), "Discrete")
+  expect_s4_class(compounding("continuous"), "Compounding")
+  expect_s4_class(compounding("continuous"), "Continuous")
   expect_error(compounding("nada"))
 })
 

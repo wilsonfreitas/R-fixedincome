@@ -1,40 +1,40 @@
 
 #' @export
 CompoundingClass <- setClass(
-  "compounding",
+  "Compounding",
   contains = "VIRTUAL"
 )
 
 #' @export
 SimpleCompoundingClass <- setClass(
-  "simple",
-  contains = "compounding"
+  "Simple",
+  contains = "Compounding"
 )
 
 #' @export
 DiscreteCompoundingClass <- setClass(
-  "discrete",
-  contains = "compounding"
+  "Discrete",
+  contains = "Compounding"
 )
 
 #' @export
 ContinuousCompoundingClass <- setClass(
-  "continuous",
-  contains = "compounding"
+  "Continuous",
+  contains = "Compounding"
 )
 
 setAs(
-  "simple", "character",
+  "Simple", "character",
   def = function(from) "simple"
 )
 
 setAs(
-  "discrete", "character",
+  "Discrete", "character",
   def = function(from) "discrete"
 )
 
 setAs(
-  "continuous", "character",
+  "Continuous", "character",
   def = function(from) "continuous"
 )
 
@@ -57,42 +57,42 @@ setGeneric(
 #' @export
 setMethod(
   f = "compound",
-  signature = c("simple", "numeric", "numeric"),
+  signature = c(x = "Simple", .t = "numeric", .v = "numeric"),
   def = function(x, .t, .v) (1 + .v*.t)
 )
 
 #' @export
 setMethod(
   f = "rates",
-  signature = c("simple", "numeric", "numeric"),
+  signature = c(x = "Simple", .t = "numeric", .v = "numeric"),
   def = function(x, .t, .v) (.v - 1)*(1/.t)
 )
 
 #' @export
 setMethod(
   f = "compound",
-  signature = c("discrete", "numeric", "numeric"),
+  signature = c(x = "Discrete", .t = "numeric", .v = "numeric"),
   def = function(x, .t, .v) (1 + .v)^.t
 )
 
 #' @export
 setMethod(
   f = "rates",
-  signature = c("discrete", "numeric", "numeric"),
+  signature = c(x = "Discrete", .t = "numeric", .v = "numeric"),
   def = function(x, .t, .v) .v^(1/.t) - 1
 )
 
 #' @export
 setMethod(
   f = "compound",
-  signature = c("continuous", "numeric", "numeric"),
+  signature = c(x = "Continuous", .t = "numeric", .v = "numeric"),
   def = function(x, .t, .v) exp(.v*.t)
 )
 
 #' @export
 setMethod(
   f = "rates",
-  signature = c("continuous", "numeric", "numeric"),
+  signature = c(x = "Continuous", .t = "numeric", .v = "numeric"),
   def = function(x, .t, .v) log(.v)*(1/.t)
 )
 
@@ -108,7 +108,7 @@ compounding <- function(x = c("simple", "discrete", "continuous")) {
 #' @export
 setMethod(
   f = "compound",
-  signature = c("character", "numeric", "numeric"),
+  signature = c(x = "character", .t = "numeric", .v = "numeric"),
   def = function(x, .t, .v) {
     obj <- compounding(x)
     callGeneric(obj, .t, .v)
@@ -118,7 +118,7 @@ setMethod(
 #' @export
 setMethod(
   f = "rates",
-  signature = c("character", "numeric", "numeric"),
+  signature = c(x = "character", .t = "numeric", .v = "numeric"),
   def = function(x, .t, .v) {
     obj <- compounding(x)
     callGeneric(obj, .t, .v)
@@ -128,7 +128,7 @@ setMethod(
 #' @export
 setMethod(
   "show",
-  "compounding",
+  "Compounding",
   function(object) {
     cat("<compounding:", as(object, "character"), "\b>", "\n")
     invisible(object)
