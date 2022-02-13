@@ -40,8 +40,3 @@ NULL
 #' @name ZeroCurveBRL
 NULL
 
-# check if bizdays has actual calendar
-if (! "actual" %in% names(bizdays::calendars())) {
-  bizdays::create.calendar("actual")
-  message("Created \"actual\" calendar")
-}
