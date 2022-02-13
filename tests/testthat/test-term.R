@@ -68,3 +68,19 @@ test_that("it should put a term object into a data.frame column", {
   expect_equal(df[1,"term"], term(1, "day"))
   expect_equal(df[c(T, F),"term"], term(c(1, 3, 5, 7, 9), "day"))
 })
+
+test_that("it should create terms with different units", {
+  t1 <- term(c(1, 2), c("day", "month"))
+  expect_equal(units(t1), c("day", "month"))
+})
+
+test_that("it should compare terms with different units", {
+  t1 <- term(1, "day")
+  t2 <- term(1, "year")
+  expect_true(t1 < t2)
+  expect_false(t1 > t2)
+  t1 <- term(c(1, 2), c("day", "year"))
+  t2 <- term(1, "month")
+  expect_equal(t1 < t2, c(TRUE, FALSE))
+})
+
