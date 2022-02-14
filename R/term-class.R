@@ -39,7 +39,7 @@ setMethod(
 setClass(
   "DateRangeTerm",
   slots = c(start_date = "Date", end_date = "Date", cal = "character"),
-  contains = "Term"
+  contains = c("Term", "numeric")
 )
 
 setMethod(
@@ -82,23 +82,6 @@ setMethod(
 )
 
 # coercion 1: from Term to ANY ----
-
-#' @export
-setMethod(
-  "as.numeric",
-  signature(x = "Term"),
-  function(x) {
-    unname(x@.Data)
-  }
-)
-
-setAs(
-  "Term",
-  "numeric",
-  function(from) {
-    as.numeric(from)
-  }
-)
 
 #' @export
 setMethod(
