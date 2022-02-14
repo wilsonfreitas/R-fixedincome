@@ -1,8 +1,8 @@
 
 #' @export
 setClass(
-  "spotrate",
-  representation = representation(
+  "SpotRate",
+  slots = c(
     compounding = "Compounding",
     daycount = "Daycount",
     calendar = "character"
@@ -21,17 +21,24 @@ spotrate <- function(.value, .compounding, .daycount, .calendar = "actual", .cop
   
   .compounding <- if (is.character(.compounding)) compounding(.compounding) else .compounding
   .daycount <- if (is.character(.daycount)) daycount(.daycount) else .daycount
-  new("spotrate", .value, compounding = .compounding, daycount = .daycount, calendar = .calendar)
+  new("SpotRate", .value, compounding = .compounding, daycount = .daycount, calendar = .calendar)
 }
 
-# coercion ----
-
-#' @export
-setMethod("as.numeric", "spotrate", function(x) x@.Data)
+# coercion 1: from SpotRate to ANY ----
 
 #' @export
 setMethod(
-  "as.character", "spotrate",
+  "as.numeric",
+  signature(x = "SpotRate"),
+  function(x) {
+    x@.Data
+  }
+)
+
+#' @export
+setMethod(
+  "as.character",
+  signature(x = "SpotRate"),
   function(x) {
     paste(x@.Data, as(x@compounding, "character"), as(x@daycount, "character"), x@calendar)
   }
@@ -39,7 +46,8 @@ setMethod(
 
 #' @export
 setMethod(
-  "as.list", "spotrate",
+  "as.list",
+  signature(x = "SpotRate"),
   function(x) {
     list(
       value = x@.Data,
@@ -50,10 +58,31 @@ setMethod(
   }
 )
 
+setAs(
+  "SpotRate",
+  "character",
+  function(from) {
+    as.character(from)
+  }
+)
 
-setAs("spotrate", "character", function(from) as.character(from))
-setAs("spotrate", "numeric", function(from) as.numeric(from))
-setAs("spotrate", "list", function(from) as.list(from))
+setAs(
+  "SpotRate",
+  "numeric",
+  function(from) {
+    as.numeric(from)
+  }
+)
+
+setAs(
+  "SpotRate",
+  "list",
+  function(from) {
+    as.list(from)
+  }
+)
+
+# coercion 2: from ANY to SpotRate ----
 
 #' @export
 setGeneric(
@@ -102,18 +131,16 @@ setMethod(
 
 # print, show and format ----
 
-# #' @export
-# setMethod(
-#   "format", signature("spotrate"),
-#   function(x, ...) {
-#     hdr <- paste(as(x@compounding, "character"), as(x@daycount, "character"), x@calendar)
-#     paste(callGeneric(x@.Data, ...), hdr)
-#   }
-# )
+#' @export
+format.SpotRate <- function(x, ...) {
+  hdr <- paste(as(x@compounding, "character"), as(x@daycount, "character"), x@calendar)
+  paste(callGeneric(x@.Data, ...), hdr)
+}
 
 #' @export
 setMethod(
-  "show", signature("spotrate"),
+  "show",
+  signature(object = "SpotRate"),
   function(object) {
     print(format(object))
   }
@@ -123,11 +150,13 @@ setMethod(
 # [spotrate], [term]
 # [spotrate], from, to
 
+# methods ----
+
 #' @export
 setMethod(
-  f = "compound",
-  signature = c("spotrate", "numeric", "character"),
-  def = function(x, .t, .v) {
+  "compound",
+  signature(x = "SpotRate", .t = "numeric", .v = "character"),
+  function(x, .t, .v) {
     tm <- term(.t, .v)
     tf <- timefactor(x@daycount, tm)
     compound(x@compounding, tf, x@.Data)
@@ -136,9 +165,9 @@ setMethod(
 
 #' @export
 setMethod(
-  f = "compound",
-  signature = c("spotrate", "Term", "missing"),
-  def = function(x, .t, .v) {
+  "compound",
+  signature(x = "SpotRate", .t = "Term", .v = "missing"),
+  function(x, .t, .v) {
     tf <- timefactor(x@daycount, .t)
     compound(x@compounding, tf, x@.Data)
   }
@@ -146,10 +175,10 @@ setMethod(
 
 #' @export
 setMethod(
-  f = "compound",
-  signature = c("spotrate", "Date", "Date"),
-  def = function(x, .t, .v) {
-    tm <- term(bizdays::bizdays(.t, .v, x@calendar), "days")
+  "compound",
+  signature(x = "SpotRate", .t = "Date", .v = "Date"),
+  function(x, .t, .v) {
+    tm <- term(.t, .v, x@calendar)
     tf <- timefactor(x@daycount, tm)
     compound(x@compounding, tf, x@.Data)
   }
@@ -157,35 +186,35 @@ setMethod(
 
 #' @export
 setGeneric(
-  name = "discount",
-  def = function(x, .t, .v, ...) {
+  "discount",
+  function(x, .t, .v, ...) {
     standardGeneric("discount")
   }
 )
 
 #' @export
 setMethod(
-  f = "discount",
-  signature = c("spotrate", "numeric", "character"),
-  def = function(x, .t, .v) {
+  "discount",
+  signature(x = "SpotRate", .t = "numeric", .v = "character"),
+  function(x, .t, .v) {
     1 / compound(x, .t, .v)
   }
 )
 
 #' @export
 setMethod(
-  f = "discount",
-  signature = c("spotrate", "Term", "missing"),
-  def = function(x, .t, .v) {
+  "discount",
+  signature(x = "SpotRate", .t = "Term", .v = "missing"),
+  function(x, .t, .v) {
     1 / compound(x, .t)
   }
 )
 
 #' @export
 setMethod(
-  f = "discount",
-  signature = c("spotrate", "Date", "Date"),
-  def = function(x, .t, .v) {
+  "discount",
+  signature(x = "SpotRate", .t = "Date", .v = "Date"),
+  function(x, .t, .v) {
     1 / compound(x, .t, .v)
   }
 )
@@ -194,16 +223,20 @@ setMethod(
 
 #' @export
 setMethod(
-  "Arith", signature("spotrate", "spotrate"),
+  "Arith",
+  signature(e1 = "SpotRate", e2 = "SpotRate"),
   function(e1, e2) {
     e1@.Data <- callGeneric(e1@.Data, e2@.Data)
+    if (!check_slots(e1, e2))
+      warning("Arith operation with SpotRate classes that have different slots")
     e1
   }
 )
 
 #' @export
 setMethod(
-  "Arith", signature("spotrate", "numeric"),
+  "Arith",
+  signature(e1 = "SpotRate", e2 = "numeric"),
   function(e1, e2) {
     e1@.Data <- callGeneric(e1@.Data, e2)
     e1
@@ -212,7 +245,8 @@ setMethod(
 
 #' @export
 setMethod(
-  "Arith", signature("numeric", "spotrate"),
+  "Arith",
+  signature(e1 = "numeric", e2 = "SpotRate"),
   function(e1, e2) {
     e2@.Data <- callGeneric(e1, e2@.Data)
     e2
@@ -221,15 +255,17 @@ setMethod(
 
 #' @export
 setMethod(
-  "Compare", signature("spotrate", "spotrate"),
+  "Compare",
+  signature(e1 = "SpotRate", e2 = "SpotRate"),
   function(e1, e2) {
-    callGeneric(e1@.Data, e2@.Data)
+    callGeneric(e1@.Data, e2@.Data) & check_slots(e1, e2)
   }
 )
 
 #' @export
 setMethod(
-  "Compare", signature("spotrate", "numeric"),
+  "Compare",
+  signature(e1 = "SpotRate", e2 = "numeric"),
   function(e1, e2) {
     callGeneric(e1@.Data, e2)
   }
@@ -237,7 +273,8 @@ setMethod(
 
 #' @export
 setMethod(
-  "Compare", signature("numeric", "spotrate"),
+  "Compare",
+  signature(e1 = "numeric", e2 = "SpotRate"),
   function(e1, e2) {
     callGeneric(e1, e2@.Data)
   }
@@ -247,24 +284,8 @@ setMethod(
 
 #' @export
 setMethod(
-  "is.na", signature("spotrate"),
-  function(x) {
-    is.na(x@.Data)
-  }
-)
-
-#' @export
-setMethod(
-  "is.infinite", signature("spotrate"),
-  function(x) {
-    is.infinite(x@.Data)
-  }
-)
-
-#' @export
-setMethod(
   "[",
-  signature("spotrate"),
+  signature(x = "SpotRate"),
   function(x, i) {
     spotrate(x@.Data[i], x@compounding, x@daycount, x@calendar)
   }
@@ -273,7 +294,7 @@ setMethod(
 #' @export
 setReplaceMethod(
   "[",
-  signature("spotrate"),
+  signature(x = "SpotRate"),
   function(x, i, value) {
     x@.Data[i] <- value
     x
@@ -283,39 +304,56 @@ setReplaceMethod(
 #' @export
 setMethod(
   "length",
-  "spotrate",
+  signature(x = "SpotRate"),
   function(x) {
     length(x@.Data)
   }
 )
 
-# #' @export
-# setMethod(
-#   "append", c("spotrate", "numeric"),
-#   function(x, values, after = length(x)) {
-#     values_ <- append(x@.Data, values, after)
-#     spotrate(values_, x@compounding, x@daycount, x@calendar)
-#   }
-# )
-# 
-# #' @export
-# setMethod(
-#   "append", c("spotrate", "spotrate"),
-#   function(x, values, after = length(x)) {
-#     values_ <- append(x@.Data, values@.Data, after)
-#     spotrate(values_, x@compounding, x@daycount, x@calendar)
-#   }
-# )
+check_slots <- function(e1, e2) {
+  (e1@compounding == e2@compounding) &
+    (e1@daycount == e2@daycount) &
+    (e1@calendar == e2@calendar)
+}
+
+spr_builder <- function(x) {
+  function(values_) {
+    if (is(values_, "SpotRate")) {
+      if (!check_slots(x, values_))
+        warning("Given SpotRate has different slots. This is ignored in concatenation")
+      values_ <- as.numeric(values_)
+    }
+    spotrate(values_, x@compounding, x@daycount, x@calendar)
+  }
+}
+
+#' @export
+setMethod(
+  "c",
+  signature(x = "SpotRate"),
+  function(x, ...) {
+    dots <- list(...)
+    nempty <- sapply(dots, length) != 0
+    elements <- lapply(dots[nempty], spr_builder(x))
+    values_ <- c(x@.Data, unlist(lapply(elements, as.numeric)))
+    spotrate(values_, x@compounding, x@daycount, x@calendar)
+  }
+)
 
 # convert
 
 #' @export
-setGeneric("convert", function(x, .t1, .t2, ...) standardGeneric("convert"))
+setGeneric(
+  "convert",
+  function(x, .t1, .t2, ...) {
+    standardGeneric("convert")
+  }
+)
 
 #' @export
 setMethod(
   "convert",
-  c("spotrate", "Term", "missing"),
+  signature(x = "SpotRate", .t1 = "Term", .t2 = "missing"),
   function (x, .t1, .t2, .compounding, .daycount, .calendar) {
     .compounding <- if (missing(.compounding)) x@compounding else .compounding
     .compounding <- if (is(.compounding, "character")) compounding(.compounding) else .compounding
@@ -333,7 +371,7 @@ setMethod(
 #' @export
 setMethod(
   "convert",
-  c("spotrate", "Date", "Date"),
+  signature(x = "SpotRate", .t1 = "Date", .t2 = "Date"),
   function (x, .t1, .t2, .compounding, .daycount, .calendar) {
     .compounding <- if (missing(.compounding)) x@compounding else .compounding
     .compounding <- if (is(.compounding, "character")) compounding(.compounding) else .compounding
@@ -352,18 +390,9 @@ setMethod(
 #' @export
 setMethod(
   "rep",
-  "spotrate",
+  signature(x = "SpotRate"),
   function(x, times) {
     n <- rep(x@.Data, times)
     spotrate(n, x@compounding, x@daycount, x@calendar)
   }
 )
-
-# setMethod(
-#   "head",
-#   "spotrate",
-#   function(x, n = 6L) {
-#     y <- head(x@.Data, n)
-#     spotrate(y, x@compounding, x@daycount, x@calendar)
-#   }
-# )
