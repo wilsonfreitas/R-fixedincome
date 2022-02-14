@@ -12,7 +12,7 @@ setClass(
     terms_positivity_check <- all(object@terms > 0)
     len_check & unique_check & terms_positivity_check
   },
-  contains = "spotrate"
+  contains = "SpotRate"
 )
 
 #' @export
@@ -20,7 +20,7 @@ spotratecurve <- function(.value, .terms, .compounding, .daycount, .calendar = "
   if (length(.value) != length(.terms))
     stop("length(.value) must match length(.terms)")
   .underlying <- 
-    if (is(.value, "spotrate")) {
+    if (is(.value, "SpotRate")) {
       spotrate(.value = .value@.Data,
                .compounding = .value@compounding,
                .daycount = .value@daycount,
@@ -108,7 +108,7 @@ setReplaceMethod(
 #' @export
 setReplaceMethod(
   "[",
-  signature(x="spotratecurve", i="numeric", j="missing", value="spotrate"),
+  signature(x="spotratecurve", i="numeric", j="missing", value="SpotRate"),
   function(x, i, value) {
     x[i] <- value@.Data
     x
