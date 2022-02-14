@@ -139,3 +139,13 @@ setMethod(
 # [character], term:[numeric], value
 # [compounding], term:[numeric], value
 # 
+
+#' @export
+setMethod(
+  "Compare",
+  signature(e1 = "Compounding", e2 = "Compounding"),
+  function(e1, e2) {
+    as(e1, "character") == as(e2, "character")
+  }
+)
+
