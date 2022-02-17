@@ -1,8 +1,8 @@
 
 #' @export
 setClass(
-  "spotratecurve",
-  representation = representation(
+  "SpotRateCurve",
+  slots = c(
     terms = "ANY",
     refdate = "Date"
   ),
@@ -16,7 +16,9 @@ setClass(
 )
 
 #' @export
-spotratecurve <- function(.value, .terms, .compounding, .daycount, .calendar = "actual", .refdate = Sys.Date(), .copyfrom = NULL) {
+spotratecurve <- function(.value, .terms, .compounding, .daycount,
+                          .calendar = "actual", .refdate = Sys.Date(),
+                          .copyfrom = NULL) {
   if (length(.value) != length(.terms))
     stop("length(.value) must match length(.terms)")
   .underlying <- 
@@ -33,8 +35,8 @@ spotratecurve <- function(.value, .terms, .compounding, .daycount, .calendar = "
                .calendar = .calendar,
                .copyfrom = .copyfrom)
     }
-  .Object <- new("spotratecurve",
-                 .Data = .underlying@.Data,
+  .Object <- new("SpotRateCurve",
+                 .Data = .underlying,
                  compounding = .underlying@compounding,
                  daycount = .underlying@daycount,
                  calendar = .underlying@calendar,
@@ -48,22 +50,37 @@ spotratecurve <- function(.value, .terms, .compounding, .daycount, .calendar = "
   .Object
 }
 
+# TODO situation: given index return all NA
+#      choices: define an empty spotrate object or raise an error
 #' @export
 setMethod(
   "[",
-  signature(x = "spotratecurve", i = "numeric"),
-  function(x, i, strict = FALSE) {
-    if (strict) {
-      mx <- i
+  signature(x = "SpotRateCurve", i = "numeric", j = "missing"),
+  function(x, i, j, ..., drop = TRUE) {
+    spotratecurve(x@.Data[i], x@terms[i], x@compounding, x@daycount, x@calendar)
+  }
+)
+
+#' @export
+setMethod(
+  "[",
+  signature(x = "SpotRateCurve", i = "missing", j = "missing"),
+  function(x, i, j, ..., drop = TRUE) {
+    x
+  }
+)
+
+#' @export
+setMethod(
+  "[[",
+  signature(x = "SpotRateCurve", i = "numeric", j = "missing"),
+  function(x, i, j, ...) {
+    if (any(i < 0)) {
+      mx <- - match(abs(i), x@terms)
       ix <- x@terms[mx]
     } else {
-      if (any(i < 0)) {
-        mx <- - match(abs(i), x@terms)
-        ix <- x@terms[mx]
-      } else {
-        mx <- match(i, x@terms)
-        ix <- i
-      }
+      mx <- match(i, x@terms)
+      ix <- i
     }
     spotratecurve(x@.Data[mx], ix, x@compounding, x@daycount, x@calendar)
   }
@@ -72,8 +89,8 @@ setMethod(
 #' @export
 setMethod(
   "[",
-  signature(x = "spotratecurve", i = "logical"),
-  function(x, i, strict = FALSE) {
+  signature(x = "SpotRateCurve", i = "logical", j="missing"),
+  function(x, i, j, ..., drop = TRUE) {
     spotratecurve(x@.Data[i], x@terms[i], x@compounding, x@daycount, x@calendar)
   }
 )
@@ -81,25 +98,52 @@ setMethod(
 #' @export
 setReplaceMethod(
   "[",
-  signature(x="spotratecurve", i="numeric", j="missing", value="numeric"),
-  function(x, i, value, strict = FALSE) {
-    if (strict) {
-      if (any(i > length(x@.Data)) || any(i < 1))
-        stop("Index out of limits")
-      x@.Data[i] <- value
-    } else {
-      contained.from <- i %in% x@terms
-      contained.to <- x@terms %in% i
-      if (any(contained.from)) {
-        x@.Data[contained.to] <- if (length(value) == 1) value else value[contained.from]
-      }
-      if (any(! contained.from)) {
-        value_ <- c(x@.Data, if (length(value) == 1) rep(value, sum(! contained.from)) else value[! contained.from])
-        terms_ <- c(x@terms, i[! contained.from])
-        ix <- order(terms_)
-        x@.Data <- value_[ix]
-        x@terms <- terms_[ix]
-      }
+  signature(x="SpotRateCurve", i="numeric", j="missing", value="numeric"),
+  function(x, i, j, ..., value) {
+    if (any(i > length(x@.Data)) || any(i < 1))
+      stop("Index out of limits")
+    x@.Data[i] <- value
+    x
+  }
+)
+
+#' @export
+setReplaceMethod(
+  "[[",
+  signature(x="SpotRateCurve", i="numeric", j="missing", value="numeric"),
+  function(x, i, j, ..., value) {
+    contained.from <- i %in% x@terms
+    contained.to <- x@terms %in% i
+    if (any(contained.from)) {
+      x@.Data[contained.to] <- if (length(value) == 1) value else value[contained.from]
+    }
+    if (any(! contained.from)) {
+      value_ <- c(x@.Data, if (length(value) == 1) rep(value, sum(! contained.from)) else value[! contained.from])
+      terms_ <- c(x@terms, i[! contained.from])
+      ix <- order(terms_)
+      x@.Data <- value_[ix]
+      x@terms <- terms_[ix]
+    }
+    x
+  }
+)
+
+#' @export
+setReplaceMethod(
+  "[[",
+  signature(x="SpotRateCurve", i="numeric", j="missing", value="SpotRate"),
+  function(x, i, j, ..., value) {
+    contained_from <- i %in% x@terms
+    contained_to <- x@terms %in% i
+    if (any(contained_from)) {
+      x@.Data[contained_to] <- if (length(value) == 1) value else value[contained_from]
+    }
+    if (any(! contained_from)) {
+      value_ <- c(x@.Data, if (length(value) == 1) rep(value, sum(! contained_from)) else value[! contained_from])
+      terms_ <- c(x@terms, i[! contained_from])
+      ix <- order(terms_)
+      x@.Data <- value_[ix]
+      x@terms <- terms_[ix]
     }
     x
   }
@@ -108,8 +152,8 @@ setReplaceMethod(
 #' @export
 setReplaceMethod(
   "[",
-  signature(x="spotratecurve", i="numeric", j="missing", value="SpotRate"),
-  function(x, i, value) {
+  signature(x="SpotRateCurve", i="numeric", j="missing", value="SpotRate"),
+  function(x, i, j, ..., value) {
     x[i] <- value@.Data
     x
   }
@@ -117,37 +161,15 @@ setReplaceMethod(
 
 #' @export
 setMethod(
-  "head",
-  "spotratecurve",
-  function(x, n = 6L, ...) {
-    y <- head(x@.Data, n)
-    t <- head(x@terms, n)
-    spotratecurve(y, t, x@compounding, x@daycount, x@calendar)
-  }
-)
-
-#' @export
-setMethod(
-  "tail",
-  "spotratecurve",
-  function(x, n = 6L, ...) {
-    y <- tail(x@.Data, n)
-    t <- tail(x@terms, n)
-    spotratecurve(y, t, x@compounding, x@daycount, x@calendar)
-  }
-)
-
-#' @export
-setMethod(
   "show",
-  "spotratecurve",
+  "SpotRateCurve",
   function(object) {
     hdr <- paste(as(object@compounding, "character"), as(object@daycount, "character"), object@calendar)
     
     m <- as.matrix(object@.Data, ncol=1)
     .terms <- term(object@terms, "days")
     rownames(m) <- as.character(.terms)
-    colnames(m) <- "spotratecurve"
+    colnames(m) <- "SpotRateCurve"
     print.default(m)
     cat(hdr)
     cat("\n")
