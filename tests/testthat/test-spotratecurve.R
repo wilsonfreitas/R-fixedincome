@@ -5,13 +5,40 @@ terms <- c(1, 11, 26, 27, 28)
 rates <- c(0.0719, 0.056, 0.0674, 0.0687, 0.07)
 
 
-test_that("it should create an interest rate curve", {
+test_that("it should create spotratecurve", {
   curve <- spotratecurve(rates, terms, "discrete", "actual/365", "actual")
   expect_s4_class(curve, "SpotRateCurve")
   expect_s4_class(curve, "SpotRate")
   expect_equal(as.numeric(curve), rates)
-  expect_equal(curve@terms, terms)
+  expect_true(all(curve@terms == terms))
   expect_s4_class(curve@compounding, "Discrete")
+  expect_s4_class(curve@daycount, "Daycount")
+  expect_equal(curve@calendar, "actual")
+})
+
+test_that("it should create spotratecurve with SpotRate", {
+  spr <- spotrate(rates, "simple", "actual/365", "actual")
+  curve <- spotratecurve(spr, terms)
+  expect_s4_class(curve, "SpotRateCurve")
+  expect_s4_class(curve, "SpotRate")
+  expect_equal(as.numeric(curve), rates)
+  expect_true(all(curve@terms == terms))
+  expect_s4_class(curve@compounding, "Simple")
+  expect_s4_class(curve@daycount, "Daycount")
+  expect_equal(curve@calendar, "actual")
+})
+
+test_that("it should create spotratecurve with SpotRate and Term", {
+  spr <- spotrate(rates, "simple", "actual/365", "actual")
+  terms_ <- term(terms, "years")
+  curve <- spotratecurve(spr, terms_)
+  expect_s4_class(curve, "SpotRateCurve")
+  expect_s4_class(curve, "SpotRate")
+  expect_equal(as.numeric(curve), rates)
+  expect_true(all(curve@terms@units == "year"))
+  expect_true(all(curve@terms == terms))
+  expect_s4_class(curve@terms, "Term")
+  expect_s4_class(curve@compounding, "Simple")
   expect_s4_class(curve@daycount, "Daycount")
   expect_equal(curve@calendar, "actual")
 })
@@ -38,7 +65,7 @@ test_that("it should create a spotratecurve using a spotrate", {
   spr <- spotrate(rates, "simple", "actual/365", "actual")
   curve <- spotratecurve(spr, terms)
   expect_equal(as.numeric(curve), rates)
-  expect_equal(curve@terms, terms)
+  expect_true(all(curve@terms == terms))
   expect_s4_class(curve@compounding, "Simple")
   expect_s4_class(curve@daycount, "Daycount")
   expect_equal(curve@calendar, "actual")
@@ -50,7 +77,7 @@ test_that("it should handle terms if they are not ordered", {
   ix <- order(.terms)
   curve <- spotratecurve(spr, .terms)
   expect_equal(as.numeric(curve), rates[ix])
-  expect_equal(curve@terms, terms)
+  expect_true(all(curve@terms == terms))
 })
 
 
@@ -67,8 +94,8 @@ test_that("it should check if indexed the elements is spotrate", {
 test_that("it should index the elements", {
   curve <- spotratecurve(rates, terms, "simple", "actual/365", "actual")
   expect_equal(as.numeric(curve[[11]]), 0.056)
-  expect_equal(curve[[11]]@terms, 11)
-  expect_equal(curve[[c(1, 11)]]@terms, c(1, 11))
+  expect_true(curve[[11]]@terms == 11)
+  expect_true(all(curve[[c(1, 11)]]@terms == c(1, 11)))
   expect_equal(as.numeric(curve[[c(1, 11)]]), c(0.0719, 0.056))
 })
 
@@ -76,7 +103,7 @@ test_that("it should return a NA spotrate for unexistent indexes", {
   curve <- spotratecurve(rates, terms, "simple", "actual/365", "actual")
   expect_s4_class(curve[[10]], "SpotRateCurve")
   expect_true(is.na(curve[[10]]))
-  expect_equal(curve[[10]]@terms, 10)
+  expect_true(curve[[10]]@terms == 10)
   expect_equal(length(curve[[10]]), 1)
   expect_equal(as.numeric(curve[[c(10, 11)]]), c(NA, 0.056))
   expect_equal(length(curve[[c(10, 11)]]), 2)
@@ -131,6 +158,26 @@ test_that("it should replace with another spotrate", {
                as.numeric(curve[[c(1 , 11, 26)]])[c(2, 1, 3)])
 })
 
+test_that("it should insert a spotratecurve into another spotratecurve", {
+  curve <- spotratecurve(rates[-1], terms[-1], "simple", "actual/365", "actual")
+  curve_1 <- spotratecurve(rates[1], terms[1], "simple", "actual/365", "actual")
+  curve[[]] <- curve_1
+  expect_equal(as.numeric(curve), as.numeric(rates))
+  expect_equal(curve@terms, terms)
+  curve[[]] <- spotratecurve(0, 1, "simple", "actual/365", "actual")
+  expect_equal(as.numeric(curve[1]), 0)
+  expect_true(curve[1]@terms == 1)
+  curve[[]] <- spotratecurve(c(0.05, 0.5), c(1, 3), "simple", "actual/365", "actual")
+  expect_equal(as.numeric(curve[[c(1, 3)]]), c(0.05, 0.5))
+  expect_true(all(curve[[c(1, 3)]]@terms == c(1, 3)))
+})
+
+test_that("it should warn when inserting a spotratecurve into another spotratecurve with different slots", {
+  curve <- spotratecurve(rates[-1], terms[-1], "simple", "actual/365", "Brazil/ANBIMA")
+  curve_1 <- spotratecurve(rates[1], terms[1], "simple", "actual/365", "actual")
+  expect_warning(curve[[]] <- curve_1)
+})
+
 test_that("it should return NA elements with [[", {
   curve <- spotratecurve(rates, terms, "simple", "actual/365", "actual")
   x <- curve[[100]]
@@ -149,7 +196,7 @@ test_that("it should return the curve head", {
   expect_s4_class(hr, "SpotRateCurve")
   expect_equal(length(hr), 3)
   expect_equal(as.numeric(hr), head(rates, 3))
-  expect_equal(hr@terms, head(terms, 3))
+  expect_true(all(hr@terms == head(terms, 3)))
 })
 
 test_that("it should return the curve tail", {
@@ -158,7 +205,7 @@ test_that("it should return the curve tail", {
   expect_s4_class(hr, "SpotRateCurve")
   expect_equal(length(hr), 3)
   expect_equal(as.numeric(hr), tail(rates, 3))
-  expect_equal(hr@terms, tail(terms, 3))
+  expect_true(all(hr@terms == tail(terms, 3)))
 })
 
 test_that("it should subset the curve with boolean index", {
@@ -170,14 +217,14 @@ test_that("it should subset the curve with boolean index", {
   ix <- c(TRUE, FALSE)
   curve1 <- curve[ix]
   expect_s4_class(curve1, "SpotRateCurve")
-  expect_equal(curve1@terms, terms[ix])
+  expect_true(all(curve1@terms == terms[ix]))
   expect_equal(as.numeric(curve1), rates[ix])
 })
 
 test_that("it should remove a term from spotrate curve by using negative index", {
   curve <- spotratecurve(rates, terms, "simple", "actual/365", "actual")
   expect_equal(length(curve[[-11]]), length(curve)-1)
-  expect_equal(curve[[-11]]@terms, terms[-2])
+  expect_true(all(curve[[-11]]@terms == terms[-2]))
   expect_equal(as.numeric(curve[[-11]]), rates[-2])
 })
 
@@ -212,7 +259,9 @@ test_that("it should fail trying to replace spotratecurve elements using out of 
 
 test_that("it should coerce a spotratecurve into a data.frame", {
   curve <- spotratecurve(rates, terms, "simple", "actual/365", "actual")
-  expect_equal(as.data.frame(curve), data.frame(terms = terms, rates = rates))
+  df <- as.data.frame(curve)
+  expect_equal(df$terms, term(terms))
+  expect_equal(df$rates, spotrate(rates, "simple", "actual/365", "actual"))
 })
 
 # test_that("it should interpolate", {
