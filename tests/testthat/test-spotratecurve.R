@@ -163,7 +163,7 @@ test_that("it should insert a spotratecurve into another spotratecurve", {
   curve_1 <- spotratecurve(rates[1], terms[1], "simple", "actual/365", "actual")
   curve[[]] <- curve_1
   expect_equal(as.numeric(curve), as.numeric(rates))
-  expect_equal(curve@terms, terms)
+  expect_true(all(curve@terms == terms))
   curve[[]] <- spotratecurve(0, 1, "simple", "actual/365", "actual")
   expect_equal(as.numeric(curve[1]), 0)
   expect_true(curve[1]@terms == 1)
