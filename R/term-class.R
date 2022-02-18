@@ -227,6 +227,11 @@ term.numeric <- function(x, units = "days") {
 }
 
 #' @export
+term.Term <- function(x, ...) {
+  x
+}
+
+#' @export
 term.Date <- function(x, end_date = NULL, cal = NULL) {
   new("DateRangeTerm", x, end_date = end_date, cal = cal)
 }
