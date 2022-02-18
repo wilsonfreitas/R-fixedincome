@@ -227,8 +227,10 @@ setMethod(
   signature(e1 = "SpotRate", e2 = "SpotRate"),
   function(e1, e2) {
     e1@.Data <- callGeneric(e1@.Data, e2@.Data)
-    if (!check_slots(e1, e2))
-      warning("Arith operation with SpotRate classes that have different slots")
+    warn_if_spotrate_slots_differ(
+      e1, e2,
+      "Arith operation with SpotRate classes that have different slots"
+    )
     e1
   }
 )
@@ -316,11 +318,24 @@ check_slots <- function(e1, e2) {
     (e1@calendar == e2@calendar)
 }
 
+warn_if_spotrate_slots_differ <- function(e1, e2, msg) {
+  if (!check_slots(e1, e2))
+    warning(msg)
+}
+
+stop_if_spotrate_slots_differ <- function(e1, e2, msg) {
+  if (!check_slots(e1, e2))
+    stop(msg)
+}
+
 spr_builder <- function(x) {
   function(values_) {
     if (is(values_, "SpotRate")) {
-      if (!check_slots(x, values_))
-        warning("Given SpotRate has different slots. This is ignored in concatenation")
+      warn_if_spotrate_slots_differ(
+        x,
+        values_,
+        "Given SpotRate has different slots. This is ignored in concatenation"
+      )
       values_ <- as.numeric(values_)
     }
     spotrate(values_, x@compounding, x@daycount, x@calendar)
