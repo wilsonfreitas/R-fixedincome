@@ -222,13 +222,22 @@ setMethod(
     hdr <- paste(as(object@compounding, "character"), as(object@daycount, "character"), object@calendar)
     
     m <- as.matrix(object@.Data, ncol=1)
-    .terms <- term(object@terms, "days")
-    rownames(m) <- as.character(.terms)
+    rownames(m) <- as.character(object@terms)
     colnames(m) <- "SpotRateCurve"
-    print.default(m)
+    print.default(m, digits = 4)
     cat(hdr)
     cat("\n")
     cat("Reference date:", format(object@refdate), "\n")
     invisible(object)
   }
 )
+
+#' @export
+setMethod(
+  "compound",
+  signature(x = "SpotRateCurve", .t = "missing", .v = "missing"),
+  function(x, .t, .v) {
+    compound(x, x@terms)
+  }
+)
+
