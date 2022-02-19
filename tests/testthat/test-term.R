@@ -90,3 +90,39 @@ test_that("it should create a DateRangeTerm", {
   expect_equal(as(t, "character"), "4 days")
   expect_equal(as(t, "numeric"), 4)
 })
+
+test_that("it should shift a term object", {
+  t <- term(1:5, "days")
+  st <- shift(t)
+  expect_s4_class(st, "Term")
+  expect_equal(as.numeric(st), c(NA, 1, 2, 3, 4))
+  
+})
+
+test_that("it should concatenate terms", {
+  t1 <- term(1:5, "days")
+  t2 <- term(6:10, "days")
+  t <- c(t1, t2)
+  expect_s4_class(t, "Term")
+  expect_equal(as.numeric(t), 1:10)
+})
+
+test_that("it should concatenate numeric with terms", {
+  t2 <- term(6:10, "days")
+  t <- c(1:5, t2)
+  expect_s4_class(t, "Term")
+  expect_equal(as.numeric(t), 1:10)
+})
+
+test_that("it should diff terms", {
+  t1 <- term(1:5, "days")
+  t <- diff(t1)
+  expect_s4_class(t, "Term")
+  expect_length(t, 4)
+  expect_equal(as.numeric(t), rep(1, 4))
+  t1 <- term(1:5, "days")
+  t <- diff(t1, fill = NA)
+  expect_s4_class(t, "Term")
+  expect_length(t, 5)
+  expect_equal(as.numeric(t), c(NA, rep(1, 4)))
+})
