@@ -22,11 +22,13 @@ Imports:
     lubridate
 Collate:
     "fixedincome-internal.R"
+    "utils.R"
     "term-class.R"
     "daycount-class.R"
     "compounding-class.R"
     "spotrate-class.R"
     "spotratecurve-class.R"
+    "forwardratecurve-class.R"
     "zzz.R"
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
