@@ -72,8 +72,7 @@ forwardratecurve.SpotRateCurve <- function(x, .copyfrom = NULL) {
                    refdate = x@refdate)
   } else {
     factor_rate <- compound(x)
-    # TODO shift vector
-    factor_rate_b <- c(NA, factor_rate[-length(factor_rate)])
+    factor_rate_b <- shift(factor_rate)
     dub <- diff(x@terms, fill = NA)
     tf <- timefactor(x@daycount, dub)
     # first element is NA
