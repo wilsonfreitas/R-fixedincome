@@ -217,6 +217,43 @@ setMethod(
 )
 
 #' @export
+setMethod(
+  "shift",
+  signature(x = "Term"),
+  function(x, k = 1, ..., fill = NA) {
+    shifted <- shift(as.numeric(x), k, fill = fill)
+    term(shifted, units(x))
+  }
+)
+
+#' @export
+setMethod(
+  "diff",
+  signature(x = "Term"),
+  function(x, ..., fill = NULL) {
+    diff_x <- as.numeric(diff(x@.Data))
+    if (is.null(fill)) {
+      term(diff_x, units(x)[-1])
+    } else {
+      term(c(fill, diff_x), units(x))
+    }
+  }
+)
+
+#' @export
+setMethod(
+  "c",
+  signature(x = "Term"),
+  function(x, ...) {
+    dots <- list(...)
+    nempty <- sapply(dots, length) != 0
+    elements <- dots[nempty]
+    values_ <- c(x@.Data, unlist(lapply(elements, as.numeric)))
+    term(values_, units(x))
+  }
+)
+
+#' @export
 term <- function(x, ...) {
   UseMethod("term")
 }
