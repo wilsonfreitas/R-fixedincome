@@ -49,7 +49,7 @@ spotratecurve.numeric <- function(x, terms, .compounding, .daycount,
 #' @export
 spotratecurve.SpotRate <- function(x, terms,
                                    refdate = Sys.Date(),
-                                  .copyfrom = NULL) {
+                                   .copyfrom = NULL) {
   
   .Object <- new("SpotRateCurve",
                  .Data = x@.Data,
@@ -66,6 +66,26 @@ spotratecurve.SpotRate <- function(x, terms,
   .Object
 }
 
+#' @export
+as.spotratecurve <- function(x, ...) {
+  UseMethod("as.spotratecurve")
+}
+
+#' @export
+as.spotratecurve.ForwardRate <- function(x, refdate = Sys.Date()) {
+  cumfact <- cumprod(compound(x))
+  cumterms <- term(cumsum(x@terms), units(x@terms))
+  
+  tf <- timefactor(x@daycount, cumterms)
+  rates_ <- rates(x@compounding, tf, cumfact)
+  
+  spotratecurve(rates_, cumterms,
+                .compounding = x@compounding,
+                .daycount = x@daycount,
+                .calendar = x@calendar,
+                refdate = refdate)
+}
+
 # TODO situation: given index return all NA
 #      choices: define an empty spotrate object or raise an error
 #' @export
@@ -73,7 +93,8 @@ setMethod(
   "[",
   signature(x = "SpotRateCurve", i = "numeric", j = "missing"),
   function(x, i, j, ..., drop = TRUE) {
-    spotratecurve(x@.Data[i], x@terms[i], x@compounding, x@daycount, x@calendar)
+    spotratecurve(x@.Data[i], x@terms[i], x@compounding, x@daycount, x@calendar,
+                  refdate = x@refdate)
   }
 )
 
@@ -82,7 +103,8 @@ setMethod(
   "[",
   signature(x = "SpotRateCurve", i = "logical", j="missing"),
   function(x, i, j, ..., drop = TRUE) {
-    spotratecurve(x@.Data[i], x@terms[i], x@compounding, x@daycount, x@calendar)
+    spotratecurve(x@.Data[i], x@terms[i], x@compounding, x@daycount, x@calendar,
+                  refdate = x@refdate)
   }
 )
 
@@ -91,7 +113,8 @@ setMethod(
   "[",
   signature(x = "SpotRateCurve", i = "missing", j = "missing"),
   function(x, i, j, ..., drop = TRUE) {
-    spotratecurve(x@.Data, x@terms, x@compounding, x@daycount, x@calendar)
+    spotratecurve(x@.Data, x@terms, x@compounding, x@daycount, x@calendar,
+                  refdate = x@refdate)
   }
 )
 
@@ -129,7 +152,8 @@ setMethod(
       mx <- match(i, x@terms)
       ix <- i
     }
-    spotratecurve(x@.Data[mx], ix, x@compounding, x@daycount, x@calendar)
+    spotratecurve(x@.Data[mx], ix, x@compounding, x@daycount, x@calendar,
+                  refdate = x@refdate)
   }
 )
 
@@ -203,14 +227,25 @@ setReplaceMethod(
 
 #' @export
 setMethod(
+  "as.spotrate",
+  signature(x = "SpotRateCurve"),
+  function(x, ...) {
+    spotrate(.value = x@.Data,
+             .compounding = x@compounding,
+             .daycount = x@daycount,
+             .calendar = x@calendar)
+  }
+)
+
+#' @export
+setMethod(
   "as.data.frame",
   signature(x = "SpotRateCurve"),
   function(x, row.names = NULL, optional = FALSE, ...) {
-    spotrate_ <- spotrate(.value = x@.Data,
-                          .compounding = x@compounding,
-                          .daycount = x@daycount,
-                          .calendar = x@calendar)
-    data.frame(terms = x@terms, rates = spotrate_)
+    spotrate_ <- as.spotrate(x)
+    data.frame(terms = x@terms,
+               dates = offset(x@refdate, x@terms, x@calendar),
+               rates = spotrate_)
   }
 )
 
@@ -241,3 +276,23 @@ setMethod(
   }
 )
 
+#' @export
+setMethod(
+  "c",
+  signature(x = "SpotRateCurve"),
+  function(x, ...) {
+    dots <- list(...)
+    elements <- lapply(dots, spr_builder(x))
+    values_ <- c(x@.Data, unlist(lapply(elements, as.numeric)))
+    rates_ <- spotrate(values_, x@compounding, x@daycount, x@calendar)
+    terms_ <- c(x@terms, unlist(lapply(dots, function(dx) dx@terms)))
+    spotratecurve(rates_, terms_, refdate = x@refdate)
+  }
+)
+
+
+#' @export
+maturities <- function(x) {
+  df <- as.data.frame(x)
+  df$dates
+}
