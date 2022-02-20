@@ -156,7 +156,7 @@ setMethod(
 setMethod(
   "compound",
   signature(x = "SpotRate", .t = "numeric", .v = "character"),
-  function(x, .t, .v) {
+  function(x, .t, .v = "days") {
     tm <- term(.t, .v)
     tf <- timefactor(x@daycount, tm)
     compound(x@compounding, tf, x@.Data)
