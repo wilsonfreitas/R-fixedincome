@@ -28,7 +28,7 @@ Collate:
     "compounding-class.R"
     "spotrate-class.R"
     "spotratecurve-class.R"
-    "forwardratecurve-class.R"
+    "forwardrate-class.R"
     "zzz.R"
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
