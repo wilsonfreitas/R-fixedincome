@@ -11,17 +11,17 @@ setClass(
 )
 
 #' @export
-spotrate <- function(.value, .compounding, .daycount, .calendar = "actual", .copyfrom = NULL) {
+spotrate <- function(.value, compounding, daycount, calendar = "actual", .copyfrom = NULL) {
   if ( !is.null(.copyfrom) ) {
     .value <- if (missing(.value)) .copyfrom@.Data else .value
-    .compounding <- if (missing(.compounding)) .copyfrom@compounding else .compounding
-    .daycount <- if (missing(.daycount)) .copyfrom@daycount else .daycount
-    .calendar <- if (.calendar == "actual") .copyfrom@calendar else .calendar
+    compounding <- if (missing(compounding)) .copyfrom@compounding else compounding
+    daycount <- if (missing(daycount)) .copyfrom@daycount else daycount
+    calendar <- if (calendar == "actual") .copyfrom@calendar else calendar
   }
   
-  .compounding <- if (is.character(.compounding)) compounding(.compounding) else .compounding
-  .daycount <- if (is.character(.daycount)) daycount(.daycount) else .daycount
-  new("SpotRate", .value, compounding = .compounding, daycount = .daycount, calendar = .calendar)
+  compounding <- if (is.character(compounding)) compounding(compounding) else compounding
+  daycount <- if (is.character(daycount)) daycount(daycount) else daycount
+  new("SpotRate", .value, compounding = compounding, daycount = daycount, calendar = calendar)
 }
 
 # coercion 1: from SpotRate to ANY ----

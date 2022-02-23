@@ -22,13 +22,13 @@ spotratecurve <- function(x, terms, ..., refdate = Sys.Date()) {
 }
 
 #' @export
-spotratecurve.numeric <- function(x, terms, .compounding, .daycount,
-                                  .calendar = "actual", refdate = Sys.Date(),
+spotratecurve.numeric <- function(x, terms, compounding, daycount,
+                                  calendar = "actual", refdate = Sys.Date(),
                                   .copyfrom = NULL) {
   .underlying <- spotrate(.value = x,
-                          .compounding = .compounding,
-                          .daycount = .daycount,
-                          .calendar = .calendar,
+                          compounding = compounding,
+                          daycount = daycount,
+                          calendar = calendar,
                           .copyfrom = .copyfrom)
   
   .Object <- new("SpotRateCurve",
@@ -80,9 +80,9 @@ as.spotratecurve.ForwardRate <- function(x, refdate = Sys.Date()) {
   rates_ <- rates(x@compounding, tf, cumfact)
   
   spotratecurve(rates_, cumterms,
-                .compounding = x@compounding,
-                .daycount = x@daycount,
-                .calendar = x@calendar,
+                compounding = x@compounding,
+                daycount = x@daycount,
+                calendar = x@calendar,
                 refdate = refdate)
 }
 
@@ -231,9 +231,9 @@ setMethod(
   signature(x = "SpotRateCurve"),
   function(x, ...) {
     spotrate(.value = x@.Data,
-             .compounding = x@compounding,
-             .daycount = x@daycount,
-             .calendar = x@calendar)
+             compounding = x@compounding,
+             daycount = x@daycount,
+             calendar = x@calendar)
   }
 )
 
