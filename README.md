@@ -122,7 +122,7 @@ curve
 ```{r}
 plot(curve)
 ```
-![SpotRateCurve 2022-02-23](Rplot03.png "Spot Rate Curve")
+![SpotRateCurve 2022-02-23](Rplot02.png "Spot Rate Curve")
 
 For another date.
 
@@ -130,5 +130,5 @@ For another date.
 curve <- get_curve_from_web("2011-02-23")
 plot(curve)
 ```
-![SpotRateCurve 2011-02-23](Rplot02.png "Spot Rate Curve")
+![SpotRateCurve 2011-02-23](Rplot03.png "Spot Rate Curve")
 
