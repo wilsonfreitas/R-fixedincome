@@ -384,7 +384,7 @@ flatten_names <- function(nx) {
 }
 
 get_contracts <- function(refdate) {
-  url <- "http://www2.bmf.com.br/pages/portal/bmfbovespa/lumis/lum-ajustes-do-pregao-ptBR.asp"
+  url <- "https://www2.bmf.com.br/pages/portal/bmfbovespa/lumis/lum-ajustes-do-pregao-ptBR.asp"
   
   if (is.null(refdate)) {
     res <- GET(url)
@@ -459,7 +459,7 @@ get_curve_from_web <- function(refdate = NULL) {
     refdate = refdate
   )
   
-  rates <- cdi_rate_from_web()
+  rates <- cdi_rate_from_web(refdate)
   di1_curve[[1]] <- rates$CDI
   
   di1_curve
