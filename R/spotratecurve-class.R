@@ -259,9 +259,11 @@ setMethod(
     m <- as.matrix(object@.Data, ncol=1)
     rownames(m) <- as.character(object@terms)
     colnames(m) <- "SpotRateCurve"
-    print.default(m, digits = 4)
-    cat(hdr)
-    cat("\n")
+    print.default(head(m, 10), digits = 4)
+    rem <- nrow(m) - 10
+    if (rem > 0)
+      cat("# ... with", rem, "more rows\n")
+    cat(hdr, "\n")
     cat("Reference date:", format(object@refdate), "\n")
     invisible(object)
   }
