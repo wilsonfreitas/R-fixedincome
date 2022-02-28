@@ -4,7 +4,8 @@ setClass(
   "SpotRateCurve",
   slots = c(
     terms = "ANY",
-    refdate = "Date"
+    refdate = "Date",
+    interpolation = "ANY"
   ),
   validity = function(object) {
     len_check <- length(object@terms) == length(object@.Data)
@@ -145,15 +146,21 @@ setMethod(
   "[[",
   signature(x = "SpotRateCurve", i = "numeric", j = "missing"),
   function(x, i, j, ...) {
-    if (any(i < 0)) {
-      mx <- - match(abs(i), x@terms)
-      ix <- x@terms[mx]
+    if (is.null(x@interpolation)) {
+      if (any(i < 0)) {
+        mx <- - match(abs(i), x@terms)
+        ix <- x@terms[mx]
+      } else {
+        mx <- match(i, x@terms)
+        ix <- i
+      }
+      spotratecurve(x@.Data[mx], ix, x@compounding, x@daycount, x@calendar,
+                    refdate = x@refdate)
     } else {
-      mx <- match(i, x@terms)
-      ix <- i
+      rates_ <- interpolate(x@interpolation, i)
+      spotratecurve(rates_, term(i, "days"), x@compounding, x@daycount,
+                    x@calendar, refdate = x@refdate)
     }
-    spotratecurve(x@.Data[mx], ix, x@compounding, x@daycount, x@calendar,
-                  refdate = x@refdate)
   }
 )
 
@@ -265,6 +272,9 @@ setMethod(
       cat("# ... with", rem, "more rows\n")
     cat(hdr, "\n")
     cat("Reference date:", format(object@refdate), "\n")
+    if (!is.null(object@interpolation)) {
+      cat("Interpolation:", as.character(object@interpolation), "\n")
+    }
     invisible(object)
   }
 )
@@ -298,3 +308,65 @@ maturities <- function(x) {
   df <- as.data.frame(x)
   df$dates
 }
+
+#' @export
+setMethod(
+  "interpolation",
+  signature(x = "SpotRateCurve"),
+  function(x) {
+    x@interpolation
+  }
+)
+
+#' @export
+setReplaceMethod(
+  "interpolation",
+  signature(x = "SpotRateCurve", value = "Interpolation"),
+  function(x, value) {
+    x@interpolation <- prepare_interpolation(value, x)
+    x
+  }
+)
+
+#' @export
+setReplaceMethod(
+  "interpolation",
+  signature(x = "SpotRateCurve", value = "NULL"),
+  function(x, value) {
+    x@interpolation <- value
+    x
+  }
+)
+
+#' @export
+setMethod(
+  "prepare_interpolation",
+  signature(object = "FlatForward", x = "SpotRateCurve"),
+  function(object, x, ...) {
+    terms <- as.numeric(x@terms)
+    prices <- compound(x)
+    interp.coords <- xy.coords(terms, log(prices))
+    interp.FUN <- approxfun(interp.coords, method='linear')
+    dc <- curve@daycount
+    comp <- curve@compounding
+    object@func <- function (term) {
+      log.price <- interp.FUN(term)
+      price <- exp(log.price)
+      rates(comp, price, timefactor(dc, term, units(curve)))
+    }
+    object
+  }
+)
+
+#' @export
+setMethod(
+  "prepare_interpolation",
+  signature(object = "Linear", x = "SpotRateCurve"),
+  function(object, x, ...) {
+    interp.coords <- xy.coords(as.numeric(x@terms), as.numeric(x))
+    interp.FUN <- approxfun(interp.coords, method='linear')
+    object@func <- function (term) interp.FUN(term)
+    object
+  }
+)
+
