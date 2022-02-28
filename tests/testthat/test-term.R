@@ -107,12 +107,12 @@ test_that("it should concatenate terms", {
   expect_equal(as.numeric(t), 1:10)
 })
 
-test_that("it should concatenate numeric with terms", {
-  t2 <- term(6:10, "days")
-  t <- c(1:5, t2)
-  expect_s4_class(t, "Term")
-  expect_equal(as.numeric(t), 1:10)
-})
+# test_that("it should concatenate numeric with terms", {
+#   t2 <- term(6:10, "days")
+#   t <- c(1:5, t2)
+#   expect_s4_class(t, "Term")
+#   expect_equal(as.numeric(t), 1:10)
+# })
 
 test_that("it should diff terms", {
   t1 <- term(1:5, "days")
