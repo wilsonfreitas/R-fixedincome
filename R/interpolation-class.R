@@ -21,38 +21,53 @@ setClass(
 )
 
 #' @export
-setGeneric(
-  "interpolation",
-  function(x, ...) {
-    standardGeneric("interpolation")
-  }
+setClass(
+  "LogLinear",
+  contains = "Interpolation"
 )
 
 #' @export
-setGeneric(
-  "interpolation<-",
-  function(x, value, ...) {
-    standardGeneric("interpolation<-")
-  }
+setClass(
+  "NaturalSpline",
+  contains = "Interpolation"
 )
 
 #' @export
-setMethod(
-  "interpolation",
-  signature(x = "character"),
-  function(x) {
-    switch(x,
-           "flatforward" = new("FlatForward", "flatforward"),
-           "linear" = new("Linear", "linear"))
-  }
+setClass(
+  "HermiteSpline",
+  contains = "Interpolation"
 )
 
 #' @export
-setGeneric(
-  "prepare_interpolation",
-  function(object, x, ...) {
-    standardGeneric("prepare_interpolation")
-  }
+setClass(
+  "MonotoneSpline",
+  contains = "Interpolation"
+)
+
+#' @export
+setClass(
+  "NelsonSiegel",
+  slots = c(
+    beta1 = "numeric",
+    beta2 = "numeric",
+    beta3 = "numeric",
+    lambda1 = "numeric"
+  ),
+  contains = "Interpolation"
+)
+
+#' @export
+setClass(
+  "NelsonSiegelSvensson",
+  slots = c(
+    beta1 = "numeric",
+    beta2 = "numeric",
+    beta3 = "numeric",
+    beta4 = "numeric",
+    lambda1 = "numeric",
+    lambda2 = "numeric"
+  ),
+  contains = "Interpolation"
 )
 
 #' @export
@@ -81,3 +96,43 @@ setMethod(
     invisible(object)
   }
 )
+
+#' @export
+interp_flatforward <- function() new("FlatForward", "flatforward")
+
+#' @export
+interp_linear <- function() new("Linear", "linear")
+
+#' @export
+interp_loglinear <- function() new("LogLinear", "loglinear")
+
+#' @export
+interp_naturalspline <- function() new("NaturalSpline", "naturalspline")
+
+#' @export
+interp_hermitespline <- function() new("HermiteSpline", "hermitespline")
+
+#' @export
+interp_monotonespline <- function() new("MonotoneSpline", "monotonespline")
+
+#' @export
+interp_nelsonsiegel <- function(beta1, beta2, beta3, lambda1) {
+  new("NelsonSiegel", "nelsonsiegel",
+      beta1 = beta1,
+      beta2 = beta2,
+      beta3 = beta3,
+      lambda1 = lambda1)
+}
+
+#' @export
+interp_nelsonsiegelsvensson <- function(beta1, beta2, beta3, beta4,
+                                        lambda1, lambda2) {
+  new("NelsonSiegelSvensson", "nelsonsiegelsvensson",
+      beta1 = beta1,
+      beta2 = beta2,
+      beta3 = beta3,
+      beta4 = beta4,
+      lambda1 = lambda1,
+      lambda2 = lambda2)
+}
+

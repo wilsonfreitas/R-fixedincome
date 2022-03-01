@@ -94,8 +94,10 @@ setMethod(
   "[",
   signature(x = "SpotRateCurve", i = "numeric", j = "missing"),
   function(x, i, j, ..., drop = TRUE) {
-    spotratecurve(x@.Data[i], x@terms[i], x@compounding, x@daycount, x@calendar,
-                  refdate = x@refdate)
+    obj <- spotratecurve(x@.Data[i], x@terms[i], x@compounding, x@daycount,
+                         x@calendar, refdate = x@refdate)
+    obj@interpolation <- x@interpolation
+    obj
   }
 )
 
@@ -104,8 +106,10 @@ setMethod(
   "[",
   signature(x = "SpotRateCurve", i = "logical", j="missing"),
   function(x, i, j, ..., drop = TRUE) {
-    spotratecurve(x@.Data[i], x@terms[i], x@compounding, x@daycount, x@calendar,
-                  refdate = x@refdate)
+    obj <- spotratecurve(x@.Data[i], x@terms[i], x@compounding, x@daycount,
+                         x@calendar, refdate = x@refdate)
+    obj@interpolation <- x@interpolation
+    obj
   }
 )
 
@@ -114,8 +118,10 @@ setMethod(
   "[",
   signature(x = "SpotRateCurve", i = "missing", j = "missing"),
   function(x, i, j, ..., drop = TRUE) {
-    spotratecurve(x@.Data, x@terms, x@compounding, x@daycount, x@calendar,
-                  refdate = x@refdate)
+    obj <- spotratecurve(x@.Data, x@terms, x@compounding, x@daycount,
+                         x@calendar, refdate = x@refdate)
+    obj@interpolation <- x@interpolation
+    obj
   }
 )
 
@@ -302,7 +308,6 @@ setMethod(
   }
 )
 
-
 #' @export
 maturities <- function(x) {
   df <- as.data.frame(x)
@@ -310,63 +315,20 @@ maturities <- function(x) {
 }
 
 #' @export
+setGeneric(
+  "interpolation_error",
+  function(x, ...) {
+    standardGeneric("interpolation_error")
+  }
+)
+
+#' @export
 setMethod(
-  "interpolation",
+  "interpolation_error",
   signature(x = "SpotRateCurve"),
-  function(x) {
-    x@interpolation
-  }
-)
-
-#' @export
-setReplaceMethod(
-  "interpolation",
-  signature(x = "SpotRateCurve", value = "Interpolation"),
-  function(x, value) {
-    x@interpolation <- prepare_interpolation(value, x)
-    x
-  }
-)
-
-#' @export
-setReplaceMethod(
-  "interpolation",
-  signature(x = "SpotRateCurve", value = "NULL"),
-  function(x, value) {
-    x@interpolation <- value
-    x
-  }
-)
-
-#' @export
-setMethod(
-  "prepare_interpolation",
-  signature(object = "FlatForward", x = "SpotRateCurve"),
-  function(object, x, ...) {
-    terms <- as.numeric(x@terms)
-    prices <- compound(x)
-    interp.coords <- xy.coords(terms, log(prices))
-    interp.FUN <- approxfun(interp.coords, method='linear')
-    dc <- curve@daycount
-    comp <- curve@compounding
-    object@func <- function (term) {
-      log.price <- interp.FUN(term)
-      price <- exp(log.price)
-      rates(comp, price, timefactor(dc, term, units(curve)))
-    }
-    object
-  }
-)
-
-#' @export
-setMethod(
-  "prepare_interpolation",
-  signature(object = "Linear", x = "SpotRateCurve"),
-  function(object, x, ...) {
-    interp.coords <- xy.coords(as.numeric(x@terms), as.numeric(x))
-    interp.FUN <- approxfun(interp.coords, method='linear')
-    object@func <- function (term) interp.FUN(term)
-    object
+  function(x, ...) {
+    interp_rates <- interpolate(x@interpolation, as.numeric(x@terms))
+    sum((interp_rates - x@.Data) ^ 2)
   }
 )
 
