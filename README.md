@@ -132,3 +132,40 @@ plot(curve)
 ```
 ![SpotRateCurve 2011-02-23](Rplot03.png "Spot Rate Curve")
 
+Show forward rates for the short term.
+
+```r
+plot(curve[curve@terms <= 504], show_forward = TRUE)
+```
+
+![SpotRateCurve 2011-02-23](Rplot07.png "Spot Rate Curve and Forward Curve")
+
+Once interpolation is set, it can be used in the plot.
+
+```r
+interpolation(curve) <- interp_flatforward()
+plot(curve[curve@terms <= 504], use_interpolation = TRUE)
+```
+
+![SpotRateCurve 2011-02-23](Rplot08.png "Spot Rate Curve with FlatForward Interpolation")
+
+A Nelson-Siegel-Svensson model can be fitted to the curve.
+
+```r
+interpolation(curve) <- fit_interpolation(
+  interp_nelsonsiegelsvensson(0.01, 0.01, 0.01, 0.01, 0.01, 0.01), curve)
+
+interpolation(curve)
+#> <Interpolation: nelsonsiegelsvensson> 
+#> Parameters:
+#>   beta1   beta2   beta3   beta4 lambda1 lambda2 
+#>  0.1189 -0.0142  0.1378 -0.1127  0.0064  0.0038 
+```
+
+Once set to the curve it is used in the plot to show daily forward rates.
+
+```r
+plot(curve, use_interpolation = TRUE, show_forward = TRUE)
+```
+
+![SpotRateCurve 2011-02-23](Rplot4.png "Spot Rate Curve with Nelson-Siegel-Svensson Interpolation")
