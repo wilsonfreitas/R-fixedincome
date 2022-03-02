@@ -69,8 +69,8 @@ setMethod(
     prices <- compound(x)
     interp.coords <- xy.coords(terms, log(prices))
     interp.FUN <- approxfun(interp.coords, method='linear')
-    dc <- curve@daycount
-    comp <- curve@compounding
+    dc <- x@daycount
+    comp <- x@compounding
     object@func <- function (term) {
       log.price <- interp.FUN(term)
       price <- exp(log.price)
