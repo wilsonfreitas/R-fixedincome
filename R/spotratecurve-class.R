@@ -96,7 +96,8 @@ setMethod(
   function(x, i, j, ..., drop = TRUE) {
     obj <- spotratecurve(x@.Data[i], x@terms[i], x@compounding, x@daycount,
                          x@calendar, refdate = x@refdate)
-    obj@interpolation <- x@interpolation
+    if (length(obj) >= 2)
+      interpolation(obj) <- x@interpolation
     obj
   }
 )
@@ -108,7 +109,8 @@ setMethod(
   function(x, i, j, ..., drop = TRUE) {
     obj <- spotratecurve(x@.Data[i], x@terms[i], x@compounding, x@daycount,
                          x@calendar, refdate = x@refdate)
-    obj@interpolation <- x@interpolation
+    if (length(obj) >= 2)
+      interpolation(obj) <- x@interpolation
     obj
   }
 )
@@ -120,7 +122,8 @@ setMethod(
   function(x, i, j, ..., drop = TRUE) {
     obj <- spotratecurve(x@.Data, x@terms, x@compounding, x@daycount,
                          x@calendar, refdate = x@refdate)
-    obj@interpolation <- x@interpolation
+    if (length(obj) >= 2)
+      interpolation(obj) <- x@interpolation
     obj
   }
 )
@@ -164,8 +167,11 @@ setMethod(
                     refdate = x@refdate)
     } else {
       rates_ <- interpolate(x@interpolation, i)
-      spotratecurve(rates_, term(i, "days"), x@compounding, x@daycount,
-                    x@calendar, refdate = x@refdate)
+      obj <- spotratecurve(rates_, term(i, "days"), x@compounding, x@daycount,
+                           x@calendar, refdate = x@refdate)
+      if (length(obj) >= 2)
+        interpolation(obj) <- x@interpolation
+      obj
     }
   }
 )
