@@ -45,6 +45,7 @@ plot_SpotRateCurve <- function(x, y, ...,
                                use_interpolation = FALSE,
                                legend_location = "topright") {
   title <- paste("SpotRateCurve", x@refdate)
+  dc <- x@daycount
   X <- as.numeric(x@terms)
   Y <- as.numeric(x) * 100
   FWD <- as.numeric(forwardrate(x)) * 100
@@ -71,7 +72,7 @@ plot_SpotRateCurve <- function(x, y, ...,
       seq(y_lower_lim, y_upper_lim, y_tick_inc)
   y_ticks_lab <- y_ticks |> format(digits = 4)
   
-  x_tick_inc <- 252
+  x_tick_inc <- dib(dc)
   x_lower_lim <- 0
   x_upper_lim <- (as.integer(max(x@terms) / x_tick_inc) + 1) * x_tick_inc
   x_ticks <- seq(x_lower_lim, x_upper_lim, x_tick_inc)
