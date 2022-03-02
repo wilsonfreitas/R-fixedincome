@@ -16,6 +16,7 @@
 
 - [ ] create 30/360 daycount
 - [ ] Other daycounts <https://en.wikipedia.org/wiki/Day_count_convention>
+- [ ] use DayCount with Term
 
 ### SpotRate
 
@@ -31,8 +32,8 @@
     If the given index exceeds the curve length this operation returns `NA`.
     - [x] replacement with positional index `curve[1] \<- 0.01`
     - [x] associative indexing `curve[["1 day"]]` for `1 day`, `curve[["2 days"]]` for `2 days`, ...
-    - [ ] If the spotratecurve doesn't have a `2 days` index it returns NA
-    - [ ] removal of associative index
+    - [x] If the spotratecurve doesn't have a `2 days` index it returns NA
+    - [x] removal of associative index
     - [x] replacement with associative index
     - [ ] date indexes
       - [ ] select
@@ -42,7 +43,7 @@
       - [x] select
       - [ ] remove
       - [x] replace
-    - [ ] sum curve to: numeric, curve
+    - [x] sum curve to: numeric, curve
     - [ ] append SpotRateCurve
     - [ ] concatenate SpotRateCurve
 - [ ] Naming: SpotRateCurve should have a name? I am not sure about that!
@@ -56,19 +57,21 @@
 
 ### Interpolation
 
-- [ ] set interpolation to SpotRateCurve
-- [ ] Interpolation will be used with associative indexing.
+- [x] set interpolation to SpotRateCurve
+- [x] unset interpolation to SpotRateCurve
+- [x] Interpolation will be used with associative indexing.
       If interpolation is set and a missing index is passed, then this value is interpolated.
 - [ ] Methods
-    - [ ] Linear
-    - [ ] LogLinear
-    - [ ] Monotone Cubic Spline (Hyman)
-    - [ ] Hermite
-    - [ ] Natural Spline
+    - [x] Linear
+    - [x] LogLinear
+    - [x] Monotone Cubic Spline (Hyman)
+    - [x] Hermite
+    - [x] Natural Spline
+    - [x] Nelson-Siegel
+    - [x] Nelson-Siegel-Svensson
     - [ ] Constrained Spline
-    - [ ] Nelson-Siegel
     - [ ] Diebold-Li
-    - [ ] Svenson
+- [ ] Improve curve fit stop using object copy
 
 ### Bonds
 
@@ -78,12 +81,25 @@
 ### Bootstrap
 
 - [ ] bonds bootstrap
-- [ ] Curve models: Nelson-Siegel, Diebold-Li, Svenson
+- [ ] Curve models: Nelson-Siegel, Diebold-Li, Nelson-Siegel-Svensson
 
 ### Other classes
 
 - [ ] IndexCurve - for inflation index or IDI index, for example - rbcb integration
 - [ ] HistoricalRates - for CDI historical data, for example - rbcb integration
+
+### Plotting
+
+- [x] SpotRateCurve: points and lines
+- [x] SpotRateCurve: lines with daily interpolated points
+- [x] ForwardRate curve with steps
+- [x] daily ForwardRate curve with interpolated points
+
+### Other issues
+
+- [ ] IR functions: <https://support.google.com/docs/table/25273?hl=en>
+- [ ] Risk measures: YTM, Duration, Convexity
+- [ ] short rate models: Vasicek, CIR, ...
 
 ### Register
 
@@ -92,19 +108,6 @@
       These objects are used by many others and their copies should imply unnecessary memory use.
     - Integrate with rbcb package to transform series into IndexCurve or HistoricalRates.
     - Methods which work with these objects should work with characters that represent the objects.
-
-### Plotting
-
-- [x] SpotRateCurve: points and lines
-- [ ] SpotRateCurve: lines with daily interpolated points
-- [ ] ForwardRate curve with steps
-- [ ] daily ForwardRate curve with interpolated points
-
-### Other issues
-
-- [ ] IR functions: <https://support.google.com/docs/table/25273?hl=en>
-- [ ] Risk measures: YTM, Duration, Convexity
-- [ ] short rate models: Vasicek, CIR, ...
 
 ---
 
