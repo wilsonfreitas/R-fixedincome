@@ -26,8 +26,10 @@ Collate:
     "term-class.R"
     "daycount-class.R"
     "compounding-class.R"
+    "interpolation-class.R"
     "spotrate-class.R"
     "spotratecurve-class.R"
+    "spotratecurve-interpolation.R"
     "forwardrate-class.R"
     "zzz.R"
 Roxygen: list(markdown = TRUE)

@@ -48,11 +48,16 @@
     - [ ] concatenate SpotRateCurve
 - [ ] Naming: SpotRateCurve should have a name? I am not sure about that!
 
+### Multi SpotRateCurve
+
+- [ ] Data structure for multiple SpotRateCurve objects, like a matrix.
+      Useful for historical data and to build historical risk factors.
 
 ### ForwardRate
 
 - [x] create forward rates
-- [ ] daily forward rates with interpolated data
+- [x] daily forward rates with interpolated data
+- [ ] create a method for daily forward rates with interpolated data
 
 
 ### Interpolation
@@ -62,6 +67,7 @@
 - [x] Interpolation will be used with associative indexing.
       If interpolation is set and a missing index is passed, then this value is interpolated.
 - [ ] Methods
+    - [x] FlatForward
     - [x] Linear
     - [x] LogLinear
     - [x] Monotone Cubic Spline (Hyman)
@@ -69,6 +75,7 @@
     - [x] Natural Spline
     - [x] Nelson-Siegel
     - [x] Nelson-Siegel-Svensson
+    - [x] FlatForward COPOM
     - [ ] Constrained Spline
     - [ ] Diebold-Li
 - [ ] Improve curve fit stop using object copy
@@ -94,6 +101,8 @@
 - [x] SpotRateCurve: lines with daily interpolated points
 - [x] ForwardRate curve with steps
 - [x] daily ForwardRate curve with interpolated points
+- [ ] plot multiple SpotRateCurve objects
+- [x] use daycount to create x-axis ticks
 
 ### Other issues
 
