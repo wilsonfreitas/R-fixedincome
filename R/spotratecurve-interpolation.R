@@ -181,7 +181,7 @@ setMethod(
   "fit_interpolation",
   signature(object = "NelsonSiegel", x = "SpotRateCurve"),
   function(object, x, ...) {
-    par <- c(object@beta1, object@beta2, object@beta3, object@lambda1)
+    par <- parameters(object)
     res <- optim(par, function(par, x) {
       interpolation(x) <- do.call(interp_nelsonsiegel, as.list(par))
       interpolation_error(x)
@@ -195,8 +195,7 @@ setMethod(
   "fit_interpolation",
   signature(object = "NelsonSiegelSvensson", x = "SpotRateCurve"),
   function(object, x, ...) {
-    par <- c(object@beta1, object@beta2, object@beta3, object@beta4,
-             object@lambda1, object@lambda2)
+    par <- parameters(object)
     res <- optim(par, function(par, x) {
       interpolation(x) <- do.call(interp_nelsonsiegelsvensson, as.list(par))
       interpolation_error(x)

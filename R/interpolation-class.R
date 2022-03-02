@@ -136,3 +136,51 @@ interp_nelsonsiegelsvensson <- function(beta1, beta2, beta3, beta4,
       lambda2 = lambda2)
 }
 
+#' @export
+setMethod(
+  "show",
+  signature(object = "NelsonSiegelSvensson"),
+  function(object) {
+    cat("<Interpolation:", as.character(object), "\b>", "\n", "\bParameters:\n")
+    print(parameters(object), digits = 2)
+    invisible(object)
+  }
+)
+
+#' @export
+setMethod(
+  "show",
+  signature(object = "NelsonSiegel"),
+  function(object) {
+    cat("<Interpolation:", as.character(object), "\b>", "\n", "\bParameters:\n")
+    print(parameters(object), digits = 2)
+    invisible(object)
+  }
+)
+
+#' @export
+setGeneric(
+  "parameters",
+  function(x, ...) {
+    standardGeneric("parameters")
+  }
+)
+
+#' @export
+setMethod(
+  "parameters",
+  signature(x = "NelsonSiegel"),
+  function(x,...) {
+    c(beta1 = x@beta1, beta2 = x@beta2, beta3 = x@beta3, lambda1 = x@lambda1)
+  }
+)
+
+#' @export
+setMethod(
+  "parameters",
+  signature(x = "NelsonSiegelSvensson"),
+  function(x,...) {
+    c(beta1 = x@beta1, beta2 = x@beta2, beta3 = x@beta3, beta4 = x@beta4,
+      lambda1 = x@lambda1, lambda2 = x@lambda2)
+  }
+)
