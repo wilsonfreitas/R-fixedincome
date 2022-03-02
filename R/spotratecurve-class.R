@@ -347,7 +347,7 @@ setMethod(
   signature(x = "SpotRateCurve"),
   function(x, ...) {
     interp_rates <- interpolate(x@interpolation, as.numeric(x@terms))
-    sum((interp_rates - x@.Data) ^ 2)
+    sqrt(mean((interp_rates - x@.Data) ^ 2))
   }
 )
 
