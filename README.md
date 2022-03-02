@@ -132,9 +132,10 @@ plot(curve)
 ```
 ![SpotRateCurve 2011-02-23](Rplot03.png "Spot Rate Curve")
 
-Show forward rates for the short term.
+It can show the forward rates for the short term by selecting the first two years.
 
 ```r
+curve <- get_curve_from_web("2022-02-23")
 plot(curve[curve@terms <= 504], show_forward = TRUE)
 ```
 
@@ -149,7 +150,7 @@ plot(curve[curve@terms <= 504], use_interpolation = TRUE)
 
 ![SpotRateCurve 2011-02-23](Rplot08.png "Spot Rate Curve with FlatForward Interpolation")
 
-A Nelson-Siegel-Svensson model can be fitted to the curve.
+Parametric models like the Nelson-Siegel-Svensson model can be fitted to the curve.
 
 ```r
 interpolation(curve) <- fit_interpolation(
@@ -169,3 +170,13 @@ plot(curve, use_interpolation = TRUE, show_forward = TRUE)
 ```
 
 ![SpotRateCurve 2011-02-23](Rplot4.png "Spot Rate Curve with Nelson-Siegel-Svensson Interpolation")
+
+The interpolation can be changed in order to compare different interpolations
+and the effects in forward rates.
+
+```r
+interpolation(curve) <- interp_flatforward()
+plot(curve, use_interpolation = TRUE, show_forward = TRUE)
+```
+
+![SpotRateCurve 2011-02-23](Rplot09.png "Spot Rate Curve with FlatForward Interpolation")
