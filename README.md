@@ -122,7 +122,7 @@ curve
 ```{r}
 plot(curve)
 ```
-![SpotRateCurve 2022-02-23](Rplot02.png "Spot Rate Curve")
+![SpotRateCurve 2022-02-23](images/Rplot02.png "Spot Rate Curve")
 
 For another date.
 
@@ -130,7 +130,7 @@ For another date.
 curve <- get_curve_from_web("2011-02-23")
 plot(curve)
 ```
-![SpotRateCurve 2011-02-23](Rplot03.png "Spot Rate Curve")
+![SpotRateCurve 2011-02-23](images/Rplot03.png "Spot Rate Curve")
 
 It can show the forward rates for the short term by selecting the first two years.
 
@@ -139,16 +139,16 @@ curve <- get_curve_from_web("2022-02-23")
 plot(curve[curve@terms <= 504], show_forward = TRUE)
 ```
 
-![SpotRateCurve 2011-02-23](Rplot07.png "Spot Rate Curve and Forward Curve")
+![SpotRateCurve 2011-02-23](images/Rplot07.png "Spot Rate Curve and Forward Curve")
 
 Once interpolation is set, it can be used in the plot.
 
 ```r
 interpolation(curve) <- interp_flatforward()
-plot(curve[curve@terms <= 504], use_interpolation = TRUE)
+plot(curve[curve@terms <= 504], use_interpolation = TRUE, legend_location = "bottomright")
 ```
 
-![SpotRateCurve 2011-02-23](Rplot08.png "Spot Rate Curve with FlatForward Interpolation")
+![SpotRateCurve 2011-02-23](images/Rplot08.png "Spot Rate Curve with FlatForward Interpolation")
 
 Parametric models like the Nelson-Siegel-Svensson model can be fitted to the curve.
 
@@ -169,14 +169,14 @@ Once set to the curve it is used in the plot to show daily forward rates.
 plot(curve, use_interpolation = TRUE, show_forward = TRUE)
 ```
 
-![SpotRateCurve 2011-02-23](Rplot4.png "Spot Rate Curve with Nelson-Siegel-Svensson Interpolation")
+![SpotRateCurve 2011-02-23](images/Rplot4.png "Spot Rate Curve with Nelson-Siegel-Svensson Interpolation")
 
 The interpolation can be changed in order to compare different interpolations
 and the effects in forward rates.
 
 ```r
 interpolation(curve) <- interp_flatforward()
-plot(curve, use_interpolation = TRUE, show_forward = TRUE)
+plot(curve, use_interpolation = TRUE, show_forward = TRUE, legend_location = "bottomright")
 ```
 
-![SpotRateCurve 2011-02-23](Rplot09.png "Spot Rate Curve with FlatForward Interpolation")
+![SpotRateCurve 2011-02-23](images/Rplot09.png "Spot Rate Curve with FlatForward Interpolation")
