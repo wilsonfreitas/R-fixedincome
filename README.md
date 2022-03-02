@@ -16,19 +16,18 @@ To create an interest rate we need to specify 4 elements:
 
 - the value of the interest rate itself, a decimal number
 - the compounding regime of interest rate, that can be `simple`, `discrete` or
-`continuous` and we'll use `simple`.
+`continuous`.
 - the day count rule which defines how interest is accrued over time, we have a
-few options and we'll start with `actual/360` where the days between two dates
+few options, for example, `actual/360` where the days between two dates
 are calculated as the difference and the year is assumed to be 360 days.
-- the calendar used to count the number of days between two dates of accrual,
-we will use the `actual` calendar that compute the Julian difference between
-two dates.
+- the calendar used to count the number of days between two dates,
+we have `actual` calendar that compute the difference between two dates.
 
 There is another important topic that wasn't declared here that is the
 *frequency* of interest.
-To make things simple `fixedincome` handles only with *annual* rates since this
-represents the great majority of rates used in financial market contracts, but
-this restriction can be reviewed in the future.
+To start with the things simple `fixedincome` handles only with *annual* rates
+since this represents the great majority of rates used in financial market 
+contracts, but this restriction can be reviewed in the future.
 
 Given that let's declare an annual spot rate with a `simple` compounding, an
 `actual/360` and the `actual` calendar.
@@ -139,7 +138,7 @@ curve <- get_curve_from_web("2022-02-23")
 plot(curve[curve@terms <= 504], show_forward = TRUE)
 ```
 
-![SpotRateCurve 2011-02-23](images/Rplot07.png "Spot Rate Curve and Forward Curve")
+![SpotRateCurve 2022-02-23](images/Rplot07.png "Spot Rate Curve and Forward Curve")
 
 Once interpolation is set, it can be used in the plot.
 
@@ -148,7 +147,7 @@ interpolation(curve) <- interp_flatforward()
 plot(curve[curve@terms <= 504], use_interpolation = TRUE, legend_location = "bottomright")
 ```
 
-![SpotRateCurve 2011-02-23](images/Rplot08.png "Spot Rate Curve with FlatForward Interpolation")
+![SpotRateCurve 2022-02-23](images/Rplot08.png "Spot Rate Curve with FlatForward Interpolation")
 
 Parametric models like the Nelson-Siegel-Svensson model can be fitted to the curve.
 
@@ -169,7 +168,7 @@ Once set to the curve it is used in the plot to show daily forward rates.
 plot(curve, use_interpolation = TRUE, show_forward = TRUE)
 ```
 
-![SpotRateCurve 2011-02-23](images/Rplot4.png "Spot Rate Curve with Nelson-Siegel-Svensson Interpolation")
+![SpotRateCurve 2022-02-23](images/Rplot4.png "Spot Rate Curve with Nelson-Siegel-Svensson Interpolation")
 
 The interpolation can be changed in order to compare different interpolations
 and the effects in forward rates.
@@ -179,4 +178,15 @@ interpolation(curve) <- interp_flatforward()
 plot(curve, use_interpolation = TRUE, show_forward = TRUE, legend_location = "bottomright")
 ```
 
-![SpotRateCurve 2011-02-23](images/Rplot09.png "Spot Rate Curve with FlatForward Interpolation")
+![SpotRateCurve 2022-02-23](images/Rplot09.png "Spot Rate Curve with FlatForward Interpolation")
+
+Interpolation enables the creation of standardized curves, commomly used in 
+risk management to build risk factors.
+
+```r
+risk_terms <- c(1, c(3, 6, 9) * 21, c(1, 5, 10) * 252)
+risk_curve <- curve[[risk_terms]]
+plot(risk_curve, use_interpolation = TRUE)
+```
+
+![SpotRateCurve 2022-02-23](images/Rplot10.png "Standardized Spot Rate Curve with FlatForward Interpolation")
