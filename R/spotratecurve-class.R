@@ -136,6 +136,8 @@ setReplaceMethod(
     if (any(i > length(x@.Data)) || any(i < 1))
       stop("Index out of limits")
     x@.Data[i] <- value
+    if (length(x) >= 2)
+      interpolation(x) <- x@interpolation
     x
   }
 )
@@ -146,6 +148,8 @@ setReplaceMethod(
   signature(x="SpotRateCurve", i="numeric", j="missing", value="SpotRate"),
   function(x, i, j, ..., value) {
     x[i] <- value@.Data
+    if (length(x) >= 2)
+      interpolation(x) <- x@interpolation
     x
   }
 )
@@ -163,16 +167,16 @@ setMethod(
         mx <- match(i, x@terms)
         ix <- i
       }
-      spotratecurve(x@.Data[mx], ix, x@compounding, x@daycount, x@calendar,
-                    refdate = x@refdate)
+      obj <- spotratecurve(x@.Data[mx], ix, x@compounding, x@daycount,
+                           x@calendar, refdate = x@refdate)
     } else {
       rates_ <- interpolate(x@interpolation, i)
       obj <- spotratecurve(rates_, term(i, "days"), x@compounding, x@daycount,
                            x@calendar, refdate = x@refdate)
-      if (length(obj) >= 2)
-        interpolation(obj) <- x@interpolation
-      obj
     }
+    if (length(obj) >= 2)
+      interpolation(obj) <- x@interpolation
+    obj
   }
 )
 
@@ -193,6 +197,8 @@ setReplaceMethod(
       x@.Data <- value_[ix]
       x@terms <- terms_[ix]
     }
+    if (length(x) >= 2)
+      interpolation(x) <- x@interpolation
     x
   }
 )
@@ -216,6 +222,8 @@ setReplaceMethod(
       x@.Data <- value_[ix]
       x@terms <- terms_[ix]
     }
+    if (length(x) >= 2)
+      interpolation(x) <- x@interpolation
     x
   }
 )
@@ -240,6 +248,8 @@ setReplaceMethod(
       x@.Data <- value_[ix]
       x@terms <- terms_[ix]
     }
+    if (length(x) >= 2)
+      interpolation(x) <- x@interpolation
     x
   }
 )
@@ -310,7 +320,10 @@ setMethod(
     values_ <- c(x@.Data, unlist(lapply(elements, as.numeric)))
     rates_ <- spotrate(values_, x@compounding, x@daycount, x@calendar)
     terms_ <- c(x@terms, unlist(lapply(dots, function(dx) dx@terms)))
-    spotratecurve(rates_, terms_, refdate = x@refdate)
+    obj <- spotratecurve(rates_, terms_, refdate = x@refdate)
+    if (length(obj) >= 2)
+      interpolation(obj) <- x@interpolation
+    obj
   }
 )
 
