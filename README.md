@@ -180,7 +180,7 @@ plot(curve, use_interpolation = TRUE, show_forward = TRUE, legend_location = "bo
 
 ![SpotRateCurve 2022-02-23](images/Rplot09.png "Spot Rate Curve with FlatForward Interpolation")
 
-Interpolation enables the creation of standardized curves, commomly used in 
+Interpolation enables the creation of standardized curves, commonly used in 
 risk management to build risk factors.
 
 ```r
