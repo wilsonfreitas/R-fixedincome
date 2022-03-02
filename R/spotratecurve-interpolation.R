@@ -71,11 +71,10 @@ setMethod(
     interp.FUN <- approxfun(interp.coords, method='linear')
     dc <- curve@daycount
     comp <- curve@compounding
-    units_ <- units(curve@terms)
     object@func <- function (term) {
       log.price <- interp.FUN(term)
       price <- exp(log.price)
-      rates(comp, timefactor(dc, term, units_), price)
+      rates(comp, timefactor(dc, term, "days"), price)
     }
     object
   }
