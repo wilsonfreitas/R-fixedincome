@@ -8,7 +8,6 @@
 setClass(
   "Term",
   slots = c(units = "character"),
-  prototype = prototype(units = "day"),
   contains = "numeric"
 )
 
