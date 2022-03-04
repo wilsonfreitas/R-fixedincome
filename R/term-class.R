@@ -63,18 +63,6 @@ setGeneric(
   }
 )
 
-as.term.character <- function(x, units=NULL, ...) {
-  m <- regexec('^([0-9]+)(\\.[0-9]+)? (years|months|days)?$', x)
-  m <- unlist(regmatches(x, m))
-  if (length(m))
-    t <- as.term(as.numeric(paste0(m[2], m[3])), m[4])
-  else
-    stop("Invalid term: ", x)
-  if (is.null(units)) t
-  else as.term(t, units)
-}
-
-
 setMethod(
   "as.term",
   signature(x = "character"),
