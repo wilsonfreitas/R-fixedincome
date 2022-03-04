@@ -126,3 +126,15 @@ test_that("it should diff terms", {
   expect_length(t, 5)
   expect_equal(as.numeric(t), c(NA, rep(1, 4)))
 })
+
+test_that("it should compare terms with different units", {
+  t1 <- term(252, "days", "business/252")
+  t2 <- term(1, "year", "business/252")
+  expect_true(t1 == t2)
+  t1 <- term(12, "months", "business/252")
+  t2 <- term(1, "year", "business/252")
+  expect_true(t1 == t2)
+  t1 <- term(12, "months", "actual/360")
+  t2 <- term(1, "year", "business/252")
+  expect_true(t1 != t2)
+})
