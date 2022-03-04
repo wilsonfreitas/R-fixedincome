@@ -7,7 +7,7 @@
 #' @export
 setClass(
   "Term",
-  slots = c(units = "character"),
+  slots = c(units = "character", daycount = "Daycount"),
   contains = "numeric"
 )
 
@@ -18,6 +18,7 @@ setMethod(
     dots <- list(...)
     value <- as.integer(dots[[1]])
     units <- dots[[2]]
+    dc <- dots[[3]]
     
     max_len <- max(length(value), length(units))
     
@@ -27,6 +28,7 @@ setMethod(
     value <- rep_len(value, max_len)
 
     slot(.Object, "units") <- units
+    slot(.Object, "daycount") <- daycount(dc)
     slot(.Object, ".Data") <- value
     
     validObject(.Object)
@@ -153,10 +155,6 @@ setAs(
 
 # methods ----
 
-.select_unit_size <- function(x) {
-  switch(x, year = 360L, month = 30L, day = 1L)
-}
-
 #' @export
 length.Term <- function(x) {
   length(x@.Data)
@@ -186,13 +184,18 @@ setMethod(
   }
 )
 
+.select_unit_size <- function(x, year) {
+  month <- as.integer(year / 12)
+  switch(x, year = as.integer(year), month = month, day = 1L)
+}
+
 #' @export
 setMethod(
   "Compare",
   signature("Term", "Term"),
   function(e1, e2) {
-    u1 <- vapply(units(e1), .select_unit_size, 1L, USE.NAMES = FALSE) * e1@.Data
-    u2 <- vapply(units(e2), .select_unit_size, 1L, USE.NAMES = FALSE) * e2@.Data
+    u1 <- vapply(units(e1), .select_unit_size, 1L, USE.NAMES = FALSE, year = dib(e1@daycount)) * e1@.Data
+    u2 <- vapply(units(e2), .select_unit_size, 1L, USE.NAMES = FALSE, year = dib(e2@daycount)) * e2@.Data
     callGeneric(u1, u2)
   }
 )
@@ -258,8 +261,8 @@ term <- function(x, ...) {
 }
 
 #' @export
-term.numeric <- function(x, units = "days") {
-  new("Term", x, units = units)
+term.numeric <- function(x, units = "days", daycount = "actual/360") {
+  new("Term", x, units = units, daycount = daycount)
 }
 
 #' @export

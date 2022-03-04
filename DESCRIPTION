@@ -23,8 +23,9 @@ Imports:
 Collate:
     "fixedincome-internal.R"
     "utils.R"
-    "term-class.R"
     "daycount-class.R"
+    "term-class.R"
+    "timefactor-method.R"
     "compounding-class.R"
     "interpolation-class.R"
     "spotrate-class.R"
