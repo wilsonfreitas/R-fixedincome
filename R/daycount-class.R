@@ -23,22 +23,22 @@ daycount <- function(spec, ...) {
 
 setAs(
   "Daycount", "character",
-  def = function(from) from@.Data
+  function(from) from@.Data
 )
 
 #' @export
 setGeneric(
-  name = "dib",
-  def = function(x) {
+  "dib",
+  function(x) {
     standardGeneric("dib")
   }
 )
 
 #' @export
 setMethod(
-  f = "dib",
-  signature = c(x = "Daycount"),
-  def = function(x) {
+  "dib",
+  signature(x = "Daycount"),
+  function(x) {
     dc_parts <- unlist(strsplit(x@.Data, '/'))
     as.numeric(dc_parts[2])
   }
@@ -47,7 +47,7 @@ setMethod(
 #' @export
 setMethod(
   "show",
-  "Daycount",
+  signature(object = "Daycount"),
   function(object) {
     cat("<daycount:", object@.Data, "\b>", "\n")
     invisible(object)
