@@ -37,7 +37,7 @@ setMethod(
   "timefactor",
   signature(x = "Daycount", .t = "character", .v = "missing"),
   function(x, .t, .v) {
-    tm <- as(.t, "Term")
+    tm <- as.term(.t)
     timefactor_(as(tm, "numeric"), units(tm), "year", dib(x))
   }
 )

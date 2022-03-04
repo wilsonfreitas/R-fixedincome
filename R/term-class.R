@@ -45,14 +45,6 @@ setMethod(
   }
 )
 
-setAs(
-  "Term",
-  "character",
-  function(from) {
-    as.character(from)
-  }
-)
-
 # coercion 2: from ANY to Term ----
 
 #' @export
@@ -73,23 +65,6 @@ setMethod(
       term(as.numeric(paste0(m[2], m[3])), m[4])
     else
       stop("Invalid term: ", x)
-  }
-)
-
-setAs(
-  "character",
-  "Term",
-  function(from) {
-    as.term(from)
-  }
-)
-
-setAs(
-  "Term",
-  "Period",
-  function(from) {
-    .ch <- as.character(from)
-    lubridate::as.period(.ch)
   }
 )
 
