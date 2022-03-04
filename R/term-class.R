@@ -11,59 +11,11 @@ setClass(
   contains = "numeric"
 )
 
-setMethod(
-  "initialize",
-  "Term",
-  function(.Object, ...) {
-    dots <- list(...)
-    value <- as.integer(dots[[1]])
-    units <- dots[[2]]
-    dc <- dots[[3]]
-    
-    max_len <- max(length(value), length(units))
-    
-    units <- sub("^(.*)s$", "\\1", units)
-    stopifnot(all(units %in% c('year', 'month', 'day')))
-    units <- rep_len(units, max_len)
-    value <- rep_len(value, max_len)
-
-    slot(.Object, "units") <- units
-    slot(.Object, "daycount") <- daycount(dc)
-    slot(.Object, ".Data") <- value
-    
-    validObject(.Object)
-    .Object
-  }
-)
-
 #' @export
 setClass(
   "DateRangeTerm",
   slots = c(start_date = "Date", end_date = "Date", calendar = "character"),
   contains = c("Term", "numeric")
-)
-
-setMethod(
-  "initialize",
-  "DateRangeTerm",
-  function(.Object, ...) {
-    dots <- list(...)
-    start_date <- dots[[1]]
-    end_date <- dots[["end_date"]]
-    calendar <- dots[["calendar"]]
-    units <- "day"
-    
-    value <- bizdays(start_date, end_date, calendar)
-    
-    slot(.Object, "start_date") <- start_date
-    slot(.Object, "end_date") <- end_date
-    slot(.Object, "calendar") <- calendar
-    slot(.Object, "units") <- units
-    slot(.Object, ".Data") <- value
-    
-    validObject(.Object)
-    .Object
-  }
 )
 
 #' @export
@@ -262,7 +214,17 @@ term <- function(x, ...) {
 
 #' @export
 term.numeric <- function(x, units = "days", daycount = "actual/360") {
-  new("Term", x, units = units, daycount = daycount)
+  value <- x
+  units <- units
+  dc <- daycount
+  
+  units <- sub("^(.*)s$", "\\1", units)
+  stopifnot(all(units %in% c('year', 'month', 'day')))
+  max_len <- max(length(value), length(units))
+  units <- rep_len(units, max_len)
+  value <- rep_len(value, max_len)
+  
+  new("Term", .Data = value, units = units, daycount = daycount(dc))
 }
 
 #' @export
@@ -271,7 +233,10 @@ term.Term <- function(x, ...) {
 }
 
 #' @export
-term.Date <- function(x, end_date = NULL, calendar = NULL) {
-  new("DateRangeTerm", x, end_date = end_date, calendar = calendar)
+term.Date <- function(x, end_date, calendar, daycount = "actual/360") {
+  start_date <- x
+  new("DateRangeTerm", bizdays(start_date, end_date, calendar),
+      start_date = start_date, end_date = end_date, calendar = calendar,
+      daycount = daycount(daycount), units = "day")
 }
 
