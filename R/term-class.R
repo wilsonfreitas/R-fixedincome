@@ -30,7 +30,7 @@ setMethod(
   function(x, i, j, ..., drop = TRUE) {
     .val <- x@.Data
     .unit <- units(x)
-    term(.val[i], .unit[i])
+    term(.val[i], .unit[i], x@daycount)
   }
 )
 
