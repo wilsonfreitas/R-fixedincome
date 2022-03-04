@@ -38,7 +38,7 @@ setMethod(
 #' @export
 setClass(
   "DateRangeTerm",
-  slots = c(start_date = "Date", end_date = "Date", cal = "character"),
+  slots = c(start_date = "Date", end_date = "Date", calendar = "character"),
   contains = c("Term", "numeric")
 )
 
@@ -49,14 +49,14 @@ setMethod(
     dots <- list(...)
     start_date <- dots[[1]]
     end_date <- dots[["end_date"]]
-    cal <- dots[["cal"]]
+    calendar <- dots[["calendar"]]
     units <- "day"
     
-    value <- bizdays(start_date, end_date, cal)
+    value <- bizdays(start_date, end_date, calendar)
     
     slot(.Object, "start_date") <- start_date
     slot(.Object, "end_date") <- end_date
-    slot(.Object, "cal") <- cal
+    slot(.Object, "calendar") <- calendar
     slot(.Object, "units") <- units
     slot(.Object, ".Data") <- value
     
@@ -269,7 +269,7 @@ term.Term <- function(x, ...) {
 }
 
 #' @export
-term.Date <- function(x, end_date = NULL, cal = NULL) {
-  new("DateRangeTerm", x, end_date = end_date, cal = cal)
+term.Date <- function(x, end_date = NULL, calendar = NULL) {
+  new("DateRangeTerm", x, end_date = end_date, calendar = calendar)
 }
 
