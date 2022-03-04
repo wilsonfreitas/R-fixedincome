@@ -120,7 +120,7 @@ setMethod(
   "Compare",
   signature("Term", "character"),
   function(e1, e2) {
-    callGeneric(as.character(e1), e2)
+    callGeneric(e1, as.term(e2))
   }
 )
 
@@ -129,7 +129,7 @@ setMethod(
   "Compare",
   signature("character", "Term"),
   function(e1, e2) {
-    callGeneric(as.character(e2), e1)
+    callGeneric(as.term(e1), e2)
   }
 )
 
