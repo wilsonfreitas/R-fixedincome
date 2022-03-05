@@ -7,7 +7,7 @@
 #' @export
 setClass(
   "Term",
-  slots = c(units = "character", daycount = "Daycount"),
+  slots = c(units = "character"),
   contains = "numeric"
 )
 
@@ -24,7 +24,7 @@ setMethod(
   signature(x = "Term"),
   function(x, i, j, ..., drop = TRUE) {
     .val <- x@.Data
-    term(.val[i], x@units, x@daycount)
+    term(.val[i], x@units)
   }
 )
 
@@ -86,40 +86,6 @@ setMethod(
   }
 )
 
-.select_unit_size <- function(x, year) {
-  month <- as.integer(year / 12)
-  switch(x, year = as.integer(year), month = month, day = 1L)
-}
-
-#' @export
-setMethod(
-  "Compare",
-  signature("Term", "Term"),
-  function(e1, e2) {
-    u1 <- vapply(e1@units, .select_unit_size, 1L, USE.NAMES = FALSE, year = dib(e1@daycount)) * e1@.Data
-    u2 <- vapply(e2@units, .select_unit_size, 1L, USE.NAMES = FALSE, year = dib(e2@daycount)) * e2@.Data
-    callGeneric(u1, u2)
-  }
-)
-
-#' @export
-setMethod(
-  "Compare",
-  signature("Term", "character"),
-  function(e1, e2) {
-    callGeneric(e1, as.term(e2))
-  }
-)
-
-#' @export
-setMethod(
-  "Compare",
-  signature("character", "Term"),
-  function(e1, e2) {
-    callGeneric(as.term(e1), e2)
-  }
-)
-
 #' @export
 setMethod(
   "shift",
@@ -163,9 +129,8 @@ term <- function(x, ...) {
 }
 
 #' @export
-term.numeric <- function(x, units = "days", daycount = "actual/360") {
+term.numeric <- function(x, units = "days") {
   value <- x
-  dc <- daycount
   
   if (length(units) > 1) {
     warning("units length > 1 and only the first element will be used")
@@ -175,7 +140,7 @@ term.numeric <- function(x, units = "days", daycount = "actual/360") {
   units <- sub("^(.*)s$", "\\1", units)
   stopifnot(units %in% c('year', 'month', 'day'))
   
-  new("Term", .Data = value, units = units, daycount = daycount(dc))
+  new("Term", .Data = value, units = units)
 }
 
 #' @export
@@ -184,10 +149,10 @@ term.Term <- function(x, ...) {
 }
 
 #' @export
-term.Date <- function(x, end_date, calendar, daycount = "actual/360") {
+term.Date <- function(x, end_date, calendar) {
   start_date <- x
   new("DateRangeTerm", bizdays(start_date, end_date, calendar),
       start_date = start_date, end_date = end_date, calendar = calendar,
-      daycount = daycount(daycount), units = "day")
+      units = "day")
 }
 
