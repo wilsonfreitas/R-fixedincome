@@ -30,9 +30,9 @@ test_that("it should coerce term to character", {
   t <- term(6:9, 'month')
   expect_equal(as(t, "character"),
                c("6 months", "7 months", "8 months", "9 months"))
-  t <- term(6:9, c("month", "year"))
+  expect_warning(t <- term(6:9, c("month", "year")))
   expect_equal(as(t, "character"),
-               c("6 months", "7 years", "8 months", "9 years"))
+               c("6 months", "7 months", "8 months", "9 months"))
 })
 
 test_that("it should raise error", {
@@ -69,9 +69,10 @@ test_that("it should put a term object into a data.frame column", {
   expect_equal(df[c(T, F),"term"], term(c(1, 3, 5, 7, 9), "day"))
 })
 
-test_that("it should create terms with different units", {
-  t1 <- term(c(1, 2), c("day", "month"))
-  expect_equal(t1@units, c("day", "month"))
+test_that("it should not create terms with different units", {
+  expect_warning(t1 <- term(c(1, 2), c("day", "month")))
+  expect_equal(length(t1@units), 1)
+  expect_equal(t1@units, "day")
 })
 
 test_that("it should compare terms with different units", {
@@ -79,9 +80,16 @@ test_that("it should compare terms with different units", {
   t2 <- term(1, "year")
   expect_true(t1 < t2)
   expect_false(t1 > t2)
-  t1 <- term(c(1, 2), c("day", "year"))
+  
+  t1 <- term(1, "day")
   t2 <- term(1, "month")
-  expect_equal(t1 < t2, c(TRUE, FALSE))
+  expect_true(t1 < t2)
+  expect_false(t1 > t2)
+  
+  t1 <- term(1, "year")
+  t2 <- term(1, "month")
+  expect_false(t1 < t2)
+  expect_true(t1 > t2)
 })
 
 test_that("it should create a DateRangeTerm", {

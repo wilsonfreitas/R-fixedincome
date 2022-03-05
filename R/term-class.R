@@ -24,8 +24,7 @@ setMethod(
   signature(x = "Term"),
   function(x, i, j, ..., drop = TRUE) {
     .val <- x@.Data
-    .unit <- x@units
-    term(.val[i], .unit[i], x@daycount)
+    term(.val[i], x@units, x@daycount)
   }
 )
 
@@ -175,11 +174,13 @@ term.numeric <- function(x, units = "days", daycount = "actual/360") {
   value <- x
   dc <- daycount
   
+  if (length(units) > 1) {
+    warning("units length > 1 and only the first element will be used")
+    units <- units[1]
+  }
+  
   units <- sub("^(.*)s$", "\\1", units)
-  stopifnot(all(units %in% c('year', 'month', 'day')))
-  max_len <- max(length(value), length(units))
-  units <- rep_len(units, max_len)
-  value <- rep_len(value, max_len)
+  stopifnot(units %in% c('year', 'month', 'day'))
   
   new("Term", .Data = value, units = units, daycount = daycount(dc))
 }
