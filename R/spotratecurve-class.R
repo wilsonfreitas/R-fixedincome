@@ -351,3 +351,87 @@ setMethod(
   }
 )
 
+#' @export
+setGeneric(
+  "first",
+  function(x, t) {
+    standardGeneric("first")
+  }
+)
+
+#' @export
+setMethod(
+  "first",
+  signature(x = "SpotRateCurve", t = "Term"),
+  function(x, t) {
+    idx <- timefactor(x@daycount, x@terms) <= timefactor(x@daycount, t)
+    x[idx]
+  }
+)
+
+#' @export
+setMethod(
+  "first",
+  signature(x = "SpotRateCurve", t = "character"),
+  function(x, t) {
+    first(x, as.term(t))
+  }
+)
+
+#' @export
+setGeneric(
+  "last",
+  function(x, t) {
+    standardGeneric("last")
+  }
+)
+
+#' @export
+setMethod(
+  "last",
+  signature(x = "SpotRateCurve", t = "Term"),
+  function(x, t) {
+    t_tf <- timefactor(x@daycount, t)
+    x_tf <- timefactor(x@daycount, x@terms)
+    limit_tf <- max(x_tf) - t_tf
+    idx <- timefactor(x@daycount, x@terms) >= limit_tf
+    x[idx]
+  }
+)
+
+#' @export
+setMethod(
+  "last",
+  signature(x = "SpotRateCurve", t = "character"),
+  function(x, t) {
+    last(x, as.term(t))
+  }
+)
+
+#' @export
+setGeneric(
+  "closest",
+  function(x, t) {
+    standardGeneric("closest")
+  }
+)
+
+#' @export
+setMethod(
+  "closest",
+  signature(x = "SpotRateCurve", t = "Term"),
+  function(x, t) {
+    t_tf <- timefactor(x@daycount, t)
+    x_tf <- timefactor(x@daycount, x@terms)
+    x[which.min(abs(x_tf - t_tf))]
+  }
+)
+
+#' @export
+setMethod(
+  "closest",
+  signature(x = "SpotRateCurve", t = "character"),
+  function(x, t) {
+    closest(x, as.term(t))
+  }
+)
