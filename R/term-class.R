@@ -19,17 +19,12 @@ setClass(
 )
 
 #' @export
-units.Term <- function(x) {
-  x@units
-}
-
-#' @export
 setMethod(
   "[",
   signature(x = "Term"),
   function(x, i, j, ..., drop = TRUE) {
     .val <- x@.Data
-    .unit <- units(x)
+    .unit <- x@units
     term(.val[i], .unit[i], x@daycount)
   }
 )
@@ -85,7 +80,7 @@ setMethod(
 #' @export
 format.Term <- function(x, ...) {
   value <- x@.Data
-  abrev <- units(x)
+  abrev <- x@units
   abrev <- ifelse(value > 1, paste0(abrev, "s"), abrev)
   paste(value, abrev, sep =" ")
 }
@@ -109,8 +104,8 @@ setMethod(
   "Compare",
   signature("Term", "Term"),
   function(e1, e2) {
-    u1 <- vapply(units(e1), .select_unit_size, 1L, USE.NAMES = FALSE, year = dib(e1@daycount)) * e1@.Data
-    u2 <- vapply(units(e2), .select_unit_size, 1L, USE.NAMES = FALSE, year = dib(e2@daycount)) * e2@.Data
+    u1 <- vapply(e1@units, .select_unit_size, 1L, USE.NAMES = FALSE, year = dib(e1@daycount)) * e1@.Data
+    u2 <- vapply(e2@units, .select_unit_size, 1L, USE.NAMES = FALSE, year = dib(e2@daycount)) * e2@.Data
     callGeneric(u1, u2)
   }
 )
@@ -139,7 +134,7 @@ setMethod(
   signature(x = "Term"),
   function(x, k = 1, ..., fill = NA) {
     shifted <- shift(as.numeric(x), k, fill = fill)
-    term(shifted, units(x))
+    term(shifted, x@units)
   }
 )
 
@@ -150,9 +145,9 @@ setMethod(
   function(x, ..., fill = NULL) {
     diff_x <- as.numeric(diff(x@.Data))
     if (is.null(fill)) {
-      term(diff_x, units(x)[-1])
+      term(diff_x, x@units[-1])
     } else {
-      term(c(fill, diff_x), units(x))
+      term(c(fill, diff_x), x@units)
     }
   }
 )
@@ -166,7 +161,7 @@ setMethod(
     nempty <- sapply(dots, length) != 0
     elements <- dots[nempty]
     values_ <- c(x@.Data, unlist(lapply(elements, as.numeric)))
-    term(values_, units(x))
+    term(values_, x@units)
   }
 )
 
@@ -178,7 +173,6 @@ term <- function(x, ...) {
 #' @export
 term.numeric <- function(x, units = "days", daycount = "actual/360") {
   value <- x
-  units <- units
   dc <- daycount
   
   units <- sub("^(.*)s$", "\\1", units)

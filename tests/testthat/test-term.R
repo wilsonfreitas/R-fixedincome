@@ -5,9 +5,9 @@ test_that("it should create a term object", {
   t <- term(6, 'months')
   expect_s4_class(t, "Term")
   expect_s4_class(t, 'Term')
-  expect_true(units(t) == 'month')
+  expect_true(t@units == 'month')
   t <- term(1:10, "days")
-  expect_true(all(units(t) == 'day'))
+  expect_true(all(t@units == 'day'))
 })
 
 test_that("it should test equality", {
@@ -42,7 +42,7 @@ test_that("it should raise error", {
 test_that("it should create a term object from a string", {
   t <- as.term('6 month')
   expect_true(as.numeric(t) == 6)
-  expect_true(units(t) == 'month')
+  expect_true(t@units == 'month')
   expect_error(as.term('nada'))
 })
 
@@ -71,7 +71,7 @@ test_that("it should put a term object into a data.frame column", {
 
 test_that("it should create terms with different units", {
   t1 <- term(c(1, 2), c("day", "month"))
-  expect_equal(units(t1), c("day", "month"))
+  expect_equal(t1@units, c("day", "month"))
 })
 
 test_that("it should compare terms with different units", {
@@ -86,7 +86,7 @@ test_that("it should compare terms with different units", {
 
 test_that("it should create a DateRangeTerm", {
   t <- term(as.Date("2022-02-14"), as.Date("2022-02-18"), "actual")
-  expect_equal(units(t), "day")
+  expect_equal(t@units, "day")
   expect_equal(as(t, "character"), "4 days")
   expect_equal(as(t, "numeric"), 4)
 })

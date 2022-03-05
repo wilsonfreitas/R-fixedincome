@@ -28,7 +28,7 @@ setMethod(
   "timefactor",
   signature(x = "Daycount", .t = "Term", .v = "missing"),
   function(x, .t, .v) {
-    timefactor_(as(.t, "numeric"), units(.t), "year", dib(x))
+    timefactor_(as(.t, "numeric"), .t@units, "year", dib(x))
   }
 )
 
@@ -38,7 +38,7 @@ setMethod(
   signature(x = "Daycount", .t = "character", .v = "missing"),
   function(x, .t, .v) {
     tm <- as.term(.t)
-    timefactor_(as(tm, "numeric"), units(tm), "year", dib(x))
+    timefactor_(as(tm, "numeric"), tm@units, "year", dib(x))
   }
 )
 
@@ -48,6 +48,6 @@ setMethod(
   signature(x = "Daycount", .t = "numeric", .v = "character"),
   function(x, .t, .v) {
     tm <- term(.t, .v)
-    timefactor_(as(tm, "numeric"), units(tm), "year", dib(x))
+    timefactor_(as(tm, "numeric"), tm@units, "year", dib(x))
   }
 )

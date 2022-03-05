@@ -75,7 +75,7 @@ as.spotratecurve <- function(x, ...) {
 #' @export
 as.spotratecurve.ForwardRate <- function(x, refdate = Sys.Date()) {
   cumfact <- cumprod(compound(x))
-  cumterms <- term(cumsum(x@terms), units(x@terms))
+  cumterms <- term(cumsum(x@terms), x@terms@units)
   
   tf <- timefactor(x@daycount, cumterms)
   rates_ <- rates(x@compounding, tf, cumfact)
