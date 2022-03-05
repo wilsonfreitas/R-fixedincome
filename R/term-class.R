@@ -70,13 +70,6 @@ length.Term <- function(x) {
 }
 
 #' @export
-setMethod(
-  "length",
-  signature("Term"),
-  length.Term
-)
-
-#' @export
 format.Term <- function(x, ...) {
   value <- x@.Data
   abrev <- x@units
