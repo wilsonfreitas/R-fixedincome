@@ -1,19 +1,18 @@
 
-#' Fixed income models, calculations, data structures and instruments
+#' Fixed income models, calculations and data structures
 #' 
-#' \code{fixedincome} has a set of funtions which helps with the
+#' The \code{fixedincome} package brings a set of funtions that helps with the
 #' mathematics of interest rates and fixed income.
-#' It handles the interest rates and compounding 
-#' factors as objects and provides many methods to tackle specific issues
-#' like compute discount factors, find equivalent rates, forward rates,
-#' and so on. It also has classes to represent commom fixed income entities such as
-#' a term structure of interest rates, spot rates and day count rules.
-#' This package also supports methods and models commom used by practitioners to 
+#' It handles the interest rates and term structures of interest rates as objects and 
+#' provides many methods to tackle specific issues
+#' like computing discount factors and forward rates, interpolate term structures,
+#' fit curve models and so much more.
+#' This package also supports methods and models commonly used by practitioners to 
 #' do fixed income calculations.
 #'
 #' @name fixedincome-package
 #' @aliases fixedincome
-#' @author Wilson Freitas \email{wilson.freitas@@gmail.com}
+#' @author Wilson Freitas \email{wilson.freitas@gmail.com}
 #' @references Frank Fabozzi. Fixed Income Mathematics, Wiley, 1994.
 #' @references Bruce Tuckman. Fixed Income Securities, Wiley, 1994.
 #' @import bizdays
