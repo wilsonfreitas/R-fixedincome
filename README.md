@@ -135,7 +135,7 @@ It can show the forward rates for the short term by selecting the first two year
 
 ```r
 curve <- get_curve_from_web("2022-02-23")
-plot(curve[curve@terms <= 504], show_forward = TRUE)
+plot(first(curve, "2 years"), show_forward = TRUE)
 ```
 
 ![SpotRateCurve 2022-02-23](images/Rplot07.png "Spot Rate Curve and Forward Curve")
@@ -144,7 +144,7 @@ Once interpolation is set, it can be used in the plot.
 
 ```r
 interpolation(curve) <- interp_flatforward()
-plot(curve[curve@terms <= 504], use_interpolation = TRUE, legend_location = "bottomright")
+plot(first(curve, "2 years"), use_interpolation = TRUE, legend_location = "bottomright")
 ```
 
 ![SpotRateCurve 2022-02-23](images/Rplot08.png "Spot Rate Curve with FlatForward Interpolation")
