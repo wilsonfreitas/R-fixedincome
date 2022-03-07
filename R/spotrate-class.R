@@ -11,17 +11,29 @@ setClass(
 )
 
 #' @export
-spotrate <- function(.value, compounding, daycount, calendar = "actual", .copyfrom = NULL) {
-  if ( !is.null(.copyfrom) ) {
+spotrate <- function(.value, compounding, daycount, calendar = "actual",
+                     .copyfrom = NULL) {
+  if (!is.null(.copyfrom)) {
     .value <- if (missing(.value)) .copyfrom@.Data else .value
-    compounding <- if (missing(compounding)) .copyfrom@compounding else compounding
+    compounding <- if (missing(compounding)) {
+      .copyfrom@compounding
+    } else {
+      compounding
+    }
     daycount <- if (missing(daycount)) .copyfrom@daycount else daycount
     calendar <- if (calendar == "actual") .copyfrom@calendar else calendar
   }
-  
-  compounding <- if (is.character(compounding)) compounding(compounding) else compounding
+
+  compounding <- if (is.character(compounding)) {
+    compounding(compounding)
+  } else {
+    compounding
+  }
   daycount <- if (is.character(daycount)) daycount(daycount) else daycount
-  new("SpotRate", .value, compounding = compounding, daycount = daycount, calendar = calendar)
+  new("SpotRate", .value,
+    compounding = compounding, daycount = daycount,
+    calendar = calendar
+  )
 }
 
 # coercion 1: from SpotRate to ANY ----
@@ -40,7 +52,10 @@ setMethod(
   "as.character",
   signature(x = "SpotRate"),
   function(x) {
-    paste(x@.Data, as(x@compounding, "character"), as(x@daycount, "character"), x@calendar)
+    paste(
+      x@.Data, as(x@compounding, "character"),
+      as(x@daycount, "character"), x@calendar
+    )
   }
 )
 
@@ -93,9 +108,10 @@ setGeneric(
 )
 
 .parse_spotrate <- function(x) {
-  lapply(strsplit(x, '\\s+', perl=TRUE), function (x) {
-    if (length(x) != 4)
+  lapply(strsplit(x, "\\s+", perl = TRUE), function(x) {
+    if (length(x) != 4) {
       stop("Invalid spotrate specification")
+    }
     spotrate(as.numeric(x[1]), x[2], x[3], x[4])
   })
 }
@@ -111,12 +127,17 @@ setMethod(
       specs <- unique(sapply(rm, function(x) x[3]))
       if (length(specs) == 1) {
         value <- sapply(rm, function(x) as.numeric(x[2]))
-        specs <- strsplit(specs, '\\s+')[[1]]
-        if (length(specs) != 3)
+        specs <- strsplit(specs, "\\s+")[[1]]
+        if (length(specs) != 3) {
           stop("Invalid spotrate specification")
+        }
         spotrate(value, specs[1], specs[2], specs[3])
-      } else .parse_spotrate(x)
-    } else .parse_spotrate(x)
+      } else {
+        .parse_spotrate(x)
+      }
+    } else {
+      .parse_spotrate(x)
+    }
   }
 )
 
@@ -133,7 +154,10 @@ setMethod(
 
 #' @export
 format.SpotRate <- function(x, ...) {
-  hdr <- paste(as(x@compounding, "character"), as(x@daycount, "character"), x@calendar)
+  hdr <- paste(
+    as(x@compounding, "character"),
+    as(x@daycount, "character"), x@calendar
+  )
   paste(callGeneric(x@.Data, ...), hdr)
 }
 
@@ -287,13 +311,15 @@ check_slots <- function(e1, e2) {
 }
 
 warn_if_spotrate_slots_differ <- function(e1, e2, msg) {
-  if (!check_slots(e1, e2))
+  if (!check_slots(e1, e2)) {
     warning(msg)
+  }
 }
 
 stop_if_spotrate_slots_differ <- function(e1, e2, msg) {
-  if (!check_slots(e1, e2))
+  if (!check_slots(e1, e2)) {
     stop(msg)
+  }
 }
 
 spr_builder <- function(x) {
@@ -337,15 +363,23 @@ setGeneric(
 setMethod(
   "convert",
   signature(x = "SpotRate", .t1 = "Term", .t2 = "missing"),
-  function (x, .t1, .t2, .compounding, .daycount, .calendar) {
+  function(x, .t1, .t2, .compounding, .daycount, .calendar) {
     .compounding <- if (missing(.compounding)) x@compounding else .compounding
-    .compounding <- if (is(.compounding, "character")) compounding(.compounding) else .compounding
-    
+    .compounding <- if (is(.compounding, "character")) {
+      compounding(.compounding)
+    } else {
+      .compounding
+    }
+
     .daycount <- if (missing(.daycount)) x@daycount else .daycount
-    .daycount <- if (is(.daycount, "character")) daycount(.daycount) else .daycount
-    
+    .daycount <- if (is(.daycount, "character")) {
+      daycount(.daycount)
+    } else {
+      .daycount
+    }
+
     .calendar <- if (missing(.calendar)) x@calendar else .calendar
-    
+
     .value <- rates(.compounding, toyears(.daycount, .t1), compound(x, .t1))
     spotrate(.value, .compounding, .daycount, .calendar)
   }
@@ -355,17 +389,28 @@ setMethod(
 setMethod(
   "convert",
   signature(x = "SpotRate", .t1 = "Date", .t2 = "Date"),
-  function (x, .t1, .t2, .compounding, .daycount, .calendar) {
+  function(x, .t1, .t2, .compounding, .daycount, .calendar) {
     .compounding <- if (missing(.compounding)) x@compounding else .compounding
-    .compounding <- if (is(.compounding, "character")) compounding(.compounding) else .compounding
-    
+    .compounding <- if (is(.compounding, "character")) {
+      compounding(.compounding)
+    } else {
+      .compounding
+    }
+
     .daycount <- if (missing(.daycount)) x@daycount else .daycount
-    .daycount <- if (is(.daycount, "character")) daycount(.daycount) else .daycount
-    
+    .daycount <- if (is(.daycount, "character")) {
+      daycount(.daycount)
+    } else {
+      .daycount
+    }
+
     .calendar <- if (missing(.calendar)) x@calendar else .calendar
-    
+
     tm2 <- term(bizdays::bizdays(.t1, .t2, .calendar), "days")
-    .value <- rates(.compounding, toyears(.daycount, tm2), compound(x, .t1, .t2))
+    .value <- rates(
+      .compounding, toyears(.daycount, tm2),
+      compound(x, .t1, .t2)
+    )
     spotrate(.value, .compounding, .daycount, .calendar)
   }
 )

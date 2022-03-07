@@ -170,7 +170,7 @@ setGeneric(
 setMethod(
   "parameters",
   signature(x = "NelsonSiegel"),
-  function(x,...) {
+  function(x, ...) {
     c(beta1 = x@beta1, beta2 = x@beta2, beta3 = x@beta3, lambda1 = x@lambda1)
   }
 )
@@ -179,7 +179,7 @@ setMethod(
 setMethod(
   "parameters",
   signature(x = "NelsonSiegelSvensson"),
-  function(x,...) {
+  function(x, ...) {
     c(beta1 = x@beta1, beta2 = x@beta2, beta3 = x@beta3, beta4 = x@beta4,
       lambda1 = x@lambda1, lambda2 = x@lambda2)
   }

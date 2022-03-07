@@ -33,7 +33,7 @@
 #' @examples
 #' dc <- daycount("actual/360")
 #' dib(dc)
-#' 
+#'
 #' toyears(dc, 10, "days")
 #' t <- term(10, "months")
 #' toyears(dc, t)

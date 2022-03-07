@@ -67,12 +67,12 @@ setMethod(
   function(object, x, ...) {
     terms <- as.numeric(x@terms)
     prices <- compound(x)
-    interp.coords <- xy.coords(terms, log(prices))
-    interp.FUN <- approxfun(interp.coords, method='linear')
+    interp_coords <- xy.coords(terms, log(prices))
+    interp_fun <- approxfun(interp_coords, method = "linear")
     dc <- x@daycount
     comp <- x@compounding
-    object@func <- function (term) {
-      log.price <- interp.FUN(term)
+    object@func <- function(term) {
+      log.price <- interp_fun(term)
       price <- exp(log.price)
       rates(comp, toyears(dc, term, "days"), price)
     }
@@ -85,9 +85,9 @@ setMethod(
   "prepare_interpolation",
   signature(object = "Linear", x = "SpotRateCurve"),
   function(object, x, ...) {
-    interp.coords <- xy.coords(as.numeric(x@terms), as.numeric(x))
-    interp.FUN <- approxfun(interp.coords, method = "linear")
-    object@func <- function (term) interp.FUN(term)
+    interp_coords <- xy.coords(as.numeric(x@terms), as.numeric(x))
+    interp_fun <- approxfun(interp_coords, method = "linear")
+    object@func <- function(term) interp_fun(term)
     object
   }
 )
@@ -97,9 +97,9 @@ setMethod(
   "prepare_interpolation",
   signature(object = "LogLinear", x = "SpotRateCurve"),
   function(object, x, ...) {
-    interp.coords <- xy.coords(as.numeric(x@terms), log(as.numeric(x)))
-    interp.FUN <- approxfun(interp.coords, method = "linear")
-    object@func <- function (term) exp(interp.FUN(term))
+    interp_coords <- xy.coords(as.numeric(x@terms), log(as.numeric(x)))
+    interp_fun <- approxfun(interp_coords, method = "linear")
+    object@func <- function(term) exp(interp_fun(term))
     object
   }
 )
@@ -109,9 +109,9 @@ setMethod(
   "prepare_interpolation",
   signature(object = "NaturalSpline", x = "SpotRateCurve"),
   function(object, x, ...) {
-    interp.coords <- xy.coords(as.numeric(x@terms), as.numeric(x))
-    interp.FUN <- splinefun(interp.coords, method = "natural")
-    object@func <- function(term) interp.FUN(term)
+    interp_coords <- xy.coords(as.numeric(x@terms), as.numeric(x))
+    interp_fun <- splinefun(interp_coords, method = "natural")
+    object@func <- function(term) interp_fun(term)
     object
   }
 )
@@ -121,9 +121,9 @@ setMethod(
   "prepare_interpolation",
   signature(object = "HermiteSpline", x = "SpotRateCurve"),
   function(object, x, ...) {
-    interp.coords <- xy.coords(as.numeric(x@terms), as.numeric(x))
-    interp.FUN <- splinefun(interp.coords, method = "monoH.FC")
-    object@func <- function(term) interp.FUN(term)
+    interp_coords <- xy.coords(as.numeric(x@terms), as.numeric(x))
+    interp_fun <- splinefun(interp_coords, method = "monoH.FC")
+    object@func <- function(term) interp_fun(term)
     object
   }
 )
@@ -133,17 +133,17 @@ setMethod(
   "prepare_interpolation",
   signature(object = "MonotoneSpline", x = "SpotRateCurve"),
   function(object, x, ...) {
-    interp.coords <- xy.coords(as.numeric(x@terms), as.numeric(x))
-    interp.FUN <- splinefun(interp.coords, method = "hyman")
-    object@func <- function(term) interp.FUN(term)
+    interp_coords <- xy.coords(as.numeric(x@terms), as.numeric(x))
+    interp_fun <- splinefun(interp_coords, method = "hyman")
+    object@func <- function(term) interp_fun(term)
     object
   }
 )
 
 ns <- function(t, b1, b2, b3, l1) {
   b1 +
-    b2 * (1 - exp(-l1*t)) / (l1*t) +
-    b3 * ((1 - exp(-l1*t)) / (l1*t) - exp(-l1*t))
+    b2 * (1 - exp(-l1 * t)) / (l1 * t) +
+    b3 * ((1 - exp(-l1 * t)) / (l1 * t) - exp(-l1 * t))
 }
 
 #' @export
@@ -159,7 +159,7 @@ setMethod(
 )
 
 nss <- function(t, b1, b2, b3, b4, l1, l2) {
-  ns(t, b1, b2, b3, l1) + b4 * ((1 - exp(-l2*t)) / (l2*t) - exp(-l2*t))
+  ns(t, b1, b2, b3, l1) + b4 * ((1 - exp(-l2 * t)) / (l2 * t) - exp(-l2 * t))
 }
 
 #' @export
@@ -168,8 +168,10 @@ setMethod(
   signature(object = "NelsonSiegelSvensson", x = "SpotRateCurve"),
   function(object, x, ...) {
     object@func <- function(term) {
-      nss(term, object@beta1, object@beta2, object@beta3, object@beta4,
-          object@lambda1, object@lambda2)
+      nss(
+        term, object@beta1, object@beta2, object@beta3, object@beta4,
+        object@lambda1, object@lambda2
+      )
     }
     object
   }
@@ -202,4 +204,3 @@ setMethod(
     do.call(interp_nelsonsiegelsvensson, as.list(res$par))
   }
 )
-
