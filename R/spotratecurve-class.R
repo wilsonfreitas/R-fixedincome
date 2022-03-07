@@ -27,7 +27,7 @@ spotratecurve.numeric <- function(x, terms, compounding, daycount,
                                   calendar = "actual", refdate = Sys.Date(),
                                   .copyfrom = NULL) {
   .underlying <- spotrate(
-    .value = x,
+    x,
     compounding = compounding,
     daycount = daycount,
     calendar = calendar,
@@ -319,7 +319,7 @@ setMethod(
   signature(x = "SpotRateCurve"),
   function(x, ...) {
     spotrate(
-      .value = x@.Data,
+      x = x@.Data,
       compounding = x@compounding,
       daycount = x@daycount,
       calendar = x@calendar
