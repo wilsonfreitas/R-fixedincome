@@ -35,8 +35,9 @@ compound(x, t, val, ...)
 \S4method{compound}{ForwardRate,missing,missing}(x, t, val)
 }
 \arguments{
-\item{x}{can be a \code{Compounding}, a \code{SpotRate}, a \code{SpotRateCurve},
-a \code{ForwardRate} and a character representing a \code{Compounding}.}
+\item{x}{can be a \code{Compounding}, a \code{SpotRate},
+a \code{SpotRateCurve}, a \code{ForwardRate} and a character
+representing a \code{Compounding}.}
 
 \item{t}{represents the term to compound. Can be a numeric, a \code{Term},
 a \code{Date} or even missing. See Details.}
@@ -55,10 +56,10 @@ Computes the compounding factor for spot rates.
 For \code{Compounding} classes the arguments \code{t} and \code{val} must be
 provided.
 
-For a \code{SpotRate} class, if the \code{t} argument is numeric, representing
-the term to be compounded, the argument \code{val} must be a character with
-the units of the Term class. If otherwise \code{t} is a Term object, \code{val}
-is missing.
+For a \code{SpotRate} class, if the \code{t} argument is numeric,
+representing the term to be compounded, the argument \code{val} must
+be a character with the units of the Term class. If otherwise \code{t}
+is a Term object, \code{val} is missing.
 
 For \code{SpotRateCurve} and \code{ForwardRate} classes, that already have
 terms associated, \code{t} and \code{val} are missing.
