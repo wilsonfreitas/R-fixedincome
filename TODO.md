@@ -18,7 +18,7 @@
 - [x] Term
 - [x] Compounding
   - [x] Compounding Methods
-- [ ] Daycount
+- [x] Daycount
 - [ ] SpotRate
 - [ ] SpotRateCurve
 - [ ] ForwardCurve
@@ -29,6 +29,7 @@
 - [ ] create 30/360 daycount
 - [ ] Other daycounts <https://en.wikipedia.org/wiki/Day_count_convention>
 - [ ] use DayCount with Term
+- [ ] Create function convert_term(dc, "10 days", "months") to help converting terms' units
 
 ### SpotRate
 
