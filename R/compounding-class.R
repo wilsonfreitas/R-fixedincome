@@ -116,41 +116,64 @@ setMethod(
   }
 )
 
+#' Implied rates
+#' 
+#' Computes implied rates to compounding factors.
+#' 
+#' @param x a Compounding object or a character with the compounding name.
+#' @param t a numeric representing the term.
+#' @param val a numeric representing the compounding factor.
+#' 
+#' @details
+#' If the \code{x} argument is a \code{character} with a valid compounding name
+#' (\code{simple}, \code{discrete}, \code{continuous}) the function 
+#' instanciates a Compounding object and then computes the implied rate 
+#' for the given compounding values and terms.
+#' 
+#' @return a numeric value that represents a spot rate.
+#' 
+#' @name rates
+NULL
+
 #' @export
 setGeneric(
   "rates",
-  function(x, .t, .v, ...) {
+  function(x, t, val, ...) {
     standardGeneric("rates")
   }
 )
 
+#' @rdname rates
 #' @export
 setMethod(
   "rates",
-  signature(x = "Simple", .t = "numeric", .v = "numeric"),
-  function(x, .t, .v) (.v - 1)*(1/.t)
+  signature(x = "Simple", t = "numeric", val = "numeric"),
+  function(x, t, val) (val - 1)*(1/t)
 )
 
+#' @rdname rates
 #' @export
 setMethod(
   "rates",
-  signature(x = "Discrete", .t = "numeric", .v = "numeric"),
-  function(x, .t, .v) .v^(1/.t) - 1
+  signature(x = "Discrete", t = "numeric", val = "numeric"),
+  function(x, t, val) val^(1/t) - 1
 )
 
+#' @rdname rates
 #' @export
 setMethod(
   "rates",
-  signature(x = "Continuous", .t = "numeric", .v = "numeric"),
-  function(x, .t, .v) log(.v)*(1/.t)
+  signature(x = "Continuous", t = "numeric", val = "numeric"),
+  function(x, t, val) log(val)*(1/t)
 )
 
+#' @rdname rates
 #' @export
 setMethod(
   "rates",
-  signature(x = "character", .t = "numeric", .v = "numeric"),
-  function(x, .t, .v) {
+  signature(x = "character", t = "numeric", val = "numeric"),
+  function(x, t, val) {
     obj <- compounding(x)
-    callGeneric(obj, .t, .v)
+    callGeneric(obj, t, val)
   }
 )
