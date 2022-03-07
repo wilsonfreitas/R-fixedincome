@@ -19,18 +19,21 @@ discount or compound a spot rate.
 There are 3 compoundings:
 \itemize{
 \item \code{simple} for simple interest rate compounding \deqn{1 + rt}
-\item \code{discrete} for compounded interest rate compounding \deqn{(1 + r)^t}
-\item \code{continuous} for continuous interest rate compounding \deqn{exp(rt)}
+\item \code{discrete} for compounded interest rate compounding
+\deqn{(1 + r)^t}
+\item \code{continuous} for continuous interest rate compounding
+\deqn{exp(rt)}
 }
 
-A Compounding object can be instanciated with the \code{compounding} function,
-passing a string with the name of one of the compounding regimes:
+A Compounding object can be instanciated with the \code{compounding}
+function, passing a string with the name of one of the compounding regimes:
 \code{simple}, \code{discrete}, \code{continuous}.
 
 The \code{compounding} class has 2 methods:
 \itemize{
 \item \code{compound} to compound the spot rate for a given term.
-\item \code{rates} to compute the implied rate for a compound factor in a given term.
+\item \code{rates} to compute the implied rate for a compound factor
+in a given term.
 }
 }
 \examples{

@@ -52,5 +52,4 @@ compatible with the one used to visualize data.frames.
 \examples{
 t <- as.term("6 months")
 as.character(t)
-
 }

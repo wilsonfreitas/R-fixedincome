@@ -28,5 +28,4 @@ where units is one of: days, months, years.
 \examples{
 t <- as.term("6 months")
 as.character(t)
-
 }
