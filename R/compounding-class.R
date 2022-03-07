@@ -128,7 +128,7 @@ setMethod(
 #'
 #' @return a numeric value that represents a spot rate.
 #'
-#' @name rates
+#' @name rates-method
 #' @examples
 #'
 #' rates("simple", 2, 1.1)
@@ -148,7 +148,7 @@ setGeneric(
   }
 )
 
-#' @rdname rates
+#' @rdname rates-method
 #' @export
 setMethod(
   "rates",
@@ -156,7 +156,7 @@ setMethod(
   function(x, t, val) (val - 1) * (1 / t)
 )
 
-#' @rdname rates
+#' @rdname rates-method
 #' @export
 setMethod(
   "rates",
@@ -164,7 +164,7 @@ setMethod(
   function(x, t, val) val^(1 / t) - 1
 )
 
-#' @rdname rates
+#' @rdname rates-method
 #' @export
 setMethod(
   "rates",
@@ -172,7 +172,7 @@ setMethod(
   function(x, t, val) log(val) * (1 / t)
 )
 
-#' @rdname rates
+#' @rdname rates-method
 #' @export
 setMethod(
   "rates",
