@@ -23,9 +23,15 @@ test_that("it should compute compounding implied rate", {
   expect_equal(rates("continuous", 2, 1.105170918), 0.05)
 })
 
-test_that("it should coece compounding to character", {
+test_that("it should coerce compounding to character", {
   expect_equal(as(compounding("simple"), "character"), "simple")
   expect_equal(as(compounding("discrete"), "character"), "discrete")
   expect_equal(as(compounding("continuous"), "character"), "continuous")
+})
+
+test_that("it should compare compoundings", {
+  expect_true(compounding("simple") == compounding("simple"))
+  expect_true(compounding("simple") != compounding("discrete"))
+  expect_false(compounding("discrete") == compounding("simple"))
 })
 
