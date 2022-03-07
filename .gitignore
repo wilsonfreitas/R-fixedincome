@@ -4,3 +4,6 @@ aux
 .Rhistory
 .DS_Store
 docs
+.lintr
+.Rprofile
+.vscode/settings.json
