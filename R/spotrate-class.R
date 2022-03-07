@@ -346,7 +346,7 @@ setMethod(
     
     .calendar <- if (missing(.calendar)) x@calendar else .calendar
     
-    .value <- rates(.compounding, timefactor(.daycount, .t1), compound(x, .t1))
+    .value <- rates(.compounding, toyears(.daycount, .t1), compound(x, .t1))
     spotrate(.value, .compounding, .daycount, .calendar)
   }
 )
@@ -365,7 +365,7 @@ setMethod(
     .calendar <- if (missing(.calendar)) x@calendar else .calendar
     
     tm2 <- term(bizdays::bizdays(.t1, .t2, .calendar), "days")
-    .value <- rates(.compounding, timefactor(.daycount, tm2), compound(x, .t1, .t2))
+    .value <- rates(.compounding, toyears(.daycount, tm2), compound(x, .t1, .t2))
     spotrate(.value, .compounding, .daycount, .calendar)
   }
 )

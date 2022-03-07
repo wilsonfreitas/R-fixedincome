@@ -160,7 +160,7 @@ setMethod(
     object@func <- function (term) {
       log.price <- interp.FUN(term)
       price <- exp(log.price)
-      rates(comp, timefactor(dc, term, "days"), price)
+      rates(comp, toyears(dc, term, "days"), price)
     }
     object
   }

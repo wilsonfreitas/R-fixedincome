@@ -77,7 +77,7 @@ as.spotratecurve.ForwardRate <- function(x, refdate = Sys.Date()) {
   cumfact <- cumprod(compound(x))
   cumterms <- term(cumsum(x@terms), x@terms@units)
   
-  tf <- timefactor(x@daycount, cumterms)
+  tf <- toyears(x@daycount, cumterms)
   rates_ <- rates(x@compounding, tf, cumfact)
   
   spotratecurve(rates_, cumterms,
@@ -355,7 +355,7 @@ setMethod(
   "first",
   signature(x = "SpotRateCurve", t = "Term"),
   function(x, t) {
-    idx <- timefactor(x@daycount, x@terms) <= timefactor(x@daycount, t)
+    idx <- toyears(x@daycount, x@terms) <= toyears(x@daycount, t)
     x[idx]
   }
 )
@@ -382,10 +382,10 @@ setMethod(
   "last",
   signature(x = "SpotRateCurve", t = "Term"),
   function(x, t) {
-    t_tf <- timefactor(x@daycount, t)
-    x_tf <- timefactor(x@daycount, x@terms)
+    t_tf <- toyears(x@daycount, t)
+    x_tf <- toyears(x@daycount, x@terms)
     limit_tf <- max(x_tf) - t_tf
-    idx <- timefactor(x@daycount, x@terms) >= limit_tf
+    idx <- toyears(x@daycount, x@terms) >= limit_tf
     x[idx]
   }
 )
@@ -412,8 +412,8 @@ setMethod(
   "closest",
   signature(x = "SpotRateCurve", t = "Term"),
   function(x, t) {
-    t_tf <- timefactor(x@daycount, t)
-    x_tf <- timefactor(x@daycount, x@terms)
+    t_tf <- toyears(x@daycount, t)
+    x_tf <- toyears(x@daycount, x@terms)
     x[which.min(abs(x_tf - t_tf))]
   }
 )

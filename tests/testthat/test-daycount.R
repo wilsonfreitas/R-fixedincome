@@ -16,14 +16,14 @@ test_that("it should test daycount dib", {
 #   expect_error(as.daycount('actual'), 'Unknown daycount: actual')
 # })
 
-test_that("it should call timefactor with a fixed period", {
+test_that("it should call toyears with a fixed period", {
   dc <- daycount('actual/360')
-  expect_true(timefactor(dc, 1, 'day') == 1/360)
-  expect_true(timefactor(dc, '1 day') == 1/360)
-  expect_true(timefactor(dc, term(1, "day")) == 1/360)
-  expect_true(timefactor(dc, 6, 'month') == 1/2)
-  expect_true(timefactor(dc, '6 month') == 1/2)
-  expect_true(timefactor(dc, term(6, "month")) == 1/2)
+  expect_true(toyears(dc, 1, 'day') == 1/360)
+  expect_true(toyears(dc, '1 day') == 1/360)
+  expect_true(toyears(dc, term(1, "day")) == 1/360)
+  expect_true(toyears(dc, 6, 'month') == 1/2)
+  expect_true(toyears(dc, '6 month') == 1/2)
+  expect_true(toyears(dc, term(6, "month")) == 1/2)
 })
 
 test_that("it should coerce a daycount to character", {
