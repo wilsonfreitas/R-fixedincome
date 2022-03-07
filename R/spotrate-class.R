@@ -1,3 +1,45 @@
+#' SpotRate class
+#'
+#' @description
+#' The \code{SpotRate} class abstracts a spot rate (or an interst rate) and
+#' stores all information needed to handle calculations on that rate.
+#'
+#' @note
+#' The \code{SpotRate} objects are annual rates.
+#'
+#' @details
+#' The \code{SpotRate} class fully specifies spot rates.
+#' It has:
+#' \itemize{
+#'   \item the spot rate values which are numeric values representing the rate.
+#'   \item the compounding regime that specifies how to compound the spot
+#'         rate. This is a \code{compounding} object.
+#'   \item the daycount rule to compute the compounding periods right
+#'         adjusted to the spot rate frequency (which is annual).
+#'   \item the calendar which returns the number of days between 2 dates.
+#' }
+#'
+#' The \code{SpotRate} class is a \code{numeric} vector and
+#' all values in this vector share the \code{compounding}, \code{daycount}
+#' and \code{calendar} attributes.
+#' The coercion function \code{as.list} splits the vector into many
+#' single spot rate objects.
+#'
+#' The \code{calendar} attribute is an instance of \code{bizdays}
+#' \code{\link[bizdays]{Calendar}} class or the name of one of the calendars
+#' that already comes with bizdays (pex. actual, weekend, Brazil/ANBIMA).
+#'
+#' @param x a numeric vector representing spot rate values.
+#' @param compounding
+#' @param daycount
+#' @param calendar
+#' @param .copyfrom
+#'
+#' @name spotrate-class
+#' @examples
+#' spotrate(0.06, "continuous", "actual/365", "actual")
+#' spotrate(c(0.06, 0.07, 0.08), "continuous", "actual/365", "actual")
+NULL
 
 #' @export
 setClass(
@@ -11,10 +53,10 @@ setClass(
 )
 
 #' @export
-spotrate <- function(.value, compounding, daycount, calendar = "actual",
+spotrate <- function(x, compounding, daycount, calendar = "actual",
                      .copyfrom = NULL) {
   if (!is.null(.copyfrom)) {
-    .value <- if (missing(.value)) .copyfrom@.Data else .value
+    x <- if (missing(x)) .copyfrom@.Data else x
     compounding <- if (missing(compounding)) {
       .copyfrom@compounding
     } else {
@@ -30,7 +72,7 @@ spotrate <- function(.value, compounding, daycount, calendar = "actual",
     compounding
   }
   daycount <- if (is.character(daycount)) daycount(daycount) else daycount
-  new("SpotRate", .value,
+  new("SpotRate", x,
     compounding = compounding, daycount = daycount,
     calendar = calendar
   )
