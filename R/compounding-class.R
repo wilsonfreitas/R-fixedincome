@@ -1,3 +1,4 @@
+#' 
 #' Compounding class
 #' 
 #' @description
@@ -70,23 +71,14 @@ ContinuousCompoundingClass <- setClass(
   contains = "Compounding"
 )
 
-setAs(
-  "Simple",
-  "character",
-  function(from) "simple"
-)
+#' @export
+as.character.Simple <- function(x) "simple"
 
-setAs(
-  "Discrete",
-  "character",
-  function(from) "discrete"
-)
+#' @export
+as.character.Discrete <- function(x) "discrete"
 
-setAs(
-  "Continuous",
-  "character",
-  function(from) "continuous"
-)
+#' @export
+as.character.Continuous <- function(x) "continuous"
 
 #' @export
 setMethod(
