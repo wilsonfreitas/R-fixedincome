@@ -303,15 +303,6 @@ setMethod(
 
 #' @export
 setMethod(
-  "compound",
-  signature(x = "SpotRateCurve", .t = "missing", .v = "missing"),
-  function(x, .t, .v) {
-    compound(x, x@terms)
-  }
-)
-
-#' @export
-setMethod(
   "c",
   signature(x = "SpotRateCurve"),
   function(x, ...) {

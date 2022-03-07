@@ -153,38 +153,6 @@ setMethod(
 # methods ----
 
 #' @export
-setMethod(
-  "compound",
-  signature(x = "SpotRate", .t = "numeric", .v = "character"),
-  function(x, .t, .v = "days") {
-    tm <- term(.t, .v)
-    tf <- timefactor(x@daycount, tm)
-    compound(x@compounding, tf, x@.Data)
-  }
-)
-
-#' @export
-setMethod(
-  "compound",
-  signature(x = "SpotRate", .t = "Term", .v = "missing"),
-  function(x, .t, .v) {
-    tf <- timefactor(x@daycount, .t)
-    compound(x@compounding, tf, x@.Data)
-  }
-)
-
-#' @export
-setMethod(
-  "compound",
-  signature(x = "SpotRate", .t = "Date", .v = "Date"),
-  function(x, .t, .v) {
-    tm <- term(.t, .v, x@calendar)
-    tf <- timefactor(x@daycount, tm)
-    compound(x@compounding, tf, x@.Data)
-  }
-)
-
-#' @export
 setGeneric(
   "discount",
   function(x, .t, .v, ...) {

@@ -133,15 +133,6 @@ setMethod(
 
 #' @export
 setMethod(
-  "compound",
-  signature(x = "ForwardRate", .t = "missing", .v = "missing"),
-  function(x, .t, .v) {
-    compound(x, x@terms)
-  }
-)
-
-#' @export
-setMethod(
   "[",
   signature(x = "ForwardRate", i = "numeric", j = "missing"),
   function(x, i, j, ..., drop = TRUE) {
