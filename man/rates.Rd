@@ -35,3 +35,13 @@ If the \code{x} argument is a \code{character} with a valid compounding name
 instanciates a Compounding object and then computes the implied rate
 for the given compounding values and terms.
 }
+\examples{
+
+rates("simple", 2, 1.1)
+rates("discrete", 2, 1.1025)
+rates("continuous", 2, 1.105170918)
+
+comp <- compounding("discrete")
+compound(comp, 0.06, 2) # equals (1 + 0.06) ^ 2 = 1.1236
+rates(comp, 1.1236, 2) # equals 0.06
+}
