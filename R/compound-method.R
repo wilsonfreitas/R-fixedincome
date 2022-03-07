@@ -62,7 +62,7 @@ setGeneric(
 setMethod(
   "compound",
   signature(x = "Simple", t = "numeric", val = "numeric"),
-  function(x, t, val) (1 + val*t)
+  function(x, t, val) (1 + val * t)
 )
 
 #' @rdname compound-method
