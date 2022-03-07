@@ -15,9 +15,9 @@
 
 ### Documentation
 
-- [ ] Term
-- [ ] Compounding
-  - [ ] Compounding Methods
+- [x] Term
+- [x] Compounding
+  - [x] Compounding Methods
 - [ ] Daycount
 - [ ] SpotRate
 - [ ] SpotRateCurve
