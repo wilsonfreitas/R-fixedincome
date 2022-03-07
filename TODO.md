@@ -9,8 +9,20 @@
 - `Term`
 - `Compounding`
 - `Daycount`
+- `Interpolation`
 
 ## TODO
+
+### Documentation
+
+- [ ] Term
+- [ ] Compounding
+  - [ ] Compounding Methods
+- [ ] Daycount
+- [ ] SpotRate
+- [ ] SpotRateCurve
+- [ ] ForwardCurve
+- [ ] Interpolation
 
 ### Daycount
 
