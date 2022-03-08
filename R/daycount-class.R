@@ -30,6 +30,8 @@
 #'        See Details.
 #' @param ... additional arguments
 #'
+#' @aliases Daycount-class
+#'
 #' @name daycount-class
 #' @examples
 #' dc <- daycount("actual/360")

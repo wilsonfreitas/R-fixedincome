@@ -1,4 +1,14 @@
-
+#' Interpolation classes
+#'
+#' Classes that implement interpolation methods to be used with SpotRateCurve
+#' objects.
+#' Every class that implement a interpolation method inherits the
+#' \code{Interpolation} class.
+#'
+#' @aliases FlatForward-class Linear-class LogLinear-class NaturalSpline-class
+#'          HermiteSpline-class MonotoneSpline-class NelsonSiegel-class
+#'          NelsonSiegelSvensson-class
+#'
 #' @export
 setClass(
   "Interpolation",
@@ -118,22 +128,24 @@ interp_monotonespline <- function() new("MonotoneSpline", "monotonespline")
 #' @export
 interp_nelsonsiegel <- function(beta1, beta2, beta3, lambda1) {
   new("NelsonSiegel", "nelsonsiegel",
-      beta1 = beta1,
-      beta2 = beta2,
-      beta3 = beta3,
-      lambda1 = lambda1)
+    beta1 = beta1,
+    beta2 = beta2,
+    beta3 = beta3,
+    lambda1 = lambda1
+  )
 }
 
 #' @export
 interp_nelsonsiegelsvensson <- function(beta1, beta2, beta3, beta4,
                                         lambda1, lambda2) {
   new("NelsonSiegelSvensson", "nelsonsiegelsvensson",
-      beta1 = beta1,
-      beta2 = beta2,
-      beta3 = beta3,
-      beta4 = beta4,
-      lambda1 = lambda1,
-      lambda2 = lambda2)
+    beta1 = beta1,
+    beta2 = beta2,
+    beta3 = beta3,
+    beta4 = beta4,
+    lambda1 = lambda1,
+    lambda2 = lambda2
+  )
 }
 
 #' @export
@@ -180,7 +192,9 @@ setMethod(
   "parameters",
   signature(x = "NelsonSiegelSvensson"),
   function(x, ...) {
-    c(beta1 = x@beta1, beta2 = x@beta2, beta3 = x@beta3, beta4 = x@beta4,
-      lambda1 = x@lambda1, lambda2 = x@lambda2)
+    c(
+      beta1 = x@beta1, beta2 = x@beta2, beta3 = x@beta3, beta4 = x@beta4,
+      lambda1 = x@lambda1, lambda2 = x@lambda2
+    )
   }
 )

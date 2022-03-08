@@ -1,4 +1,19 @@
-
+#' SpotRateCurve class
+#'
+#' The SpotRateCurve class abstracts a term structure of SpotRate objects.
+#' The SpotRateCurve has a reference date (\code{refdate} slot), that is a
+#' mark to market date.
+#' The SpotRates are indexed to future dates according to its reference date
+#' and these future dates represent the terms of the SpotRateCurve.
+#'
+#' Once the SpotRateCurve object is built, any SpotRate can be accessed
+#' using indexing operations: \code{[]} positional indexing, \code{[[]]}
+#' term indexing.
+#'
+#' The SpotRateCurve inherits SpotRate class and has three slots:
+#' terms that is a Term object, refdate and interpolation that defines the
+#' method used to interpolate the curve.
+#'
 #' @export
 setClass(
   "SpotRateCurve",
@@ -17,14 +32,45 @@ setClass(
   contains = "SpotRate"
 )
 
+#' Create a SpotRateCurve object
+#'
+#' `spotratecurve()` S3 method createas a SpotRateCurve object.
+#' It is dispatched for numeric values, that represent spot rates and
+#' for SpotRate objects.
+#'
+#' @param x a numeric representing a spot rate value or a SpotRate object.
+#' @param terms a numeric vector with positive values representing the days of
+#'        the term structure.
+#' @param compounding a character with the compouning name.
+#' @param daycount a character representing the daycount.
+#' @param calendar a calendar object.
+#' @param refdate the curve reference date.
+#' @param .copyfrom a SpotRate object that is used as reference to build
+#'        the SpotRateCurve object.
+#' @param ... additional arguments
+#'
+#' @name spotratecurve-method
+#'
+#' @examples
+#' terms <- c(1, 11, 26, 27, 28)
+#' rates <- c(0.0719, 0.056, 0.0674, 0.0687, 0.07)
+#'
+#' curve <- spotratecurve(rates, terms, "discrete", "actual/365", "actual")
+#'
+#' # access the term 11 days
+#' curve[[11]]
+#'
+#' # access the second element
+#' curve[2]
 #' @export
 spotratecurve <- function(x, terms, ..., refdate = Sys.Date()) {
   UseMethod("spotratecurve")
 }
 
+#' @rdname spotratecurve-method
 #' @export
 spotratecurve.numeric <- function(x, terms, compounding, daycount,
-                                  calendar = "actual", refdate = Sys.Date(),
+                                  calendar, refdate = Sys.Date(),
                                   .copyfrom = NULL, ...) {
   .underlying <- spotrate(
     x,
@@ -50,6 +96,7 @@ spotratecurve.numeric <- function(x, terms, compounding, daycount,
   .Object
 }
 
+#' @rdname spotratecurve-method
 #' @export
 spotratecurve.SpotRate <- function(x, terms,
                                    refdate = Sys.Date(),
@@ -70,11 +117,23 @@ spotratecurve.SpotRate <- function(x, terms,
   .Object
 }
 
+#' Coerce objects to spotratecurve
+#'
+#' A SpotRateCurve can be coerced from \code{ForwardRate}.
+#'
+#' @param x a ForwardRate object.
+#' @param refdate the curve reference date.
+#' @param ... additional arguments
+#'
+#' @return a SpotRateCurve object
+#'
+#' @name as.spotratecurve-method
 #' @export
 as.spotratecurve <- function(x, ...) {
   UseMethod("as.spotratecurve")
 }
 
+#' @rdname as.spotratecurve-method
 #' @export
 as.spotratecurve.ForwardRate <- function(x, refdate = Sys.Date(), ...) {
   cumfact <- cumprod(compound(x))
@@ -313,6 +372,7 @@ setReplaceMethod(
   }
 )
 
+#' @rdname as.spotrate-method
 #' @export
 setMethod(
   "as.spotrate",

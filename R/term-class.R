@@ -14,6 +14,7 @@
 #' between two dates.
 #' @param ... additional arguments
 #'
+#' @aliases term,Term-method DateRangeTerm-class Term-class term
 #' @name term-class
 #' @examples
 #' term(6, "months")
@@ -137,8 +138,6 @@ setMethod(
     }
   }
 )
-
-# methods ----
 
 #' Term methods
 #'

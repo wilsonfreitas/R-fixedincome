@@ -29,6 +29,8 @@
 #'         in a given term.
 #' }
 #'
+#' @aliases Simple-class Compounding-class Discrete-class Continuous-class
+#'
 #' @name compounding-class
 #' @examples
 #' compounding("simple")

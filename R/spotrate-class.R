@@ -34,6 +34,8 @@
 #' @param .copyfrom a \code{SpotRate} object used as reference to copy
 #'        attributes.
 #'
+#' @aliases SpotRate-class
+#'
 #' @name spotrate-class
 #' @examples
 #' spotrate(0.06, "continuous", "actual/365", "actual")
@@ -131,6 +133,7 @@ c.SpotRate <- function(x, ...) {
 #' @param x a character with SpotRate specification.
 #' @param simplify a boolean indicating whether to simplify SpotRate creation
 #'        or not. Defaults to TRUE.
+#' @param ... additional arguments
 #'
 #' @details
 #'
