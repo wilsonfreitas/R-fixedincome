@@ -51,7 +51,10 @@ test_that("it should check if terms and rates have the same length", {
 
 test_that("it should check if terms are unique", {
   expect_error(
-    spotratecurve(rates, rep(1, length(rates)), "discrete", "actual/365", "actual")
+    spotratecurve(
+      rates, rep(1, length(rates)), "discrete", "actual/365",
+      "actual"
+    )
   )
 })
 
@@ -115,7 +118,7 @@ test_that("it should replace or insert elements into the curve", {
   curve[[10]] <- 0.051
   expect_s4_class(curve[[10]], "SpotRateCurve")
   expect_equal(as.numeric(curve[[10]]), 0.051)
-  expect_equal(length(curve), length(terms)+1)
+  expect_equal(length(curve), length(terms) + 1)
   expect_equal(match(10, curve@terms), 2)
   # insert more new elements
   curve[[c(8, 9)]] <- c(0.048, 0.049)
@@ -142,7 +145,7 @@ test_that("it should replace or insert elements into the curve", {
   len_ <- length(curve)
   curve[[c(29, 26, 25)]] <- 0.07
   expect_equal(as.numeric(curve[[c(25, 26, 29)]]), c(0.07, 0.07, 0.07))
-  expect_equal(length(curve), len_+2)
+  expect_equal(length(curve), len_ + 2)
   # 2
   curve[[c(31, 28, 35)]] <- c(0.071, 0.072, 0.073)
   expect_equal(as.numeric(curve[[c(31, 28, 35)]]), c(0.072, 0.071, 0.073))
@@ -154,8 +157,10 @@ test_that("it should replace with another spotrate", {
   curve[[13]] <- curve[1]
   expect_equal(as.numeric(curve[[13]]), as.numeric(curve[1]))
   curve[[c(31, 28, 35)]] <- curve[[c(1, 11, 26)]]
-  expect_equal(as.numeric(curve[[c(31, 28, 35)]]),
-               as.numeric(curve[[c(1 , 11, 26)]])[c(2, 1, 3)])
+  expect_equal(
+    as.numeric(curve[[c(31, 28, 35)]]),
+    as.numeric(curve[[c(1, 11, 26)]])[c(2, 1, 3)]
+  )
 })
 
 test_that("it should insert a spotratecurve into another spotratecurve", {
@@ -167,13 +172,19 @@ test_that("it should insert a spotratecurve into another spotratecurve", {
   curve[[]] <- spotratecurve(0, 1, "simple", "actual/365", "actual")
   expect_equal(as.numeric(curve[1]), 0)
   expect_true(curve[1]@terms == 1)
-  curve[[]] <- spotratecurve(c(0.05, 0.5), c(1, 3), "simple", "actual/365", "actual")
+  curve[[]] <- spotratecurve(
+    c(0.05, 0.5), c(1, 3), "simple", "actual/365",
+    "actual"
+  )
   expect_equal(as.numeric(curve[[c(1, 3)]]), c(0.05, 0.5))
   expect_true(all(curve[[c(1, 3)]]@terms == c(1, 3)))
 })
 
 test_that("it should warn when inserting a spotratecurve into another spotratecurve with different slots", {
-  curve <- spotratecurve(rates[-1], terms[-1], "simple", "actual/365", "Brazil/ANBIMA")
+  curve <- spotratecurve(
+    rates[-1], terms[-1], "simple", "actual/365",
+    "Brazil/ANBIMA"
+  )
   curve_1 <- spotratecurve(rates[1], terms[1], "simple", "actual/365", "actual")
   expect_warning(curve[[]] <- curve_1)
 })
@@ -223,7 +234,7 @@ test_that("it should subset the curve with boolean index", {
 
 test_that("it should remove a term from spotrate curve by using negative index", {
   curve <- spotratecurve(rates, terms, "simple", "actual/365", "actual")
-  expect_equal(length(curve[[-11]]), length(curve)-1)
+  expect_equal(length(curve[[-11]]), length(curve) - 1)
   expect_true(all(curve[[-11]]@terms == terms[-2]))
   expect_equal(as.numeric(curve[[-11]]), rates[-2])
 })
@@ -270,7 +281,7 @@ test_that("it should coerce a spotratecurve into a data.frame", {
 #   expect_true(curve[21] == 0.0636)
 #   expect_true(all(curve[c(11, 21, 26)] == c(0.0560, 0.0636, 0.0674)))
 # })
-# 
+#
 # test_that("it should create a curve using dates", {
 #   library(bizdays)
 #   spr <- as.spotrate(rates, simpleCompounding(), as.daycount("actual/365"), Calendar(name="Actual"))
@@ -280,7 +291,7 @@ test_that("it should coerce a spotratecurve into a data.frame", {
 #   expect_true(all(terms(curve) == terms+Sys.Date()))
 #   expect_true(all(terms(curve, as.x=TRUE) == terms))
 # })
-# 
+#
 # test_that("it should interpolate a curve using dates", {
 #   library(bizdays)
 #   spr <- as.spotrate(rates, simpleCompounding(), as.daycount("actual/365"), Calendar(name="Actual"))
@@ -289,7 +300,7 @@ test_that("it should coerce a spotratecurve into a data.frame", {
 #   expect_equal(rates(curve[c("2014-07-02", "2014-07-03")]), c(0.0719, 0.07031))
 #   expect_true(curve["2014-07-04"] == curve[3])
 # })
-# 
+#
 # test_that("it should replace a curve element using dates", {
 #   library(bizdays)
 #   spr <- as.spotrate(rates, simpleCompounding(), as.daycount("actual/365"), Calendar(name="Actual"))
@@ -301,7 +312,7 @@ test_that("it should coerce a spotratecurve into a data.frame", {
 #   curve[c("2014-07-04", "2014-07-05")] <- 1
 #   expect_true(all(curve[c(3, 4)] == 1))
 # })
-# 
+#
 # test_that("it should create a curve using numeric and dates", {
 #   library(bizdays)
 #   cal <- Calendar(name="Actual")
@@ -313,7 +324,7 @@ test_that("it should coerce a spotratecurve into a data.frame", {
 #   expect_true(all(terms(curve) == .terms))
 #   expect_true(all(terms(curve, as.x=TRUE) == terms))
 # })
-# 
+#
 # test_that("it should interpolate a curve using dates and numbers", {
 #   library(bizdays)
 #   cal <- Calendar(name="Actual")
@@ -323,7 +334,7 @@ test_that("it should coerce a spotratecurve into a data.frame", {
 #   expect_equal(rates(curve[c("2014-07-02", "2014-07-03")]), rates(curve[c(1, 2)]))
 #   expect_true(curve["2014-07-04"] == curve[3])
 # })
-# 
+#
 # test_that("it should compute forward rates", {
 #   spr <- as.spotrate(rates, "simple", "actual/365")
 #   curve <- as.spotratecurve(terms, spr)
@@ -332,7 +343,7 @@ test_that("it should coerce a spotratecurve into a data.frame", {
 #   expect_equal(forwardrate(curve, 1, 11), rate, tolerance=1e-6)
 #   expect_equal(forwardrate(curve, 1, forward=1), curve[1])
 #   expect_equal(forwardrate(curve, 1, forward=10), rate, tolerance=1e-6)
-#   
+#
 #   f1 <- curve[10]
 #   f2 <- forwardrate(curve, 10, forward=1)
 #   expect_equal(compound(f1, 10) * compound(f2, 1), compound(curve[11], 11) )
@@ -343,7 +354,7 @@ test_that("it should coerce a spotratecurve into a data.frame", {
 #   expect_error(forwardrate(curve, 1),
 #     "to or forward arguments must be provided." )
 # })
-# 
+#
 # test_that("it should compute forward rates (vectorized)", {
 #   spr <- as.spotrate(rates, "simple", "actual/365")
 #   curve <- as.spotratecurve(terms, spr)
@@ -354,7 +365,7 @@ test_that("it should coerce a spotratecurve into a data.frame", {
 #   # expect_equal(forwardrate(curve, 1, forward=c(1, 1)), curve[c(1, 1)])
 #   # expect_equal(forwardrate(curve, 1, forward=10), rate, tolerance=1e-6)
 # })
-# 
+#
 # test_that("it should compute forward rates using dates", {
 #   library(bizdays)
 #   cal <- Calendar(name="Actual")
@@ -362,13 +373,13 @@ test_that("it should coerce a spotratecurve into a data.frame", {
 #   refdate <- as.Date("2014-07-01")
 #   curve <- as.spotratecurve(terms+refdate, spr, refdate=refdate)
 #   rate <- as.spotrate(0.05439928, "simple", "actual/365", cal)
-# 
+#
 #   expect_error(forwardrate(curve, refdate+1, refdate+1),
 #     "to term must be greater than from.")
 #   expect_equal(forwardrate(curve, refdate+1, refdate+11), rate, tolerance=1e-6)
 #   expect_equal(forwardrate(curve, refdate+1, forward=1), curve[1])
 #   expect_equal(forwardrate(curve, refdate+1, forward=10), rate, tolerance=1e-6)
-#   
+#
 #   f1 <- curve[refdate+10]
 #   f2 <- forwardrate(curve, refdate+10, forward=1)
 #   expect_equal(compound(f1, 10) * compound(f2, 1),
@@ -378,13 +389,13 @@ test_that("it should coerce a spotratecurve into a data.frame", {
 #   expect_equal( compound(f1, 1) * compound(f2, 1),
 #     compound(curve[refdate+2], 2), tolerance=1e-5)
 # })
-# 
+#
 # test_that("it should compound curve", {
 #   spr <- as.spotrate(rates, "simple", "actual/365")
 #   curve <- as.spotratecurve(terms, spr)
 #   expect_equal(compound(curve, 11), 1.00168767)
 #   expect_equal(compound(curve, c(11, 26)), c(1.00168767, 1.004801096))
-# 
+#
 #   library(bizdays)
 #   cal <- Calendar(name="Actual")
 #   spr <- as.spotrate(rates, "simple", "actual/365", cal)
@@ -393,7 +404,7 @@ test_that("it should coerce a spotratecurve into a data.frame", {
 #   expect_equal(compound(curve, c("2014-07-12", "2014-07-27")),
 #     c(1.00168767, 1.004801096))
 # })
-# 
+#
 # test_that("it should call [[ which returns a numeric value", {
 #   spr <- as.spotrate(rates, "simple", "actual/365")
 #   curve <- as.spotratecurve(terms, spr)
