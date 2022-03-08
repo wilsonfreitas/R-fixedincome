@@ -19,7 +19,10 @@ BugReports: https://github.com/wilsonfreitas/R-fixedincome/issues
 Imports:
     bizdays (>= 1.0.0),
     methods,
-    lubridate
+    graphics,
+    stats,
+    grDevices,
+    utils
 Collate:
     "fixedincome-internal.R"
     "utils.R"
