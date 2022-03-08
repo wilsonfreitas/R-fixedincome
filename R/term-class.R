@@ -181,17 +181,13 @@ setMethod(
 
 #' @rdname term-methods
 #' @export
-setMethod(
-  "c",
-  signature(x = "Term"),
-  function(x, ...) {
-    dots <- list(...)
-    nempty <- sapply(dots, length) != 0
-    elements <- dots[nempty]
-    values_ <- c(x@.Data, unlist(lapply(elements, as.numeric)))
-    term(values_, x@units)
-  }
-)
+c.Term <- function(x, ...) {
+  dots <- list(...)
+  nempty <- sapply(dots, length) != 0
+  elements <- dots[nempty]
+  values_ <- c(x@.Data, unlist(lapply(elements, as.numeric)))
+  term(values_, x@units)
+}
 
 #' @rdname term-methods
 #' @export

@@ -3,7 +3,7 @@
 \name{term-methods}
 \alias{term-methods}
 \alias{[,Term,ANY,ANY-method}
-\alias{c,Term-method}
+\alias{c.Term}
 \alias{format.Term}
 \alias{shift,Term-method}
 \alias{diff,Term-method}
@@ -11,7 +11,7 @@
 \usage{
 \S4method{[}{Term,ANY,ANY}(x, i, j, ..., drop = TRUE)
 
-\S4method{c}{Term}(x, ...)
+\method{c}{Term}(x, ...)
 
 \method{format}{Term}(x, ...)
 
