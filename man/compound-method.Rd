@@ -12,6 +12,11 @@
 \alias{compound,SpotRate,Date,Date-method}
 \alias{compound,SpotRateCurve,missing,missing-method}
 \alias{compound,ForwardRate,missing,missing-method}
+\alias{discount,SpotRate,numeric,character-method}
+\alias{discount,SpotRate,Term,missing-method}
+\alias{discount,SpotRate,Date,Date-method}
+\alias{discount,SpotRateCurve,missing,missing-method}
+\alias{discount,ForwardRate,missing,missing-method}
 \title{Compound method}
 \usage{
 compound(x, t, val, ...)
@@ -33,6 +38,16 @@ compound(x, t, val, ...)
 \S4method{compound}{SpotRateCurve,missing,missing}(x, t, val)
 
 \S4method{compound}{ForwardRate,missing,missing}(x, t, val)
+
+\S4method{discount}{SpotRate,numeric,character}(x, t, val)
+
+\S4method{discount}{SpotRate,Term,missing}(x, t, val)
+
+\S4method{discount}{SpotRate,Date,Date}(x, t, val)
+
+\S4method{discount}{SpotRateCurve,missing,missing}(x, t, val)
+
+\S4method{discount}{ForwardRate,missing,missing}(x, t, val)
 }
 \arguments{
 \item{x}{can be a \code{Compounding}, a \code{SpotRate},
@@ -50,7 +65,7 @@ a numeric value that represents the compounding factor for the given
 spot rate.
 }
 \description{
-Computes the compounding factor for spot rates.
+Computes the compounding (and discount) factor for spot rates.
 }
 \details{
 For \code{Compounding} classes the arguments \code{t} and \code{val} must be
@@ -70,17 +85,19 @@ compound("simple", 2, 0.05)
 compound("discrete", 2, 0.05)
 compound("continuous", 2, 0.05)
 
-spr <- spotrate(0.06, "simple", "actual/365")
+spr <- spotrate(0.06, "simple", "actual/365", "actual")
 compound(spr, 10, "days")
+discount(spr, 10, "days")
 t <- term(10, "days")
 compound(spr, t)
+discount(spr, t)
 d1 <- Sys.Date()
 d2 <- Sys.Date() + 10
 compound(spr, d1, d2)
+discount(spr, d1, d2)
 
 terms <- c(1, 11, 26, 27, 28)
 rates <- c(0.0719, 0.056, 0.0674, 0.0687, 0.07)
 curve <- spotratecurve(rates, terms, "discrete", "actual/365", "actual")
 compound(curve)
-
 }

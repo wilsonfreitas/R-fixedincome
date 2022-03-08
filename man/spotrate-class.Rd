@@ -40,7 +40,7 @@ all values in it share the \code{compounding}, \code{daycount}
 and \code{calendar} slots.
 
 The \code{calendar} attribute is an instance of \code{bizdays}
-\code{\link[bizdays]{Calendar}} class or the name of one of the calendars
+\code{Calendar} class or the name of one of the calendars
 that are already registered in bizdays register.
 }
 \note{
