@@ -10,7 +10,7 @@ setGeneric(
 #' @export
 setGeneric(
   "interpolation<-",
-  function(x, value, ...) {
+  function(x, value) {
     standardGeneric("interpolation<-")
   }
 )
