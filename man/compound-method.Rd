@@ -2,6 +2,7 @@
 % Please edit documentation in R/compound-method.R
 \name{compound-method}
 \alias{compound-method}
+\alias{discount}
 \alias{compound}
 \alias{compound,Simple,numeric,numeric-method}
 \alias{compound,Discrete,numeric,numeric-method}

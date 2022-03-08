@@ -26,6 +26,8 @@
 #' @return a numeric value that represents the compounding factor for the given
 #'         spot rate.
 #'
+#' @aliases discount
+#'
 #' @name compound-method
 #' @examples
 #'

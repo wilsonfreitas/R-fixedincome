@@ -3,6 +3,7 @@
 \name{daycount-class}
 \alias{daycount-class}
 \alias{Daycount-class}
+\alias{dib}
 \alias{daycount}
 \alias{dib,Daycount-method}
 \alias{toyears,Daycount,Term,missing-method}

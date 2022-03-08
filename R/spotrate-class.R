@@ -156,6 +156,8 @@ c.SpotRate <- function(x, ...) {
 #' If it is true the returned object is a SpotRate otherwise a \code{list} with
 #' SpotRate objects is returned.
 #'
+#' @aliases as.spotrate
+#'
 #' @examples
 #'
 #' as.spotrate(c(

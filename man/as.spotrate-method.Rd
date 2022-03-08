@@ -2,6 +2,7 @@
 % Please edit documentation in R/spotrate-class.R, R/spotratecurve-class.R
 \name{as.spotrate-method}
 \alias{as.spotrate-method}
+\alias{as.spotrate}
 \alias{as.spotrate,character-method}
 \alias{as.spotrate,SpotRateCurve-method}
 \title{Coerce to SpotRate}

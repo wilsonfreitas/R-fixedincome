@@ -30,7 +30,7 @@
 #'        See Details.
 #' @param ... additional arguments
 #'
-#' @aliases Daycount-class
+#' @aliases Daycount-class dib
 #'
 #' @name daycount-class
 #' @examples
