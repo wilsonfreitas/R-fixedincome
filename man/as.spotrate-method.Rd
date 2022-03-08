@@ -9,6 +9,9 @@
 }
 \arguments{
 \item{x}{a character with SpotRate specification.}
+
+\item{simplify}{a boolean indicating whether to simplify SpotRate creation
+or not. Defaults to TRUE.}
 }
 \description{
 Coerce character objects to SpotRate class
@@ -27,6 +30,11 @@ where:
 see \code{\link{daycount-class}}
 \item \code{CALENDAR} is the name of a bizdays calendar.
 }
+
+\code{simplify} check if compounding, daycount and calendar are the same for
+all given characters.
+If it is true the returned object is a SpotRate otherwise a \code{list} with
+SpotRate objects is returned.
 }
 \examples{
 

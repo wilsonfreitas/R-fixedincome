@@ -6,9 +6,9 @@
 \alias{term.Date}
 \title{Term class}
 \usage{
-\method{term}{numeric}(x, units = "days")
+\method{term}{numeric}(x, units = "days", ...)
 
-\method{term}{Date}(x, end_date, calendar)
+\method{term}{Date}(x, end_date, calendar, ...)
 }
 \arguments{
 \item{x}{can be a numeric value representing the time period or the initial
@@ -16,6 +16,8 @@ date for a period between two dates.}
 
 \item{units}{one of the valid \code{units}: \code{days}, \code{monts},
 \code{years}.}
+
+\item{...}{additional arguments}
 
 \item{end_date}{the final date for a period between two dates.}
 

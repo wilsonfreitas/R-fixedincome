@@ -23,6 +23,8 @@ daycount(x, ...)
 \item{x}{a character representing a daycount rule, like: \code{business/252},
 \code{actual/365}, \code{actual/360}, ...}
 
+\item{...}{additional arguments}
+
 \item{t}{represents the term to compound. Can be a numeric, a \code{Term},
 or a character representing a \code{Term}. See Details.}
 

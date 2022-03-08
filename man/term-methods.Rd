@@ -25,6 +25,12 @@
 \item{i}{index used with the \code{[]} operator. Can be numeric
 (positional index) or boolean (\code{logical}), similar to vector indexing.}
 
+\item{j}{\emph{unused}.}
+
+\item{...}{additional arguments.}
+
+\item{drop}{\emph{unused}.}
+
 \item{k}{a numeric with the number of elements to shift the Term vector}
 
 \item{fill}{a numeric value (or \code{NA}) to fill the empty created by

@@ -15,6 +15,8 @@ as.term(x, ...)
 }
 \arguments{
 \item{x}{a Term object or a character representing a term.}
+
+\item{...}{additional arguments}
 }
 \description{
 The Term class has a string representation and can be coerced to a character.

@@ -59,6 +59,8 @@ a \code{Date} or even missing. See Details.}
 
 \item{val}{is the value of the spot rate to be compounded in the given term.
 Can be a numeric, a \code{Date} or missing. See Details.}
+
+\item{...}{additional arguments.}
 }
 \value{
 a numeric value that represents the compounding factor for the given
