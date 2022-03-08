@@ -49,6 +49,7 @@ setClass(
 #'        the SpotRateCurve object.
 #' @param ... additional arguments
 #'
+#' @aliases spotratecurve
 #' @name spotratecurve-method
 #'
 #' @examples
@@ -62,6 +63,8 @@ setClass(
 #'
 #' # access the second element
 #' curve[2]
+NULL
+
 #' @export
 spotratecurve <- function(x, terms, ..., refdate = Sys.Date()) {
   UseMethod("spotratecurve")
@@ -119,7 +122,7 @@ spotratecurve.SpotRate <- function(x, terms,
 
 #' Coerce objects to spotratecurve
 #'
-#' A SpotRateCurve can be coerced from \code{ForwardRate}.
+#' A SpotRateCurve can be created from a \code{ForwardRate} object.
 #'
 #' @param x a ForwardRate object.
 #' @param refdate the curve reference date.

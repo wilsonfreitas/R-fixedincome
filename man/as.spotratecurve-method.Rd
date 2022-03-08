@@ -21,5 +21,5 @@ as.spotratecurve(x, ...)
 a SpotRateCurve object
 }
 \description{
-A SpotRateCurve can be coerced from \code{ForwardRate}.
+A SpotRateCurve can be created from a \code{ForwardRate} object.
 }

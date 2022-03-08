@@ -7,8 +7,6 @@
 \alias{spotratecurve.SpotRate}
 \title{Create a SpotRateCurve object}
 \usage{
-spotratecurve(x, terms, ..., refdate = Sys.Date())
-
 \method{spotratecurve}{numeric}(
   x,
   terms,
@@ -28,18 +26,18 @@ spotratecurve(x, terms, ..., refdate = Sys.Date())
 \item{terms}{a numeric vector with positive values representing the days of
 the term structure.}
 
-\item{...}{additional arguments}
-
-\item{refdate}{the curve reference date.}
-
 \item{compounding}{a character with the compouning name.}
 
 \item{daycount}{a character representing the daycount.}
 
 \item{calendar}{a calendar object.}
 
+\item{refdate}{the curve reference date.}
+
 \item{.copyfrom}{a SpotRate object that is used as reference to build
 the SpotRateCurve object.}
+
+\item{...}{additional arguments}
 }
 \description{
 \code{spotratecurve()} S3 method createas a SpotRateCurve object.

@@ -1,5 +1,8 @@
-
-
+#' ForwardRate class
+#'
+#' ForwardRate class abstracts a forward rate and differs from a spot rate
+#' because it has a term associated.
+#'
 #' @export
 setClass(
   "ForwardRate",
@@ -9,14 +12,36 @@ setClass(
   contains = "SpotRate"
 )
 
+#' Create a SpotRateCurve object
+#'
+#' `spotratecurve()` S3 method createas a SpotRateCurve object.
+#' It is dispatched for numeric values, that represent spot rates and
+#' for SpotRate objects.
+#'
+#' @param x
+#' @param terms a numeric vector with positive values representing terms of
+#'        the forward rates.
+#' @param compounding a character with the compouning name.
+#' @param daycount a character representing the daycount.
+#' @param calendar a calendar object.
+#' @param refdate the curve reference date.
+#' @param .copyfrom a SpotRate object that is used as reference to build
+#'        the SpotRateCurve object.
+#' @param ... additional arguments
+#'
+#' @aliases forwardrate
+#' @name forwardrate-method
+NULL
+
 #' @export
 forwardrate <- function(x, ...) {
   UseMethod("forwardrate")
 }
 
+#' @rdname forwardrate-method
 #' @export
 forwardrate.numeric <- function(x, terms, compounding, daycount,
-                                calendar = "actual", .copyfrom = NULL, ...) {
+                                calendar, .copyfrom = NULL, ...) {
   if (!is.null(.copyfrom)) {
     compounding <- if (missing(compounding)) {
       .copyfrom@compounding
@@ -24,7 +49,7 @@ forwardrate.numeric <- function(x, terms, compounding, daycount,
       compounding
     }
     daycount <- if (missing(daycount)) .copyfrom@daycount else daycount
-    calendar <- if (calendar == "actual") .copyfrom@calendar else calendar
+    calendar <- if (missing(calendar)) .copyfrom@calendar else calendar
   }
 
   new("ForwardRate",
@@ -36,6 +61,7 @@ forwardrate.numeric <- function(x, terms, compounding, daycount,
   )
 }
 
+#' @rdname forwardrate-method
 #' @export
 forwardrate.SpotRateCurve <- function(x, t1 = NULL, t2 = NULL, ...) {
   if (length(x) == 1) {
@@ -82,11 +108,26 @@ forwardrate.SpotRateCurve <- function(x, t1 = NULL, t2 = NULL, ...) {
   .Object
 }
 
+#' Coerce objects to ForwardRate
+#'
+#' A \code{ForwardRate} object can be created from a SpotRate object and
+#' a SpotRateCurve.
+#'
+#' @param x a SpotRate or a SpotRateCurve object.
+#' @param terms a numeric with positive values representing terms or a Term
+#'        object.
+#' @param ... additional arguments
+#'
+#' @aliases as.forwardrate
+#' @name as.forwardrate-method
+NULL
+
 #' @export
 as.forwardrate <- function(x, ...) {
   UseMethod("as.forwardrate")
 }
 
+#' @rdname as.forwardrate-method
 #' @export
 as.forwardrate.SpotRate <- function(x, terms, ...) {
   new("ForwardRate",
@@ -98,6 +139,7 @@ as.forwardrate.SpotRate <- function(x, terms, ...) {
   )
 }
 
+#' @rdname as.forwardrate-method
 #' @export
 as.forwardrate.SpotRateCurve <- function(x, ...) {
   new("ForwardRate",
