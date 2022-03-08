@@ -1,8 +1,8 @@
 #' SpotRate class
 #'
 #' @description
-#' The \code{SpotRate} class abstracts a spot rate (or an interst rate) and
-#' stores all information needed to handle calculations on that rate.
+#' The \code{SpotRate} class abstracts the interst rate and has methods
+#' to handle many calculations on it.
 #'
 #' @note
 #' The \code{SpotRate} objects are annual rates.
@@ -13,27 +13,26 @@
 #' \itemize{
 #'   \item the spot rate values which are numeric values representing the rate.
 #'   \item the compounding regime that specifies how to compound the spot
-#'         rate. This is a \code{compounding} object.
+#'         rate. This is a \code{Compounding} object.
 #'   \item the daycount rule to compute the compounding periods right
 #'         adjusted to the spot rate frequency (which is annual).
-#'   \item the calendar which returns the number of days between 2 dates.
+#'   \item the calendar according to which the number of days are counted.
 #' }
 #'
-#' The \code{SpotRate} class is a \code{numeric} vector and
-#' all values in this vector share the \code{compounding}, \code{daycount}
-#' and \code{calendar} attributes.
-#' The coercion function \code{as.list} splits the vector into many
-#' single spot rate objects.
+#' The \code{SpotRate} class is a \code{numeric} and
+#' all values in it share the \code{compounding}, \code{daycount}
+#' and \code{calendar} slots.
 #'
 #' The \code{calendar} attribute is an instance of \code{bizdays}
 #' \code{\link[bizdays]{Calendar}} class or the name of one of the calendars
-#' that already comes with bizdays (pex. actual, weekend, Brazil/ANBIMA).
+#' that are already registered in bizdays register.
 #'
 #' @param x a numeric vector representing spot rate values.
-#' @param compounding
-#' @param daycount
-#' @param calendar
-#' @param .copyfrom
+#' @param compounding a \code{Compounding} object.
+#' @param daycount a \code{Daycount} object.
+#' @param calendar a \code{bizdays} calendar.
+#' @param .copyfrom a \code{SpotRate} object used as reference to copy
+#'        attributes.
 #'
 #' @name spotrate-class
 #' @examples
@@ -41,20 +40,9 @@
 #' spotrate(c(0.06, 0.07, 0.08), "continuous", "actual/365", "actual")
 NULL
 
+#' @name spotrate-class
 #' @export
-setClass(
-  "SpotRate",
-  slots = c(
-    compounding = "Compounding",
-    daycount = "Daycount",
-    calendar = "character"
-  ),
-  contains = "numeric"
-)
-
-#' @export
-spotrate <- function(x, compounding, daycount, calendar = "actual",
-                     .copyfrom = NULL) {
+spotrate <- function(x, compounding, daycount, calendar, .copyfrom = NULL) {
   if (!is.null(.copyfrom)) {
     x <- if (missing(x)) .copyfrom@.Data else x
     compounding <- if (missing(compounding)) {
@@ -63,7 +51,7 @@ spotrate <- function(x, compounding, daycount, calendar = "actual",
       compounding
     }
     daycount <- if (missing(daycount)) .copyfrom@daycount else daycount
-    calendar <- if (calendar == "actual") .copyfrom@calendar else calendar
+    calendar <- if (missing(calendar)) .copyfrom@calendar else calendar
   }
 
   compounding <- if (is.character(compounding)) {
@@ -78,68 +66,42 @@ spotrate <- function(x, compounding, daycount, calendar = "actual",
   )
 }
 
-# coercion 1: from SpotRate to ANY ----
-
 #' @export
-setMethod(
-  "as.numeric",
-  signature(x = "SpotRate"),
-  function(x) {
-    x@.Data
-  }
-)
-
-#' @export
-setMethod(
-  "as.character",
-  signature(x = "SpotRate"),
-  function(x) {
-    paste(
-      x@.Data, as(x@compounding, "character"),
-      as(x@daycount, "character"), x@calendar
-    )
-  }
+setClass(
+  "SpotRate",
+  slots = c(
+    compounding = "Compounding",
+    daycount = "Daycount",
+    calendar = "character"
+  ),
+  contains = "numeric"
 )
 
 #' @export
+as.character.SpotRate <- function(x, ...) {
+  paste(
+    x@.Data, as(x@compounding, "character"),
+    as(x@daycount, "character"), x@calendar
+  )
+}
+
+#' @export
+format.SpotRate <- function(x, ...) {
+  hdr <- paste(
+    as(x@compounding, "character"),
+    as(x@daycount, "character"), x@calendar
+  )
+  paste(callGeneric(x@.Data, ...), hdr)
+}
+
+#' @export
 setMethod(
-  "as.list",
-  signature(x = "SpotRate"),
-  function(x) {
-    list(
-      value = x@.Data,
-      compounding = as(x@compounding, "character"),
-      daycount = as(x@daycount, "character"),
-      calendar = x@calendar
-    )
+  "show",
+  signature(object = "SpotRate"),
+  function(object) {
+    print(format(object))
   }
 )
-
-setAs(
-  "SpotRate",
-  "character",
-  function(from) {
-    as.character(from)
-  }
-)
-
-setAs(
-  "SpotRate",
-  "numeric",
-  function(from) {
-    as.numeric(from)
-  }
-)
-
-setAs(
-  "SpotRate",
-  "list",
-  function(from) {
-    as.list(from)
-  }
-)
-
-# coercion 2: from ANY to SpotRate ----
 
 #' @export
 setGeneric(
@@ -182,39 +144,6 @@ setMethod(
     }
   }
 )
-
-#' @export
-setMethod(
-  "as.spotrate",
-  "list",
-  function(x, ...) {
-    spotrate(x$value, x$compounding, x$daycount, x$calendar)
-  }
-)
-
-# print, show and format ----
-
-#' @export
-format.SpotRate <- function(x, ...) {
-  hdr <- paste(
-    as(x@compounding, "character"),
-    as(x@daycount, "character"), x@calendar
-  )
-  paste(callGeneric(x@.Data, ...), hdr)
-}
-
-#' @export
-setMethod(
-  "show",
-  signature(object = "SpotRate"),
-  function(object) {
-    print(format(object))
-  }
-)
-
-# [spotrate], term:[numeric], units:[character]
-# [spotrate], [term]
-# [spotrate], from, to
 
 # methods ----
 
@@ -337,15 +266,6 @@ setReplaceMethod(
   }
 )
 
-#' @export
-setMethod(
-  "length",
-  signature(x = "SpotRate"),
-  function(x) {
-    length(x@.Data)
-  }
-)
-
 check_slots <- function(e1, e2) {
   (e1@compounding == e2@compounding) &
     (e1@daycount == e2@daycount) &
@@ -388,81 +308,5 @@ setMethod(
     elements <- lapply(dots[nempty], spr_builder(x))
     values_ <- c(x@.Data, unlist(lapply(elements, as.numeric)))
     spotrate(values_, x@compounding, x@daycount, x@calendar)
-  }
-)
-
-# convert
-
-#' @export
-setGeneric(
-  "convert",
-  function(x, .t1, .t2, ...) {
-    standardGeneric("convert")
-  }
-)
-
-#' @export
-setMethod(
-  "convert",
-  signature(x = "SpotRate", .t1 = "Term", .t2 = "missing"),
-  function(x, .t1, .t2, .compounding, .daycount, .calendar) {
-    .compounding <- if (missing(.compounding)) x@compounding else .compounding
-    .compounding <- if (is(.compounding, "character")) {
-      compounding(.compounding)
-    } else {
-      .compounding
-    }
-
-    .daycount <- if (missing(.daycount)) x@daycount else .daycount
-    .daycount <- if (is(.daycount, "character")) {
-      daycount(.daycount)
-    } else {
-      .daycount
-    }
-
-    .calendar <- if (missing(.calendar)) x@calendar else .calendar
-
-    .value <- rates(.compounding, toyears(.daycount, .t1), compound(x, .t1))
-    spotrate(.value, .compounding, .daycount, .calendar)
-  }
-)
-
-#' @export
-setMethod(
-  "convert",
-  signature(x = "SpotRate", .t1 = "Date", .t2 = "Date"),
-  function(x, .t1, .t2, .compounding, .daycount, .calendar) {
-    .compounding <- if (missing(.compounding)) x@compounding else .compounding
-    .compounding <- if (is(.compounding, "character")) {
-      compounding(.compounding)
-    } else {
-      .compounding
-    }
-
-    .daycount <- if (missing(.daycount)) x@daycount else .daycount
-    .daycount <- if (is(.daycount, "character")) {
-      daycount(.daycount)
-    } else {
-      .daycount
-    }
-
-    .calendar <- if (missing(.calendar)) x@calendar else .calendar
-
-    tm2 <- term(bizdays::bizdays(.t1, .t2, .calendar), "days")
-    .value <- rates(
-      .compounding, toyears(.daycount, tm2),
-      compound(x, .t1, .t2)
-    )
-    spotrate(.value, .compounding, .daycount, .calendar)
-  }
-)
-
-#' @export
-setMethod(
-  "rep",
-  signature(x = "SpotRate"),
-  function(x, times) {
-    n <- rep(x@.Data, times)
-    spotrate(n, x@compounding, x@daycount, x@calendar)
   }
 )

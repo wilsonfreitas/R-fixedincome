@@ -2,15 +2,26 @@
 % Please edit documentation in R/spotrate-class.R
 \name{spotrate-class}
 \alias{spotrate-class}
+\alias{spotrate}
 \title{SpotRate class}
+\usage{
+spotrate(x, compounding, daycount, calendar, .copyfrom = NULL)
+}
 \arguments{
 \item{x}{a numeric vector representing spot rate values.}
 
-\item{.copyfrom}{}
+\item{compounding}{a \code{Compounding} object.}
+
+\item{daycount}{a \code{Daycount} object.}
+
+\item{calendar}{a \code{bizdays} calendar.}
+
+\item{.copyfrom}{a \code{SpotRate} object used as reference to copy
+attributes.}
 }
 \description{
-The \code{SpotRate} class abstracts a spot rate (or an interst rate) and
-stores all information needed to handle calculations on that rate.
+The \code{SpotRate} class abstracts the interst rate and has methods
+to handle many calculations on it.
 }
 \details{
 The \code{SpotRate} class fully specifies spot rates.
@@ -18,21 +29,19 @@ It has:
 \itemize{
 \item the spot rate values which are numeric values representing the rate.
 \item the compounding regime that specifies how to compound the spot
-rate. This is a \code{compounding} object.
+rate. This is a \code{Compounding} object.
 \item the daycount rule to compute the compounding periods right
 adjusted to the spot rate frequency (which is annual).
-\item the calendar which returns the number of days between 2 dates.
+\item the calendar according to which the number of days are counted.
 }
 
-The \code{SpotRate} class is a \code{numeric} vector and
-all values in this vector share the \code{compounding}, \code{daycount}
-and \code{calendar} attributes.
-The coercion function \code{as.list} splits the vector into many
-single spot rate objects.
+The \code{SpotRate} class is a \code{numeric} and
+all values in it share the \code{compounding}, \code{daycount}
+and \code{calendar} slots.
 
 The \code{calendar} attribute is an instance of \code{bizdays}
 \code{\link[bizdays]{Calendar}} class or the name of one of the calendars
-that already comes with bizdays (pex. actual, weekend, Brazil/ANBIMA).
+that are already registered in bizdays register.
 }
 \note{
 The \code{SpotRate} objects are annual rates.
