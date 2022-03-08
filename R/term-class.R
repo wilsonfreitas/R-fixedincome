@@ -16,7 +16,9 @@
 #' @name term-class
 #' @examples
 #' term(6, "months")
-#' term(as.Date("2022-02-02"), as.Date("2022-02-23"), "Brazil/ANBIMA")
+#' if (require("bizdays")) {
+#'   term(as.Date("2022-02-02"), as.Date("2022-02-23"), "Brazil/ANBIMA")
+#' }
 NULL
 
 #' @export

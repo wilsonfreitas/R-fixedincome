@@ -17,7 +17,10 @@
 #' @references Bruce Tuckman. Fixed Income Securities, Wiley, 1994.
 #' @import bizdays
 #' @import methods
-#' @import lubridate
+#' @importFrom graphics par axis abline points lines legend
+#' @importFrom grDevices xy.coords
+#' @importFrom stats stepfun optim approxfun splinefun
+#' @importFrom utils head
 #' @docType package
 NULL
 

@@ -32,7 +32,7 @@
 #' compound("discrete", 2, 0.05)
 #' compound("continuous", 2, 0.05)
 #'
-#' spr <- spotrate(0.06, "simple", "actual/365")
+#' spr <- spotrate(0.06, "simple", "actual/365", "actual")
 #' compound(spr, 10, "days")
 #' discount(spr, 10, "days")
 #' t <- term(10, "days")

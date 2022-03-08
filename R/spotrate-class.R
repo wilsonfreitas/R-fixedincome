@@ -24,7 +24,7 @@
 #' and \code{calendar} slots.
 #'
 #' The \code{calendar} attribute is an instance of \code{bizdays}
-#' \code{\link[bizdays]{Calendar}} class or the name of one of the calendars
+#' \code{Calendar} class or the name of one of the calendars
 #' that are already registered in bizdays register.
 #'
 #' @param x a numeric vector representing spot rate values.
@@ -134,21 +134,25 @@ c.SpotRate <- function(x, ...) {
 #'
 #' The character representation of a SpotRate is as follows:
 #'
-#' \preformatted{"RATE COMPOUNDING DAYCOUNT"}
+#' \preformatted{"RATE COMPOUNDING DAYCOUNT CALENDAR"}
 #'
 #' where:
 #' \itemize{
-#' \item \code{RATE} is a numeric value
-#' \item \code{COMPOUNDING} is one of the following:
-#'       \code{simple}, \code{discrete}, \code{continuous}
-#' \item \code{DAYCOUNT} is a valid day count rule, pex. \code{business/252},
-#'       see \code{\link{daycount-class}}
+#'   \item \code{RATE} is a numeric value
+#'   \item \code{COMPOUNDING} is one of the following:
+#'         \code{simple}, \code{discrete}, \code{continuous}
+#'   \item \code{DAYCOUNT} is a valid day count rule, pex. \code{business/252},
+#'         see \code{\link{daycount-class}}
+#'   \item \code{CALENDAR} is the name of a bizdays calendar.
 #' }
 #'
 #' @examples
 #'
-#' as.spotrate(c("0.06 simple actual/365", "0.11 discrete business/252"))
-#' @name as.spotrate
+#' as.spotrate(c(
+#'   "0.06 simple actual/365 actual",
+#'   "0.11 discrete business/252 actual"
+#' ))
+#' @name as.spotrate-method
 NULL
 
 #' @export
@@ -168,7 +172,7 @@ setGeneric(
   })
 }
 
-#' @rdname as.spotrate
+#' @rdname as.spotrate-method
 #' @export
 setMethod(
   "as.spotrate",
@@ -212,7 +216,7 @@ setMethod(
 #'
 #' @examples
 #'
-#' spr <- as.spotrate(c("0.06 simple actual/365", "0.11 discrete business/252"))
+#' spr <- as.spotrate("0.06 simple actual/365 actual")
 #' spr <- spr + 0.01
 NULL
 
@@ -267,7 +271,7 @@ setMethod(
 #'
 #' @examples
 #'
-#' spr <- as.spotrate(c("0.06 simple actual/365", "0.11 discrete business/252"))
+#' spr <- as.spotrate("0.06 simple actual/365 actual")
 #' spr == 0.06
 NULL
 
