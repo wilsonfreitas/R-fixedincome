@@ -18,3 +18,8 @@ slcTaxa.R
 ^\.Rproj\.user$
 TS.png
 aux
+.lintr
+.vscode
+TODO.md
+examples
+images
