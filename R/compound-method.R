@@ -1,7 +1,6 @@
-
 #' Compound method
 #'
-#' Computes the compounding factor for spot rates.
+#' Computes the compounding (and discount) factor for spot rates.
 #'
 #' @param x can be a \code{Compounding}, a \code{SpotRate},
 #'        a \code{SpotRateCurve}, a \code{ForwardRate} and a character
@@ -35,17 +34,19 @@
 #'
 #' spr <- spotrate(0.06, "simple", "actual/365")
 #' compound(spr, 10, "days")
+#' discount(spr, 10, "days")
 #' t <- term(10, "days")
 #' compound(spr, t)
+#' discount(spr, t)
 #' d1 <- Sys.Date()
 #' d2 <- Sys.Date() + 10
 #' compound(spr, d1, d2)
+#' discount(spr, d1, d2)
 #'
 #' terms <- c(1, 11, 26, 27, 28)
 #' rates <- c(0.0719, 0.056, 0.0674, 0.0687, 0.07)
 #' curve <- spotratecurve(rates, terms, "discrete", "actual/365", "actual")
 #' compound(curve)
-#'
 NULL
 
 #' @rdname compound-method
@@ -100,7 +101,7 @@ setMethod(
   function(x, t, val = "days") {
     tm <- term(t, val)
     tf <- toyears(x@daycount, tm)
-    compound(x@compounding, tf, x@.Data)
+    callGeneric(x@compounding, tf, x@.Data)
   }
 )
 
@@ -111,7 +112,7 @@ setMethod(
   signature(x = "SpotRate", t = "Term", val = "missing"),
   function(x, t, val) {
     tf <- toyears(x@daycount, t)
-    compound(x@compounding, tf, x@.Data)
+    callGeneric(x@compounding, tf, x@.Data)
   }
 )
 
@@ -123,7 +124,7 @@ setMethod(
   function(x, t, val) {
     tm <- term(t, val, x@calendar)
     tf <- toyears(x@daycount, tm)
-    compound(x@compounding, tf, x@.Data)
+    callGeneric(x@compounding, tf, x@.Data)
   }
 )
 
@@ -133,7 +134,7 @@ setMethod(
   "compound",
   signature(x = "SpotRateCurve", t = "missing", val = "missing"),
   function(x, t, val) {
-    compound(x, x@terms)
+    callGeneric(x, x@terms)
   }
 )
 
@@ -143,6 +144,64 @@ setMethod(
   "compound",
   signature(x = "ForwardRate", t = "missing", val = "missing"),
   function(x, t, val) {
-    compound(x, x@terms)
+    callGeneric(x, x@terms)
+  }
+)
+
+#' @export
+setGeneric(
+  "discount",
+  function(x, t, val, ...) {
+    standardGeneric("discount")
+  }
+)
+
+#' @rdname compound-method
+#' @export
+setMethod(
+  "discount",
+  signature(x = "SpotRate", t = "numeric", val = "character"),
+  function(x, t, val) {
+    1 / compound(x, t, val)
+  }
+)
+
+#' @rdname compound-method
+#' @export
+setMethod(
+  "discount",
+  signature(x = "SpotRate", t = "Term", val = "missing"),
+  function(x, t, val) {
+    1 / compound(x, t)
+  }
+)
+
+#' @rdname compound-method
+#' @export
+setMethod(
+  "discount",
+  signature(x = "SpotRate", t = "Date", val = "Date"),
+  function(x, t, val) {
+    1 / compound(x, t, val)
+  }
+)
+
+#' @rdname compound-method
+#' @export
+setMethod(
+  "discount",
+  signature(x = "SpotRateCurve", t = "missing", val = "missing"),
+  function(x, t, val) {
+    callGeneric(x, x@terms)
+  }
+)
+
+#' @rdname compound-method
+#' @export
+setMethod(
+  "discount",
+  signature(x = "ForwardRate", t = "missing", val = "missing"),
+  function(x, t, val) {
+    callGeneric(x, x@terms)
   }
 )

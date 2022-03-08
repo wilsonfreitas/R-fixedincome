@@ -124,18 +124,18 @@ c.SpotRate <- function(x, ...) {
 }
 
 #' Coerce to SpotRate
-#' 
-#' @description 
+#'
+#' @description
 #' Coerce character objects to SpotRate class
-#' 
+#'
 #' @param x a character with SpotRate specification.
-#' 
+#'
 #' @details
-#' 
+#'
 #' The character representation of a SpotRate is as follows:
-#' 
+#'
 #' \preformatted{"RATE COMPOUNDING DAYCOUNT"}
-#' 
+#'
 #' where:
 #' \itemize{
 #' \item \code{RATE} is a numeric value
@@ -144,11 +144,10 @@ c.SpotRate <- function(x, ...) {
 #' \item \code{DAYCOUNT} is a valid day count rule, pex. \code{business/252},
 #'       see \code{\link{daycount-class}}
 #' }
-#' 
-#' @examples 
-#' 
+#'
+#' @examples
+#'
 #' as.spotrate(c("0.06 simple actual/365", "0.11 discrete business/252"))
-#' 
 #' @name as.spotrate
 NULL
 
@@ -195,45 +194,29 @@ setMethod(
   }
 )
 
-# methods ----
+#' SpotRate arithmetic operations
+#'
+#' Arithmetic operations with SpotRate class
+#'
+#' @param e1 a \code{SpotRate} object or a numeric
+#' @param e2 a \code{SpotRate} object or a numeric
+#'
+#' SpotRate objects can be summed among themselves or with numeric variables.
+#'
+#' When two SpotRate objects are being summed and their slots are different of
+#' each other, the resulting SpotRate brings the slots of the first object
+#' given (\code{e1}).
+#'
+#' @return a SpotRate object.
+#' @name spotrate-arith-method
+#'
+#' @examples
+#'
+#' spr <- as.spotrate(c("0.06 simple actual/365", "0.11 discrete business/252"))
+#' spr <- spr + 0.01
+NULL
 
-#' @export
-setGeneric(
-  "discount",
-  function(x, .t, .v, ...) {
-    standardGeneric("discount")
-  }
-)
-
-#' @export
-setMethod(
-  "discount",
-  signature(x = "SpotRate", .t = "numeric", .v = "character"),
-  function(x, .t, .v) {
-    1 / compound(x, .t, .v)
-  }
-)
-
-#' @export
-setMethod(
-  "discount",
-  signature(x = "SpotRate", .t = "Term", .v = "missing"),
-  function(x, .t, .v) {
-    1 / compound(x, .t)
-  }
-)
-
-#' @export
-setMethod(
-  "discount",
-  signature(x = "SpotRate", .t = "Date", .v = "Date"),
-  function(x, .t, .v) {
-    1 / compound(x, .t, .v)
-  }
-)
-
-# Ops: Arith, Compare methods ----
-
+#' @rdname spotrate-arith-method
 #' @export
 setMethod(
   "Arith",
@@ -248,6 +231,7 @@ setMethod(
   }
 )
 
+#' @rdname spotrate-arith-method
 #' @export
 setMethod(
   "Arith",
@@ -258,6 +242,7 @@ setMethod(
   }
 )
 
+#' @rdname spotrate-arith-method
 #' @export
 setMethod(
   "Arith",
@@ -268,6 +253,25 @@ setMethod(
   }
 )
 
+#' SpotRate comparison operations
+#'
+#' Comparison operations with SpotRate class
+#' \code{SpotRate} objects can be compared among themselves or with numeric
+#' variables.
+#'
+#' @param e1 a \code{SpotRate} object or a numeric
+#' @param e2 a \code{SpotRate} object or a numeric
+#'
+#' @return a boolean \code{logical} object.
+#' @name spotrate-compare-method
+#'
+#' @examples
+#'
+#' spr <- as.spotrate(c("0.06 simple actual/365", "0.11 discrete business/252"))
+#' spr == 0.06
+NULL
+
+#' @rdname spotrate-compare-method
 #' @export
 setMethod(
   "Compare",
@@ -277,6 +281,7 @@ setMethod(
   }
 )
 
+#' @rdname spotrate-compare-method
 #' @export
 setMethod(
   "Compare",
@@ -286,6 +291,7 @@ setMethod(
   }
 )
 
+#' @rdname spotrate-compare-method
 #' @export
 setMethod(
   "Compare",
