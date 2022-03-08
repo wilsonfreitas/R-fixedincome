@@ -104,6 +104,55 @@ setMethod(
 )
 
 #' @export
+`[.SpotRate` <- function(x, i) {
+  spotrate(x@.Data[i], x@compounding, x@daycount, x@calendar)
+}
+
+#' @export
+`[<-.SpotRate` <- function(x, i, value) {
+  x@.Data[i] <- value
+  x
+}
+
+#' @export
+c.SpotRate <- function(x, ...) {
+  dots <- list(...)
+  nempty <- sapply(dots, length) != 0
+  elements <- lapply(dots[nempty], spr_builder(x))
+  values_ <- c(x@.Data, unlist(lapply(elements, as.numeric)))
+  spotrate(values_, x@compounding, x@daycount, x@calendar)
+}
+
+#' Coerce to SpotRate
+#' 
+#' @description 
+#' Coerce character objects to SpotRate class
+#' 
+#' @param x a character with SpotRate specification.
+#' 
+#' @details
+#' 
+#' The character representation of a SpotRate is as follows:
+#' 
+#' \preformatted{"RATE COMPOUNDING DAYCOUNT"}
+#' 
+#' where:
+#' \itemize{
+#' \item \code{RATE} is a numeric value
+#' \item \code{COMPOUNDING} is one of the following:
+#'       \code{simple}, \code{discrete}, \code{continuous}
+#' \item \code{DAYCOUNT} is a valid day count rule, pex. \code{business/252},
+#'       see \code{\link{daycount-class}}
+#' }
+#' 
+#' @examples 
+#' 
+#' as.spotrate(c("0.06 simple actual/365", "0.11 discrete business/252"))
+#' 
+#' @name as.spotrate
+NULL
+
+#' @export
 setGeneric(
   "as.spotrate",
   function(x, ...) {
@@ -120,6 +169,7 @@ setGeneric(
   })
 }
 
+#' @rdname as.spotrate
 #' @export
 setMethod(
   "as.spotrate",
@@ -245,26 +295,7 @@ setMethod(
   }
 )
 
-# other methods
-
-#' @export
-setMethod(
-  "[",
-  signature(x = "SpotRate"),
-  function(x, i) {
-    spotrate(x@.Data[i], x@compounding, x@daycount, x@calendar)
-  }
-)
-
-#' @export
-setReplaceMethod(
-  "[",
-  signature(x = "SpotRate"),
-  function(x, i, value) {
-    x@.Data[i] <- value
-    x
-  }
-)
+# support functions ----
 
 check_slots <- function(e1, e2) {
   (e1@compounding == e2@compounding) &
@@ -297,16 +328,3 @@ spr_builder <- function(x) {
     spotrate(values_, x@compounding, x@daycount, x@calendar)
   }
 }
-
-#' @export
-setMethod(
-  "c",
-  signature(x = "SpotRate"),
-  function(x, ...) {
-    dots <- list(...)
-    nempty <- sapply(dots, length) != 0
-    elements <- lapply(dots[nempty], spr_builder(x))
-    values_ <- c(x@.Data, unlist(lapply(elements, as.numeric)))
-    spotrate(values_, x@compounding, x@daycount, x@calendar)
-  }
-)
