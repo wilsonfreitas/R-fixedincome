@@ -12,6 +12,7 @@
 #' @param end_date the final date for a period between two dates.
 #' @param calendar the calendar used to compute the amount of days for a period
 #' between two dates.
+#' @param ... additional arguments
 #'
 #' @name term-class
 #' @examples
@@ -28,7 +29,7 @@ term <- function(x, ...) {
 
 #' @rdname term-class
 #' @export
-term.numeric <- function(x, units = "days") {
+term.numeric <- function(x, units = "days", ...) {
   value <- x
 
   if (length(units) > 1) {
@@ -49,7 +50,7 @@ term.Term <- function(x, ...) {
 
 #' @rdname term-class
 #' @export
-term.Date <- function(x, end_date, calendar) {
+term.Date <- function(x, end_date, calendar, ...) {
   start_date <- x
   new("DateRangeTerm", bizdays(start_date, end_date, calendar),
     start_date = start_date, end_date = end_date, calendar = calendar,
@@ -86,6 +87,7 @@ setMethod(
 #' Also a character can be coerced to a Term object.
 #'
 #' @param x a Term object or a character representing a term.
+#' @param ... additional arguments
 #'
 #' @details
 #' The string representation of the Term class follows the layout:
@@ -146,10 +148,13 @@ setMethod(
 #' @param x a Term object.
 #' @param i index used with the \code{[]} operator. Can be numeric
 #' (positional index) or boolean (\code{logical}), similar to vector indexing.
+#' @param j \emph{unused}.
+#' @param drop \emph{unused}.
 #' @param k a numeric with the number of elements to shift the Term vector
 #' @param lag a numerix indicating which lag to use.
 #' @param fill a numeric value (or \code{NA}) to fill the empty created by
 #' applying shift or diff to a Term vector.
+#' @param ... additional arguments.
 #'
 #' @details
 #' Indexing a Term with the \code{[]} operator is similar to vector indexing.

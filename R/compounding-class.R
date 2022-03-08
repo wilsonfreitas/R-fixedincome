@@ -76,13 +76,13 @@ ContinuousCompoundingClass <- setClass(
 )
 
 #' @export
-as.character.Simple <- function(x) "simple"
+as.character.Simple <- function(x, ...) "simple"
 
 #' @export
-as.character.Discrete <- function(x) "discrete"
+as.character.Discrete <- function(x, ...) "discrete"
 
 #' @export
-as.character.Continuous <- function(x) "continuous"
+as.character.Continuous <- function(x, ...) "continuous"
 
 #' @export
 setMethod(

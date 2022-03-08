@@ -16,7 +16,7 @@ forwardrate <- function(x, ...) {
 
 #' @export
 forwardrate.numeric <- function(x, terms, compounding, daycount,
-                                calendar = "actual", .copyfrom = NULL) {
+                                calendar = "actual", .copyfrom = NULL, ...) {
   if (!is.null(.copyfrom)) {
     compounding <- if (missing(compounding)) {
       .copyfrom@compounding
@@ -37,7 +37,7 @@ forwardrate.numeric <- function(x, terms, compounding, daycount,
 }
 
 #' @export
-forwardrate.SpotRateCurve <- function(x, t1 = NULL, t2 = NULL) {
+forwardrate.SpotRateCurve <- function(x, t1 = NULL, t2 = NULL, ...) {
   if (length(x) == 1) {
     .Object <- new("ForwardRate",
       .Data = x@.Data,

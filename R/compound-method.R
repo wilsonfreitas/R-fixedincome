@@ -9,6 +9,7 @@
 #'        a \code{Date} or even missing. See Details.
 #' @param val is the value of the spot rate to be compounded in the given term.
 #'        Can be a numeric, a \code{Date} or missing. See Details.
+#' @param ... additional arguments.
 #'
 #' @details
 #' For \code{Compounding} classes the arguments \code{t} and \code{val} must be

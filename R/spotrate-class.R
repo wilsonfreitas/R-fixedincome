@@ -129,6 +129,8 @@ c.SpotRate <- function(x, ...) {
 #' Coerce character objects to SpotRate class
 #'
 #' @param x a character with SpotRate specification.
+#' @param simplify a boolean indicating whether to simplify SpotRate creation
+#'        or not. Defaults to TRUE.
 #'
 #' @details
 #'
@@ -145,6 +147,11 @@ c.SpotRate <- function(x, ...) {
 #'         see \code{\link{daycount-class}}
 #'   \item \code{CALENDAR} is the name of a bizdays calendar.
 #' }
+#'
+#' \code{simplify} check if compounding, daycount and calendar are the same for
+#' all given characters.
+#' If it is true the returned object is a SpotRate otherwise a \code{list} with
+#' SpotRate objects is returned.
 #'
 #' @examples
 #'

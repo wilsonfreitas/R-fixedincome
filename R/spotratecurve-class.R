@@ -25,7 +25,7 @@ spotratecurve <- function(x, terms, ..., refdate = Sys.Date()) {
 #' @export
 spotratecurve.numeric <- function(x, terms, compounding, daycount,
                                   calendar = "actual", refdate = Sys.Date(),
-                                  .copyfrom = NULL) {
+                                  .copyfrom = NULL, ...) {
   .underlying <- spotrate(
     x,
     compounding = compounding,
@@ -53,7 +53,7 @@ spotratecurve.numeric <- function(x, terms, compounding, daycount,
 #' @export
 spotratecurve.SpotRate <- function(x, terms,
                                    refdate = Sys.Date(),
-                                   .copyfrom = NULL) {
+                                   .copyfrom = NULL, ...) {
   .Object <- new("SpotRateCurve",
     .Data = x@.Data,
     compounding = x@compounding,
@@ -76,7 +76,7 @@ as.spotratecurve <- function(x, ...) {
 }
 
 #' @export
-as.spotratecurve.ForwardRate <- function(x, refdate = Sys.Date()) {
+as.spotratecurve.ForwardRate <- function(x, refdate = Sys.Date(), ...) {
   cumfact <- cumprod(compound(x))
   cumterms <- term(cumsum(x@terms), x@terms@units)
 

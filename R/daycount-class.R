@@ -28,6 +28,7 @@
 #'        or a character representing a \code{Term}. See Details.
 #' @param units a character with the Term units. Can also be missing.
 #'        See Details.
+#' @param ... additional arguments
 #'
 #' @name daycount-class
 #' @examples
