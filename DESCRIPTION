@@ -36,6 +36,7 @@ Collate:
     "spotratecurve-interpolation.R"
     "forwardrate-class.R"
     "compound-method.R"
+    "hidden.R"
     "zzz.R"
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
