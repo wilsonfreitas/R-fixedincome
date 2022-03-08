@@ -2,6 +2,10 @@
 % Please edit documentation in R/compounding-class.R
 \name{compounding-class}
 \alias{compounding-class}
+\alias{Simple-class}
+\alias{Compounding-class}
+\alias{Discrete-class}
+\alias{Continuous-class}
 \alias{compounding}
 \title{Compounding class}
 \usage{

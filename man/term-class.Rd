@@ -2,6 +2,10 @@
 % Please edit documentation in R/term-class.R
 \name{term-class}
 \alias{term-class}
+\alias{term,Term-method}
+\alias{DateRangeTerm-class}
+\alias{Term-class}
+\alias{term}
 \alias{term.numeric}
 \alias{term.Date}
 \title{Term class}

@@ -2,6 +2,7 @@
 % Please edit documentation in R/spotrate-class.R
 \name{spotrate-class}
 \alias{spotrate-class}
+\alias{SpotRate-class}
 \alias{spotrate}
 \title{SpotRate class}
 \usage{

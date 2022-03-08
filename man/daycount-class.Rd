@@ -2,6 +2,7 @@
 % Please edit documentation in R/daycount-class.R
 \name{daycount-class}
 \alias{daycount-class}
+\alias{Daycount-class}
 \alias{daycount}
 \alias{dib,Daycount-method}
 \alias{toyears,Daycount,Term,missing-method}
