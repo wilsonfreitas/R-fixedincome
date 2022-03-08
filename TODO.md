@@ -60,6 +60,7 @@
     - [ ] append SpotRateCurve
     - [ ] concatenate SpotRateCurve
 - [ ] Naming: SpotRateCurve should have a name? I am not sure about that!
+- [ ] create DiscountCurve - interpolations should be applied to it.
 
 ### Multi SpotRateCurve
 
@@ -74,6 +75,9 @@
 
 
 ### Interpolation
+
+[ref1]: https://github.com/werleycordeiro/Dynamic-Nelson-Siegel-and-Svensson/blob/master/DNS-TS.R
+[ref2]: https://www.r-bloggers.com/2021/05/dynamic-nelson-siegel-model-with-r-code/
 
 - [x] set interpolation to SpotRateCurve
 - [x] unset interpolation to SpotRateCurve
@@ -90,7 +94,7 @@
     - [x] Nelson-Siegel-Svensson
     - [x] FlatForward COPOM
     - [ ] Constrained Spline
-    - [ ] Diebold-Li
+    - [ ] Dynamic Nelson-Siegel [ref1][ref1], [ref2][ref2] 
 - [ ] Improve curve fit stop using object copy
 
 ### Bonds
