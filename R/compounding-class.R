@@ -1,14 +1,8 @@
-#'
 #' Compounding class
 #'
-#' @description
 #' The Compounding class abstracts the compounding regime used to
 #' discount or compound a spot rate.
 #'
-#' @param x a character with the name of compounding regime:
-#'        \code{simple}, \code{discrete}, \code{continuous}
-#'
-#' @details
 #' There are 3 compoundings:
 #' \itemize{
 #'   \item \code{simple} for simple interest rate compounding \deqn{1 + rt}
@@ -18,43 +12,17 @@
 #'         \deqn{exp(rt)}
 #' }
 #'
-#' A Compounding object can be instanciated with the \code{compounding}
-#' function, passing a string with the name of one of the compounding regimes:
-#' \code{simple}, \code{discrete}, \code{continuous}.
-#'
-#' The \code{compounding} class has 2 methods:
+#' The \code{Compounding} class has 2 methods:
 #' \itemize{
 #'   \item \code{compound} to compound the spot rate for a given term.
 #'   \item \code{rates} to compute the implied rate for a compound factor
 #'         in a given term.
 #' }
 #'
-#' @aliases Simple-class Compounding-class Discrete-class Continuous-class
+#' @aliases Simple-class Discrete-class Continuous-class
 #'
-#' @name compounding-class
-#' @examples
-#' compounding("simple")
-#' compounding("discrete")
-#' compounding("continuous")
-#'
-#' comp <- compounding("discrete")
-#' compound(comp, 0.06, 2) # equals (1 + 0.06) ^ 2 = 1.1236
-#' rates(comp, 1.1236, 2) # equals 0.06
-NULL
-
-#' @name compounding-class
 #' @export
-compounding <- function(x = c("simple", "discrete", "continuous")) {
-  x <- match.arg(x)
-  switch(x,
-    "simple" = SimpleCompoundingClass(),
-    "discrete" = DiscreteCompoundingClass(),
-    "continuous" = ContinuousCompoundingClass()
-  )
-}
-
-#' @export
-CompoundingClass <- setClass(
+setClass(
   "Compounding",
   contains = "VIRTUAL"
 )
@@ -76,6 +44,40 @@ ContinuousCompoundingClass <- setClass(
   "Continuous",
   contains = "Compounding"
 )
+
+#' Create Compounding class
+#'
+#' @description
+#' `compound()` creates a `Compounding` object in one of its subclasses:
+#' [Simple-class], [Discrete-class], [Continuous-class].
+#'
+#' @param x a character with the name of compounding regime:
+#'        \code{simple}, \code{discrete}, \code{continuous}
+#'
+#' @details
+#' A Compounding object can be instanciated with the \code{compounding}
+#' function, passing a string with the name of one of the compounding regimes:
+#' \code{simple}, \code{discrete}, \code{continuous}.
+#'
+#' @return A subclass of `Compounding` object.
+#'
+#' @examples
+#' compounding("simple")
+#' compounding("discrete")
+#' compounding("continuous")
+#'
+#' comp <- compounding("discrete")
+#' compound(comp, 0.06, 2) # equals (1 + 0.06) ^ 2 = 1.1236
+#' rates(comp, 1.1236, 2) # equals 0.06
+#' @export
+compounding <- function(x = c("simple", "discrete", "continuous")) {
+  x <- match.arg(x)
+  switch(x,
+    "simple" = SimpleCompoundingClass(),
+    "discrete" = DiscreteCompoundingClass(),
+    "continuous" = ContinuousCompoundingClass()
+  )
+}
 
 #' @export
 as.character.Simple <- function(x, ...) "simple"
@@ -121,6 +123,7 @@ setMethod(
 #' @param x a Compounding object or a character with the compounding name.
 #' @param t a numeric representing the term.
 #' @param val a numeric representing the compounding factor.
+#' @param ... additional arguments. Currently unused.
 #'
 #' @details
 #' If the \code{x} argument is a \code{character} with a valid compounding name
@@ -130,9 +133,13 @@ setMethod(
 #'
 #' @return a numeric value that represents a spot rate.
 #'
-#' @name rates-method
-#' @examples
+#' @aliases
+#' rates,Continuous,numeric,numeric-method
+#' rates,Discrete,numeric,numeric-method
+#' rates,Simple,numeric,numeric-method
+#' rates,character,numeric,numeric-method
 #'
+#' @examples
 #' rates("simple", 2, 1.1)
 #' rates("discrete", 2, 1.1025)
 #' rates("continuous", 2, 1.105170918)
@@ -140,8 +147,6 @@ setMethod(
 #' comp <- compounding("discrete")
 #' compound(comp, 0.06, 2) # equals (1 + 0.06) ^ 2 = 1.1236
 #' rates(comp, 1.1236, 2) # equals 0.06
-NULL
-
 #' @export
 setGeneric(
   "rates",
@@ -150,36 +155,28 @@ setGeneric(
   }
 )
 
-#' @rdname rates-method
-#' @export
 setMethod(
   "rates",
   signature(x = "Simple", t = "numeric", val = "numeric"),
-  function(x, t, val) (val - 1) * (1 / t)
+  function(x, t, val, ...) (val - 1) * (1 / t)
 )
 
-#' @rdname rates-method
-#' @export
 setMethod(
   "rates",
   signature(x = "Discrete", t = "numeric", val = "numeric"),
-  function(x, t, val) val^(1 / t) - 1
+  function(x, t, val, ...) val^(1 / t) - 1
 )
 
-#' @rdname rates-method
-#' @export
 setMethod(
   "rates",
   signature(x = "Continuous", t = "numeric", val = "numeric"),
-  function(x, t, val) log(val) * (1 / t)
+  function(x, t, val, ...) log(val) * (1 / t)
 )
 
-#' @rdname rates-method
-#' @export
 setMethod(
   "rates",
   signature(x = "character", t = "numeric", val = "numeric"),
-  function(x, t, val) {
+  function(x, t, val, ...) {
     obj <- compounding(x)
     callGeneric(obj, t, val)
   }
