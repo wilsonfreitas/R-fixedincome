@@ -1,13 +1,26 @@
 ---
 title: "Pricing Fixed Rate Bonds with fixedincome package"
 author: "Wilson Freitas"
-date: "12/03/2017"
-output: html_document
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Creating Calendars}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+```{r}
+library(fixedincome)
+library(bizdays)
+library(httr)
+library(jsonlite)
+library(transmute)
+```
+
 
 ```
 Títulos Públicos Federais	10/Mar/2017
@@ -30,7 +43,7 @@ Mínimo (D0)	Máximo (D0)	Mínimo (D+1)	Máximo (D+1)
 ```
 
 
-```{json}
+```json
 {
   "name": "LTN_20170401",
   "issue_date": "2016-01-15",
@@ -59,53 +72,49 @@ Mínimo (D0)	Máximo (D0)	Mínimo (D+1)	Máximo (D+1)
 ```
 
 ```{r}
-ZeroCouponBond(
-  notional = 1000,
-  yield_rate = "0.121892 discrete business/252 Brazil/ANBIMA",
-  maturity_date = "2017-04-01",
-  issue_date = "2016-01-15",
-  calendar_adjustment = "following",
-  calendar = "Brazil/ANBIMA"
-)
+# ZeroCouponBond(
+#   notional = 1000,
+#   yield_rate = "0.121892 discrete business/252 Brazil/ANBIMA",
+#   maturity_date = "2017-04-01",
+#   issue_date = "2016-01-15",
+#   calendar_adjustment = "following",
+#   calendar = "Brazil/ANBIMA"
+# )
 ```
 
 
 
 ```{r}
-library(httr)
 url <- modify_url("https://api.morph.io/wilsonfreitas/MorthIO_VNATitulosPublicos_ANBIMA/data.json",
                   query = list(key = "uIUD3TeyxgIVWhVwsFr0",
                                query = "select * from 'data' where data_ref in (select max(data_ref) from 'data')"))
 res <- GET(url)
-jsonlite::fromJSON(content(res, as = "text"))
+fromJSON(content(res, as = "text"))
 
 url <- modify_url("https://api.morph.io/wilsonfreitas/MorthIO_TitulosPublicos_ANBIMA/data.json",
                   query = list(key = "uIUD3TeyxgIVWhVwsFr0",
                                query = "select * from 'data' where data_referencia in (select max(data_referencia) from 'data') and titulo = 'LTN'"))
 
 res <- GET(url)
-df <- jsonlite::fromJSON(content(res, as = "text"))
+df <- fromJSON(content(res, as = "text"))
 
 url <- modify_url("https://api.morph.io/wilsonfreitas/MorthIO_TaxasVNATitulosPublicos_ANBIMA/data.json",
                   query = list(key = "uIUD3TeyxgIVWhVwsFr0",
                                query = "select * from 'data' where data_ref in (select max(data_ref) from 'data')"))
 res <- GET(url)
-jsonlite::fromJSON(content(res, as = "text"))
+fromJSON(content(res, as = "text"))
 
 ```
 
 ## LTN - ZeroCouponBond
 
 ```{r}
-library(transmute)
-library(httr)
-
 url <- modify_url("https://api.morph.io/wilsonfreitas/MorthIO_TitulosPublicos_ANBIMA/data.json",
                   query = list(key = "uIUD3TeyxgIVWhVwsFr0",
                                query = "select * from 'data' where data_referencia in (select max(data_referencia) from 'data') and titulo = 'LTN'"))
 
 res <- GET(url)
-df <- jsonlite::fromJSON(content(res, as = "text"))
+df <- fromJSON(content(res, as = "text"))
 
 tr_ <- transmuter(
   match_regex("^\\d{8}$", function(text, match) as.Date(text, format="%Y%m%d"))
@@ -124,7 +133,7 @@ url <- modify_url("https://api.morph.io/wilsonfreitas/MorthIO_TitulosPublicos_AN
                   query = list(key = "uIUD3TeyxgIVWhVwsFr0",
                                query = "select * from 'data' where data_referencia in (select max(data_referencia) from 'data') and titulo = 'NTN-F'"))
 res <- GET(url)
-df <- jsonlite::fromJSON(content(res, as = "text"))
+df <- fromJSON(content(res, as = "text"))
 df <- transmute(tr_, df)
 
 yield_rate <- spotrate(df$taxa_ind/100, "discrete", "business/252", "Brazil/ANBIMA")
@@ -157,14 +166,14 @@ url <- modify_url("https://api.morph.io/wilsonfreitas/MorthIO_TitulosPublicos_AN
                   query = list(key = "uIUD3TeyxgIVWhVwsFr0",
                                query = "select * from 'data' where data_referencia = '20170404' and titulo = 'NTN-B'"))
 res <- GET(url)
-df <- jsonlite::fromJSON(content(res, as = "text"))
+df <- fromJSON(content(res, as = "text"))
 df <- transmute(tr_, df)
 
 url <- modify_url("https://api.morph.io/wilsonfreitas/MorthIO_VNATitulosPublicos_ANBIMA/data.json",
                   query = list(key = "uIUD3TeyxgIVWhVwsFr0",
                                query = "select VNA from 'data' where data_ref = '2017-04-04' and titulo = 'NTNB'"))
 res <- GET(url)
-VNA <- jsonlite::fromJSON(content(res, as = "text"))
+VNA <- fromJSON(content(res, as = "text"))
 
 vna_ntnb <- VNA$VNA
 yield_rate <- spotrate(df$taxa_ind/100, "discrete", "business/252", "Brazil/ANBIMA")

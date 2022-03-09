@@ -16,6 +16,7 @@ Description: fixedincome has a set of funtions which helps with the mathematics
     calculations.
 URL: https://github.com/wilsonfreitas/R-fixedincome
 BugReports: https://github.com/wilsonfreitas/R-fixedincome/issues
+VignetteBuilder: knitr
 Imports:
     bizdays (>= 1.0.0),
     methods,
@@ -23,6 +24,10 @@ Imports:
     stats,
     grDevices,
     utils
+Suggests: 
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
 Collate:
     "fixedincome-internal.R"
     "utils.R"
@@ -42,6 +47,4 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Encoding: UTF-8
 LazyData: true
-Suggests: 
-    testthat (>= 3.0.0)
 Config/testthat/edition: 3
