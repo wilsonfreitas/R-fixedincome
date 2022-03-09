@@ -82,37 +82,25 @@ setMethod(
   }
 )
 
-#' Term coercion
+#' Coerce a character to a Term
 #'
-#' The Term class has a string representation and can be coerced to a character.
-#' Also a character can be coerced to a Term object.
+#' `as.term` coerces a character vector to a Term object.
 #'
-#' @param x a Term object or a character representing a term.
-#' @param ... additional arguments
+#' @param x a character to be coerced to a Term.
+#' @param ... additional arguments. Currently unused.
+#'
+#' @return A Term object.
 #'
 #' @details
 #' The string representation of the Term class follows the layout:
-#' \code{<number> <units>}
+#'
+#' \preformatted{NUMBER UNITS}
+#'
 #' where units is one of: days, months, years.
 #'
-#' @name term-coercion
+#' @aliases as.term,character-method
 #' @examples
 #' t <- as.term("6 months")
-#' as.character(t)
-NULL
-
-
-#' @rdname term-coercion
-#' @export
-setMethod(
-  "as.character",
-  signature(x = "Term"),
-  function(x) {
-    format(x)
-  }
-)
-
-#' @rdname term-coercion
 #' @export
 setGeneric(
   "as.term",
@@ -121,7 +109,6 @@ setGeneric(
   }
 )
 
-#' @rdname term-coercion
 setMethod(
   "as.term",
   signature(x = "character"),
