@@ -18,6 +18,9 @@ or a character representing a \code{Term}. See Details.}
 \item{units}{a character with the Term units. Can also be missing.
 See Details.}
 }
+\value{
+A numeric.
+}
 \description{
 \code{toyears} returns a numeric representing a Term in years.
 }

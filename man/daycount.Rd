@@ -12,6 +12,9 @@ daycount(x, ...)
 
 \item{...}{additional arguments. Currently unused.}
 }
+\value{
+A Daycount object.
+}
 \description{
 \code{daycount} creates a \code{Daycount} object.
 It accepts the following daycount rules: \code{actual/365},

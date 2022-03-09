@@ -10,6 +10,9 @@ dib(x)
 \arguments{
 \item{x}{a Daycount object.}
 }
+\value{
+A numeric.
+}
 \description{
 \code{dib} returns the days in base, that is the number of days used to
 define one year.
