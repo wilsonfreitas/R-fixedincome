@@ -5,6 +5,7 @@
 \alias{ForwardRate-class}
 \title{ForwardRate class}
 \description{
-ForwardRate class abstracts a forward rate and differs from a spot rate
-because it has a term associated.
+ForwardRate class abstracts a forward rate.
+It has an additional term, that reffers to the forward period used to
+compute the forward rate.
 }

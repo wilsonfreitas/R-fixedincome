@@ -1,7 +1,8 @@
 #' ForwardRate class
 #'
-#' ForwardRate class abstracts a forward rate and differs from a spot rate
-#' because it has a term associated.
+#' ForwardRate class abstracts a forward rate.
+#' It has an additional term, that reffers to the forward period used to
+#' compute the forward rate.
 #'
 #' @export
 setClass(
@@ -14,7 +15,7 @@ setClass(
 
 #' Create a ForwardRate object
 #'
-#' `forwardrate()` S3 method creates a ForwardRate object.
+#' `forwardrate()` creates a ForwardRate object.
 #'
 #' @param x a numeric or a SpotRateCurve object.
 #' @param terms a numeric vector with positive values representing terms of
@@ -27,20 +28,16 @@ setClass(
 #' @param t1 initial term
 #' @param t2 final term
 #' @param ... additional arguments.
-#' 
+#'
 #' The arguments \code{t1} and \code{t2} define initial and final term used to
 #' extract a ForwardRate from a SpotRateCurve.
 #'
-#' @aliases forwardrate
-#' @name forwardrate-method
-NULL
-
 #' @export
 forwardrate <- function(x, ...) {
   UseMethod("forwardrate")
 }
 
-#' @rdname forwardrate-method
+#' @rdname forwardrate
 #' @export
 forwardrate.numeric <- function(x, terms, compounding, daycount,
                                 calendar, .copyfrom = NULL, ...) {
@@ -63,7 +60,7 @@ forwardrate.numeric <- function(x, terms, compounding, daycount,
   )
 }
 
-#' @rdname forwardrate-method
+#' @rdname forwardrate
 #' @export
 forwardrate.SpotRateCurve <- function(x, t1 = NULL, t2 = NULL, ...) {
   if (length(x) == 1) {
@@ -112,24 +109,20 @@ forwardrate.SpotRateCurve <- function(x, t1 = NULL, t2 = NULL, ...) {
 
 #' Coerce objects to ForwardRate
 #'
-#' A \code{ForwardRate} object can be created from a SpotRate object and
-#' a SpotRateCurve.
+#' A \code{ForwardRate} object can be created from a `SpotRate` object and
+#' a `SpotRateCurve`.
 #'
-#' @param x a SpotRate or a SpotRateCurve object.
+#' @param x a `SpotRate` or a `SpotRateCurve` object.
 #' @param terms a numeric with positive values representing terms or a Term
 #'        object.
 #' @param ... additional arguments
 #'
-#' @aliases as.forwardrate
-#' @name as.forwardrate-method
-NULL
-
 #' @export
 as.forwardrate <- function(x, ...) {
   UseMethod("as.forwardrate")
 }
 
-#' @rdname as.forwardrate-method
+#' @rdname as.forwardrate
 #' @export
 as.forwardrate.SpotRate <- function(x, terms, ...) {
   new("ForwardRate",
@@ -141,7 +134,7 @@ as.forwardrate.SpotRate <- function(x, terms, ...) {
   )
 }
 
-#' @rdname as.forwardrate-method
+#' @rdname as.forwardrate
 #' @export
 as.forwardrate.SpotRateCurve <- function(x, ...) {
   new("ForwardRate",
