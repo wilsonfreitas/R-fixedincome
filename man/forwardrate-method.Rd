@@ -5,13 +5,15 @@
 \alias{forwardrate}
 \alias{forwardrate.numeric}
 \alias{forwardrate.SpotRateCurve}
-\title{Create a SpotRateCurve object}
+\title{Create a ForwardRate object}
 \usage{
 \method{forwardrate}{numeric}(x, terms, compounding, daycount, calendar, .copyfrom = NULL, ...)
 
 \method{forwardrate}{SpotRateCurve}(x, t1 = NULL, t2 = NULL, ...)
 }
 \arguments{
+\item{x}{a numeric or a SpotRateCurve object.}
+
 \item{terms}{a numeric vector with positive values representing terms of
 the forward rates.}
 
@@ -24,12 +26,15 @@ the forward rates.}
 \item{.copyfrom}{a SpotRate object that is used as reference to build
 the SpotRateCurve object.}
 
-\item{...}{additional arguments}
+\item{...}{additional arguments.
 
-\item{refdate}{the curve reference date.}
+The arguments \code{t1} and \code{t2} define initial and final term used to
+extract a ForwardRate from a SpotRateCurve.}
+
+\item{t1}{initial term}
+
+\item{t2}{final term}
 }
 \description{
-\code{spotratecurve()} S3 method createas a SpotRateCurve object.
-It is dispatched for numeric values, that represent spot rates and
-for SpotRate objects.
+\code{forwardrate()} S3 method creates a ForwardRate object.
 }

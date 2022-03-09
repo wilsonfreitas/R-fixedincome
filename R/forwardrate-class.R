@@ -12,22 +12,24 @@ setClass(
   contains = "SpotRate"
 )
 
-#' Create a SpotRateCurve object
+#' Create a ForwardRate object
 #'
-#' `spotratecurve()` S3 method createas a SpotRateCurve object.
-#' It is dispatched for numeric values, that represent spot rates and
-#' for SpotRate objects.
+#' `forwardrate()` S3 method creates a ForwardRate object.
 #'
-#' @param x
+#' @param x a numeric or a SpotRateCurve object.
 #' @param terms a numeric vector with positive values representing terms of
 #'        the forward rates.
 #' @param compounding a character with the compouning name.
 #' @param daycount a character representing the daycount.
 #' @param calendar a calendar object.
-#' @param refdate the curve reference date.
 #' @param .copyfrom a SpotRate object that is used as reference to build
 #'        the SpotRateCurve object.
-#' @param ... additional arguments
+#' @param t1 initial term
+#' @param t2 final term
+#' @param ... additional arguments.
+#' 
+#' The arguments \code{t1} and \code{t2} define initial and final term used to
+#' extract a ForwardRate from a SpotRateCurve.
 #'
 #' @aliases forwardrate
 #' @name forwardrate-method
