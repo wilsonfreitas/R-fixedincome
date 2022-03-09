@@ -66,7 +66,7 @@ setMethod(
 #'
 #' @param x a Daycount object.
 #'
-#' @aliases dib,Daycount
+#' @aliases dib,Daycount-method
 #'
 #' @return A numeric.
 #'

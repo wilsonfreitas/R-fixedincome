@@ -2,7 +2,7 @@
 % Please edit documentation in R/daycount-class.R
 \name{dib}
 \alias{dib}
-\alias{dib,Daycount}
+\alias{dib,Daycount-method}
 \title{Days in base for Daycount}
 \usage{
 dib(x)
