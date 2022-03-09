@@ -13,8 +13,21 @@
 \alias{NelsonSiegelSvensson-class}
 \title{Interpolation classes}
 \description{
-Classes that implement interpolation methods to be used with SpotRateCurve
+Classes that implement interpolation methods to be used with \code{SpotRateCurve}
 objects.
+}
+\details{
+\itemize{
+\item FlatForward
+\item Linear
+\item LogLinear
+\item NaturalSpline
+\item HermiteSpline
+\item MonotoneSpline
+\item NelsonSiegel
+\item NelsonSiegelSvensson
+}
+
 Every class that implement a interpolation method inherits the
 \code{Interpolation} class.
 }
