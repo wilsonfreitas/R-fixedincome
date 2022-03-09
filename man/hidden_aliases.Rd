@@ -3,8 +3,12 @@
 \docType{data}
 \name{hidden_aliases}
 \alias{hidden_aliases}
+\alias{Arith,SpotRate,SpotRate-method}
+\alias{Arith,SpotRate,numeric-method}
+\alias{Arith,numeric,SpotRate-method}
 \alias{!=,Compounding,Compounding-method}
 \alias{==,Compounding,Compounding-method}
+\alias{[,Term,numeric,ANY-method}
 \alias{[,ForwardRate,missing,missing-method}
 \alias{[,ForwardRate,numeric,missing-method}
 \alias{[,SpotRateCurve,logical,missing-method}
@@ -28,9 +32,15 @@
 \alias{show,SpotRate-method}
 \alias{show,SpotRateCurve-method}
 \alias{show,Term-method}
+\alias{format,Term-method}
+\alias{c,Term-method}
 \alias{c,SpotRate-method}
 \alias{c,SpotRateCurve-method}
 \alias{c,ForwardRate-method}
+\alias{as.character,Daycount-method}
+\alias{as.character,Term-method}
+\alias{as.character,SpotRate-method}
+\alias{as.character,Compounding-method}
 \title{Internal page for hidden aliases}
 \description{
 For S4 methods that require a documentation entry but only clutter the index.

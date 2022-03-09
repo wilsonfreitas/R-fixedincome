@@ -9,8 +9,12 @@ hidden_aliases <- NULL
 
 #' @name hidden_aliases
 #' @aliases
+#' Arith,SpotRate,SpotRate-method
+#' Arith,SpotRate,numeric-method
+#' Arith,numeric,SpotRate-method
 #' !=,Compounding,Compounding-method
 #' ==,Compounding,Compounding-method
+#' [,Term,numeric,ANY-method
 #' [,ForwardRate,missing,missing-method
 #' [,ForwardRate,numeric,missing-method
 #' [,SpotRateCurve,logical,missing-method
@@ -34,7 +38,13 @@ hidden_aliases <- NULL
 #' show,SpotRate-method
 #' show,SpotRateCurve-method
 #' show,Term-method
+#' format,Term-method
+#' c,Term-method
 #' c,SpotRate-method
 #' c,SpotRateCurve-method
 #' c,ForwardRate-method
+#' as.character,Daycount-method
+#' as.character,Term-method
+#' as.character,SpotRate-method
+#' as.character,Compounding-method
 NULL
