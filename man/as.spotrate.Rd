@@ -34,7 +34,7 @@ where:
 \item \code{COMPOUNDING} is one of the following:
 \code{simple}, \code{discrete}, \code{continuous}
 \item \code{DAYCOUNT} is a valid day count rule, pex. \code{business/252},
-see \code{\link{daycount-class}}
+see \linkS4class{Daycount}.
 \item \code{CALENDAR} is the name of a bizdays calendar.
 }
 

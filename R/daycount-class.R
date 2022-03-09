@@ -1,48 +1,34 @@
 #' Daycount class
 #'
-#' @description
-#' \code{Daycount} class helps computing terms used to compound interest rates.
+#' `Daycount` class helps adjusting the terms to compound interest rates.
+#' With annual rates it is necessary to convert periods of days or months
+#' to years units.
+#' The day count convention helps with that by defining the number of days of
+#' one year.
+#' Together with a calendar it defines the way the wordays are counted between
+#' two dates.
 #'
-#' @details
-#' The daycount convention determines the amount of days, in years, represents
-#' the given term.
+#' Common day count rules are: \code{actual/365}, \code{actual/360},
+#' `business/252`, `30/360`, ...
 #'
-#' \code{daycount} creates a \code{Daycount} object and accepts the
-#' following daycount rules: \code{actual/365}, \code{actual/360},
-#' \code{business/252}
+#' @export
+setClass(
+  "Daycount",
+  contains = "character"
+)
+
+#' Create Daycount class
 #'
-#' The method \code{dib} returns the days in base for a daycount convention.
-#' Since we work with annual rates the days in base define the amount of days
-#' in a year used in the convention.
-#'
-#' \code{toyears} returns the given term in years, since we are assuming
-#' annual rates.
-#' The \code{t} argument can be a term instance, a string defining a term
-#' or a numeric.
-#' In the last alternative, the \code{units} argument must be
-#' provided with a valid Term units (days, months, years).
+#' \code{daycount} creates a \code{Daycount} object.
+#' It accepts the following daycount rules: \code{actual/365},
+#' \code{actual/360}, \code{business/252}.
 #'
 #' @param x a character representing a daycount rule, like: \code{business/252},
 #'        \code{actual/365}, \code{actual/360}, ...
-#' @param t represents the term to compound. Can be a numeric, a \code{Term},
-#'        or a character representing a \code{Term}. See Details.
-#' @param units a character with the Term units. Can also be missing.
-#'        See Details.
-#' @param ... additional arguments
+#' @param ... additional arguments. Currently unused.
 #'
-#' @aliases Daycount-class dib
-#'
-#' @name daycount-class
 #' @examples
 #' dc <- daycount("actual/360")
-#' dib(dc)
-#'
-#' toyears(dc, 10, "days")
-#' t <- term(10, "months")
-#' toyears(dc, t)
-NULL
-
-#' @rdname daycount-class
 #' @export
 daycount <- function(x, ...) {
   spec_parts <- strsplit(x, "/")[[1]]
@@ -51,12 +37,6 @@ daycount <- function(x, ...) {
   }
   new("Daycount", .Data = x)
 }
-
-#' @export
-setClass(
-  "Daycount",
-  contains = "character"
-)
 
 #' @export
 as.character.Daycount <- function(x, ...) x@.Data
@@ -71,6 +51,24 @@ setMethod(
   }
 )
 
+#' Days in base for Daycount
+#'
+#' @description
+#' \code{dib} returns the days in base, that is the number of days used to
+#' define one year.
+#'
+#' @details
+#' The method \code{dib} returns the days in base for a daycount convention.
+#' Since we work with annual rates the days in base define the amount of days
+#' in a year used in the convention.
+#'
+#' @param x a Daycount object.
+#'
+#' @aliases dib,Daycount
+#'
+#' @examples
+#' dc <- daycount("actual/360")
+#' dib(dc)
 #' @export
 setGeneric(
   "dib",
@@ -79,8 +77,6 @@ setGeneric(
   }
 )
 
-#' @rdname daycount-class
-#' @export
 setMethod(
   "dib",
   signature(x = "Daycount"),
@@ -90,6 +86,35 @@ setMethod(
   }
 )
 
+#' Terms in years according to Daycount
+#'
+#' @description
+#' \code{toyears} returns a numeric representing a Term in years.
+#'
+#' @details
+#' \code{toyears} returns the given term in years, since we are assuming
+#' annual rates.
+#' The \code{t} argument can be a term instance, a string defining a term
+#' or a numeric.
+#' In the last alternative, the \code{units} argument must be
+#' provided with a valid Term units (days, months, years).
+#'
+#' @param x a Daycount object.
+#' @param t represents the term to compound. Can be a numeric, a \code{Term},
+#'        or a character representing a \code{Term}. See Details.
+#' @param units a character with the Term units. Can also be missing.
+#'        See Details.
+#'
+#' @aliases
+#' toyears,Daycount,Term,missing-method
+#' toyears,Daycount,character,missing-method
+#' toyears,Daycount,numeric,character-method
+#'
+#' @examples
+#' dc <- daycount("actual/360")
+#' toyears(dc, 10, "days")
+#' t <- term(10, "months")
+#' toyears(dc, t)
 #' @export
 setGeneric(
   "toyears",
@@ -120,8 +145,6 @@ toyears_ <- function(term_value, from_units, to_units, dib) {
   unname(rx)
 }
 
-#' @rdname daycount-class
-#' @export
 setMethod(
   "toyears",
   signature(x = "Daycount", t = "Term", units = "missing"),
@@ -130,8 +153,6 @@ setMethod(
   }
 )
 
-#' @rdname daycount-class
-#' @export
 setMethod(
   "toyears",
   signature(x = "Daycount", t = "character", units = "missing"),
@@ -141,8 +162,6 @@ setMethod(
   }
 )
 
-#' @rdname daycount-class
-#' @export
 setMethod(
   "toyears",
   signature(x = "Daycount", t = "numeric", units = "character"),
