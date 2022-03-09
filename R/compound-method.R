@@ -1,6 +1,6 @@
 #' Compound method
 #'
-#' Computes the compounding (and discount) factor for spot rates.
+#' Computes the compounding (and discount) factor for spot rates and curves.
 #'
 #' @param x can be a \code{Compounding}, a \code{SpotRate},
 #'        a \code{SpotRateCurve}, a \code{ForwardRate} and a character
@@ -23,14 +23,28 @@
 #' For \code{SpotRateCurve} and \code{ForwardRate} classes, that already have
 #' terms associated, \code{t} and \code{val} are missing.
 #'
+#' `discount()` method is the inverse of compound: `1 / compound()`.
+#'
 #' @return a numeric value that represents the compounding factor for the given
 #'         spot rate.
 #'
-#' @aliases discount
+#' @aliases
+#' compound,Continuous,numeric,numeric-method
+#' compound,Discrete,numeric,numeric-method
+#' compound,ForwardRate,missing,missing-method
+#' compound,Simple,numeric,numeric-method
+#' compound,SpotRate,Date,Date-method
+#' compound,SpotRate,Term,missing-method
+#' compound,SpotRate,numeric,character-method
+#' compound,SpotRateCurve,missing,missing-method
+#' compound,character,numeric,numeric-method
+#' discount,ForwardRate,missing,missing-method
+#' discount,SpotRate,Date,Date-method
+#' discount,SpotRate,Term,missing-method
+#' discount,SpotRate,numeric,character-method
+#' discount,SpotRateCurve,missing,missing-method
 #'
-#' @name compound-method
 #' @examples
-#'
 #' compound("simple", 2, 0.05)
 #' compound("discrete", 2, 0.05)
 #' compound("continuous", 2, 0.05)
@@ -50,9 +64,7 @@
 #' rates <- c(0.0719, 0.056, 0.0674, 0.0687, 0.07)
 #' curve <- spotratecurve(rates, terms, "discrete", "actual/365", "actual")
 #' compound(curve)
-NULL
-
-#' @rdname compound-method
+#' discount(curve)
 #' @export
 setGeneric(
   "compound",
@@ -61,32 +73,24 @@ setGeneric(
   }
 )
 
-#' @rdname compound-method
-#' @export
 setMethod(
   "compound",
   signature(x = "Simple", t = "numeric", val = "numeric"),
   function(x, t, val) (1 + val * t)
 )
 
-#' @rdname compound-method
-#' @export
 setMethod(
   "compound",
   signature(x = "Discrete", t = "numeric", val = "numeric"),
   function(x, t, val) (1 + val)^t
 )
 
-#' @rdname compound-method
-#' @export
 setMethod(
   "compound",
   signature(x = "Continuous", t = "numeric", val = "numeric"),
   function(x, t, val) exp(val * t)
 )
 
-#' @rdname compound-method
-#' @export
 setMethod(
   "compound",
   signature(x = "character", t = "numeric", val = "numeric"),
@@ -96,8 +100,6 @@ setMethod(
   }
 )
 
-#' @rdname compound-method
-#' @export
 setMethod(
   "compound",
   signature(x = "SpotRate", t = "numeric", val = "character"),
@@ -108,8 +110,6 @@ setMethod(
   }
 )
 
-#' @rdname compound-method
-#' @export
 setMethod(
   "compound",
   signature(x = "SpotRate", t = "Term", val = "missing"),
@@ -119,8 +119,6 @@ setMethod(
   }
 )
 
-#' @rdname compound-method
-#' @export
 setMethod(
   "compound",
   signature(x = "SpotRate", t = "Date", val = "Date"),
@@ -131,8 +129,6 @@ setMethod(
   }
 )
 
-#' @rdname compound-method
-#' @export
 setMethod(
   "compound",
   signature(x = "SpotRateCurve", t = "missing", val = "missing"),
@@ -141,8 +137,6 @@ setMethod(
   }
 )
 
-#' @rdname compound-method
-#' @export
 setMethod(
   "compound",
   signature(x = "ForwardRate", t = "missing", val = "missing"),
@@ -151,6 +145,7 @@ setMethod(
   }
 )
 
+#' @rdname compound
 #' @export
 setGeneric(
   "discount",
@@ -159,8 +154,6 @@ setGeneric(
   }
 )
 
-#' @rdname compound-method
-#' @export
 setMethod(
   "discount",
   signature(x = "SpotRate", t = "numeric", val = "character"),
@@ -169,8 +162,6 @@ setMethod(
   }
 )
 
-#' @rdname compound-method
-#' @export
 setMethod(
   "discount",
   signature(x = "SpotRate", t = "Term", val = "missing"),
@@ -179,8 +170,6 @@ setMethod(
   }
 )
 
-#' @rdname compound-method
-#' @export
 setMethod(
   "discount",
   signature(x = "SpotRate", t = "Date", val = "Date"),
@@ -189,8 +178,6 @@ setMethod(
   }
 )
 
-#' @rdname compound-method
-#' @export
 setMethod(
   "discount",
   signature(x = "SpotRateCurve", t = "missing", val = "missing"),
@@ -199,8 +186,6 @@ setMethod(
   }
 )
 
-#' @rdname compound-method
-#' @export
 setMethod(
   "discount",
   signature(x = "ForwardRate", t = "missing", val = "missing"),
