@@ -126,6 +126,11 @@ setMethod(
   }
 )
 
+#' @export
+as.character.Term <- function(x, ...) {
+  format(x)
+}
+
 #' Term methods
 #'
 #' The Term class has a few methods that helps in tasks involving data
