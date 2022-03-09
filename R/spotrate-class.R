@@ -210,29 +210,6 @@ setMethod(
   }
 )
 
-#' SpotRate arithmetic operations
-#'
-#' Arithmetic operations with SpotRate class
-#'
-#' @param e1 a \code{SpotRate} object or a numeric
-#' @param e2 a \code{SpotRate} object or a numeric
-#'
-#' SpotRate objects can be summed among themselves or with numeric variables.
-#'
-#' When two SpotRate objects are being summed and their slots are different of
-#' each other, the resulting SpotRate brings the slots of the first object
-#' given (\code{e1}).
-#'
-#' @return a SpotRate object.
-#' @name spotrate-arith-method
-#'
-#' @examples
-#'
-#' spr <- as.spotrate("0.06 simple actual/365 actual")
-#' spr <- spr + 0.01
-NULL
-
-#' @rdname spotrate-arith-method
 #' @export
 setMethod(
   "Arith",
@@ -247,7 +224,6 @@ setMethod(
   }
 )
 
-#' @rdname spotrate-arith-method
 #' @export
 setMethod(
   "Arith",
@@ -258,7 +234,6 @@ setMethod(
   }
 )
 
-#' @rdname spotrate-arith-method
 #' @export
 setMethod(
   "Arith",
