@@ -1,4 +1,22 @@
-
+#' Set/Get interpolation to SpotRateCurve
+#'
+#' Sets and gets interpolation method to the SpotRateCurve.
+#'
+#' @param x a SpotRateCurve object.
+#' @param value a Interpolation object.
+#' @param ... additional arguments. Currently unused.
+#'
+#' @return A Interpolatin object.
+#' @aliases
+#' interpolation,SpotRateCurve-method
+#' interpolation<-,SpotRateCurve,Interpolation-method
+#' interpolation<-,SpotRateCurve,NULL-method
+#' @examples
+#' terms <- c(1, 11, 26, 27, 28)
+#' rates <- c(0.0719, 0.056, 0.0674, 0.0687, 0.07)
+#' curve <- spotratecurve(rates, terms, "discrete", "actual/365", "actual")
+#' interpolation(curve) <- interp_flatforward()
+#' interpolation(curve)
 #' @export
 setGeneric(
   "interpolation",
@@ -7,6 +25,7 @@ setGeneric(
   }
 )
 
+#' @rdname interpolation
 #' @export
 setGeneric(
   "interpolation<-",
@@ -15,6 +34,25 @@ setGeneric(
   }
 )
 
+#' Create the interpolation function
+#'
+#' Creates the interpolation function to a SpotRateCurve object.
+#'
+#' @param x a SpotRateCurve object.
+#' @param value a Interpolation object.
+#' @param ... additional arguments. Currently unused.
+#'
+#' @return A Interpolatin object.
+#' @aliases
+#' interpolation,SpotRateCurve-method
+#' interpolation<-,SpotRateCurve,Interpolation-method
+#' interpolation<-,SpotRateCurve,NULL-method
+#' @examples
+#' terms <- c(1, 11, 26, 27, 28)
+#' rates <- c(0.0719, 0.056, 0.0674, 0.0687, 0.07)
+#' curve <- spotratecurve(rates, terms, "discrete", "actual/365", "actual")
+#' interpolation(curve) <- interp_flatforward()
+#' interpolation(curve)
 #' @export
 setGeneric(
   "prepare_interpolation",
@@ -31,7 +69,6 @@ setGeneric(
   }
 )
 
-#' @export
 setMethod(
   "interpolation",
   signature(x = "SpotRateCurve"),
@@ -40,7 +77,6 @@ setMethod(
   }
 )
 
-#' @export
 setReplaceMethod(
   "interpolation",
   signature(x = "SpotRateCurve", value = "Interpolation"),
@@ -50,7 +86,6 @@ setReplaceMethod(
   }
 )
 
-#' @export
 setReplaceMethod(
   "interpolation",
   signature(x = "SpotRateCurve", value = "NULL"),
@@ -60,7 +95,6 @@ setReplaceMethod(
   }
 )
 
-#' @export
 setMethod(
   "prepare_interpolation",
   signature(object = "FlatForward", x = "SpotRateCurve"),
@@ -80,7 +114,6 @@ setMethod(
   }
 )
 
-#' @export
 setMethod(
   "prepare_interpolation",
   signature(object = "Linear", x = "SpotRateCurve"),
