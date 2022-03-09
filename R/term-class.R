@@ -1,12 +1,10 @@
 
-#' Term class
+#' Create Term class
 #'
-#' It is the time interval used in calculations with interest rates.
-#' The term class represents the period used to discount or compound a spot
-#' rate.
+#' `term()` creates a Term object.
 #'
-#' @param x can be a numeric value representing the time period or the initial
-#' date for a period between two dates.
+#' @param x can be a numeric value representing the time period, a Term object,
+#' or the initial date for a period between two dates.
 #' @param units one of the valid \code{units}: \code{days}, \code{monts},
 #' \code{years}.
 #' @param end_date the final date for a period between two dates.
@@ -14,21 +12,17 @@
 #' between two dates.
 #' @param ... additional arguments
 #'
-#' @aliases term,Term-method DateRangeTerm-class Term-class term
-#' @name term-class
 #' @examples
 #' term(6, "months")
 #' if (require("bizdays")) {
 #'   term(as.Date("2022-02-02"), as.Date("2022-02-23"), "Brazil/ANBIMA")
 #' }
-NULL
-
 #' @export
 term <- function(x, ...) {
   UseMethod("term")
 }
 
-#' @rdname term-class
+#' @rdname term
 #' @export
 term.numeric <- function(x, units = "days", ...) {
   value <- x
@@ -44,12 +38,13 @@ term.numeric <- function(x, units = "days", ...) {
   new("Term", .Data = value, units = units)
 }
 
+#' @rdname term
 #' @export
 term.Term <- function(x, ...) {
   x
 }
 
-#' @rdname term-class
+#' @rdname term
 #' @export
 term.Date <- function(x, end_date, calendar, ...) {
   start_date <- x
@@ -59,6 +54,15 @@ term.Date <- function(x, end_date, calendar, ...) {
   )
 }
 
+#' Term class
+#'
+#' It is the time interval used in calculations with interest rates.
+#' The term class represents the period used to discount or compound a spot
+#' rate.
+#' It can be Term object or a DateRangeTerm which defines start and end dates
+#' and a calendar to count the amount of working days between these two dates.
+#'
+#' @aliases DateRangeTerm-class
 #' @export
 setClass(
   "Term",
