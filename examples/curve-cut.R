@@ -1,6 +1,6 @@
 
 source("examples/utils-functions.R")
-curve <- get_curve_from_web("2022-03-04")
+curve <- get_curve_from_web("2022-03-08")
 plot(first(curve, "2 years"), show_forward = TRUE)
 
 first(curve, term(2, "years"))
