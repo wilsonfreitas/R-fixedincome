@@ -58,7 +58,8 @@ setClass(
   contains = "character"
 )
 
-as.character.Daycount <- function(from) from@.Data
+#' @export
+as.character.Daycount <- function(x, ...) x@.Data
 
 #' @export
 setMethod(
