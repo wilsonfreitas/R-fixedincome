@@ -1,4 +1,3 @@
-
 #' Fixed income models, calculations and data structures
 #'
 #' The \code{fixedincome} package brings a set of funtions that helps with the
