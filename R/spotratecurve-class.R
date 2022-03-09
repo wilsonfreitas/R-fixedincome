@@ -49,9 +49,6 @@ setClass(
 #'        the SpotRateCurve object.
 #' @param ... additional arguments
 #'
-#' @aliases spotratecurve
-#' @name spotratecurve-method
-#'
 #' @examples
 #' terms <- c(1, 11, 26, 27, 28)
 #' rates <- c(0.0719, 0.056, 0.0674, 0.0687, 0.07)
@@ -63,14 +60,12 @@ setClass(
 #'
 #' # access the second element
 #' curve[2]
-NULL
-
 #' @export
 spotratecurve <- function(x, terms, ..., refdate = Sys.Date()) {
   UseMethod("spotratecurve")
 }
 
-#' @rdname spotratecurve-method
+#' @rdname spotratecurve
 #' @export
 spotratecurve.numeric <- function(x, terms, compounding, daycount,
                                   calendar, refdate = Sys.Date(),
@@ -99,7 +94,7 @@ spotratecurve.numeric <- function(x, terms, compounding, daycount,
   .Object
 }
 
-#' @rdname spotratecurve-method
+#' @rdname spotratecurve
 #' @export
 spotratecurve.SpotRate <- function(x, terms,
                                    refdate = Sys.Date(),
@@ -130,13 +125,12 @@ spotratecurve.SpotRate <- function(x, terms,
 #'
 #' @return a SpotRateCurve object
 #'
-#' @name as.spotratecurve-method
 #' @export
 as.spotratecurve <- function(x, ...) {
   UseMethod("as.spotratecurve")
 }
 
-#' @rdname as.spotratecurve-method
+#' @rdname as.spotratecurve
 #' @export
 as.spotratecurve.ForwardRate <- function(x, refdate = Sys.Date(), ...) {
   cumfact <- cumprod(compound(x))
@@ -449,12 +443,48 @@ setMethod(
   }
 )
 
+#' Get SpotRateCurve terms as Date objects
+#'
+#' Compute the SpotRateCurve terms as Date objects, according to the curve's
+#' reference date.
+#'
+#' @param x a SpotRateCurve object.
+#'
+#' @return a vector of `Date` objects.
+#'
+#' @examples
+#' terms <- c(1, 11, 26, 27, 28)
+#' rates <- c(0.0719, 0.056, 0.0674, 0.0687, 0.07)
+#' curve <- spotratecurve(rates, terms, "discrete", "actual/365", "actual")
+#' maturities(curve)
 #' @export
 maturities <- function(x) {
   df <- as.data.frame(x)
   df$dates
 }
 
+#' Interpolation error
+#'
+#' Computes interpolation error as the root mean square error of differences
+#' between interpolated terms and SpotRateCurve values.
+#'
+#' @param x a SpotRateCurve object.
+#' @param ... additional arguments. Currently unused.
+#'
+#' The curve must have a interpolation set to compute the interpolation error.
+#' This is useful to evaluate parametric methods like [NelsonSiegel-class] and
+#' [NelsonSiegelSvensson-class].
+#'
+#' @return A numeric value.
+#' @aliases interpolation_error,SpotRateCurve-method
+#' @examples
+#' terms <- c(1, 11, 26, 27, 28)
+#' rates <- c(0.0719, 0.056, 0.0674, 0.0687, 0.07)
+#' curve <- spotratecurve(rates, terms, "discrete", "actual/365", "actual")
+#' interpolation(curve) <- interp_nelsonsiegel(
+#'   0.1229, -0.0606, 0.1004, 1.9174
+#' )
+#' interpolation_error(curve)
 #' @export
 setGeneric(
   "interpolation_error",
@@ -463,7 +493,6 @@ setGeneric(
   }
 )
 
-#' @export
 setMethod(
   "interpolation_error",
   signature(x = "SpotRateCurve"),
@@ -473,6 +502,42 @@ setMethod(
   }
 )
 
+#' SpotRateCurve helpers
+#'
+#' Helpers methods that return parts of a SpotRateCurve object according to a
+#' given term.
+#'
+#' @param x a SpotRateCurve object.
+#' @param t a Term object.
+#'
+#' `first` filters the first elements of the SpotRateCurve according to the
+#' given term.
+#'
+#' `last` filters the last elements of the SpotRateCurve according to the
+#' given term.
+#'
+#' `closest` selects the element of the SpotRateCurve that is the closest to
+#' the given term.
+#'
+#' @name spotratecurve-helpers
+#' @return A SpotRateCurve object.
+#' @aliases
+#' closest,SpotRateCurve,Term-method
+#' closest,SpotRateCurve,character-method
+#' first,SpotRateCurve,Term-method
+#' first,SpotRateCurve,character-method
+#' last,SpotRateCurve,Term-method
+#' last,SpotRateCurve,character-method
+#' @examples
+#' terms <- c(1, 11, 26, 27, 28)
+#' rates <- c(0.0719, 0.056, 0.0674, 0.0687, 0.07)
+#' curve <- spotratecurve(rates, terms, "discrete", "actual/365", "actual")
+#' first(curve, "10 days")
+#' last(curve, "10 days")
+#' closest(curve, "10 days")
+NULL
+
+#' @rdname spotratecurve-helpers
 #' @export
 setGeneric(
   "first",
@@ -481,7 +546,6 @@ setGeneric(
   }
 )
 
-#' @export
 setMethod(
   "first",
   signature(x = "SpotRateCurve", t = "Term"),
@@ -491,7 +555,6 @@ setMethod(
   }
 )
 
-#' @export
 setMethod(
   "first",
   signature(x = "SpotRateCurve", t = "character"),
@@ -500,6 +563,7 @@ setMethod(
   }
 )
 
+#' @rdname spotratecurve-helpers
 #' @export
 setGeneric(
   "last",
@@ -508,7 +572,6 @@ setGeneric(
   }
 )
 
-#' @export
 setMethod(
   "last",
   signature(x = "SpotRateCurve", t = "Term"),
@@ -521,7 +584,6 @@ setMethod(
   }
 )
 
-#' @export
 setMethod(
   "last",
   signature(x = "SpotRateCurve", t = "character"),
@@ -530,6 +592,7 @@ setMethod(
   }
 )
 
+#' @rdname spotratecurve-helpers
 #' @export
 setGeneric(
   "closest",
@@ -538,7 +601,6 @@ setGeneric(
   }
 )
 
-#' @export
 setMethod(
   "closest",
   signature(x = "SpotRateCurve", t = "Term"),
@@ -549,7 +611,6 @@ setMethod(
   }
 )
 
-#' @export
 setMethod(
   "closest",
   signature(x = "SpotRateCurve", t = "character"),
