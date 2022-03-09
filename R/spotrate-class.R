@@ -156,17 +156,12 @@ c.SpotRate <- function(x, ...) {
 #' If it is true the returned object is a SpotRate otherwise a \code{list} with
 #' SpotRate objects is returned.
 #'
-#' @aliases as.spotrate
-#'
 #' @examples
 #'
 #' as.spotrate(c(
 #'   "0.06 simple actual/365 actual",
 #'   "0.11 discrete business/252 actual"
 #' ))
-#' @name as.spotrate-method
-NULL
-
 #' @export
 setGeneric(
   "as.spotrate",
@@ -184,7 +179,7 @@ setGeneric(
   })
 }
 
-#' @rdname as.spotrate-method
+#' @rdname as.spotrate
 #' @export
 setMethod(
   "as.spotrate",

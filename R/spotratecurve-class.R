@@ -375,7 +375,7 @@ setReplaceMethod(
   }
 )
 
-#' @rdname as.spotrate-method
+#' @rdname as.spotrate
 #' @export
 setMethod(
   "as.spotrate",
