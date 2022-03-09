@@ -131,73 +131,6 @@ as.character.Term <- function(x, ...) {
   format(x)
 }
 
-#' Term methods
-#'
-#' The Term class has a few methods that helps in tasks involving data
-#' manipulation.
-#'
-#' @param x a Term object.
-#' @param i index used with the \code{[]} operator. Can be numeric
-#' (positional index) or boolean (\code{logical}), similar to vector indexing.
-#' @param j \emph{unused}.
-#' @param drop \emph{unused}.
-#' @param k a numeric with the number of elements to shift the Term vector
-#' @param lag a numerix indicating which lag to use.
-#' @param fill a numeric value (or \code{NA}) to fill the empty created by
-#' applying shift or diff to a Term vector.
-#' @param ... additional arguments.
-#'
-#' @details
-#' Indexing a Term with the \code{[]} operator is similar to vector indexing.
-#' The only difference is that the returned object is of Term class.
-#'
-#' \code{c} concatenates terms and keeps the units correct.
-#'
-#' \code{format} coerces the Term class to a string representation that is
-#' compatible with the one used to visualize data.frames.
-#'
-#' \code{shift} shifts the Term vector elements by \code{k} positions.
-#'
-#' \code{diff} returns a Term vector with lagged differences.
-#'
-#' @name term-methods
-#' @examples
-#' t <- as.term("6 months")
-#' as.character(t)
-NULL
-
-#' @rdname term-methods
-#' @export
-setMethod(
-  "[",
-  signature(x = "Term"),
-  function(x, i, ...) {
-    .val <- x@.Data
-    term(.val[i], x@units)
-  }
-)
-
-#' @rdname term-methods
-#' @export
-c.Term <- function(x, ...) {
-  dots <- list(...)
-  nempty <- sapply(dots, length) != 0
-  elements <- dots[nempty]
-  values_ <- c(x@.Data, unlist(lapply(elements, as.numeric)))
-  term(values_, x@units)
-}
-
-#' @rdname term-methods
-#' @export
-format.Term <- function(x, ...) {
-  value <- x@.Data
-  abrev <- x@units
-  abrev <- ifelse(value > 1, paste0(abrev, "s"), abrev)
-  paste(value, abrev, sep = " ")
-}
-
-#' @rdname term-methods
-#' @export
 setMethod(
   "shift",
   signature(x = "Term"),
@@ -207,7 +140,20 @@ setMethod(
   }
 )
 
-#' @rdname term-methods
+#' Calculate lagged differences of Term objects
+#'
+#' \code{diff} returns a Term vector with lagged differences.
+#'
+#' @param x a Term object.
+#' @param lag a numerix indicating which lag to use.
+#' @param fill a numeric value (or \code{NA}) to fill the empty created by
+#' applying diff to a Term object.
+#' @param ... additional arguments. Currently unused.
+#'
+#' @return A Term object.
+#' @examples
+#' t <- term(1:10, "months")
+#' diff(t)
 #' @export
 setMethod(
   "diff",
@@ -222,3 +168,30 @@ setMethod(
     }
   }
 )
+
+#' @export
+format.Term <- function(x, ...) {
+  value <- x@.Data
+  abrev <- x@units
+  abrev <- ifelse(value > 1, paste0(abrev, "s"), abrev)
+  paste(value, abrev, sep = " ")
+}
+
+#' @export
+setMethod(
+  "[",
+  signature(x = "Term", i = "numeric"),
+  function(x, i, ...) {
+    .val <- x@.Data
+    term(.val[i], x@units)
+  }
+)
+
+#' @export
+c.Term <- function(x, ...) {
+  dots <- list(...)
+  nempty <- sapply(dots, length) != 0
+  elements <- dots[nempty]
+  values_ <- c(x@.Data, unlist(lapply(elements, as.numeric)))
+  term(values_, x@units)
+}

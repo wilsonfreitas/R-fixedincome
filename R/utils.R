@@ -1,13 +1,30 @@
 
+#' Shift vectors
+#'
+#' Element wise shift of vectors by `k` positions.
+#'
+#' @param x a vector object.
+#' @param k a numeric with the number of elements to shift the Term vector
+#' @param fill a numeric value (or \code{NA}) to fill the empty created by
+#' shifting a vector object.
+#' @param ... additional arguments. Currently unused.
+#'
+#' @return A vector object with the same type of provided object.
+#'
+#' @aliases shift,Term-method shift,numeric-method
+#' @examples
+#' shift(1:10, fill = 0)
+#'
+#' t <- term(1:10, "months")
+#' shift(t)
 #' @export
 setGeneric(
   "shift",
-  function(x, k = 1, ...) {
+  function(x, k = 1, ..., fill = NA) {
     standardGeneric("shift")
   }
 )
 
-#' @export
 setMethod(
   "shift",
   signature(x = "numeric"),
