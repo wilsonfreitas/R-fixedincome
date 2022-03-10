@@ -19,13 +19,27 @@
 #'   \item the calendar according to which the number of days are counted.
 #' }
 #'
-#' The \code{SpotRate} class is a \code{numeric} and
-#' all values in it share the \code{compounding}, \code{daycount}
-#' and \code{calendar} slots.
+#' The \code{SpotRate} class is a \code{numeric}, that represents the
+#' interest rate and that has the slots: \code{compounding}, \code{daycount}
+#' and \code{calendar}.
 #'
-#' The \code{calendar} attribute is an instance of \code{bizdays}
-#' \code{Calendar} class or the name of one of the calendars
-#' that are already registered in bizdays register.
+#' The \code{calendar} slot is a \code{bizdays} calendar.
+#'
+#' @export
+setClass(
+  "SpotRate",
+  slots = c(
+    compounding = "Compounding",
+    daycount = "Daycount",
+    calendar = "character"
+  ),
+  contains = "numeric"
+)
+
+#' Create SpotRate objects
+#'
+#' @description
+#' `spotrate()` function creates `SpotRate` objects.
 #'
 #' @param x a numeric vector representing spot rate values.
 #' @param compounding a \code{Compounding} object.
@@ -34,15 +48,9 @@
 #' @param .copyfrom a \code{SpotRate} object used as reference to copy
 #'        attributes.
 #'
-#' @aliases SpotRate-class
-#'
-#' @name spotrate-class
 #' @examples
 #' spotrate(0.06, "continuous", "actual/365", "actual")
 #' spotrate(c(0.06, 0.07, 0.08), "continuous", "actual/365", "actual")
-NULL
-
-#' @name spotrate-class
 #' @export
 spotrate <- function(x, compounding, daycount, calendar, .copyfrom = NULL) {
   if (!is.null(.copyfrom)) {
@@ -67,17 +75,6 @@ spotrate <- function(x, compounding, daycount, calendar, .copyfrom = NULL) {
     calendar = calendar
   )
 }
-
-#' @export
-setClass(
-  "SpotRate",
-  slots = c(
-    compounding = "Compounding",
-    daycount = "Daycount",
-    calendar = "character"
-  ),
-  contains = "numeric"
-)
 
 #' @export
 as.character.SpotRate <- function(x, ...) {
