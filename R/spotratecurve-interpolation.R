@@ -38,21 +38,32 @@ setGeneric(
 #'
 #' Creates the interpolation function to a SpotRateCurve object.
 #'
+#' @param object a Interpolation object.
 #' @param x a SpotRateCurve object.
-#' @param value a Interpolation object.
 #' @param ... additional arguments. Currently unused.
+#' 
+#' This method is used internally when the interpolation is set to a curve.
+#' It uses the current state of the curve to build the interpolation function.
+#' This is similar to call `approxfun` and `splinefun` to create functions that
+#' perform interpolation of the given data points.
+#' 
+#' This method shouldn't be directly called, it is for internal use only.
 #'
-#' @return A Interpolatin object.
+#' @return A Interpolation object.
 #' @aliases
-#' interpolation,SpotRateCurve-method
-#' interpolation<-,SpotRateCurve,Interpolation-method
-#' interpolation<-,SpotRateCurve,NULL-method
+#' prepare_interpolation,FlatForward,SpotRateCurve-method
+#' prepare_interpolation,HermiteSpline,SpotRateCurve-method
+#' prepare_interpolation,Linear,SpotRateCurve-method
+#' prepare_interpolation,LogLinear,SpotRateCurve-method
+#' prepare_interpolation,MonotoneSpline,SpotRateCurve-method
+#' prepare_interpolation,NaturalSpline,SpotRateCurve-method
+#' prepare_interpolation,NelsonSiegel,SpotRateCurve-method
+#' prepare_interpolation,NelsonSiegelSvensson,SpotRateCurve-method
 #' @examples
 #' terms <- c(1, 11, 26, 27, 28)
 #' rates <- c(0.0719, 0.056, 0.0674, 0.0687, 0.07)
 #' curve <- spotratecurve(rates, terms, "discrete", "actual/365", "actual")
-#' interpolation(curve) <- interp_flatforward()
-#' interpolation(curve)
+#' prepare_interpolation(interp_flatforward(), curve)
 #' @export
 setGeneric(
   "prepare_interpolation",
@@ -61,6 +72,24 @@ setGeneric(
   }
 )
 
+#' Fit parametric interpolation functions
+#'
+#' Fits parametric interpolation functions like [NelsonSiegel-class] or
+#' [NelsonSiegelSvensson-class].
+#'
+#' @param object a Interpolation object with initial parameters set.
+#' @param x a SpotRateCurve object.
+#' @param ... additional arguments. Currently unused.
+#' 
+#' @return A Interpolation object.
+#' @aliases
+#' fit_interpolation,NelsonSiegel,SpotRateCurve-method
+#' fit_interpolation,NelsonSiegelSvensson,SpotRateCurve-method
+#' @examples
+#' terms <- c(1, 11, 26, 27, 28)
+#' rates <- c(0.0719, 0.056, 0.0674, 0.0687, 0.07)
+#' curve <- spotratecurve(rates, terms, "discrete", "actual/365", "actual")
+#' fit_interpolation(interp_nelsonsiegel(0.1, 0.01, 0.01, 0.01), curve)
 #' @export
 setGeneric(
   "fit_interpolation",
@@ -210,7 +239,6 @@ setMethod(
   }
 )
 
-#' @export
 setMethod(
   "fit_interpolation",
   signature(object = "NelsonSiegel", x = "SpotRateCurve"),
@@ -224,7 +252,6 @@ setMethod(
   }
 )
 
-#' @export
 setMethod(
   "fit_interpolation",
   signature(object = "NelsonSiegelSvensson", x = "SpotRateCurve"),

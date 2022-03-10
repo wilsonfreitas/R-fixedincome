@@ -2,22 +2,34 @@
 % Please edit documentation in R/spotratecurve-interpolation.R
 \name{prepare_interpolation}
 \alias{prepare_interpolation}
-\alias{interpolation,SpotRateCurve-method}
-\alias{interpolation<-,SpotRateCurve,Interpolation-method}
-\alias{interpolation<-,SpotRateCurve,NULL-method}
+\alias{prepare_interpolation,FlatForward,SpotRateCurve-method}
+\alias{prepare_interpolation,HermiteSpline,SpotRateCurve-method}
+\alias{prepare_interpolation,Linear,SpotRateCurve-method}
+\alias{prepare_interpolation,LogLinear,SpotRateCurve-method}
+\alias{prepare_interpolation,MonotoneSpline,SpotRateCurve-method}
+\alias{prepare_interpolation,NaturalSpline,SpotRateCurve-method}
+\alias{prepare_interpolation,NelsonSiegel,SpotRateCurve-method}
+\alias{prepare_interpolation,NelsonSiegelSvensson,SpotRateCurve-method}
 \title{Create the interpolation function}
 \usage{
 prepare_interpolation(object, x, ...)
 }
 \arguments{
+\item{object}{a Interpolation object.}
+
 \item{x}{a SpotRateCurve object.}
 
-\item{...}{additional arguments. Currently unused.}
+\item{...}{additional arguments. Currently unused.
 
-\item{value}{a Interpolation object.}
+This method is used internally when the interpolation is set to a curve.
+It uses the current state of the curve to build the interpolation function.
+This is similar to call \code{approxfun} and \code{splinefun} to create functions that
+perform interpolation of the given data points.
+
+This method shouldn't be directly called, it is for internal use only.}
 }
 \value{
-A Interpolatin object.
+A Interpolation object.
 }
 \description{
 Creates the interpolation function to a SpotRateCurve object.
@@ -26,6 +38,5 @@ Creates the interpolation function to a SpotRateCurve object.
 terms <- c(1, 11, 26, 27, 28)
 rates <- c(0.0719, 0.056, 0.0674, 0.0687, 0.07)
 curve <- spotratecurve(rates, terms, "discrete", "actual/365", "actual")
-interpolation(curve) <- interp_flatforward()
-interpolation(curve)
+prepare_interpolation(interp_flatforward(), curve)
 }

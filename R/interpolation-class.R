@@ -247,6 +247,24 @@ setMethod(
   }
 )
 
+#' Get parameters of the interpolation models
+#'
+#' Gets parameters of parametric interpolation models like 
+#' [NelsonSiegel-class] and [NelsonSiegelSvensson-class].
+#'
+#' @param x a Interpolation object.
+#' @param ... additional arguments. Currently unused.
+#' 
+#' @return A named vector with parameters of the models.
+#' @aliases
+#' parameters,NelsonSiegel-method
+#' parameters,NelsonSiegelSvensson-method
+#' @examples
+#' terms <- c(1, 11, 26, 27, 28)
+#' rates <- c(0.0719, 0.056, 0.0674, 0.0687, 0.07)
+#' curve <- spotratecurve(rates, terms, "discrete", "actual/365", "actual")
+#' model <- fit_interpolation(interp_nelsonsiegel(0.1, 0.01, 0.01, 0.01), curve)
+#' parameters(model)
 #' @export
 setGeneric(
   "parameters",
@@ -255,7 +273,6 @@ setGeneric(
   }
 )
 
-#' @export
 setMethod(
   "parameters",
   signature(x = "NelsonSiegel"),
@@ -264,7 +281,6 @@ setMethod(
   }
 )
 
-#' @export
 setMethod(
   "parameters",
   signature(x = "NelsonSiegelSvensson"),
