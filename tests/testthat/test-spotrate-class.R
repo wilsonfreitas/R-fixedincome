@@ -212,37 +212,37 @@ test_that("it should create the spotrate object copying some attributes of other
   expect_equal(as.numeric(spr2), c(0.07, 0.08))
 })
 
-test_that("it should convert a spotrate to another spotrate", {
-  spr_s <- spotrate(0.06, "simple", "actual/365", "actual")
-  spr_d <- convert(spr_s, term(1, "years"), .compounding = "discrete")
-  expect_equal(as.numeric(spr_d), 0.06)
-  # simple change
-  spr_d <- convert(spr_s, term(1, "months"), .compounding = "discrete")
-  expect_equal(as.numeric(spr_d), 0.06167781186)
-  # vectorized
-  spr_s <- spotrate(c(0.06, 0.07, 0.08), "simple", "actual/365", "actual")
-  spr_d <- convert(spr_s, term(1, "months"), .compounding = "discrete")
-  expect_equal(
-    as.numeric(spr_d),
-    c(0.06167781186, 0.07229008086, 0.08299950681)
-  )
-  # change daycount
-  spr_s <- spotrate(10.68 / 100, "discrete", "actual/360", "actual")
-  spr_d <- convert(spr_s, term(1, "days"),
-    .daycount = "business/252",
-    .calendar = "Brazil/ANBIMA"
-  )
-  expect_equal(as.numeric(spr_d), 0.07361459, tolerance = 1e-6)
-  # change calendar
-  spr_s <- spotrate(10.68 / 100, "simple", "actual/360", "actual")
-  if (require("bizdays", quietly = TRUE)) {
-    spr_d <- convert(spr_s, as.Date("2017-03-03"), as.Date("2017-03-06"),
-      .compounding = "discrete", .daycount = "business/252",
-      .calendar = "Brazil/ANBIMA"
-    )
-    expect_equal(as.numeric(spr_d), 0.2512966, tolerance = 1e-6)
-  }
-})
+# test_that("it should convert a spotrate to another spotrate", {
+#   spr_s <- spotrate(0.06, "simple", "actual/365", "actual")
+#   spr_d <- convert(spr_s, term(1, "years"), .compounding = "discrete")
+#   expect_equal(as.numeric(spr_d), 0.06)
+#   # simple change
+#   spr_d <- convert(spr_s, term(1, "months"), .compounding = "discrete")
+#   expect_equal(as.numeric(spr_d), 0.06167781186)
+#   # vectorized
+#   spr_s <- spotrate(c(0.06, 0.07, 0.08), "simple", "actual/365", "actual")
+#   spr_d <- convert(spr_s, term(1, "months"), .compounding = "discrete")
+#   expect_equal(
+#     as.numeric(spr_d),
+#     c(0.06167781186, 0.07229008086, 0.08299950681)
+#   )
+#   # change daycount
+#   spr_s <- spotrate(10.68 / 100, "discrete", "actual/360", "actual")
+#   spr_d <- convert(spr_s, term(1, "days"),
+#     .daycount = "business/252",
+#     .calendar = "Brazil/ANBIMA"
+#   )
+#   expect_equal(as.numeric(spr_d), 0.07361459, tolerance = 1e-6)
+#   # change calendar
+#   spr_s <- spotrate(10.68 / 100, "simple", "actual/360", "actual")
+#   if (require("bizdays", quietly = TRUE)) {
+#     spr_d <- convert(spr_s, as.Date("2017-03-03"), as.Date("2017-03-06"),
+#       .compounding = "discrete", .daycount = "business/252",
+#       .calendar = "Brazil/ANBIMA"
+#     )
+#     expect_equal(as.numeric(spr_d), 0.2512966, tolerance = 1e-6)
+#   }
+# })
 
 test_that("it should concatenate spotrates with differnt slots", {
   spr1 <- spotrate(0.06, "simple", "actual/365", "actual")
