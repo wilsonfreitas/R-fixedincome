@@ -6,17 +6,14 @@ Depends:
 Authors@R: person("Wilson", "Freitas", email = "wilson.freitas@gmail.com",
     role = c("aut", "cre"))
 License: MIT + file LICENSE
-Description: fixedincome has a set of functions which helps with the mathematics
-    of interest rates and fixed income. It handles the interest rates and
-    compounding factors as objects and provides many methods to tackle specific
-    issues like compute discount factors, find equivalent rates, forward rates, and
-    so on. fixedincome has classes that represent common fixed income entities such as a
-    term structure of interest rates, spot rates, forward rates, day count rules and
-    many others, and it also brings methods and models commonly used by practitioners in
-    fixed income calculations.
+Description: Fixed income mathematics made easy. A rich set of functions 
+    that helps with calculations of interest rates and fixed income.
+    It has objects that abstract interest rates, compounding factors, day count rules,
+    forward rates and term structure of interest rates.
+    Many interpolation methods and parametric curve models commonly used by practitioners
+    are implemented.
 URL: https://github.com/wilsonfreitas/R-fixedincome
 BugReports: https://github.com/wilsonfreitas/R-fixedincome/issues
-VignetteBuilder: knitr
 Imports:
     bizdays (>= 1.0.0),
     methods,
@@ -25,9 +22,7 @@ Imports:
     grDevices,
     utils
 Suggests: 
-    testthat (>= 3.0.0),
-    knitr,
-    rmarkdown
+    testthat (>= 3.0.0)
 Collate:
     "fixedincome-internal.R"
     "utils.R"

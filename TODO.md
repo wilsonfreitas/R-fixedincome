@@ -19,10 +19,10 @@
 - [x] Compounding
   - [x] Compounding Methods
 - [x] Daycount
-- [ ] SpotRate
-- [ ] SpotRateCurve
-- [ ] ForwardCurve
-- [ ] Interpolation
+- [x] SpotRate
+- [x] SpotRateCurve
+- [x] ForwardCurve
+- [x] Interpolation
 
 ### Daycount
 
