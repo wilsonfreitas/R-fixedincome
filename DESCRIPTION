@@ -6,13 +6,13 @@ Depends:
 Authors@R: person("Wilson", "Freitas", email = "wilson.freitas@gmail.com",
     role = c("aut", "cre"))
 License: MIT + file LICENSE
-Description: fixedincome has a set of funtions which helps with the mathematics
+Description: fixedincome has a set of functions which helps with the mathematics
     of interest rates and fixed income. It handles the interest rates and
     compounding factors as objects and provides many methods to tackle specific
     issues like compute discount factors, find equivalent rates, forward rates, and
-    so on. It also has classes to represent commom fixed income entities such as a
+    so on. It also has classes to represent common fixed income entities such as a
     term structure of interest rates, spot rates, forward rates and day count rules.
-    This package also supports methods and models commom used by practitioners to do
+    This package also supports methods and models common used by practitioners to do
     fixed income calculations.
 URL: https://github.com/wilsonfreitas/R-fixedincome
 BugReports: https://github.com/wilsonfreitas/R-fixedincome/issues
