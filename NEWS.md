@@ -1,6 +1,3 @@
-Changes in Version 0.1.0
+# fixedincome 0.0.1
 
-  * first functional release
-  
-  * lft.R is a great starting point.
-  
+* First CRAN version.
