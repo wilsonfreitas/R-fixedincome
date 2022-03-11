@@ -1,6 +1,6 @@
 Package: fixedincome
 Title: Fixed income models, calculations, data structures and instruments
-Version: 0.2.0.9000
+Version: 0.0.1
 Depends:
     R (>= 3.2.0)
 Authors@R: person("Wilson", "Freitas", email = "wilson.freitas@gmail.com",
@@ -11,9 +11,9 @@ Description: fixedincome has a set of funtions which helps with the mathematics
     compounding factors as objects and provides many methods to tackle specific
     issues like compute discount factors, find equivalent rates, forward rates, and
     so on. It also has classes to represent commom fixed income entities such as a
-    term structure of interest rates, spot rates and day count rules. This package
-    also supports methods and models commom used by practitioners to do fixed income
-    calculations.
+    term structure of interest rates, spot rates, forward rates and day count rules.
+    This package also supports methods and models commom used by practitioners to do
+    fixed income calculations.
 URL: https://github.com/wilsonfreitas/R-fixedincome
 BugReports: https://github.com/wilsonfreitas/R-fixedincome/issues
 VignetteBuilder: knitr
