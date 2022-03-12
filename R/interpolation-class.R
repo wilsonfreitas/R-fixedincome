@@ -280,29 +280,48 @@ setMethod(
   }
 )
 
-#' Get parameters of the interpolation models
+#' Get/Set parameters of the interpolation models
 #'
-#' Gets parameters of parametric interpolation models like 
+#' Gets parameters of parametric interpolation models like
 #' [NelsonSiegel-class] and [NelsonSiegelSvensson-class].
 #'
 #' @param x a Interpolation object.
+#' @param value a named vector with parameters.
 #' @param ... additional arguments. Currently unused.
 #' 
+#' The argument `value` must be named with the models' parameter names.
+#' The given parameters will be replaced the missing ones will keep
+#' the original values.
+#'
 #' @return A named vector with parameters of the models.
 #' @aliases
 #' parameters,NelsonSiegel-method
 #' parameters,NelsonSiegelSvensson-method
+#' parameters<-,NelsonSiegel-method
+#' parameters<-,NelsonSiegelSvensson-method
 #' @examples
 #' terms <- c(1, 11, 26, 27, 28)
 #' rates <- c(0.0719, 0.056, 0.0674, 0.0687, 0.07)
 #' curve <- spotratecurve(rates, terms, "discrete", "actual/365", "actual")
 #' model <- fit_interpolation(interp_nelsonsiegel(0.1, 0.01, 0.01, 0.01), curve)
 #' parameters(model)
+#' 
+#' # only beta1 is updated 
+#' parameters(model) <- c(beta1 = 0.0719)
 #' @export
 setGeneric(
   "parameters",
   function(x, ...) {
     standardGeneric("parameters")
+  }
+)
+
+#' @rdname parameters
+#' @export
+setGeneric(
+  "parameters<-",
+  function(x, value) {
+    standardGeneric("parameters<-")
   }
 )
 
@@ -322,5 +341,31 @@ setMethod(
       beta1 = x@beta1, beta2 = x@beta2, beta3 = x@beta3, beta4 = x@beta4,
       lambda1 = x@lambda1, lambda2 = x@lambda2
     )
+  }
+)
+
+setReplaceMethod(
+  "parameters",
+  signature(x = "NelsonSiegel", value = "numeric"),
+  function(x, value) {
+    if (!is.na(value["beta1"])) x@beta1 <- unname(value["beta1"])
+    if (!is.na(value["beta2"])) x@beta2 <- unname(value["beta2"])
+    if (!is.na(value["beta3"])) x@beta3 <- unname(value["beta3"])
+    if (!is.na(value["lambda1"])) x@lambda1 <- unname(value["lambda1"])
+    x
+  }
+)
+
+setReplaceMethod(
+  "parameters",
+  signature(x = "NelsonSiegelSvensson", value = "numeric"),
+  function(x, value) {
+    if (!is.na(value["beta1"])) x@beta1 <- unname(value["beta1"])
+    if (!is.na(value["beta2"])) x@beta2 <- unname(value["beta2"])
+    if (!is.na(value["beta3"])) x@beta3 <- unname(value["beta3"])
+    if (!is.na(value["beta4"])) x@beta4 <- unname(value["beta4"])
+    if (!is.na(value["lambda1"])) x@lambda1 <- unname(value["lambda1"])
+    if (!is.na(value["lambda2"])) x@lambda2 <- unname(value["lambda2"])
+    x
   }
 )
