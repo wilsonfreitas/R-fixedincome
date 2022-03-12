@@ -61,6 +61,7 @@
     - [ ] concatenate SpotRateCurve
 - [ ] Naming: SpotRateCurve should have a name? I am not sure about that!
 - [ ] create DiscountCurve - interpolations should be applied to it.
+- [ ] arithmetic operations between curves respecting terms
 
 ### Multi SpotRateCurve
 
@@ -96,6 +97,7 @@
     - [ ] Constrained Spline
     - [ ] Dynamic Nelson-Siegel [ref1][ref1], [ref2][ref2] 
 - [ ] Improve curve fit stop using object copy
+- [ ] Work with terms in years instead of days
 
 ### Bonds
 

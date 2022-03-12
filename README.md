@@ -1,5 +1,10 @@
 # fixedincome
 
+<!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/fixedincome)](https://CRAN.R-project.org/package=fixedincome)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+<!-- badges: end -->
+
 Calculations involving interest rates are usually very easy and straightforward,
 but sometimes it involves specific issues that makes the task of writing
 structured and reproducible code for it chalenging and annoying.
