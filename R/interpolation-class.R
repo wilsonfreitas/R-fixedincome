@@ -102,6 +102,8 @@ setClass(
 #'
 #' @keywords internal
 #' @aliases interpolate,Interpolation,numeric-method
+#' @aliases interpolate,NelsonSiegel,numeric-method
+#' @aliases interpolate,NelsonSiegelSvensson,numeric-method
 #'
 #' @export
 setGeneric(
@@ -116,6 +118,37 @@ setMethod(
   signature(object = "Interpolation", x = "numeric"),
   function(object, x, ...) {
     object@func(x)
+  }
+)
+
+nss <- function(t, b1, b2, b3, b4, l1, l2) {
+  ns(t, b1, b2, b3, l1) + b4 * ((1 - exp(-l2 * t)) / (l2 * t) - exp(-l2 * t))
+}
+
+setMethod(
+  "interpolate",
+  signature(object = "NelsonSiegelSvensson", x = "numeric"),
+  function(object, x, ...) {
+    nss(
+      x, object@beta1, object@beta2, object@beta3, object@beta4,
+      object@lambda1, object@lambda2
+    )
+  }
+)
+
+ns <- function(t, b1, b2, b3, l1) {
+  b1 +
+    b2 * (1 - exp(-l1 * t)) / (l1 * t) +
+    b3 * ((1 - exp(-l1 * t)) / (l1 * t) - exp(-l1 * t))
+}
+
+setMethod(
+  "interpolate",
+  signature(object = "NelsonSiegel", x = "numeric"),
+  function(object, x, ...) {
+    ns(
+      x, object@beta1, object@beta2, object@beta3, object@lambda1
+    )
   }
 )
 

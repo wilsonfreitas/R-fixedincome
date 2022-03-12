@@ -202,39 +202,20 @@ setMethod(
   }
 )
 
-ns <- function(t, b1, b2, b3, l1) {
-  b1 +
-    b2 * (1 - exp(-l1 * t)) / (l1 * t) +
-    b3 * ((1 - exp(-l1 * t)) / (l1 * t) - exp(-l1 * t))
-}
-
 #' @export
 setMethod(
   "prepare_interpolation",
   signature(object = "NelsonSiegel", x = "SpotRateCurve"),
   function(object, x, ...) {
-    object@func <- function(term) {
-      ns(term, object@beta1, object@beta2, object@beta3, object@lambda1)
-    }
     object
   }
 )
-
-nss <- function(t, b1, b2, b3, b4, l1, l2) {
-  ns(t, b1, b2, b3, l1) + b4 * ((1 - exp(-l2 * t)) / (l2 * t) - exp(-l2 * t))
-}
 
 #' @export
 setMethod(
   "prepare_interpolation",
   signature(object = "NelsonSiegelSvensson", x = "SpotRateCurve"),
   function(object, x, ...) {
-    object@func <- function(term) {
-      nss(
-        term, object@beta1, object@beta2, object@beta3, object@beta4,
-        object@lambda1, object@lambda2
-      )
-    }
     object
   }
 )
