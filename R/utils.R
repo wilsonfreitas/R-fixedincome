@@ -70,7 +70,9 @@ plot_SpotRateCurve <- function(x, y, ...,
   Y <- as.numeric(x) * 100
   FWD <- as.numeric(forwardrate(x)) * 100
   family <- "mono"
-  plot_op <- par(family = family)
+  plot_op <- par(no.readonly = TRUE)
+  on.exit(par(plot_op))
+  par(family = family)
 
   rng <- if (show_forward) range(c(Y, FWD)) else range(Y)
 
@@ -182,5 +184,4 @@ plot_SpotRateCurve <- function(x, y, ...,
       pch = leg_pchs, lty = leg_ltys
     )
   }
-  par(plot_op)
 }
