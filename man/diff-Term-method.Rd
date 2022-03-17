@@ -17,7 +17,7 @@
 applying diff to a Term object.}
 }
 \value{
-A Term object.
+A new \code{Term} object with lagged differences of the given \code{Term} object.
 }
 \description{
 \code{diff} returns a Term vector with lagged differences.

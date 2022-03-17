@@ -17,7 +17,8 @@ This is useful to evaluate parametric methods like \linkS4class{NelsonSiegel} an
 \linkS4class{NelsonSiegelSvensson}.}
 }
 \value{
-A numeric value.
+A numeric value with the root mean squared error between the curve data point
+and interpolated points.
 }
 \description{
 Computes interpolation error as the root mean square error of differences

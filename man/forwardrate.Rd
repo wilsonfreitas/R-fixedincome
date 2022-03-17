@@ -15,10 +15,7 @@ forwardrate(x, ...)
 \arguments{
 \item{x}{a numeric or a SpotRateCurve object.}
 
-\item{...}{additional arguments.
-
-The arguments \code{t1} and \code{t2} define initial and final term used to
-extract a ForwardRate from a SpotRateCurve.}
+\item{...}{additional arguments.}
 
 \item{terms}{a numeric vector with positive values representing terms of
 the forward rates.}
@@ -35,6 +32,12 @@ the SpotRateCurve object.}
 \item{t1}{initial term}
 
 \item{t2}{final term}
+}
+\value{
+A \code{ForwardRate} object.
+
+The arguments \code{t1} and \code{t2} define initial and final term used to
+extract a ForwardRate from a SpotRateCurve.
 }
 \description{
 \code{forwardrate()} creates a ForwardRate object.

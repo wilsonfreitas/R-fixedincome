@@ -11,7 +11,8 @@ dib(x)
 \item{x}{a Daycount object.}
 }
 \value{
-A numeric.
+A numeric with daycount's days in base, the number of days in a year
+used in the convention.
 }
 \description{
 \code{dib} returns the days in base, that is the number of days used to

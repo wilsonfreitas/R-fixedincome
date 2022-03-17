@@ -41,6 +41,13 @@ interp_nelsonsiegelsvensson(beta1, beta2, beta3, beta4, lambda1, lambda2)
 
 \item{lambda2}{a single numeric}
 }
+\value{
+An \code{Interpolation} object.
+That object knows the interpolation method but doesn't have the data
+points.
+When the \code{Interpolation} is set to the curve with \verb{interpolation<-}
+the interpolation engine is properly configured.
+}
 \description{
 Functions to create intepolation objects.
 }

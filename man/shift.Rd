@@ -19,7 +19,7 @@ shift(x, k = 1, ..., fill = NA)
 shifting a vector object.}
 }
 \value{
-A vector object with the same type of provided object.
+A shifted vector object of the same type of provided object.
 }
 \description{
 Element wise shift of vectors by \code{k} positions.

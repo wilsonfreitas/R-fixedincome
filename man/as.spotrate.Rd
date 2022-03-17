@@ -20,6 +20,9 @@ as.spotrate(x, ...)
 \item{simplify}{a boolean indicating whether to simplify SpotRate creation
 or not. Defaults to TRUE.}
 }
+\value{
+A \code{SpotRate} object created from a string.
+}
 \description{
 Coerce character objects to SpotRate class
 }

@@ -29,6 +29,9 @@ or the initial date for a period between two dates.}
 \item{calendar}{the calendar used to compute the amount of days for a period
 between two dates.}
 }
+\value{
+A \code{Term} object.
+}
 \description{
 \code{term()} creates a Term object.
 }

@@ -20,7 +20,7 @@ rates(x, t, val, ...)
 \item{...}{additional arguments. Currently unused.}
 }
 \value{
-a numeric value that represents a spot rate.
+A numeric value that represents a spot rate.
 }
 \description{
 Computes implied rates to compounding factors.

@@ -10,7 +10,8 @@ maturities(x)
 \item{x}{a SpotRateCurve object.}
 }
 \value{
-a vector of \code{Date} objects.
+A vector of \code{Date} objects that represent the curve's \code{terms} and using
+curve's \code{refdate} as a starting point.
 }
 \description{
 Compute the SpotRateCurve terms as Date objects, according to the curve's

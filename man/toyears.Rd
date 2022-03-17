@@ -19,7 +19,7 @@ or a character representing a \code{Term}. See Details.}
 See Details.}
 }
 \value{
-A numeric.
+A numeric with the value of the given \code{Term} in years.
 }
 \description{
 \code{toyears} returns a numeric representing a Term in years.

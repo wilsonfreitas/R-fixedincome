@@ -17,7 +17,7 @@ as.spotratecurve(x, ...)
 \item{refdate}{the curve reference date.}
 }
 \value{
-a SpotRateCurve object
+A \code{SpotRateCurve} object create from another object.
 }
 \description{
 A SpotRateCurve can be created from a \code{ForwardRate} object.

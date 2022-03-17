@@ -13,7 +13,7 @@ as.term(x, ...)
 \item{...}{additional arguments. Currently unused.}
 }
 \value{
-A Term object.
+A \code{Term} object created from a string.
 }
 \description{
 \code{as.term} coerces a character vector to a Term object.

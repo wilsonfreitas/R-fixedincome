@@ -18,6 +18,9 @@ spotrate(x, compounding, daycount, calendar, .copyfrom = NULL)
 \item{.copyfrom}{a \code{SpotRate} object used as reference to copy
 attributes.}
 }
+\value{
+A \code{SpotRate} object.
+}
 \description{
 \code{spotrate()} function creates \code{SpotRate} objects.
 }

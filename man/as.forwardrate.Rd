@@ -20,6 +20,10 @@ as.forwardrate(x, ...)
 \item{terms}{a numeric with positive values representing terms or a Term
 object.}
 }
+\value{
+A \code{ForwardRate} object created from another object, \code{SpotRate} or
+\code{SpotRateCurve}.
+}
 \description{
 A \code{ForwardRate} object can be created from a \code{SpotRate} object and
 a \code{SpotRateCurve}.

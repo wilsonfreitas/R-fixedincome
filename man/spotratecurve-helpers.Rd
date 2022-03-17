@@ -34,7 +34,8 @@ given term.
 the given term.}
 }
 \value{
-A SpotRateCurve object.
+A \code{SpotRateCurve} object that is a subset of the given curve.
+The elements returned are select according to the operation executed.
 }
 \description{
 Helpers methods that return parts of a SpotRateCurve object according to a

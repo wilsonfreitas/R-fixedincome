@@ -29,7 +29,9 @@ perform interpolation of the given data points.
 This method shouldn't be directly called, it is for internal use only.}
 }
 \value{
-A Interpolation object.
+A \code{Interpolation} object with the slot \code{func} properly defined.
+This slot is set with a \code{function} (closure) that executes
+the interpolation method.
 }
 \description{
 Creates the interpolation function to a SpotRateCurve object.

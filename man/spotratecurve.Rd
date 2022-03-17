@@ -40,6 +40,9 @@ the term structure.}
 \item{.copyfrom}{a SpotRate object that is used as reference to build
 the SpotRateCurve object.}
 }
+\value{
+A \code{SpotRateCurve} object.
+}
 \description{
 \code{spotratecurve()} S3 method createas a SpotRateCurve object.
 It is dispatched for numeric values, that represent spot rates and

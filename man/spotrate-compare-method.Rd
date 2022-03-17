@@ -19,7 +19,12 @@
 \item{e2}{a \code{SpotRate} object or a numeric}
 }
 \value{
-a boolean \code{logical} object.
+A boolean \code{logical} object.
+The comparison with \code{SpotRate} objects only takes all fields
+into account.
+Comparing \code{SpotRate} against numeric values is equivalent to
+coerce the \code{SpotRate} object to numeric execute the operation,
+this is a syntax sugar for a shortcut that is commonly applied.
 }
 \description{
 Comparison operations with SpotRate class

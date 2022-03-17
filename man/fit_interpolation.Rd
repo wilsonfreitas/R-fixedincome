@@ -16,7 +16,7 @@ fit_interpolation(object, x, ...)
 \item{...}{additional arguments. Currently unused.}
 }
 \value{
-A Interpolation object.
+A \code{Interpolation} object.
 }
 \description{
 Fits parametric interpolation functions like \linkS4class{NelsonSiegel} or

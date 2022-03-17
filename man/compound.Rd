@@ -37,7 +37,7 @@ Can be a numeric, a \code{Date} or missing. See Details.}
 \item{...}{additional arguments.}
 }
 \value{
-a numeric value that represents the compounding factor for the given
+A numeric value that represents the compounding factor for the given
 spot rate.
 }
 \description{

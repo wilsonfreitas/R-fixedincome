@@ -13,7 +13,7 @@ daycount(x, ...)
 \item{...}{additional arguments. Currently unused.}
 }
 \value{
-A Daycount object.
+A \code{Daycount} object.
 }
 \description{
 \code{daycount} creates a \code{Daycount} object.
