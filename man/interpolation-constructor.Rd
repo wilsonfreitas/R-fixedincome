@@ -84,3 +84,8 @@ interpolation(curve) <- interp_flatforward()
 
 curve[[1:10]]
 }
+\references{
+Charles R. Nelson and Andrew F. Siegel (1987), The Journal of Business
+
+Lars E.O. Svensson (1994), National Bureau of Economic Research
+}

@@ -177,6 +177,11 @@ setMethod(
 #' points.
 #' When the `Interpolation` is set to the curve with `interpolation<-`
 #' the interpolation engine is properly configured.
+#' 
+#' @references
+#' Charles R. Nelson and Andrew F. Siegel (1987), The Journal of Business
+#' 
+#' Lars E.O. Svensson (1994), National Bureau of Economic Research
 #'
 #' @examples
 #' terms <- c(1, 11, 26, 27, 28)
