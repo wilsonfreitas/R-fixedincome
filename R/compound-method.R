@@ -25,7 +25,7 @@
 #'
 #' `discount()` method is the inverse of compound: `1 / compound()`.
 #'
-#' @return a numeric value that represents the compounding factor for the given
+#' @return A numeric value that represents the compounding factor for the given
 #'         spot rate.
 #'
 #' @aliases

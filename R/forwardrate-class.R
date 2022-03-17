@@ -28,6 +28,8 @@ setClass(
 #' @param t1 initial term
 #' @param t2 final term
 #' @param ... additional arguments.
+#' 
+#' @return A `ForwardRate` object.
 #'
 #' The arguments \code{t1} and \code{t2} define initial and final term used to
 #' extract a ForwardRate from a SpotRateCurve.
@@ -116,6 +118,10 @@ forwardrate.SpotRateCurve <- function(x, t1 = NULL, t2 = NULL, ...) {
 #' @param terms a numeric with positive values representing terms or a Term
 #'        object.
 #' @param ... additional arguments
+#' 
+#' @return
+#' A `ForwardRate` object created from another object, `SpotRate` or
+#' `SpotRateCurve`.
 #'
 #' @export
 as.forwardrate <- function(x, ...) {

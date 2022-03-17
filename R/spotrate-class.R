@@ -47,6 +47,8 @@ setClass(
 #' @param calendar a \code{bizdays} calendar.
 #' @param .copyfrom a \code{SpotRate} object used as reference to copy
 #'        attributes.
+#' 
+#' @return A `SpotRate` object.
 #'
 #' @examples
 #' spotrate(0.06, "continuous", "actual/365", "actual")
@@ -152,6 +154,8 @@ c.SpotRate <- function(x, ...) {
 #' all given characters.
 #' If it is true the returned object is a SpotRate otherwise a \code{list} with
 #' SpotRate objects is returned.
+#' 
+#' @return A `SpotRate` object created from a string.
 #'
 #' @examples
 #'
@@ -245,7 +249,13 @@ setMethod(
 #' @param e1 a \code{SpotRate} object or a numeric
 #' @param e2 a \code{SpotRate} object or a numeric
 #'
-#' @return a boolean \code{logical} object.
+#' @return
+#' A boolean `logical` object.
+#' The comparison with `SpotRate` objects only takes all fields
+#' into account.
+#' Comparing `SpotRate` against numeric values is equivalent to
+#' coerce the `SpotRate` object to numeric execute the operation,
+#' this is a syntax sugar for a shortcut that is commonly applied.
 #' @name spotrate-compare-method
 #'
 #' @examples

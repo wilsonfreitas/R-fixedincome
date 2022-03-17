@@ -27,7 +27,7 @@ setClass(
 #'        \code{actual/365}, \code{actual/360}, ...
 #' @param ... additional arguments. Currently unused.
 #'
-#' @return A Daycount object.
+#' @return A `Daycount` object.
 #'
 #' @examples
 #' dc <- daycount("actual/360")
@@ -68,7 +68,8 @@ setMethod(
 #'
 #' @aliases dib,Daycount-method
 #'
-#' @return A numeric.
+#' @return A numeric with daycount's days in base, the number of days in a year
+#' used in the convention.
 #'
 #' @examples
 #' dc <- daycount("actual/360")
@@ -114,7 +115,7 @@ setMethod(
 #' toyears,Daycount,character,missing-method
 #' toyears,Daycount,numeric,character-method
 #'
-#' @return A numeric.
+#' @return A numeric with the value of the given `Term` in years.
 #'
 #' @examples
 #' dc <- daycount("actual/360")

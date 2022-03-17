@@ -131,7 +131,7 @@ setMethod(
 #' instanciates a Compounding object and then computes the implied rate
 #' for the given compounding values and terms.
 #'
-#' @return a numeric value that represents a spot rate.
+#' @return A numeric value that represents a spot rate.
 #'
 #' @aliases
 #' rates,Continuous,numeric,numeric-method

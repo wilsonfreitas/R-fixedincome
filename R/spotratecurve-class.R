@@ -48,6 +48,8 @@ setClass(
 #' @param .copyfrom a SpotRate object that is used as reference to build
 #'        the SpotRateCurve object.
 #' @param ... additional arguments
+#' 
+#' @return A `SpotRateCurve` object.
 #'
 #' @examples
 #' terms <- c(1, 11, 26, 27, 28)
@@ -123,7 +125,7 @@ spotratecurve.SpotRate <- function(x, terms,
 #' @param refdate the curve reference date.
 #' @param ... additional arguments
 #'
-#' @return a SpotRateCurve object
+#' @return A `SpotRateCurve` object create from another object.
 #'
 #' @export
 as.spotratecurve <- function(x, ...) {
@@ -450,7 +452,9 @@ setMethod(
 #'
 #' @param x a SpotRateCurve object.
 #'
-#' @return a vector of `Date` objects.
+#' @return
+#' A vector of `Date` objects that represent the curve's `terms` and using
+#' curve's `refdate` as a starting point.
 #'
 #' @examples
 #' terms <- c(1, 11, 26, 27, 28)
@@ -475,7 +479,10 @@ maturities <- function(x) {
 #' This is useful to evaluate parametric methods like [NelsonSiegel-class] and
 #' [NelsonSiegelSvensson-class].
 #'
-#' @return A numeric value.
+#' @return
+#' A numeric value with the root mean squared error between the curve data point
+#' and interpolated points.
+#' 
 #' @aliases interpolation_error,SpotRateCurve-method
 #' @examples
 #' terms <- c(1, 11, 26, 27, 28)
@@ -520,7 +527,9 @@ setMethod(
 #' the given term.
 #'
 #' @name spotratecurve-helpers
-#' @return A SpotRateCurve object.
+#' @return
+#' A `SpotRateCurve` object that is a subset of the given curve.
+#' The elements returned are select according to the operation executed.
 #' @aliases
 #' closest,SpotRateCurve,Term-method
 #' closest,SpotRateCurve,character-method

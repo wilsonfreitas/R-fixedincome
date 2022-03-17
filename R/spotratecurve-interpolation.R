@@ -49,7 +49,11 @@ setGeneric(
 #' 
 #' This method shouldn't be directly called, it is for internal use only.
 #'
-#' @return A Interpolation object.
+#' @return
+#' A `Interpolation` object with the slot `func` properly defined.
+#' This slot is set with a `function` (closure) that executes
+#' the interpolation method.
+#' 
 #' @aliases
 #' prepare_interpolation,FlatForward,SpotRateCurve-method
 #' prepare_interpolation,HermiteSpline,SpotRateCurve-method
@@ -81,7 +85,7 @@ setGeneric(
 #' @param x a SpotRateCurve object.
 #' @param ... additional arguments. Currently unused.
 #' 
-#' @return A Interpolation object.
+#' @return A `Interpolation` object.
 #' @aliases
 #' fit_interpolation,NelsonSiegel,SpotRateCurve-method
 #' fit_interpolation,NelsonSiegelSvensson,SpotRateCurve-method

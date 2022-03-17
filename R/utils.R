@@ -9,7 +9,8 @@
 #' shifting a vector object.
 #' @param ... additional arguments. Currently unused.
 #'
-#' @return A vector object with the same type of provided object.
+#' @return
+#' A shifted vector object of the same type of provided object.
 #'
 #' @aliases shift,Term-method shift,numeric-method
 #' @examples

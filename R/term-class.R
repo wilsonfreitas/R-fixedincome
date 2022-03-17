@@ -11,6 +11,8 @@
 #' @param calendar the calendar used to compute the amount of days for a period
 #' between two dates.
 #' @param ... additional arguments
+#' 
+#' @return A `Term` object.
 #'
 #' @examples
 #' term(6, "months")
@@ -93,7 +95,7 @@ setMethod(
 #' @param x a character to be coerced to a Term.
 #' @param ... additional arguments. Currently unused.
 #'
-#' @return A Term object.
+#' @return A `Term` object created from a string.
 #'
 #' @details
 #' The string representation of the Term class follows the layout:
@@ -154,7 +156,9 @@ setMethod(
 #' applying diff to a Term object.
 #' @param ... additional arguments. Currently unused.
 #'
-#' @return A Term object.
+#' @return
+#' A new `Term` object with lagged differences of the given `Term` object.
+#' 
 #' @examples
 #' t <- term(1:10, "months")
 #' diff(t)

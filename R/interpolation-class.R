@@ -99,6 +99,12 @@ setClass(
 #' method.
 #' This method creates the interpolation funcion with the current state of the
 #' curve object and sets this function to the `func` slot.
+#' 
+#' @return
+#' A numeric vector with the interpolated values.
+#' The `Interpolation` object is created with the data point of the curve.
+#' The interpolation method is executed on these points the numeric
+#' vector.
 #'
 #' @keywords internal
 #' @aliases interpolate,Interpolation,numeric-method
@@ -164,6 +170,13 @@ setMethod(
 #' term structure.
 #'
 #' @name interpolation-constructor
+#' 
+#' @return 
+#' An `Interpolation` object.
+#' That object knows the interpolation method but doesn't have the data
+#' points.
+#' When the `Interpolation` is set to the curve with `interpolation<-`
+#' the interpolation engine is properly configured.
 #'
 #' @examples
 #' terms <- c(1, 11, 26, 27, 28)
