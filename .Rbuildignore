@@ -23,3 +23,9 @@ aux
 TODO.md
 examples
 images
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
+^resources$
+^README\.Rmd$
