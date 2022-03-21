@@ -32,6 +32,12 @@ interest rates using `fixedincome`.
 
 ## Installation
 
+You can install from CRAN with:
+
+```{r eval=FALSE}
+install.packages("fixedincome")
+```
+
 You can install the development version of fixedincome from [GitHub](https://github.com/) with:
 
 ```{r eval=FALSE}
