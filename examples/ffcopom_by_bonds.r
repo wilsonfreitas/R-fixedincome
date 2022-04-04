@@ -16,9 +16,10 @@ futures <- contracts |>
     ) |>
     select(refdate, symbol, maturity_date, notional, business_days, spot_price)
 
-di1 <- get_curve_from_web("2022-03-10")
 
 di1_contracts$spot_price - di1_contracts$notional * discount(di1[[di1_contracts$business_days]])
+
+di1 <- get_curve_from_web("2022-03-10")
 
 setClass(
     "COPOMScenarios",
@@ -55,7 +56,7 @@ setMethod(
         comp2 <- compound(x[ix])
 
         terms <- c(t, x@terms[ix])
-        prices <- compound(c(comp, comp2))
+        prices <- c(comp, comp2)
         interp_coords <- xy.coords(terms, log(prices))
         interp_fun <- approxfun(interp_coords, method = "linear")
         dc <- x@daycount
@@ -68,3 +69,27 @@ setMethod(
         object
     }
 )
+
+
+# adjust for the first future
+
+x <- di1
+cd <- copom_dates[copom_dates > x@refdate][1:4]
+cm <- c(100, 100, 50, 50) / 1e4
+
+du_1 <- bizdays(x@refdate, cd, "Brazil/ANBIMA")
+du_2 <- shift(du_1, fill = 0)
+t <- term(du_1 - du_2, "days")
+
+first_vert <- as.spotrate(x[1])
+acc_moves <- shift(cumsum(cm), fill = 0)
+rates <- first_vert + acc_moves
+comp <- cumprod(compound(rates, t))
+
+ix <- x@terms > max(du_1)
+comp2 <- compound(x[ix])
+
+terms <- c(term(du_1, "days"), x@terms[ix])
+prices <- c(comp, comp2)
+
+plot(terms, prices, type = "b")
