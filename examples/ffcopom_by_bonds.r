@@ -19,7 +19,7 @@ futures <- contracts |>
 
 di1_contracts$spot_price - di1_contracts$notional * discount(di1[[di1_contracts$business_days]])
 
-di1 <- get_curve_from_web("2022-03-10")
+di1 <- get_curve_from_web("2022-04-01")
 
 setClass(
     "COPOMScenarios",
@@ -52,11 +52,12 @@ setMethod(
         rates <- first_vert + acc_moves
         comp <- cumprod(compound(rates, t))
 
-        ix <- x@terms > max(t)
+        ix <- x@terms > max(du_1)
         comp2 <- compound(x[ix])
 
-        terms <- c(t, x@terms[ix])
+        terms <- c(term(du_1, "days"), x@terms[ix])
         prices <- c(comp, comp2)
+
         interp_coords <- xy.coords(terms, log(prices))
         interp_fun <- approxfun(interp_coords, method = "linear")
         dc <- x@daycount
@@ -70,6 +71,24 @@ setMethod(
     }
 )
 
+
+library(stringr)
+library(rbcb)
+library(purrr)
+
+selic <- get_series(c(SELIC = 432), start_date = "2022-04-01")
+
+selic_exp <- get_market_expectations("selic", start_date = "2022-03-25") |>
+    filter(baseCalculo == 0) |>
+    mutate(Reuniao = str_split(Reuniao, "/") |> map_chr(~ paste0(.x[2], .x[1]))) |>
+    arrange(Reuniao)
+
+cd <- copom_dates[copom_dates > "2022-04-01"]
+mv <- c(selic_exp$Mediana[1] - selic$SELIC[1], selic_exp$Mediana |> diff())
+mv[seq_along(cd)]
+
+copom_dates |> diff()
+copom_dates |> bizdiff("Brazil/ANBIMA")
 
 # adjust for the first future
 
