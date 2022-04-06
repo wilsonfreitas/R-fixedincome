@@ -25,9 +25,11 @@
 setClass(
   "Interpolation",
   slots = c(
-    func = "ANY"
+    func = "ANY",
+    propagate = "logical"
   ),
-  contains = "character"
+  contains = "character",
+  prototype = prototype(propagate = TRUE)
 )
 
 #' @export
@@ -99,7 +101,7 @@ setClass(
 #' method.
 #' This method creates the interpolation funcion with the current state of the
 #' curve object and sets this function to the `func` slot.
-#' 
+#'
 #' @return
 #' A numeric vector with the interpolated values.
 #' The `Interpolation` object is created with the data point of the curve.
@@ -170,17 +172,17 @@ setMethod(
 #' term structure.
 #'
 #' @name interpolation-constructor
-#' 
-#' @return 
+#'
+#' @return
 #' An `Interpolation` object.
 #' That object knows the interpolation method but doesn't have the data
 #' points.
 #' When the `Interpolation` is set to the curve with `interpolation<-`
 #' the interpolation engine is properly configured.
-#' 
+#'
 #' @references
 #' Charles R. Nelson and Andrew F. Siegel (1987), The Journal of Business
-#' 
+#'
 #' Lars E.O. Svensson (1994), National Bureau of Economic Research
 #'
 #' @examples
@@ -267,12 +269,12 @@ setMethod(
 
 #' Get parameters of the interpolation models
 #'
-#' Gets parameters of parametric interpolation models like 
+#' Gets parameters of parametric interpolation models like
 #' [NelsonSiegel-class] and [NelsonSiegelSvensson-class].
 #'
 #' @param x a Interpolation object.
 #' @param ... additional arguments. Currently unused.
-#' 
+#'
 #' @return A named vector with parameters of the models.
 #' @aliases
 #' parameters,NelsonSiegel-method

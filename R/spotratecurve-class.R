@@ -48,7 +48,7 @@ setClass(
 #' @param .copyfrom a SpotRate object that is used as reference to build
 #'        the SpotRateCurve object.
 #' @param ... additional arguments
-#' 
+#'
 #' @return A `SpotRateCurve` object.
 #'
 #' @examples
@@ -258,7 +258,7 @@ setMethod(
         refdate = x@refdate
       )
     }
-    if (length(obj) >= 2) {
+    if (length(obj) >= 2 && x@interpolation@propagate) {
       interpolation(obj) <- x@interpolation
     }
     obj
@@ -482,7 +482,7 @@ maturities <- function(x) {
 #' @return
 #' A numeric value with the root mean squared error between the curve data point
 #' and interpolated points.
-#' 
+#'
 #' @aliases interpolation_error,SpotRateCurve-method
 #' @examples
 #' terms <- c(1, 11, 26, 27, 28)
