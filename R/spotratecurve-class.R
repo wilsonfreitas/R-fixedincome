@@ -258,7 +258,9 @@ setMethod(
         refdate = x@refdate
       )
     }
-    if (length(obj) >= 2 && x@interpolation@propagate) {
+    if (length(obj) >= 2 &&
+      !is.null(x@interpolation) &&
+      x@interpolation@propagate) {
       interpolation(obj) <- x@interpolation
     }
     obj
