@@ -267,6 +267,33 @@ setMethod(
   }
 )
 
+replace_double_brackets <- function(x, i, value) {
+  contained_from <- i %in% x@terms
+  contained_to <- x@terms %in% i
+  if (any(contained_from)) {
+    x@.Data[contained_to] <- if (length(value) == 1) {
+      value
+    } else {
+      value[contained_from]
+    }
+  }
+  if (any(!contained_from)) {
+    value_ <- c(x@.Data, if (length(value) == 1) {
+      rep(value, sum(!contained_from))
+    } else {
+      value[!contained_from]
+    })
+    terms_ <- c(x@terms, i[!contained_from])
+    ix <- order(terms_)
+    x@.Data <- value_[ix]
+    x@terms <- terms_[ix]
+  }
+  if (length(x) >= 2) {
+    interpolation(x) <- x@interpolation
+  }
+  x
+}
+
 #' @export
 setReplaceMethod(
   "[[",
@@ -275,30 +302,7 @@ setReplaceMethod(
     value = "numeric"
   ),
   function(x, i, j, ..., value) {
-    contained_from <- i %in% x@terms
-    contained_to <- x@terms %in% i
-    if (any(contained_from)) {
-      x@.Data[contained_to] <- if (length(value) == 1) {
-        value
-      } else {
-        value[contained_from]
-      }
-    }
-    if (any(!contained_from)) {
-      value_ <- c(x@.Data, if (length(value) == 1) {
-        rep(value, sum(!contained_from))
-      } else {
-        value[!contained_from]
-      })
-      terms_ <- c(x@terms, i[!contained_from])
-      ix <- order(terms_)
-      x@.Data <- value_[ix]
-      x@terms <- terms_[ix]
-    }
-    if (length(x) >= 2) {
-      interpolation(x) <- x@interpolation
-    }
-    x
+    replace_double_brackets(x, i, value)
   }
 )
 
@@ -314,30 +318,7 @@ setReplaceMethod(
       x, value,
       "Given SpotRate objects have different slots"
     )
-    contained_from <- i %in% x@terms
-    contained_to <- x@terms %in% i
-    if (any(contained_from)) {
-      x@.Data[contained_to] <- if (length(value) == 1) {
-        value
-      } else {
-        value[contained_from]
-      }
-    }
-    if (any(!contained_from)) {
-      value_ <- c(x@.Data, if (length(value) == 1) {
-        rep(value, sum(!contained_from))
-      } else {
-        value[!contained_from]
-      })
-      terms_ <- c(x@terms, i[!contained_from])
-      ix <- order(terms_)
-      x@.Data <- value_[ix]
-      x@terms <- terms_[ix]
-    }
-    if (length(x) >= 2) {
-      interpolation(x) <- x@interpolation
-    }
-    x
+    replace_double_brackets(x, i, value)
   }
 )
 
