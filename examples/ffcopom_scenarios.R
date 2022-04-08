@@ -1,61 +1,30 @@
 
 source("examples/utils-functions.R")
-
-setClass(
-  "COPOMScenarios",
-  slots = c(
-    copom_dates = "ANY",
-    copom_moves = "numeric"
-  ),
-  contains = "Interpolation"
-)
-
-interp_copomscenarios <- function(copom_dates, copom_moves) {
-  obj <- new("COPOMScenarios", "copomscenarios",
-    copom_dates = copom_dates,
-    copom_moves = copom_moves
-  )
-  obj@propagate <- FALSE
-  obj
-}
-
-setMethod(
-  "prepare_interpolation",
-  signature(object = "COPOMScenarios", x = "SpotRateCurve"),
-  function(object, x, ...) {
-    x@interpolation <- NULL
-
-    t1 <- term(bizdays(x@refdate, object@copom_dates, x@calendar), "days")
-    t1 <- c(t1, x@terms[x@terms > max(t1)][1])
-    t <- t1 - shift(t1, fill = 0)
-
-    acc_moves <- c(0, cumsum(object@copom_moves))
-    comp <- cumprod(compound(as.spotrate(x[1]) + acc_moves, t))
-
-    ix <- x@terms > max(t1)
-    terms <- c(term(1, "days"), t1, x@terms[ix])
-    prices <- c(compound(x[1]), comp, compound(x[ix]))
-
-    interp_coords <- xy.coords(terms, log(prices))
-    interp_fun <- approxfun(interp_coords, method = "linear")
-    dc <- x@daycount
-    comp <- x@compounding
-    object@func <- function(term) {
-      log_price <- interp_fun(term)
-      price <- exp(log_price)
-      rates(comp, toyears(dc, term, "days"), price)
-    }
-    object
-  }
-)
-
+source("examples/copomscenarios.R")
 
 di1 <- get_curve_from_web("2022-04-04") |> fixedincome::first("2 years")
 cd <- copom_dates[copom_dates > di1@refdate][1:6]
 cm <- c(100, 25, 0, 0, 0, 0) / 1e4
 interpolation(di1) <- interp_copomscenarios(cd, cm)
-di1[[1:100]]
 plot(di1, use_interpolation = TRUE)
+
+# optimize COPOM moves against a given curve
+interp <- fit_interpolation(interp_copomscenarios(cd, cm), di1)
+interp@copom_moves * 1e4
+
+# optimize COPOM moves against bonds
+
+fit_interpolation_with_bonds <- function(object, x, bonds) {
+  par <- object@copom_moves
+  res <- optim(par, function(par, x, .dates) {
+    interpolation(x) <- interp_copomscenarios(.dates, par)
+    
+  }, method = "BFGS", x = x, .dates = object@copom_dates)
+  interp_copomscenarios(object@copom_dates, res$par)
+}
+
+
+# di1[[1:100]]
 
 
 # fixedincome::first(di1, "2 years")
