@@ -1,8 +1,6 @@
 Package: fixedincome
 Title: Fixed Income Models, Calculations, Data Structures and Instruments
 Version: 0.0.1
-Depends:
-    R (>= 3.4.0)
 Authors@R: person("Wilson", "Freitas", email = "wilson.freitas@gmail.com",
     role = c("aut", "cre"))
 License: MIT + file LICENSE
@@ -14,8 +12,10 @@ Description: Fixed income mathematics made easy. A rich set of functions
     are implemented.
 URL: https://github.com/wilsonfreitas/R-fixedincome
 BugReports: https://github.com/wilsonfreitas/R-fixedincome/issues
+Depends:
+    R (>= 4.0.0),
+    bizdays (>= 1.0.0)
 Imports:
-    bizdays (>= 1.0.0),
     methods,
     graphics,
     stats,
