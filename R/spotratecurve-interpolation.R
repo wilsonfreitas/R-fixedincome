@@ -41,19 +41,19 @@ setGeneric(
 #' @param object a Interpolation object.
 #' @param x a SpotRateCurve object.
 #' @param ... additional arguments. Currently unused.
-#' 
+#'
 #' This method is used internally when the interpolation is set to a curve.
 #' It uses the current state of the curve to build the interpolation function.
 #' This is similar to call `approxfun` and `splinefun` to create functions that
 #' perform interpolation of the given data points.
-#' 
+#'
 #' This method shouldn't be directly called, it is for internal use only.
 #'
 #' @return
 #' A `Interpolation` object with the slot `func` properly defined.
 #' This slot is set with a `function` (closure) that executes
 #' the interpolation method.
-#' 
+#'
 #' @aliases
 #' prepare_interpolation,FlatForward,SpotRateCurve-method
 #' prepare_interpolation,HermiteSpline,SpotRateCurve-method
@@ -84,7 +84,7 @@ setGeneric(
 #' @param object a Interpolation object with initial parameters set.
 #' @param x a SpotRateCurve object.
 #' @param ... additional arguments. Currently unused.
-#' 
+#'
 #' @return A `Interpolation` object.
 #' @aliases
 #' fit_interpolation,NelsonSiegel,SpotRateCurve-method
@@ -114,7 +114,11 @@ setReplaceMethod(
   "interpolation",
   signature(x = "SpotRateCurve", value = "Interpolation"),
   function(x, value) {
-    x@interpolation <- prepare_interpolation(value, x)
+    if (length(x) >= 2) {
+      x@interpolation <- prepare_interpolation(value, x)
+    } else {
+      warning("interpolation<- not set - curve with less than 2 elements")
+    }
     x
   }
 )
@@ -123,7 +127,7 @@ setReplaceMethod(
   "interpolation",
   signature(x = "SpotRateCurve", value = "NULL"),
   function(x, value) {
-    x@interpolation <- value
+    x@interpolation <- NULL
     x
   }
 )

@@ -160,9 +160,7 @@ setMethod(
       x@calendar,
       refdate = x@refdate
     )
-    if (length(obj) >= 2) {
-      interpolation(obj) <- x@interpolation
-    }
+    interpolation(obj) <- x@interpolation
     obj
   }
 )
@@ -176,9 +174,7 @@ setMethod(
       x@calendar,
       refdate = x@refdate
     )
-    if (length(obj) >= 2) {
-      interpolation(obj) <- x@interpolation
-    }
+    interpolation(obj) <- x@interpolation
     obj
   }
 )
@@ -192,9 +188,7 @@ setMethod(
       x@calendar,
       refdate = x@refdate
     )
-    if (length(obj) >= 2) {
-      interpolation(obj) <- x@interpolation
-    }
+    interpolation(obj) <- x@interpolation
     obj
   }
 )
@@ -211,9 +205,7 @@ setReplaceMethod(
       stop("Index out of limits")
     }
     x@.Data[i] <- value
-    if (length(x) >= 2) {
-      interpolation(x) <- x@interpolation
-    }
+    interpolation(x) <- x@interpolation
     x
   }
 )
@@ -227,9 +219,7 @@ setReplaceMethod(
   ),
   function(x, i, j, ..., value) {
     x[i] <- value@.Data
-    if (length(x) >= 2) {
-      interpolation(x) <- x@interpolation
-    }
+    interpolation(x) <- x@interpolation
     x
   }
 )
@@ -258,8 +248,7 @@ setMethod(
         refdate = x@refdate
       )
     }
-    if (length(obj) >= 2 &&
-      !is.null(x@interpolation) &&
+    if (!is.null(x@interpolation) &&
       x@interpolation@propagate) {
       interpolation(obj) <- x@interpolation
     }
