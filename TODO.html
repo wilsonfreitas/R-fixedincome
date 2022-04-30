@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">fixedincome</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.1.9999</span>
       </span>
     </div>
 
@@ -47,7 +47,6 @@
     </div>
 
 <div id="fixedincome" class="section level1">
-
 <div class="section level2">
 <h2 id="classes">Classes<a class="anchor" aria-label="anchor" href="#classes"></a></h2>
 <ul><li><code>SpotRate</code></li>
@@ -63,265 +62,189 @@
 <div class="section level3">
 <h3 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a></h3>
 <ul><li>
-<input type="checkbox" disabled checked>
-Term</li>
+<input type="checkbox" disabled checked>Term</li>
 <li>
-<input type="checkbox" disabled checked>
-Compounding<ul><li>
-<input type="checkbox" disabled checked>
-Compounding Methods</li>
-</ul></li>
+<input type="checkbox" disabled checked>Compounding<ul><li>
+<input type="checkbox" disabled checked>Compounding Methods</li></ul></li>
 <li>
-<input type="checkbox" disabled checked>
-Daycount</li>
+<input type="checkbox" disabled checked>Daycount</li>
 <li>
-<input type="checkbox" disabled checked>
-SpotRate</li>
+<input type="checkbox" disabled checked>SpotRate</li>
 <li>
-<input type="checkbox" disabled checked>
-SpotRateCurve</li>
+<input type="checkbox" disabled checked>SpotRateCurve</li>
 <li>
-<input type="checkbox" disabled checked>
-ForwardCurve</li>
+<input type="checkbox" disabled checked>ForwardCurve</li>
 <li>
-<input type="checkbox" disabled checked>
-Interpolation</li>
+<input type="checkbox" disabled checked>Interpolation</li>
 </ul></div>
 <div class="section level3">
 <h3 id="daycount">Daycount<a class="anchor" aria-label="anchor" href="#daycount"></a></h3>
 <ul><li>
-<input type="checkbox" disabled>
-create 30/360 daycount</li>
+<input type="checkbox" disabled>create 30/360 daycount</li>
 <li>
-<input type="checkbox" disabled>
-Other daycounts <a href="https://en.wikipedia.org/wiki/Day_count_convention" class="external-link uri">https://en.wikipedia.org/wiki/Day_count_convention</a>
+<input type="checkbox" disabled>Other daycounts <a href="https://en.wikipedia.org/wiki/Day_count_convention" class="external-link uri">https://en.wikipedia.org/wiki/Day_count_convention</a>
 </li>
 <li>
-<input type="checkbox" disabled>
-use DayCount with Term</li>
+<input type="checkbox" disabled>use DayCount with Term</li>
 <li>
-<input type="checkbox" disabled>
-Create function convert_term(dc, “10 days”, “months”) to help converting terms’ units</li>
+<input type="checkbox" disabled>Create function convert_term(dc, “10 days”, “months”) to help converting terms’ units</li>
 </ul></div>
 <div class="section level3">
 <h3 id="spotrate">SpotRate<a class="anchor" aria-label="anchor" href="#spotrate"></a></h3>
 <ul><li>
-<input type="checkbox" disabled>
-compound and discount functions accept (character, character) date arguments discount(r, “2017-08-01”, “2017-08-21”)</li>
-</ul></div>
+<input type="checkbox" disabled>compound and discount functions accept (character, character) date arguments discount(r, “2017-08-01”, “2017-08-21”)</li></ul></div>
 <div class="section level3">
 <h3 id="spotratecurve">SpotRateCurve<a class="anchor" aria-label="anchor" href="#spotratecurve"></a></h3>
 <ul><li>
-<input type="checkbox" disabled checked>
-A spotrate should be removed from a spotratecurve: curve[-10] - curve[-n] should return a spotratecurve without the removed spotrate</li>
+<input type="checkbox" disabled checked>A spotrate should be removed from a spotratecurve: curve[-10] - curve[-n] should return a spotratecurve without the removed spotrate</li>
 <li>
-<input type="checkbox" disabled>
-spotratecurve indexing:<ul><li>
-<input type="checkbox" disabled checked>
-positional indexing: <code>curve[1]</code> for the first term, <code>curve[2]</code> for the second and so on. If the given index exceeds the curve length this operation returns <code>NA</code>.</li>
+<input type="checkbox" disabled>spotratecurve indexing:<ul><li>
+<input type="checkbox" disabled checked>positional indexing: <code>curve[1]</code> for the first term, <code>curve[2]</code> for the second and so on. If the given index exceeds the curve length this operation returns <code>NA</code>.</li>
 <li>
-<input type="checkbox" disabled checked>
-replacement with positional index <code>curve[1] \&lt;- 0.01</code>
+<input type="checkbox" disabled checked>replacement with positional index <code>curve[1] \&lt;- 0.01</code>
 </li>
 <li>
-<input type="checkbox" disabled checked>
-associative indexing <code>curve[["1 day"]]</code> for <code>1 day</code>, <code>curve[["2 days"]]</code> for <code>2 days</code>, …</li>
+<input type="checkbox" disabled checked>associative indexing <code>curve[["1 day"]]</code> for <code>1 day</code>, <code>curve[["2 days"]]</code> for <code>2 days</code>, …</li>
 <li>
-<input type="checkbox" disabled checked>
-If the spotratecurve doesn’t have a <code>2 days</code> index it returns NA</li>
+<input type="checkbox" disabled checked>If the spotratecurve doesn’t have a <code>2 days</code> index it returns NA</li>
 <li>
-<input type="checkbox" disabled checked>
-removal of associative index</li>
+<input type="checkbox" disabled checked>removal of associative index</li>
 <li>
-<input type="checkbox" disabled checked>
-replacement with associative index</li>
+<input type="checkbox" disabled checked>replacement with associative index</li>
 <li>
-<input type="checkbox" disabled>
-date indexes<ul><li>
-<input type="checkbox" disabled>
-select</li>
+<input type="checkbox" disabled>date indexes<ul><li>
+<input type="checkbox" disabled>select</li>
 <li>
-<input type="checkbox" disabled>
-remove</li>
+<input type="checkbox" disabled>remove</li>
 <li>
-<input type="checkbox" disabled>
-replace</li>
+<input type="checkbox" disabled>replace</li>
 </ul></li>
 <li>
-<input type="checkbox" disabled checked>
-term indexes<ul><li>
-<input type="checkbox" disabled checked>
-select</li>
+<input type="checkbox" disabled checked>term indexes<ul><li>
+<input type="checkbox" disabled checked>select</li>
 <li>
-<input type="checkbox" disabled>
-remove</li>
+<input type="checkbox" disabled>remove</li>
 <li>
-<input type="checkbox" disabled checked>
-replace</li>
+<input type="checkbox" disabled checked>replace</li>
 </ul></li>
 <li>
-<input type="checkbox" disabled checked>
-sum curve to: numeric, curve</li>
+<input type="checkbox" disabled checked>sum curve to: numeric, curve</li>
 <li>
-<input type="checkbox" disabled>
-append SpotRateCurve</li>
+<input type="checkbox" disabled>append SpotRateCurve</li>
 <li>
-<input type="checkbox" disabled>
-concatenate SpotRateCurve</li>
+<input type="checkbox" disabled>concatenate SpotRateCurve</li>
 </ul></li>
 <li>
-<input type="checkbox" disabled>
-Naming: SpotRateCurve should have a name? I am not sure about that!</li>
+<input type="checkbox" disabled>Naming: SpotRateCurve should have a name? I am not sure about that!</li>
 <li>
-<input type="checkbox" disabled>
-create DiscountCurve - interpolations should be applied to it.</li>
+<input type="checkbox" disabled>create DiscountCurve - interpolations should be applied to it.</li>
 <li>
-<input type="checkbox" disabled>
-arithmetic operations between curves respecting terms</li>
+<input type="checkbox" disabled>arithmetic operations between curves respecting terms</li>
 </ul></div>
 <div class="section level3">
 <h3 id="multi-spotratecurve">Multi SpotRateCurve<a class="anchor" aria-label="anchor" href="#multi-spotratecurve"></a></h3>
 <ul><li>
-<input type="checkbox" disabled>
-Data structure for multiple SpotRateCurve objects, like a matrix. Useful for historical data and to build historical risk factors.</li>
-</ul></div>
+<input type="checkbox" disabled>Data structure for multiple SpotRateCurve objects, like a matrix. Useful for historical data and to build historical risk factors.</li></ul></div>
 <div class="section level3">
 <h3 id="forwardrate">ForwardRate<a class="anchor" aria-label="anchor" href="#forwardrate"></a></h3>
 <ul><li>
-<input type="checkbox" disabled checked>
-create forward rates</li>
+<input type="checkbox" disabled checked>create forward rates</li>
 <li>
-<input type="checkbox" disabled checked>
-daily forward rates with interpolated data</li>
+<input type="checkbox" disabled checked>daily forward rates with interpolated data</li>
 <li>
-<input type="checkbox" disabled>
-create a method for daily forward rates with interpolated data</li>
+<input type="checkbox" disabled>create a method for daily forward rates with interpolated data</li>
 </ul></div>
 <div class="section level3">
 <h3 id="interpolation">Interpolation<a class="anchor" aria-label="anchor" href="#interpolation"></a></h3>
 <ul><li>
-<input type="checkbox" disabled checked>
-set interpolation to SpotRateCurve</li>
+<input type="checkbox" disabled checked>set interpolation to SpotRateCurve</li>
 <li>
-<input type="checkbox" disabled checked>
-unset interpolation to SpotRateCurve</li>
+<input type="checkbox" disabled checked>unset interpolation to SpotRateCurve</li>
 <li>
-<input type="checkbox" disabled checked>
-Interpolation will be used with associative indexing. If interpolation is set and a missing index is passed, then this value is interpolated.</li>
+<input type="checkbox" disabled checked>Interpolation will be used with associative indexing. If interpolation is set and a missing index is passed, then this value is interpolated.</li>
 <li>
-<input type="checkbox" disabled>
-Methods<ul><li>
-<input type="checkbox" disabled checked>
-FlatForward</li>
+<input type="checkbox" disabled>Methods<ul><li>
+<input type="checkbox" disabled checked>FlatForward</li>
 <li>
-<input type="checkbox" disabled checked>
-Linear</li>
+<input type="checkbox" disabled checked>Linear</li>
 <li>
-<input type="checkbox" disabled checked>
-LogLinear</li>
+<input type="checkbox" disabled checked>LogLinear</li>
 <li>
-<input type="checkbox" disabled checked>
-Monotone Cubic Spline (Hyman)</li>
+<input type="checkbox" disabled checked>Monotone Cubic Spline (Hyman)</li>
 <li>
-<input type="checkbox" disabled checked>
-Hermite</li>
+<input type="checkbox" disabled checked>Hermite</li>
 <li>
-<input type="checkbox" disabled checked>
-Natural Spline</li>
+<input type="checkbox" disabled checked>Natural Spline</li>
 <li>
-<input type="checkbox" disabled checked>
-Nelson-Siegel</li>
+<input type="checkbox" disabled checked>Nelson-Siegel</li>
 <li>
-<input type="checkbox" disabled checked>
-Nelson-Siegel-Svensson</li>
+<input type="checkbox" disabled checked>Nelson-Siegel-Svensson</li>
 <li>
-<input type="checkbox" disabled checked>
-FlatForward COPOM</li>
+<input type="checkbox" disabled checked>FlatForward COPOM</li>
 <li>
-<input type="checkbox" disabled>
-Constrained Spline</li>
+<input type="checkbox" disabled>Constrained Spline</li>
 <li>
-<input type="checkbox" disabled>
-Dynamic Nelson-Siegel <a href="https://github.com/werleycordeiro/Dynamic-Nelson-Siegel-and-Svensson/blob/master/DNS-TS.R" class="external-link">ref1</a>, <a href="https://www.r-bloggers.com/2021/05/dynamic-nelson-siegel-model-with-r-code/" class="external-link">ref2</a>
+<input type="checkbox" disabled>Dynamic Nelson-Siegel <a href="https://github.com/werleycordeiro/Dynamic-Nelson-Siegel-and-Svensson/blob/master/DNS-TS.R" class="external-link">ref1</a>, <a href="https://www.r-bloggers.com/2021/05/dynamic-nelson-siegel-model-with-r-code/" class="external-link">ref2</a>
 </li>
 </ul></li>
 <li>
-<input type="checkbox" disabled>
-Improve curve fit stop using object copy</li>
+<input type="checkbox" disabled>Improve curve fit stop using object copy</li>
 <li>
-<input type="checkbox" disabled>
-Work with terms in years instead of days</li>
+<input type="checkbox" disabled>Work with terms in years instead of days</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bonds">Bonds<a class="anchor" aria-label="anchor" href="#bonds"></a></h3>
 <ul><li>
-<input type="checkbox" disabled>
-define bonds</li>
+<input type="checkbox" disabled>define bonds</li>
 <li>
-<input type="checkbox" disabled>
-pricing bonds</li>
+<input type="checkbox" disabled>pricing bonds</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bootstrap">Bootstrap<a class="anchor" aria-label="anchor" href="#bootstrap"></a></h3>
 <ul><li>
-<input type="checkbox" disabled>
-bonds bootstrap</li>
+<input type="checkbox" disabled>bonds bootstrap</li>
 <li>
-<input type="checkbox" disabled>
-Curve models: Nelson-Siegel, Diebold-Li, Nelson-Siegel-Svensson</li>
+<input type="checkbox" disabled>Curve models: Nelson-Siegel, Diebold-Li, Nelson-Siegel-Svensson</li>
 </ul></div>
 <div class="section level3">
 <h3 id="other-classes">Other classes<a class="anchor" aria-label="anchor" href="#other-classes"></a></h3>
 <ul><li>
-<input type="checkbox" disabled>
-IndexCurve - for inflation index or IDI index, for example - rbcb integration</li>
+<input type="checkbox" disabled>IndexCurve - for inflation index or IDI index, for example - rbcb integration</li>
 <li>
-<input type="checkbox" disabled>
-HistoricalRates - for CDI historical data, for example - rbcb integration</li>
+<input type="checkbox" disabled>HistoricalRates - for CDI historical data, for example - rbcb integration</li>
 </ul></div>
 <div class="section level3">
 <h3 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a></h3>
 <ul><li>
-<input type="checkbox" disabled checked>
-SpotRateCurve: points and lines</li>
+<input type="checkbox" disabled checked>SpotRateCurve: points and lines</li>
 <li>
-<input type="checkbox" disabled checked>
-SpotRateCurve: lines with daily interpolated points</li>
+<input type="checkbox" disabled checked>SpotRateCurve: lines with daily interpolated points</li>
 <li>
-<input type="checkbox" disabled checked>
-ForwardRate curve with steps</li>
+<input type="checkbox" disabled checked>ForwardRate curve with steps</li>
 <li>
-<input type="checkbox" disabled checked>
-daily ForwardRate curve with interpolated points</li>
+<input type="checkbox" disabled checked>daily ForwardRate curve with interpolated points</li>
 <li>
-<input type="checkbox" disabled>
-plot multiple SpotRateCurve objects</li>
+<input type="checkbox" disabled>plot multiple SpotRateCurve objects</li>
 <li>
-<input type="checkbox" disabled checked>
-use daycount to create x-axis ticks</li>
+<input type="checkbox" disabled checked>use daycount to create x-axis ticks</li>
 </ul></div>
 <div class="section level3">
 <h3 id="other-issues">Other issues<a class="anchor" aria-label="anchor" href="#other-issues"></a></h3>
 <ul><li>
-<input type="checkbox" disabled>
-IR functions: <a href="https://support.google.com/docs/table/25273?hl=en" class="external-link uri">https://support.google.com/docs/table/25273?hl=en</a>
+<input type="checkbox" disabled>IR functions: <a href="https://support.google.com/docs/table/25273?hl=en" class="external-link uri">https://support.google.com/docs/table/25273?hl=en</a>
 </li>
 <li>
-<input type="checkbox" disabled>
-Risk measures: YTM, Duration, Convexity</li>
+<input type="checkbox" disabled>Risk measures: YTM, Duration, Convexity</li>
 <li>
-<input type="checkbox" disabled>
-short rate models: Vasicek, CIR, …</li>
+<input type="checkbox" disabled>short rate models: Vasicek, CIR, …</li>
 </ul></div>
 <div class="section level3">
 <h3 id="register">Register<a class="anchor" aria-label="anchor" href="#register"></a></h3>
 <ul><li>
-<input type="checkbox" disabled>
-naming objects and register (aka container)<ul><li>Objects like HistoricalRates, SpotRateCurve, IndexCurve and Calendar should be referenced by their names. These objects are used by many others and their copies should imply unnecessary memory use.</li>
+<input type="checkbox" disabled>naming objects and register (aka container)<ul><li>Objects like HistoricalRates, SpotRateCurve, IndexCurve and Calendar should be referenced by their names. These objects are used by many others and their copies should imply unnecessary memory use.</li>
 <li>Integrate with rbcb package to transform series into IndexCurve or HistoricalRates.</li>
 <li>Methods which work with these objects should work with characters that represent the objects.</li>
-</ul></li>
-</ul><hr></div>
+</ul></li></ul><hr></div>
 </div>
 <div class="section level2">
 <h2 id="legacy">Legacy<a class="anchor" aria-label="anchor" href="#legacy"></a></h2>
@@ -336,15 +259,11 @@ naming objects and register (aka container)<ul><li>Objects like HistoricalRates,
 <li>[&lt;-, [[&lt;- (x,i, j, …, value)</li>
 <li>$, $&lt;- (x, name, value)</li>
 <li>summary.S3</li>
-<li>Arith
-<ul><li>(., ANY), (ANY, .)</li>
-</ul></li>
-<li>Compare
-<ul><li>(., character), (character, .)</li>
+<li>Arith<ul><li>(., ANY), (ANY, .)</li></ul></li>
+<li>Compare<ul><li>(., character), (character, .)</li>
 <li>(., numeric), (numeric, .)</li>
 </ul></li>
-<li>as.term
-<ul><li>character</li>
+<li>as.term<ul><li>character</li>
 <li>numeric</li>
 </ul></li>
 </ul><p>Bonds can be created using a <code>data.frame</code> and <code>spotrate</code> can be set as one of columns.</p>
@@ -411,7 +330,7 @@ naming objects and register (aka container)<ul><li>Objects like HistoricalRates,
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>
