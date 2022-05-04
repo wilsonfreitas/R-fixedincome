@@ -79,6 +79,7 @@
 
 [ref1]: https://github.com/werleycordeiro/Dynamic-Nelson-Siegel-and-Svensson/blob/master/DNS-TS.R
 [ref2]: https://www.r-bloggers.com/2021/05/dynamic-nelson-siegel-model-with-r-code/
+[ref3]: https://guilhermecruzsp.wordpress.com/2022/04/19/interest-rate-model-simulations-vasicek/
 
 - [x] set interpolation to SpotRateCurve
 - [x] unset interpolation to SpotRateCurve
@@ -95,7 +96,12 @@
     - [x] Nelson-Siegel-Svensson
     - [x] FlatForward COPOM
     - [ ] Constrained Spline
-    - [ ] Dynamic Nelson-Siegel [ref1][ref1], [ref2][ref2] 
+    - [ ] Dynamic Nelson-Siegel [ref1][ref1], [ref2][ref2]
+    - [ ] Vasicek (Haug 11.4.2) [ref][ref3]
+    - [ ] Rendleman and Bartter (Haug 11.4.1)
+    - [ ] Ho and Lee (Haug 11.4.3)
+    - [ ] Hull and White (Haug 11.4.4)
+    - [ ] Black-Derman-Toy (Haug 11.4.5)
 - [ ] Improve curve fit stop using object copy
 - [ ] Work with terms in years instead of days
 
