@@ -160,7 +160,9 @@ setMethod(
       x@calendar,
       refdate = x@refdate
     )
-    interpolation(obj) <- x@interpolation
+    if (!is.null(x@interpolation) && x@interpolation@propagate) {
+      interpolation(obj) <- x@interpolation
+    }
     obj
   }
 )
@@ -174,7 +176,9 @@ setMethod(
       x@calendar,
       refdate = x@refdate
     )
-    interpolation(obj) <- x@interpolation
+    if (!is.null(x@interpolation) && x@interpolation@propagate) {
+      interpolation(obj) <- x@interpolation
+    }
     obj
   }
 )

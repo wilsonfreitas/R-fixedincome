@@ -29,7 +29,7 @@ setClass(
     propagate = "logical"
   ),
   contains = "character",
-  prototype = prototype(propagate = TRUE)
+  prototype = prototype(propagate = FALSE)
 )
 
 #' @export
