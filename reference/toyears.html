@@ -53,23 +53,30 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">toyears</span><span class="op">(</span><span class="va">x</span>, <span class="va">t</span>, <span class="va">units</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">toyears</span><span class="op">(</span><span class="va">x</span>, <span class="va">t</span>, <span class="va">units</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>a Daycount object.</p></dd>
+
+
 <dt>t</dt>
 <dd><p>represents the term to compound. Can be a numeric, a <code>Term</code>,
 or a character representing a <code>Term</code>. See Details.</p></dd>
+
+
 <dt>units</dt>
 <dd><p>a character with the Term units. Can also be missing.
 See Details.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A numeric with the value of the given <code>Term</code> in years.</p>
+    
+
+<p>A numeric with the value of the given <code>Term</code> in years.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -83,11 +90,11 @@ provided with a valid Term units (days, months, years).</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">dc</span> <span class="op">&lt;-</span> <span class="fu"><a href="daycount.html">daycount</a></span><span class="op">(</span><span class="st">"actual/360"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">toyears</span><span class="op">(</span><span class="va">dc</span>, <span class="fl">10</span>, <span class="st">"days"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">dc</span> <span class="op">&lt;-</span> <span class="fu"><a href="daycount.html">daycount</a></span><span class="op">(</span><span class="st">"actual/360"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">toyears</span><span class="op">(</span><span class="va">dc</span>, <span class="fl">10</span>, <span class="st">"days"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.02777778</span>
-<span class="r-in"><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="term.html">term</a></span><span class="op">(</span><span class="fl">10</span>, <span class="st">"months"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">toyears</span><span class="op">(</span><span class="va">dc</span>, <span class="va">t</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="term.html">term</a></span><span class="op">(</span><span class="fl">10</span>, <span class="st">"months"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">toyears</span><span class="op">(</span><span class="va">dc</span>, <span class="va">t</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.8333333</span>
 </code></pre></div>
     </div>
@@ -103,7 +110,7 @@ provided with a valid Term units (days, months, years).</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

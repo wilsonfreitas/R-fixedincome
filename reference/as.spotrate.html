@@ -53,33 +53,40 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">as.spotrate</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S4 method for character</span>
-<span class="fu">as.spotrate</span><span class="op">(</span><span class="va">x</span>, simplify <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="co"># S4 method for SpotRateCurve</span>
-<span class="fu">as.spotrate</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">as.spotrate</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for character</span></span>
+<span><span class="fu">as.spotrate</span><span class="op">(</span><span class="va">x</span>, simplify <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for SpotRateCurve</span></span>
+<span><span class="fu">as.spotrate</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>a character with SpotRate specification.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>additional arguments</p></dd>
+
+
 <dt>simplify</dt>
 <dd><p>a boolean indicating whether to simplify SpotRate creation
 or not. Defaults to TRUE.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>SpotRate</code> object created from a string.</p>
+    
+
+<p>A <code>SpotRate</code> object created from a string.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
     <p>The character representation of a SpotRate is as follows:</p>
-<div class="sourceCode"><pre><code><span class="st">"RATE COMPOUNDING DAYCOUNT CALENDAR"</span></code></pre></div>
+<div class="sourceCode"><pre><code><span><span class="st">"RATE COMPOUNDING DAYCOUNT CALENDAR"</span></span></code></pre></div>
 
 <p>where:</p><ul><li><p><code>RATE</code> is a numeric value</p></li>
 <li><p><code>COMPOUNDING</code> is one of the following:
@@ -95,11 +102,11 @@ SpotRate objects is returned.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu">as.spotrate</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="st">"0.06 simple actual/365 actual"</span>,</span>
-<span class="r-in">  <span class="st">"0.11 discrete business/252 actual"</span></span>
-<span class="r-in"><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">as.spotrate</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">"0.06 simple actual/365 actual"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"0.11 discrete business/252 actual"</span></span></span>
+<span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0.06 simple actual/365 actual"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -120,7 +127,7 @@ SpotRate objects is returned.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

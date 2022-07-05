@@ -53,9 +53,9 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">compound</span><span class="op">(</span><span class="va">x</span>, <span class="va">t</span>, <span class="va">val</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">discount</span><span class="op">(</span><span class="va">x</span>, <span class="va">t</span>, <span class="va">val</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">compound</span><span class="op">(</span><span class="va">x</span>, <span class="va">t</span>, <span class="va">val</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">discount</span><span class="op">(</span><span class="va">x</span>, <span class="va">t</span>, <span class="va">val</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -64,18 +64,27 @@
 <dd><p>can be a <code>Compounding</code>, a <code>SpotRate</code>,
 a <code>SpotRateCurve</code>, a <code>ForwardRate</code> and a character
 representing a <code>Compounding</code>.</p></dd>
+
+
 <dt>t</dt>
 <dd><p>represents the term to compound. Can be a numeric, a <code>Term</code>,
 a <code>Date</code> or even missing. See Details.</p></dd>
+
+
 <dt>val</dt>
 <dd><p>is the value of the spot rate to be compounded in the given term.
 Can be a numeric, a <code>Date</code> or missing. See Details.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>additional arguments.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A numeric value that represents the compounding factor for the given
+    
+
+<p>A numeric value that represents the compounding factor for the given
 spot rate.</p>
     </div>
     <div id="details">
@@ -93,36 +102,36 @@ terms associated, <code>t</code> and <code>val</code> are missing.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">compound</span><span class="op">(</span><span class="st">"simple"</span>, <span class="fl">2</span>, <span class="fl">0.05</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">compound</span><span class="op">(</span><span class="st">"simple"</span>, <span class="fl">2</span>, <span class="fl">0.05</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.1</span>
-<span class="r-in"><span class="fu">compound</span><span class="op">(</span><span class="st">"discrete"</span>, <span class="fl">2</span>, <span class="fl">0.05</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">compound</span><span class="op">(</span><span class="st">"discrete"</span>, <span class="fl">2</span>, <span class="fl">0.05</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.1025</span>
-<span class="r-in"><span class="fu">compound</span><span class="op">(</span><span class="st">"continuous"</span>, <span class="fl">2</span>, <span class="fl">0.05</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">compound</span><span class="op">(</span><span class="st">"continuous"</span>, <span class="fl">2</span>, <span class="fl">0.05</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.105171</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">spr</span> <span class="op">&lt;-</span> <span class="fu"><a href="spotrate.html">spotrate</a></span><span class="op">(</span><span class="fl">0.06</span>, <span class="st">"simple"</span>, <span class="st">"actual/365"</span>, <span class="st">"actual"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">compound</span><span class="op">(</span><span class="va">spr</span>, <span class="fl">10</span>, <span class="st">"days"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">spr</span> <span class="op">&lt;-</span> <span class="fu"><a href="spotrate.html">spotrate</a></span><span class="op">(</span><span class="fl">0.06</span>, <span class="st">"simple"</span>, <span class="st">"actual/365"</span>, <span class="st">"actual"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">compound</span><span class="op">(</span><span class="va">spr</span>, <span class="fl">10</span>, <span class="st">"days"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.001644</span>
-<span class="r-in"><span class="fu">discount</span><span class="op">(</span><span class="va">spr</span>, <span class="fl">10</span>, <span class="st">"days"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">discount</span><span class="op">(</span><span class="va">spr</span>, <span class="fl">10</span>, <span class="st">"days"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9983589</span>
-<span class="r-in"><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="term.html">term</a></span><span class="op">(</span><span class="fl">10</span>, <span class="st">"days"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">compound</span><span class="op">(</span><span class="va">spr</span>, <span class="va">t</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="term.html">term</a></span><span class="op">(</span><span class="fl">10</span>, <span class="st">"days"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">compound</span><span class="op">(</span><span class="va">spr</span>, <span class="va">t</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.001644</span>
-<span class="r-in"><span class="fu">discount</span><span class="op">(</span><span class="va">spr</span>, <span class="va">t</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">discount</span><span class="op">(</span><span class="va">spr</span>, <span class="va">t</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9983589</span>
-<span class="r-in"><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">d2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fl">10</span></span>
-<span class="r-in"><span class="fu">compound</span><span class="op">(</span><span class="va">spr</span>, <span class="va">d1</span>, <span class="va">d2</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">d2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fl">10</span></span></span>
+<span class="r-in"><span><span class="fu">compound</span><span class="op">(</span><span class="va">spr</span>, <span class="va">d1</span>, <span class="va">d2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.001644</span>
-<span class="r-in"><span class="fu">discount</span><span class="op">(</span><span class="va">spr</span>, <span class="va">d1</span>, <span class="va">d2</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">discount</span><span class="op">(</span><span class="va">spr</span>, <span class="va">d1</span>, <span class="va">d2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9983589</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">terms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">11</span>, <span class="fl">26</span>, <span class="fl">27</span>, <span class="fl">28</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">rates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.0719</span>, <span class="fl">0.056</span>, <span class="fl">0.0674</span>, <span class="fl">0.0687</span>, <span class="fl">0.07</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">curve</span> <span class="op">&lt;-</span> <span class="fu"><a href="spotratecurve.html">spotratecurve</a></span><span class="op">(</span><span class="va">rates</span>, <span class="va">terms</span>, <span class="st">"discrete"</span>, <span class="st">"actual/365"</span>, <span class="st">"actual"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">compound</span><span class="op">(</span><span class="va">curve</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">terms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">11</span>, <span class="fl">26</span>, <span class="fl">27</span>, <span class="fl">28</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">rates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.0719</span>, <span class="fl">0.056</span>, <span class="fl">0.0674</span>, <span class="fl">0.0687</span>, <span class="fl">0.07</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">curve</span> <span class="op">&lt;-</span> <span class="fu"><a href="spotratecurve.html">spotratecurve</a></span><span class="op">(</span><span class="va">rates</span>, <span class="va">terms</span>, <span class="st">"discrete"</span>, <span class="st">"actual/365"</span>, <span class="st">"actual"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">compound</span><span class="op">(</span><span class="va">curve</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.000190 1.001643 1.004657 1.004927 1.005204</span>
-<span class="r-in"><span class="fu">discount</span><span class="op">(</span><span class="va">curve</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">discount</span><span class="op">(</span><span class="va">curve</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9998098 0.9983592 0.9953646 0.9950971 0.9948232</span>
 </code></pre></div>
     </div>
@@ -138,7 +147,7 @@ terms associated, <code>t</code> and <code>val</code> are missing.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

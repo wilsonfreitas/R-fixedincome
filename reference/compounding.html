@@ -55,7 +55,7 @@ Simple, Discrete, Continuous."><!-- mathjax --><script src="https://cdnjs.cloudf
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">compounding</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simple"</span>, <span class="st">"discrete"</span>, <span class="st">"continuous"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">compounding</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"simple"</span>, <span class="st">"discrete"</span>, <span class="st">"continuous"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -63,10 +63,13 @@ Simple, Discrete, Continuous."><!-- mathjax --><script src="https://cdnjs.cloudf
     <dl><dt>x</dt>
 <dd><p>a character with the name of compounding regime:
 <code>simple</code>, <code>discrete</code>, <code>continuous</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A subclass of <code>Compounding</code> object.</p>
+    
+
+<p>A subclass of <code>Compounding</code> object.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -77,17 +80,17 @@ function, passing a string with the name of one of the compounding regimes:
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">compounding</span><span class="op">(</span><span class="st">"simple"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">compounding</span><span class="op">(</span><span class="st">"simple"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;compounding: simple &gt; </span>
-<span class="r-in"><span class="fu">compounding</span><span class="op">(</span><span class="st">"discrete"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">compounding</span><span class="op">(</span><span class="st">"discrete"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;compounding: discrete &gt; </span>
-<span class="r-in"><span class="fu">compounding</span><span class="op">(</span><span class="st">"continuous"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">compounding</span><span class="op">(</span><span class="st">"continuous"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;compounding: continuous &gt; </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">comp</span> <span class="op">&lt;-</span> <span class="fu">compounding</span><span class="op">(</span><span class="st">"discrete"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="compound.html">compound</a></span><span class="op">(</span><span class="va">comp</span>, <span class="fl">0.06</span>, <span class="fl">2</span><span class="op">)</span> <span class="co"># equals (1 + 0.06) ^ 2 = 1.1236</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">comp</span> <span class="op">&lt;-</span> <span class="fu">compounding</span><span class="op">(</span><span class="st">"discrete"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="compound.html">compound</a></span><span class="op">(</span><span class="va">comp</span>, <span class="fl">0.06</span>, <span class="fl">2</span><span class="op">)</span> <span class="co"># equals (1 + 0.06) ^ 2 = 1.1236</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.068138</span>
-<span class="r-in"><span class="fu"><a href="rates.html">rates</a></span><span class="op">(</span><span class="va">comp</span>, <span class="fl">1.1236</span>, <span class="fl">2</span><span class="op">)</span> <span class="co"># equals 0.06</span></span>
+<span class="r-in"><span><span class="fu"><a href="rates.html">rates</a></span><span class="op">(</span><span class="va">comp</span>, <span class="fl">1.1236</span>, <span class="fl">2</span><span class="op">)</span> <span class="co"># equals 0.06</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.8531716</span>
 </code></pre></div>
     </div>
@@ -103,7 +106,7 @@ function, passing a string with the name of one of the compounding regimes:
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

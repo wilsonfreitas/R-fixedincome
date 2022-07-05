@@ -53,33 +53,44 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">spotrate</span><span class="op">(</span><span class="va">x</span>, <span class="va">compounding</span>, <span class="va">daycount</span>, <span class="va">calendar</span>, .copyfrom <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">spotrate</span><span class="op">(</span><span class="va">x</span>, <span class="va">compounding</span>, <span class="va">daycount</span>, <span class="va">calendar</span>, .copyfrom <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>a numeric vector representing spot rate values.</p></dd>
+
+
 <dt>compounding</dt>
 <dd><p>a <code>Compounding</code> object.</p></dd>
+
+
 <dt>daycount</dt>
 <dd><p>a <code>Daycount</code> object.</p></dd>
+
+
 <dt>calendar</dt>
 <dd><p>a <code>bizdays</code> calendar.</p></dd>
+
+
 <dt>.copyfrom</dt>
 <dd><p>a <code>SpotRate</code> object used as reference to copy
 attributes.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>SpotRate</code> object.</p>
+    
+
+<p>A <code>SpotRate</code> object.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">spotrate</span><span class="op">(</span><span class="fl">0.06</span>, <span class="st">"continuous"</span>, <span class="st">"actual/365"</span>, <span class="st">"actual"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">spotrate</span><span class="op">(</span><span class="fl">0.06</span>, <span class="st">"continuous"</span>, <span class="st">"actual/365"</span>, <span class="st">"actual"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0.06 continuous actual/365 actual"</span>
-<span class="r-in"><span class="fu">spotrate</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.06</span>, <span class="fl">0.07</span>, <span class="fl">0.08</span><span class="op">)</span>, <span class="st">"continuous"</span>, <span class="st">"actual/365"</span>, <span class="st">"actual"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">spotrate</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.06</span>, <span class="fl">0.07</span>, <span class="fl">0.08</span><span class="op">)</span>, <span class="st">"continuous"</span>, <span class="st">"actual/365"</span>, <span class="st">"actual"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0.06 continuous actual/365 actual" "0.07 continuous actual/365 actual"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [3] "0.08 continuous actual/365 actual"</span>
 </code></pre></div>
@@ -96,7 +107,7 @@ attributes.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -57,26 +57,31 @@ variables.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S4 method for SpotRate,SpotRate</span>
-<span class="fu">Compare</span><span class="op">(</span><span class="va">e1</span>, <span class="va">e2</span><span class="op">)</span>
-
-<span class="co"># S4 method for SpotRate,numeric</span>
-<span class="fu">Compare</span><span class="op">(</span><span class="va">e1</span>, <span class="va">e2</span><span class="op">)</span>
-
-<span class="co"># S4 method for numeric,SpotRate</span>
-<span class="fu">Compare</span><span class="op">(</span><span class="va">e1</span>, <span class="va">e2</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for SpotRate,SpotRate</span></span>
+<span><span class="fu">Compare</span><span class="op">(</span><span class="va">e1</span>, <span class="va">e2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for SpotRate,numeric</span></span>
+<span><span class="fu">Compare</span><span class="op">(</span><span class="va">e1</span>, <span class="va">e2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for numeric,SpotRate</span></span>
+<span><span class="fu">Compare</span><span class="op">(</span><span class="va">e1</span>, <span class="va">e2</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>e1</dt>
 <dd><p>a <code>SpotRate</code> object or a numeric</p></dd>
+
+
 <dt>e2</dt>
 <dd><p>a <code>SpotRate</code> object or a numeric</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A boolean <code>logical</code> object.
+    
+
+<p>A boolean <code>logical</code> object.
 The comparison with <code>SpotRate</code> objects only takes all fields
 into account.
 Comparing <code>SpotRate</code> against numeric values is equivalent to
@@ -86,9 +91,9 @@ this is a syntax sugar for a shortcut that is commonly applied.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="va">spr</span> <span class="op">&lt;-</span> <span class="fu"><a href="as.spotrate.html">as.spotrate</a></span><span class="op">(</span><span class="st">"0.06 simple actual/365 actual"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">spr</span> <span class="op">==</span> <span class="fl">0.06</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">spr</span> <span class="op">&lt;-</span> <span class="fu"><a href="as.spotrate.html">as.spotrate</a></span><span class="op">(</span><span class="st">"0.06 simple actual/365 actual"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">spr</span> <span class="op">==</span> <span class="fl">0.06</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 </code></pre></div>
     </div>
@@ -104,7 +109,7 @@ this is a syntax sugar for a shortcut that is commonly applied.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

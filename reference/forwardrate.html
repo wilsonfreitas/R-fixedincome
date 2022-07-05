@@ -53,42 +53,63 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">forwardrate</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for numeric</span>
-<span class="fu">forwardrate</span><span class="op">(</span><span class="va">x</span>, <span class="va">terms</span>, <span class="va">compounding</span>, <span class="va">daycount</span>, <span class="va">calendar</span>, .copyfrom <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for SpotRateCurve</span>
-<span class="fu">forwardrate</span><span class="op">(</span><span class="va">x</span>, t1 <span class="op">=</span> <span class="cn">NULL</span>, t2 <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">forwardrate</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for numeric</span></span>
+<span><span class="fu">forwardrate</span><span class="op">(</span><span class="va">x</span>, <span class="va">terms</span>, <span class="va">compounding</span>, <span class="va">daycount</span>, <span class="va">calendar</span>, .copyfrom <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for SpotRateCurve</span></span>
+<span><span class="fu">forwardrate</span><span class="op">(</span><span class="va">x</span>, t1 <span class="op">=</span> <span class="cn">NULL</span>, t2 <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>a numeric or a SpotRateCurve object.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>additional arguments.</p></dd>
+
+
 <dt>terms</dt>
 <dd><p>a numeric vector with positive values representing terms of
 the forward rates.</p></dd>
+
+
 <dt>compounding</dt>
 <dd><p>a character with the compouning name.</p></dd>
+
+
 <dt>daycount</dt>
 <dd><p>a character representing the daycount.</p></dd>
+
+
 <dt>calendar</dt>
 <dd><p>a calendar object.</p></dd>
+
+
 <dt>.copyfrom</dt>
 <dd><p>a SpotRate object that is used as reference to build
 the SpotRateCurve object.</p></dd>
+
+
 <dt>t1</dt>
 <dd><p>initial term</p></dd>
+
+
 <dt>t2</dt>
 <dd><p>final term</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>ForwardRate</code> object.
-The arguments <code>t1</code> and <code>t2</code> define initial and final term used to
+    
+
+<p>A <code>ForwardRate</code> object.</p>
+
+
+<p>The arguments <code>t1</code> and <code>t2</code> define initial and final term used to
 extract a ForwardRate from a SpotRateCurve.</p>
     </div>
 
@@ -104,7 +125,7 @@ extract a ForwardRate from a SpotRateCurve.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

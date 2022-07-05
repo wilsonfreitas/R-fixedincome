@@ -57,70 +57,87 @@ for SpotRate objects.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">spotratecurve</span><span class="op">(</span><span class="va">x</span>, <span class="va">terms</span>, <span class="va">...</span>, refdate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># S3 method for numeric</span>
-<span class="fu">spotratecurve</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">terms</span>,
-  <span class="va">compounding</span>,
-  <span class="va">daycount</span>,
-  <span class="va">calendar</span>,
-  refdate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>,
-  .copyfrom <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for SpotRate</span>
-<span class="fu">spotratecurve</span><span class="op">(</span><span class="va">x</span>, <span class="va">terms</span>, refdate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>, .copyfrom <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">spotratecurve</span><span class="op">(</span><span class="va">x</span>, <span class="va">terms</span>, <span class="va">...</span>, refdate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for numeric</span></span>
+<span><span class="fu">spotratecurve</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">terms</span>,</span>
+<span>  <span class="va">compounding</span>,</span>
+<span>  <span class="va">daycount</span>,</span>
+<span>  <span class="va">calendar</span>,</span>
+<span>  refdate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  .copyfrom <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for SpotRate</span></span>
+<span><span class="fu">spotratecurve</span><span class="op">(</span><span class="va">x</span>, <span class="va">terms</span>, refdate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>, .copyfrom <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>a numeric representing a spot rate value or a SpotRate object.</p></dd>
+
+
 <dt>terms</dt>
 <dd><p>a numeric vector with positive values representing the days of
 the term structure.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>additional arguments</p></dd>
+
+
 <dt>refdate</dt>
 <dd><p>the curve reference date.</p></dd>
+
+
 <dt>compounding</dt>
 <dd><p>a character with the compouning name.</p></dd>
+
+
 <dt>daycount</dt>
 <dd><p>a character representing the daycount.</p></dd>
+
+
 <dt>calendar</dt>
 <dd><p>a calendar object.</p></dd>
+
+
 <dt>.copyfrom</dt>
 <dd><p>a SpotRate object that is used as reference to build
 the SpotRateCurve object.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>SpotRateCurve</code> object.</p>
+    
+
+<p>A <code>SpotRateCurve</code> object.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">terms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">11</span>, <span class="fl">26</span>, <span class="fl">27</span>, <span class="fl">28</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">rates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.0719</span>, <span class="fl">0.056</span>, <span class="fl">0.0674</span>, <span class="fl">0.0687</span>, <span class="fl">0.07</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">curve</span> <span class="op">&lt;-</span> <span class="fu">spotratecurve</span><span class="op">(</span><span class="va">rates</span>, <span class="va">terms</span>, <span class="st">"discrete"</span>, <span class="st">"actual/365"</span>, <span class="st">"actual"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># access the term 11 days</span></span>
-<span class="r-in"><span class="va">curve</span><span class="op">[[</span><span class="fl">11</span><span class="op">]</span><span class="op">]</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">terms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">11</span>, <span class="fl">26</span>, <span class="fl">27</span>, <span class="fl">28</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">rates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.0719</span>, <span class="fl">0.056</span>, <span class="fl">0.0674</span>, <span class="fl">0.0687</span>, <span class="fl">0.07</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">curve</span> <span class="op">&lt;-</span> <span class="fu">spotratecurve</span><span class="op">(</span><span class="va">rates</span>, <span class="va">terms</span>, <span class="st">"discrete"</span>, <span class="st">"actual/365"</span>, <span class="st">"actual"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># access the term 11 days</span></span></span>
+<span class="r-in"><span><span class="va">curve</span><span class="op">[[</span><span class="fl">11</span><span class="op">]</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         SpotRateCurve</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 11 days         0.056</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> discrete actual/365 actual </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Reference date: 2022-05-11 </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># access the second element</span></span>
-<span class="r-in"><span class="va">curve</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Reference date: 2022-07-05 </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># access the second element</span></span></span>
+<span class="r-in"><span><span class="va">curve</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         SpotRateCurve</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 11 days         0.056</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> discrete actual/365 actual </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Reference date: 2022-05-11 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Reference date: 2022-07-05 </span>
 </code></pre></div>
     </div>
   </div>
@@ -135,7 +152,7 @@ the SpotRateCurve object.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>
