@@ -222,6 +222,7 @@ setMethod(
   signature(object = "NelsonSiegel", x = "SpotRateCurve"),
   function(object, x, ...) {
     object@func <- function(term) {
+      term <- toyears(x@daycount, term, "days")
       ns(term, object@beta1, object@beta2, object@beta3, object@lambda1)
     }
     object
@@ -238,6 +239,7 @@ setMethod(
   signature(object = "NelsonSiegelSvensson", x = "SpotRateCurve"),
   function(object, x, ...) {
     object@func <- function(term) {
+      term <- toyears(x@daycount, term, "days")
       nss(
         term, object@beta1, object@beta2, object@beta3, object@beta4,
         object@lambda1, object@lambda2
