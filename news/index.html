@@ -25,6 +25,16 @@
       <ul class="nav navbar-nav"><li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/spot-rate-curve-interpolation.html">Spot Rate Curve Interpolation</a>
+    </li>
+  </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -50,6 +60,10 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.2" id="fixedincome-002">fixedincome 0.0.2<a class="anchor" aria-label="anchor" href="#fixedincome-002"></a></h2>
 <ul><li>Added <code>progagate</code> slot to <code>Interpolation</code> class. It defines if the interpolation method is propagated to interpolated curves.</li>
+<li>The curve methods <code>[</code> and <code>[[</code> don’t propagate interpolation. The returned curves don’t have interpolation. This avoids recurrent <code>prepare_interpolation</code> calls.</li>
+<li>The <code>interpolate</code> function, for NelsonSiegel and NelsonSiegelSvensson models, converts <code>term</code> argument to years with <code>toyears</code>.</li>
+<li>Organized nelsonsiegel and nelsonsiegelsvensson code.<ul><li>New objective functions (and their gradients) have been created to improve the optimization.</li></ul></li>
+<li>New SpotRateCurve method <code>[[</code> for missing returns interpolated curve in curve’s terms.</li>
 <li>Updated to bizdays version 0.1.10 (Issue <a href="https://github.com/wilsonfreitas/R-fixedincome/issues/21" class="external-link">#21</a>)</li>
 <li>Code refactoring</li>
 </ul></div>
