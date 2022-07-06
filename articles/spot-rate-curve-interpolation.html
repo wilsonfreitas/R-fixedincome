@@ -50,6 +50,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/spot-rate-curve-indexing.html">Spot Rate Curve Indexing</a>
+    </li>
+    <li>
       <a href="../articles/spot-rate-curve-interpolation.html">Spot Rate Curve Interpolation</a>
     </li>
   </ul>
@@ -89,7 +92,7 @@
     
     
 <p>The <code>fixedincome</code> package implements many interpolation methods for spot rate curve. All interpolation methods inherits the S4 class <code>Interpolation</code>. Once you instantiate an Interpolation object, it has to be set to a SpotRateCurve object and this is done throught the curve’s <code>interpolation&lt;-</code> method.</p>
-<p>There is a list with the interpolation methods implemented and theirs constructors:</p>
+<p>There is a list with the interpolation methods implemented and their constructors:</p>
 <ul>
 <li>Flat Forward: <code>interp_flatforward</code>
 </li>
@@ -187,60 +190,45 @@
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
 <span><span class="co">#&gt; Reference date: 2022-07-05 </span></span>
 <span><span class="co">#&gt; Interpolation: flatforward</span></span></code></pre></div>
-<p>Now the output shows the curve with the interpolation defined. Use the <code>[[</code> curve method to use the interpolation to get spot rates to any term.</p>
+<p>Now the output shows the curve with the interpolation defined.</p>
+<div class="section level2">
+<h2 id="interpolate-with">Interpolate with <code>[[</code><a class="anchor" aria-label="anchor" href="#interpolate-with"></a>
+</h2>
+<p>The spot rate curve method <code>[[</code> is used to interpolte the curve. The term is passed as a Term object or numeric and a spot rate curve is returned with all interpolated values.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sp_curve</span><span class="op">[[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">]</span></span>
+<code class="sourceCode R"><span><span class="va">sp_curve</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">21</span>, <span class="fl">42</span>, <span class="fl">63</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="co">#&gt;         SpotRateCurve</span></span>
-<span><span class="co">#&gt; 1 day          0.1315</span></span>
-<span><span class="co">#&gt; 2 days         0.1315</span></span>
-<span><span class="co">#&gt; 3 days         0.1315</span></span>
-<span><span class="co">#&gt; 4 days         0.1315</span></span>
-<span><span class="co">#&gt; 5 days         0.1315</span></span>
-<span><span class="co">#&gt; 6 days         0.1315</span></span>
-<span><span class="co">#&gt; 7 days         0.1315</span></span>
-<span><span class="co">#&gt; 8 days         0.1315</span></span>
-<span><span class="co">#&gt; 9 days         0.1315</span></span>
-<span><span class="co">#&gt; 10 days        0.1315</span></span>
+<span><span class="co">#&gt; 21 days        0.1319</span></span>
+<span><span class="co">#&gt; 42 days        0.1338</span></span>
+<span><span class="co">#&gt; 63 days        0.1348</span></span>
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
 <span><span class="co">#&gt; Reference date: 2022-07-05</span></span></code></pre></div>
+<p>The term 21 doesn’t exist in the spot rate curve, so it is interpolated according to the interpolation method defined. Since the flat forward interpolation just connect the dots, the terms 42 and 63 have the same values of the spot rate curve.</p>
 <p>Other interpolation methods can be set with the <code>interpolation</code> method overriding any method set previously.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">sp_curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolation-constructor.html">interp_naturalspline</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">sp_curve</span><span class="op">[[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">sp_curve</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">21</span>, <span class="fl">42</span>, <span class="fl">63</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="co">#&gt;         SpotRateCurve</span></span>
-<span><span class="co">#&gt; 1 day          0.1315</span></span>
-<span><span class="co">#&gt; 2 days         0.1315</span></span>
-<span><span class="co">#&gt; 3 days         0.1314</span></span>
-<span><span class="co">#&gt; 4 days         0.1314</span></span>
-<span><span class="co">#&gt; 5 days         0.1314</span></span>
-<span><span class="co">#&gt; 6 days         0.1314</span></span>
-<span><span class="co">#&gt; 7 days         0.1314</span></span>
-<span><span class="co">#&gt; 8 days         0.1313</span></span>
-<span><span class="co">#&gt; 9 days         0.1313</span></span>
-<span><span class="co">#&gt; 10 days        0.1313</span></span>
+<span><span class="co">#&gt; 21 days        0.1316</span></span>
+<span><span class="co">#&gt; 42 days        0.1338</span></span>
+<span><span class="co">#&gt; 63 days        0.1348</span></span>
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
 <span><span class="co">#&gt; Reference date: 2022-07-05</span></span></code></pre></div>
+</div>
 <div class="section level2">
 <h2 id="unset-interpolation">Unset interpolation<a class="anchor" aria-label="anchor" href="#unset-interpolation"></a>
 </h2>
 <p>Set interpolation to <code>NULL</code> to unset the interpolation.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">sp_curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
-<span><span class="va">sp_curve</span><span class="op">[[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">sp_curve</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">21</span>, <span class="fl">42</span>, <span class="fl">63</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="co">#&gt;         SpotRateCurve</span></span>
-<span><span class="co">#&gt; 1 day          0.1315</span></span>
-<span><span class="co">#&gt; 2 days             NA</span></span>
-<span><span class="co">#&gt; 3 days             NA</span></span>
-<span><span class="co">#&gt; 4 days             NA</span></span>
-<span><span class="co">#&gt; 5 days             NA</span></span>
-<span><span class="co">#&gt; 6 days             NA</span></span>
-<span><span class="co">#&gt; 7 days             NA</span></span>
-<span><span class="co">#&gt; 8 days             NA</span></span>
-<span><span class="co">#&gt; 9 days             NA</span></span>
-<span><span class="co">#&gt; 10 days            NA</span></span>
+<span><span class="co">#&gt; 21 days            NA</span></span>
+<span><span class="co">#&gt; 42 days        0.1338</span></span>
+<span><span class="co">#&gt; 63 days        0.1348</span></span>
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
 <span><span class="co">#&gt; Reference date: 2022-07-05</span></span></code></pre></div>
-<p>Note that for those given terms in the <code>[[</code> method that don’t have a related term in the spot rate <code>NA</code> is returned.</p>
+<p>Note that for those terms in the <code>[[</code> method that don’t have a related term in the spot rate curve, <code>NA</code> is returned.</p>
 </div>
 <div class="section level2">
 <h2 id="plot-with-interpolation">Plot with interpolation<a class="anchor" aria-label="anchor" href="#plot-with-interpolation"></a>
