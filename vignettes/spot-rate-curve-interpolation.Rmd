@@ -2,7 +2,7 @@
 title: "Spot Rate Curve Interpolation"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{spot-rate-curve-interpolation}
+  %\VignetteIndexEntry{Spot Rate Curve Interpolation}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -10,7 +10,8 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  out.width = "100%"
 )
 ```
 
@@ -110,11 +111,56 @@ interpolation(sp_curve) <- interp_naturalspline()
 sp_curve[[1:10]]
 ```
 
+## Unset interpolation
+
+Set interpolation to `NULL` to unset the interpolation.
+
+```{r}
+interpolation(sp_curve) <- NULL
+sp_curve[[1:10]]
+```
+
+Note that for those given terms in the `[[` method that don't have a related term in the spot rate
+`NA` is returned.
+
 ## Plot with interpolation
 
 The `fixedincome::plot` method for the spot rate curve has an argument `use_interpolation` that
 shows the interpolation together with the curve points.
+This argument defaults to `FALSE`.
 
-```{r}
+```{r fig.width=10, fig.height=5}
+interpolation(sp_curve) <- interp_flatforward()
 plot(sp_curve, use_interpolation = TRUE)
+```
+
+### Forward rates with and without interpolation set
+
+Once the interpolation is set, the `plot` method uses it to calculate daily forward rates.
+Otherwise, it uses the forward rates between the curve terms.
+Set the `show_forward` argument to `TRUE` to show the forward rates.
+
+```{r fig.width=10, fig.height=5}
+interpolation(sp_curve) <- NULL
+plot(sp_curve, show_forward = TRUE, legend_location = "bottomright")
+```
+
+The forward rates are drawn with step lines.
+
+If the `use_interpolation` argument is `TRUE` then the daily forward rates are calculated with
+the defined interpolation.
+
+```{r fig.width=10, fig.height=5}
+interpolation(sp_curve) <- interp_flatforward()
+plot(sp_curve, use_interpolation = TRUE, show_forward = TRUE, legend_location = "bottomright")
+```
+
+It is possible to note that the flat forward daily rates are fairly close to curve terms forward
+rates.
+
+As the interpolation changes its effects can be viewed in the forward rates dynamic.
+
+```{r fig.width=10, fig.height=5}
+interpolation(sp_curve) <- interp_naturalspline()
+plot(sp_curve, use_interpolation = TRUE, show_forward = TRUE, legend_location = "bottomright")
 ```
