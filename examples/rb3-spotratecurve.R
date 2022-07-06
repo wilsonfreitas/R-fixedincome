@@ -115,9 +115,7 @@ opts <- list(
 )
 res <- nloptr(par,
   eval_f = f_obj,
-  # eval_grad_f = gr_obj,
   eval_g_ineq = g_obj,
-  # eval_jac_g_ineq = gr_g_obj,
   lb = c(0,  -0.3, -1, -1,  1e-6, 1e-6),
   ub = c(0.3, 0.3,  1,  1,   5,  3),
   opts = opts,
@@ -127,10 +125,10 @@ res <- nloptr(par,
 do.call(interp_nelsonsiegelsvensson, as.list(res$solution))
 
 interpolation(sp_curve) <- do.call(interp_nelsonsiegelsvensson, as.list(res$solution))
-sp_curve |> plot(use_interpolation = TRUE)
+sp_curve |> plot(use_interpolation = TRUE, show_forward = TRUE)
 
 # NLOPT_LD ----
-par <- res$solution # c(beta0, beta1, 0.01, 0.01, 3, 0.5)
+par <- c(beta0, beta1, 0.01, 0.01, 3, 0.5)
 opts <- list(
   "algorithm"   = "NLOPT_LD_MMA",
   "xtol_rel"    = 1.0e-16,
@@ -154,7 +152,7 @@ interpolation(sp_curve) <- do.call(interp_nelsonsiegelsvensson, as.list(res1$sol
 sp_curve |> plot(use_interpolation = TRUE)
 
 # optim ----
-par <- res$solution # c(beta0, beta1, 0.01, 0.01, 3, 0.5)
+par <- c(beta0, beta1, 0.01, 0.01, 3, 0.5)
 res2 <- optim(par,
   fn = f_obj,
   gr = gr_f_obj,
@@ -169,6 +167,27 @@ do.call(interp_nelsonsiegelsvensson, as.list(res2$par))
 interpolation(sp_curve) <- do.call(interp_nelsonsiegelsvensson, as.list(res2$par))
 sp_curve |> plot(use_interpolation = TRUE)
 
-sp_curve1 <- sp_curve |> fixedincome::first("3 years")
-interpolation(sp_curve1) <- do.call(interp_nelsonsiegelsvensson, as.list(res2$par))
-sp_curve1 |> plot(use_interpolation = TRUE)
+# S4 ----
+
+fit_interpolation(interp_nelsonsiegelsvensson(beta0, beta1, 0.01, 0.01, 1, 0.5), sp_curve)
+
+interpolation(sp_curve) <- fit_interpolation(interp_nelsonsiegel(beta0, beta1, 0.01, 1), sp_curve)
+sp_curve |> plot(use_interpolation = TRUE)
+interpolation_error(sp_curve)
+
+tt <- as.numeric(sp_curve - sp_curve[[]]) |> t.test(alternative = "two.sided")
+pt(tt$statistic, 38)
+
+sp_curve[[c(1e-6, Inf)]]
+sp_curve@interpolation
+
+x_curve <- fixedincome::first(sp_curve, "2 years")
+interpolation(x_curve) <- fit_interpolation(
+  interp_nelsonsiegel(beta0, beta1, 0.01, 1),
+  fixedincome::first(x_curve, "2 years")
+)
+x_curve |> plot(use_interpolation = TRUE, show_forward = TRUE)
+interpolation_error(x_curve)
+tt <- as.numeric(x_curve - x_curve[[]]) |> t.test()
+tt
+pt(tt$statistic, 16)
