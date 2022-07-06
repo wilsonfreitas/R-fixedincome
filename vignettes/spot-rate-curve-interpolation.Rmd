@@ -101,8 +101,6 @@ Use the `[[` curve method to use the interpolation to get spot rates to any term
 sp_curve[[1:10]]
 ```
 
-Note that returned curve doesn't have the interpolation defined.
-
 Other interpolation methods can be set with the `interpolation` method overriding any method set
 previously.
 
