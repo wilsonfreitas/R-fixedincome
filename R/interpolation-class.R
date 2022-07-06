@@ -110,6 +110,7 @@ setClass(
 #'
 #' @keywords internal
 #' @aliases interpolate,Interpolation,numeric-method
+#' @aliases interpolate,Interpolation,Term-method
 #'
 #' @export
 setGeneric(

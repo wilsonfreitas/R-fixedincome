@@ -3,6 +3,7 @@
 \name{interpolate}
 \alias{interpolate}
 \alias{interpolate,Interpolation,numeric-method}
+\alias{interpolate,Interpolation,Term-method}
 \title{Interpolates a \code{SpotRateCurve}}
 \usage{
 interpolate(object, x, ...)
