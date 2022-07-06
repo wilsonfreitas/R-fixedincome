@@ -1,0 +1,149 @@
+---
+title: "Spot Rate Curve Indexing"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Spot Rate Curve Indexing}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+In order to make it easy and fun the use of fixedincome spot rate curve, a few operators have been
+implemented.
+
+The fixedincome package is loaded and one curve `crv` is created.
+
+```{r setup}
+library(fixedincome)
+
+crv <- spotratecurve(
+  c(0.1315, 0.1319, 0.1338, 0.1348, 0.1372, 0.1381),
+  c(1, 21, 42, 63, 126, 252),
+  "discrete", "business/252", "Brazil/ANBIMA",
+  refdate = Sys.Date()
+)
+```
+
+The spot rate curve `crv` is used in the examples.
+
+## Positional Indexing
+
+The operator `[` indexes the elements by their positions and returns one SpotRateCurve object.
+
+The code below returns one SpotRateCurve object with the first, third and fifth elements.
+
+```{r}
+crv[c(1, 3, 5)]
+```
+
+This curve has the terms 1, 42, and 126 days.
+
+## Term Indexing
+
+The operator `[[` indexes the elements according to the terms of the term structured and returns
+one SpotRateCurve object.
+
+The code below returns one SpotRateCurve object with the terms 1, 21, and 42.
+
+```{r}
+crv[[c(1, 21, 42)]]
+```
+
+All these terms are present in the SpotRateCurve.
+If any given term doesn't correspond to the SpotRateCurve terms, `NA` is returned for the unmatched
+elements.
+
+```{r}
+crv[[c(1, 13, 42)]]
+```
+
+To solve that an interpolation has to be set and in these cases the interpolation is used to
+fulfill these gaps.
+
+```{r}
+interpolation(crv) <- interp_linear()
+crv[[c(1, 13, 42)]]
+```
+
+Let's get back to the original curve.
+
+```{r}
+interpolation(crv) <- NULL
+```
+
+## Positional Replacement
+
+The spot rate elements in an SpotRateCurve object can be replaced positionally with the operator `[`.
+
+For example, the second element can be set accordingly.
+
+```{r}
+crv[2] <- 0.14
+crv[c(1, 2, 3)]
+```
+
+Negative indexes remove elements
+
+```{r}
+crv[-2]
+```
+
+But it doesn't change the object in place, instead returns a new object without the removed
+elements.
+
+```{r}
+crv
+```
+
+The second element (term 21) hasn't been removed.
+
+## Replacement by Term
+
+The spot rate elements in an SpotRateCurve object can be replaced by term with the operator `[[`.
+
+For example, let's replace the element related to the term 21.
+
+```{r}
+crv[[21]] <- 0.1320
+crv[[c(1, 21, 42)]]
+```
+
+Negative terms also remove elements.
+
+```{r}
+crv[[-21]]
+```
+
+Nonetheless, if the interpolation is defined, negative terms raises an error.
+
+```{r error=TRUE}
+interpolation(crv) <- interp_linear()
+crv[[-21]]
+```
+
+## Special methods
+
+The methods `first` and `last` are handy to slice parts of the SpotRateCurve.
+
+`first` and `last` return spot rate curve according to the term given in the second argument.
+
+For example, the following call returns the elements that lies inside the first 50 days.
+
+```{r}
+fixedincome::first(crv, "50 days")
+```
+
+The `fixedincome::` prefix is necessary to avoid conflicts with dplyr's methods.
+
+We can do similar with the `last` method, for example, let's get the elements in the last 6 months
+of the spot rate curve.
+
+```{r}
+fixedincome::last(crv, "6 months")
+```

@@ -20,7 +20,7 @@ All interpolation methods inherits the S4 class `Interpolation`.
 Once you instantiate an Interpolation object, it has to be set to a SpotRateCurve object and this
 is done throught the curve's `interpolation<-` method.
 
-There is a list with the interpolation methods implemented and theirs constructors:
+There is a list with the interpolation methods implemented and their constructors:
 
 - Flat Forward: `interp_flatforward`
 - Linear: `interp_linear`
@@ -95,18 +95,28 @@ sp_curve
 ```
 
 Now the output shows the curve with the interpolation defined.
-Use the `[[` curve method to use the interpolation to get spot rates to any term.
+
+## Interpolate with `[[`
+
+The spot rate curve method `[[` is used to interpolte the curve.
+The term is passed as a Term object or numeric and a spot rate curve is returned with all
+interpolated values.
 
 ```{r}
-sp_curve[[1:10]]
+sp_curve[[c(21, 42, 63)]]
 ```
+
+The term 21 doesn't exist in the spot rate curve, so it is interpolated according to
+the interpolation method defined.
+Since the flat forward interpolation just connect the dots, the terms 42 and 63 have the same values
+of the spot rate curve.
 
 Other interpolation methods can be set with the `interpolation` method overriding any method set
 previously.
 
 ```{r}
 interpolation(sp_curve) <- interp_naturalspline()
-sp_curve[[1:10]]
+sp_curve[[c(21, 42, 63)]]
 ```
 
 ## Unset interpolation
@@ -115,10 +125,10 @@ Set interpolation to `NULL` to unset the interpolation.
 
 ```{r}
 interpolation(sp_curve) <- NULL
-sp_curve[[1:10]]
+sp_curve[[c(21, 42, 63)]]
 ```
 
-Note that for those given terms in the `[[` method that don't have a related term in the spot rate
+Note that for those terms in the `[[` method that don't have a related term in the spot rate curve,
 `NA` is returned.
 
 ## Plot with interpolation
