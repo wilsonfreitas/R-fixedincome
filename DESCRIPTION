@@ -33,6 +33,7 @@ Collate:
     "spotrate-class.R"
     "spotratecurve-class.R"
     "spotratecurve-interpolation.R"
+    "spotratecurve-interpolation-nelsonsiegel.R"
     "forwardrate-class.R"
     "compound-method.R"
     "hidden.R"
