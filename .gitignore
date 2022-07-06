@@ -8,3 +8,4 @@ docs
 .Rprofile
 .vscode/settings.json
 resources/*
+inst/doc
