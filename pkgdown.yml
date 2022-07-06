@@ -3,7 +3,7 @@ pkgdown: 2.0.5
 pkgdown_sha: ~
 articles:
   spot-rate-curve-interpolation: spot-rate-curve-interpolation.html
-last_built: 2022-07-06T16:38Z
+last_built: 2022-07-06T16:54Z
 urls:
   reference: http://wilsonfreitas.github.io/R-fixedincome/reference
   article: http://wilsonfreitas.github.io/R-fixedincome/articles
