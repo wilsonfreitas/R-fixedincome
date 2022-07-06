@@ -2,7 +2,7 @@
 library(rb3)
 library(bizdays)
 library(tidyverse)
-# library(fixedincome)
+library(fixedincome)
 library(nloptr)
 
 refdate <- getdate("last bizday", Sys.Date(), "Brazil/ANBIMA")
