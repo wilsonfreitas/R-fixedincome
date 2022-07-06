@@ -260,6 +260,28 @@ setMethod(
   }
 )
 
+#' @export
+setMethod(
+  "[[",
+  signature(x = "SpotRateCurve", i = "missing", j = "missing"),
+  function(x, i, j, ...) {
+    if (is.null(x@interpolation)) {
+      obj <- spotratecurve(x@.Data, x@terms, x@compounding, x@daycount,
+        x@calendar,
+        refdate = x@refdate
+      )
+    } else {
+      rates_ <- interpolate(x@interpolation, x@terms)
+      obj <- spotratecurve(rates_, x@terms, x@compounding, x@daycount,
+        x@calendar,
+        refdate = x@refdate
+      )
+    }
+    interpolation(obj) <- x@interpolation
+    obj
+  }
+)
+
 replace_double_brackets <- function(x, i, value) {
   contained_from <- i %in% x@terms
   contained_to <- x@terms %in% i

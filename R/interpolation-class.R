@@ -127,6 +127,14 @@ setMethod(
   }
 )
 
+setMethod(
+  "interpolate",
+  signature(object = "Interpolation", x = "Term"),
+  function(object, x, ...) {
+    object@func(as.numeric(x))
+  }
+)
+
 #' @export
 setMethod(
   "show",
