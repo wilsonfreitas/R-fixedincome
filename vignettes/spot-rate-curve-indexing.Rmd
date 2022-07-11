@@ -44,6 +44,21 @@ crv[c(1, 3, 5)]
 
 This curve has the terms 1, 42, and 126 days.
 
+### Boolean indexing
+
+The positional indexing also works with `logical` vectors.
+For example, let's get the part of the curve that is greater than 13.5%
+
+```{r}
+crv[crv > 0.135]
+```
+
+or the elements which terms are even.
+
+```{r}
+crv[(crv@terms %% 2) == 0]
+```
+
 ## Term Indexing
 
 The operator `[[` indexes the elements according to the terms of the term structured and returns
@@ -63,15 +78,14 @@ elements.
 crv[[c(1, 13, 42)]]
 ```
 
-To solve that an interpolation has to be set and in these cases the interpolation is used to
-fulfill these gaps.
+To solve that an interpolation has to be set and in these cases the interpolation fulfills these gaps.
 
 ```{r}
 interpolation(crv) <- interp_linear()
 crv[[c(1, 13, 42)]]
 ```
 
-Let's get back to the original curve.
+Let's get back to the original curve removing the interpolation.
 
 ```{r}
 interpolation(crv) <- NULL
@@ -146,4 +160,14 @@ of the spot rate curve.
 
 ```{r}
 fixedincome::last(crv, "6 months")
+```
+
+There is one last `spotratecurve` method that isn't properly an indexing method, in the usual way,
+but certainly it is useful.
+This is the `fixedincome::closest` method, for the `spotratecurve`, it returns the element of
+the curve that is close to the given term.
+For example, to get the curve element that is the closest to 1 year, we do
+
+```{r}
+fixedincome::closest(crv, "1 year")
 ```
