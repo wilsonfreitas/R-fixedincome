@@ -237,3 +237,12 @@ c.Term <- function(x, ...) {
   values_ <- c(x@.Data, unlist(lapply(elements, as.numeric)))
   term(values_, x@units)
 }
+
+#' @export
+setMethod(
+  "Ops",
+  signature(e1 = "Term", e2 = "Term"),
+  function(e1, e2) {
+    stop("Not implemented")
+  }
+)

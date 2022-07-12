@@ -79,22 +79,12 @@ test_that("it should not create terms with different units", {
   expect_equal(t1@units, "day")
 })
 
-# test_that("it should compare terms with different units", {
-#   t1 <- term(1, "day")
-#   t2 <- term(1, "year")
-#   expect_true(t1 < t2)
-#   expect_false(t1 > t2)
-#
-#   t1 <- term(1, "day")
-#   t2 <- term(1, "month")
-#   expect_true(t1 < t2)
-#   expect_false(t1 > t2)
-#
-#   t1 <- term(1, "year")
-#   t2 <- term(1, "month")
-#   expect_false(t1 < t2)
-#   expect_true(t1 > t2)
-# })
+test_that("it should ops terms", {
+  t1 <- term(1, "day")
+  t2 <- term(2, "days")
+  expect_error(t1 < t2)
+  expect_error(t1 + t2)
+})
 
 test_that("it should create a DateRangeTerm", {
   t <- term(as.Date("2022-02-14"), as.Date("2022-02-18"), "actual")
