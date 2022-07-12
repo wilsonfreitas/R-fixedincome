@@ -171,6 +171,14 @@ setMethod(
 
 setMethod(
   "toyears",
+  signature(x = "Daycount", t = "Term", units = "missing"),
+  function(x, t, units) {
+    toyears_(as(t, "numeric"), t@units, "year", dib(x))
+  }
+)
+
+setMethod(
+  "toyears",
   signature(x = "Daycount", t = "numeric", units = "character"),
   function(x, t, units) {
     tm <- term(t, units)

@@ -2,13 +2,13 @@
 # context('daycount class')
 
 test_that("it should create a daycount object", {
-  dc <- daycount('actual/360')
+  dc <- daycount("actual/360")
   expect_s4_class(dc, "Daycount")
-  expect_true(as.character(dc) == 'actual/360')
+  expect_true(as.character(dc) == "actual/360")
 })
 
 test_that("it should test daycount dib", {
-  dc <- daycount('actual/360')
+  dc <- daycount("actual/360")
   expect_true(dib(dc) == 360)
 })
 
@@ -17,13 +17,13 @@ test_that("it should test daycount dib", {
 # })
 
 test_that("it should call toyears with a fixed period", {
-  dc <- daycount('actual/360')
-  expect_true(toyears(dc, 1, 'day') == 1/360)
-  expect_true(toyears(dc, '1 day') == 1/360)
-  expect_true(toyears(dc, term(1, "day")) == 1/360)
-  expect_true(toyears(dc, 6, 'month') == 1/2)
-  expect_true(toyears(dc, '6 month') == 1/2)
-  expect_true(toyears(dc, term(6, "month")) == 1/2)
+  dc <- daycount("actual/360")
+  expect_true(toyears(dc, 1, "day") == 1 / 360)
+  expect_true(toyears(dc, "1 day") == 1 / 360)
+  expect_true(toyears(dc, term(1, "day")) == 1 / 360)
+  expect_true(toyears(dc, 6, "month") == 1 / 2)
+  expect_true(toyears(dc, "6 month") == 1 / 2)
+  expect_true(toyears(dc, term(6, "month")) == 1 / 2)
 })
 
 test_that("it should coerce a daycount to character", {
@@ -43,7 +43,7 @@ test_that("it should raise an error for invalid specification", {
 #   expect_equal(as.term(dc, '2 years', 'months'), as.term(24, 'months'))
 #   expect_equal(as.term(dc, '10 months', 'years'), as.term(10/12, 'years'))
 # })
-# 
+#
 # test_that('it should test fixed period day counts', {
 #   dc <- as.daycount('fixed/22')
 #   expect_equal(dib(dc), 22)
