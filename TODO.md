@@ -102,7 +102,7 @@
     - [ ] Ho and Lee (Haug 11.4.3)
     - [ ] Hull and White (Haug 11.4.4)
     - [ ] Black-Derman-Toy (Haug 11.4.5)
-- [ ] Improve curve fit stop using object copy
+- [x] Improve curve fit stop using object copy
 - [ ] Work with terms in years instead of days
 
 ### Bonds
