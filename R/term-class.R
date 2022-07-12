@@ -11,7 +11,7 @@
 #' @param calendar the calendar used to compute the amount of days for a period
 #' between two dates.
 #' @param ... additional arguments
-#' 
+#'
 #' @return A `Term` object.
 #'
 #' @examples
@@ -59,10 +59,44 @@ term.Date <- function(x, end_date, calendar, ...) {
 #' Term class
 #'
 #' It is the time interval used in calculations with interest rates.
-#' The term class represents the period used to discount or compound a spot
+#' The Term class represents the period used to discount or compound a spot
 #' rate.
-#' It can be Term object or a DateRangeTerm which defines start and end dates
+#'
+#' The Term object is defined by its numeric value and its unit, that can be
+#' `"days"`, `"months"` or `"years"`.
+#' For example:
+#'
+#' ```{r}
+#' term(6, "months")
+#' ```
+#'
+#' It represents a period of 6 months.
+#' The Term object can also be created from a string representation of a Term.
+#'
+#' ```{r}
+#' as.term("6 months")
+#' ```
+#'
+#' Since the Term object inherits from a `numeric`, it inherits all numeric
+#' operations.
+#' Numeric values can be summed or subtracted from a Term object numeric part.
+#'
+#' ```{r}
+#' term(1, "days") + 1
+#' ```
+#'
+#' ## DateRangeTerm objects
+#'
+#' The DateRangeTerm class inherits Term and defines start and end dates
 #' and a calendar to count the amount of working days between these two dates.
+#' This is a Term between two dates.
+#'
+#' ```{r}
+#' term(Sys.Date() - 5, Sys.Date(), "Brazil/ANBIMA")
+#' ```
+#'
+#' In financial markets it is fairly usual to evaluate interest rates between
+#' two dates.
 #'
 #' @aliases DateRangeTerm-class
 #' @export
@@ -158,7 +192,7 @@ setMethod(
 #'
 #' @return
 #' A new `Term` object with lagged differences of the given `Term` object.
-#' 
+#'
 #' @examples
 #' t <- term(1:10, "months")
 #' diff(t)

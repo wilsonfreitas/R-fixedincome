@@ -7,8 +7,35 @@
 \title{Term class}
 \description{
 It is the time interval used in calculations with interest rates.
-The term class represents the period used to discount or compound a spot
+The Term class represents the period used to discount or compound a spot
 rate.
-It can be Term object or a DateRangeTerm which defines start and end dates
+}
+\details{
+The Term object is defined by its numeric value and its unit, that can be
+\code{"days"}, \code{"months"} or \code{"years"}.
+For example:\if{html}{\out{<div class="sourceCode r">}}\preformatted{term(6, "months")
+}\if{html}{\out{</div>}}\preformatted{## [1] "6 months"
+}
+
+It represents a period of 6 months.
+The Term object can also be created from a string representation of a Term.\if{html}{\out{<div class="sourceCode r">}}\preformatted{as.term("6 months")
+}\if{html}{\out{</div>}}\preformatted{## [1] "6 months"
+}
+
+Since the Term object inherits from a \code{numeric}, it inherits all numeric
+operations.
+Numeric values can be summed or subtracted from a Term object numeric part.\if{html}{\out{<div class="sourceCode r">}}\preformatted{term(1, "days") + 1
+}\if{html}{\out{</div>}}\preformatted{## [1] "2 days"
+}
+\subsection{DateRangeTerm objects}{
+
+The DateRangeTerm class inherits Term and defines start and end dates
 and a calendar to count the amount of working days between these two dates.
+This is a Term between two dates.\if{html}{\out{<div class="sourceCode r">}}\preformatted{term(Sys.Date() - 5, Sys.Date(), "Brazil/ANBIMA")
+}\if{html}{\out{</div>}}\preformatted{## [1] "3 days"
+}
+
+In financial markets it is fairly usual to evaluate interest rates between
+two dates.
+}
 }
