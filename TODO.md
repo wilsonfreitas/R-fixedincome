@@ -24,6 +24,10 @@
 - [x] ForwardCurve
 - [x] Interpolation
 
+### Term
+
+- [ ] work with different units: terms(c(1, 6, 1, 2), c("months", "months", "years", "years"))
+
 ### Daycount
 
 - [ ] create 30/360 daycount
@@ -62,6 +66,7 @@
 - [ ] Naming: SpotRateCurve should have a name? I am not sure about that!
 - [ ] create DiscountCurve - interpolations should be applied to it.
 - [ ] arithmetic operations between curves respecting terms
+- [ ] accept terms with different units: terms(c(1, 6, 1, 2), c("months", "months", "years", "years"))
 
 ### Multi SpotRateCurve
 
@@ -103,7 +108,7 @@
     - [ ] Hull and White (Haug 11.4.4)
     - [ ] Black-Derman-Toy (Haug 11.4.5)
 - [x] Improve curve fit stop using object copy
-- [ ] Work with terms in years instead of days
+- [ ] Work with terms in different units
 
 ### Bonds
 
