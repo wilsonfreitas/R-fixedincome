@@ -85,7 +85,7 @@ test_that("it should do arithmetic operations with spotrate", {
 test_that("it should do arith operations with spotrate that have different slots", {
   spr <- spotrate(0.06, "simple", "actual/365", "actual")
   spr2 <- spotrate(0.06, "discrete", "actual/365", "actual")
-  expect_warning(spr + spr2)
+  expect_error(spr + spr2)
 })
 
 test_that("it should create a spotrate with NAs", {
@@ -247,9 +247,7 @@ test_that("it should create the spotrate object copying some attributes of other
 test_that("it should concatenate spotrates with differnt slots", {
   spr1 <- spotrate(0.06, "simple", "actual/365", "actual")
   spr2 <- spotrate(0.06, "discrete", "actual/365", "actual")
-  expect_warning(x <- c(spr1, spr2))
-  expect_equal(length(x), 2)
-  expect_true(all(x == 0.06))
+  expect_error(x <- c(spr1, spr2))
 })
 
 test_that("it should replicate a spotrate", {

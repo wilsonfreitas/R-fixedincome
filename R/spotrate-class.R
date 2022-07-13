@@ -47,7 +47,7 @@ setClass(
 #' @param calendar a \code{bizdays} calendar.
 #' @param .copyfrom a \code{SpotRate} object used as reference to copy
 #'        attributes.
-#' 
+#'
 #' @return A `SpotRate` object.
 #'
 #' @examples
@@ -154,7 +154,7 @@ c.SpotRate <- function(x, ...) {
 #' all given characters.
 #' If it is true the returned object is a SpotRate otherwise a \code{list} with
 #' SpotRate objects is returned.
-#' 
+#'
 #' @return A `SpotRate` object created from a string.
 #'
 #' @examples
@@ -212,9 +212,9 @@ setMethod(
   signature(e1 = "SpotRate", e2 = "SpotRate"),
   function(e1, e2) {
     e1@.Data <- callGeneric(e1@.Data, e2@.Data)
-    warn_if_spotrate_slots_differ(
+    stop_if_spotrate_slots_differ(
       e1, e2,
-      "Arith operation with SpotRate classes that have different slots"
+      "SpotRate objects have different slots"
     )
     e1
   }
@@ -317,10 +317,10 @@ stop_if_spotrate_slots_differ <- function(e1, e2, msg) {
 spr_builder <- function(x) {
   function(values_) {
     if (is(values_, "SpotRate")) {
-      warn_if_spotrate_slots_differ(
+      stop_if_spotrate_slots_differ(
         x,
         values_,
-        "Given SpotRate has different slots. This is ignored in concatenation"
+        "SpotRate objects have different slots"
       )
       values_ <- as.numeric(values_)
     }
