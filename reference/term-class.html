@@ -82,6 +82,9 @@ The Term object can also be created from a string representation of a Term.</p><
 <p>Since the Term object inherits from a <code>numeric</code>, it inherits all numeric
 operations.
 Numeric values can be summed or subtracted from a Term object numeric part.</p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="../reference/term.html">term</a></span><span class="op">(</span><span class="fl">1</span>, <span class="st">"days"</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span></span></code></pre><p></p></div><div class="sourceCode"><pre><code><span><span class="co">## [1] "2 days"</span></span></code></pre></div>
+
+<p>Arithmetic and comparison operations between Term object are not implemented,
+so an error is raised on these operations.</p><div class="sourceCode r"><pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="../reference/term.html">term</a></span><span class="op">(</span><span class="fl">1</span>, <span class="st">"days"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/term.html">term</a></span><span class="op">(</span><span class="fl">2</span> , <span class="st">"days"</span><span class="op">)</span><span class="op">)</span></span></code></pre><p></p></div><div class="sourceCode"><pre><code><span><span class="co">## Error in term(1, "days") + term(2, "days") : Not implemented</span></span></code></pre></div>
 <div class="section">
 <h3 id="daterangeterm-objects">DateRangeTerm objects<a class="anchor" aria-label="anchor" href="#daterangeterm-objects"></a></h3>
 
