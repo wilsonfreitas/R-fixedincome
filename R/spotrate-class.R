@@ -90,8 +90,31 @@
 #'    )
 #' ```
 #'
-#' And also all indexing operations of numeric objects are supported by
+#' SpotRate vectors also are created with the concatenation function `c`.
+#'
+#' ```{r}
+#' c(sr_disc, 0.1, 0.13, 0.14, 0.,15)
+#' ```
+#'
+#' Furtherly, all indexing operations of numeric objects are supported by
 #' SpotRate objects.
+#'
+#' ### Invalid Operations
+#'
+#' Operations involving SpotRate objects with different `compounding`,
+#' `daycount` or `calendar`, raise errors.
+#'
+#' This happens with the following operations:
+#'
+#' - Compare: >, <, <=, >=, ==, !=
+#' - Arithmetic: +, -, *, /
+#' - Concatenation: `c`
+#'
+#' ```{r}
+#' try(sr_simple + sr_disc)
+#' try(sr_simple > sr_disc)
+#' try(c(sr_simple, sr_disc))
+#' ```
 #'
 #' @export
 setClass(
