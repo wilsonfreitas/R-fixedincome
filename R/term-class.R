@@ -85,6 +85,13 @@ term.Date <- function(x, end_date, calendar, ...) {
 #' term(1, "days") + 1
 #' ```
 #'
+#' Arithmetic and comparison operations between Term object are not implemented,
+#' so an error is raised on these operations.
+#'
+#' ```{r}
+#' try(term(1, "days") + term(2 , "days"))
+#' ```
+#'
 #' ## DateRangeTerm objects
 #'
 #' The DateRangeTerm class inherits Term and defines start and end dates
