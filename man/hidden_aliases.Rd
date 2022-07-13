@@ -3,6 +3,7 @@
 \docType{data}
 \name{hidden_aliases}
 \alias{hidden_aliases}
+\alias{Ops,Term,Term-method}
 \alias{Arith,SpotRate,SpotRate-method}
 \alias{Arith,SpotRate,numeric-method}
 \alias{Arith,numeric,SpotRate-method}

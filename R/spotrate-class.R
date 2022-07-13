@@ -15,15 +15,83 @@
 #'   \item the compounding regime that specifies how to compound the spot
 #'         rate. This is a \code{Compounding} object.
 #'   \item the daycount rule to compute the compounding periods right
-#'         adjusted to the spot rate frequency (which is annual).
+#'         adjusted to the spot rate frequency.
 #'   \item the calendar according to which the number of days are counted.
 #' }
 #'
-#' The \code{SpotRate} class is a \code{numeric}, that represents the
+#' The \code{SpotRate} class is a `numeric`, that represents the
 #' interest rate and that has the slots: \code{compounding}, \code{daycount}
 #' and \code{calendar}.
 #'
+#' For example, an annual simple interest rate of 6%, that compounds in
+#' calendar days, is defined as follows:
+#'
+#' ```{r}
+#' sr_simple <- spotrate(0.06, "simple", "actual/360", "actual")
+#' sr_simple
+#' ```
+#'
+#' `actual/360` is the daycount rule and `actual` is the calendar.
+#'
+#' Differently, an annual compound interest rate of 10%, that compounds
+#' in business days according to calendar `Brazil/ANBIMA` is
+#'
+#' ```{r}
+#' sr_disc <- spotrate(0.1, "discrete", "business/252", "Brazil/ANBIMA")
+#' sr_disc
+#' ```
+#'
 #' The \code{calendar} slot is a \code{bizdays} calendar.
+#'
+#' An $100,000 investment in an instrument that pays that interst rate for 5
+#' years has the future value.
+#'
+#' ```{r}
+#' 100000 * compound(sr_disc, term(5, "years"))
+#' ```
+#'
+#' for the simple interest rate we have
+#'
+#' ```{r}
+#' 100000 * compound(sr_simple, term(5, "years"))
+#' ```
+#'
+#' SpotRate objects can be created with vectors
+#'
+#' ```{r}
+#' sr_vec <- spotrate(abs(rnorm(10)), "discrete", "business/252", "Brazil/ANBIMA")
+#' sr_vec
+#' ```
+#'
+#' and can be put into a `data.frame`
+#'
+#' ```{r}
+#' data.frame(spot_rate = sr_vec)
+#' ```
+#'
+#' once in a `data.frame`, dplyr verbs can be used to manipulate it.
+#'
+#' ```{r}
+#' require(dplyr, warn.conflicts = FALSE)
+#'
+#' data.frame(spot_rate = sr_vec) |>
+#'    mutate(comp = compound(spot_rate, term(5, "months")))
+#' ```
+#'
+#' SpotRate is `numeric`, so it executes arithmetic and comparison operations
+#' with `numeric` objects.
+#'
+#' ```{r}
+#' data.frame(spot_rate = sr_vec) |>
+#'    mutate(
+#'      new_spot_rate = spot_rate + 0.02,
+#'      check_gt_1pp = spot_rate > 0.01,
+#'      check_gt_nsr = spot_rate > new_spot_rate
+#'    )
+#' ```
+#'
+#' And also all indexing operations of numeric objects are supported by
+#' SpotRate objects.
 #'
 #' @export
 setClass(

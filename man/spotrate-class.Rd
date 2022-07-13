@@ -16,7 +16,7 @@ It has:
 \item the compounding regime that specifies how to compound the spot
 rate. This is a \code{Compounding} object.
 \item the daycount rule to compute the compounding periods right
-adjusted to the spot rate frequency (which is annual).
+adjusted to the spot rate frequency.
 \item the calendar according to which the number of days are counted.
 }
 
@@ -24,7 +24,106 @@ The \code{SpotRate} class is a \code{numeric}, that represents the
 interest rate and that has the slots: \code{compounding}, \code{daycount}
 and \code{calendar}.
 
+For example, an annual simple interest rate of 6\%, that compounds in
+calendar days, is defined as follows:\if{html}{\out{<div class="sourceCode r">}}\preformatted{sr_simple <- spotrate(0.06, "simple", "actual/360", "actual")
+sr_simple
+}\if{html}{\out{</div>}}\preformatted{## [1] "0.06 simple actual/360 actual"
+}
+
+\code{actual/360} is the daycount rule and \code{actual} is the calendar.
+
+Differently, an annual compound interest rate of 10\%, that compounds
+in business days according to calendar \code{Brazil/ANBIMA} is\if{html}{\out{<div class="sourceCode r">}}\preformatted{sr_disc <- spotrate(0.1, "discrete", "business/252", "Brazil/ANBIMA")
+sr_disc
+}\if{html}{\out{</div>}}\preformatted{## [1] "0.1 discrete business/252 Brazil/ANBIMA"
+}
+
 The \code{calendar} slot is a \code{bizdays} calendar.
+
+An $100,000 investment in an instrument that pays that interst rate for 5
+years has the future value.\if{html}{\out{<div class="sourceCode r">}}\preformatted{100000 * compound(sr_disc, term(5, "years"))
+}\if{html}{\out{</div>}}\preformatted{## [1] 161051
+}
+
+for the simple interest rate we have\if{html}{\out{<div class="sourceCode r">}}\preformatted{100000 * compound(sr_simple, term(5, "years"))
+}\if{html}{\out{</div>}}\preformatted{## [1] 130000
+}
+
+SpotRate objects can be created with vectors\if{html}{\out{<div class="sourceCode r">}}\preformatted{sr_vec <- spotrate(abs(rnorm(10)), "discrete", "business/252", "Brazil/ANBIMA")
+sr_vec
+}\if{html}{\out{</div>}}\preformatted{##  [1] "2.4074949 discrete business/252 Brazil/ANBIMA"
+##  [2] "0.1536445 discrete business/252 Brazil/ANBIMA"
+##  [3] "0.7272605 discrete business/252 Brazil/ANBIMA"
+##  [4] "0.1665265 discrete business/252 Brazil/ANBIMA"
+##  [5] "0.1888282 discrete business/252 Brazil/ANBIMA"
+##  [6] "0.8619113 discrete business/252 Brazil/ANBIMA"
+##  [7] "0.3456210 discrete business/252 Brazil/ANBIMA"
+##  [8] "1.1039747 discrete business/252 Brazil/ANBIMA"
+##  [9] "0.4384621 discrete business/252 Brazil/ANBIMA"
+## [10] "1.7957924 discrete business/252 Brazil/ANBIMA"
+}
+
+and can be put into a \code{data.frame}\if{html}{\out{<div class="sourceCode r">}}\preformatted{data.frame(spot_rate = sr_vec)
+}\if{html}{\out{</div>}}\preformatted{##                                        spot_rate
+## 1  2.4074949 discrete business/252 Brazil/ANBIMA
+## 2  0.1536445 discrete business/252 Brazil/ANBIMA
+## 3  0.7272605 discrete business/252 Brazil/ANBIMA
+## 4  0.1665265 discrete business/252 Brazil/ANBIMA
+## 5  0.1888282 discrete business/252 Brazil/ANBIMA
+## 6  0.8619113 discrete business/252 Brazil/ANBIMA
+## 7  0.3456210 discrete business/252 Brazil/ANBIMA
+## 8  1.1039747 discrete business/252 Brazil/ANBIMA
+## 9  0.4384621 discrete business/252 Brazil/ANBIMA
+## 10 1.7957924 discrete business/252 Brazil/ANBIMA
+}
+
+once in a \code{data.frame}, dplyr verbs can be used to manipulate it.\if{html}{\out{<div class="sourceCode r">}}\preformatted{require(dplyr, warn.conflicts = FALSE)
+}\if{html}{\out{</div>}}\preformatted{## Loading required package: dplyr
+}\if{html}{\out{<div class="sourceCode r">}}\preformatted{data.frame(spot_rate = sr_vec) |>
+   mutate(comp = compound(spot_rate, term(5, "months")))
+}\if{html}{\out{</div>}}\preformatted{##                                        spot_rate     comp
+## 1  2.4074949 discrete business/252 Brazil/ANBIMA 1.666664
+## 2  0.1536445 discrete business/252 Brazil/ANBIMA 1.061362
+## 3  0.7272605 discrete business/252 Brazil/ANBIMA 1.255738
+## 4  0.1665265 discrete business/252 Brazil/ANBIMA 1.066284
+## 5  0.1888282 discrete business/252 Brazil/ANBIMA 1.074731
+## 6  0.8619113 discrete business/252 Brazil/ANBIMA 1.295636
+## 7  0.3456210 discrete business/252 Brazil/ANBIMA 1.131665
+## 8  1.1039747 discrete business/252 Brazil/ANBIMA 1.363328
+## 9  0.4384621 discrete business/252 Brazil/ANBIMA 1.163566
+## 10 1.7957924 discrete business/252 Brazil/ANBIMA 1.534771
+}
+
+SpotRate is \code{numeric}, so it executes arithmetic and comparison operations
+with \code{numeric} objects.\if{html}{\out{<div class="sourceCode r">}}\preformatted{data.frame(spot_rate = sr_vec) |>
+   mutate(
+     new_spot_rate = spot_rate + 0.02,
+     check_gt_1pp = spot_rate > 0.01,
+     check_gt_nsr = spot_rate > new_spot_rate
+   )
+}\if{html}{\out{</div>}}\preformatted{##                                        spot_rate
+## 1  2.4074949 discrete business/252 Brazil/ANBIMA
+## 2  0.1536445 discrete business/252 Brazil/ANBIMA
+## 3  0.7272605 discrete business/252 Brazil/ANBIMA
+## 4  0.1665265 discrete business/252 Brazil/ANBIMA
+## 5  0.1888282 discrete business/252 Brazil/ANBIMA
+## 6  0.8619113 discrete business/252 Brazil/ANBIMA
+## 7  0.3456210 discrete business/252 Brazil/ANBIMA
+## 8  1.1039747 discrete business/252 Brazil/ANBIMA
+## 9  0.4384621 discrete business/252 Brazil/ANBIMA
+## 10 1.7957924 discrete business/252 Brazil/ANBIMA
+##                                    new_spot_rate check_gt_1pp check_gt_nsr
+## 1  2.4274949 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
+## 2  0.1736445 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
+## 3  0.7472605 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
+## 4  0.1865265 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
+## 5  0.2088282 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
+## 6  0.8819113 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
+## 7  0.3656210 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
+## 8  1.1239747 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
+## 9  0.4584621 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
+## 10 1.8157924 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
+}
 }
 \note{
 The \code{SpotRate} objects are annual rates.
