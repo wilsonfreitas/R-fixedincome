@@ -59,6 +59,11 @@ test_that("it should compare spotrates with different slots", {
   spr1 <- spotrate(0.06, "simple", "actual/365", "actual")
   spr2 <- spotrate(0.06, "discrete", "actual/365", "actual")
   expect_false(spr1 == spr2)
+  expect_true(spr1 != spr2)
+  expect_error(spr1 > spr2)
+  expect_error(spr1 < spr2)
+  expect_error(spr1 >= spr2)
+  expect_error(spr1 <= spr2)
 })
 
 test_that("it should do arithmetic operations with spotrate", {
@@ -86,6 +91,9 @@ test_that("it should do arith operations with spotrate that have different slots
   spr <- spotrate(0.06, "simple", "actual/365", "actual")
   spr2 <- spotrate(0.06, "discrete", "actual/365", "actual")
   expect_error(spr + spr2)
+  expect_error(spr - spr2)
+  expect_error(spr * spr2)
+  expect_error(spr / spr2)
 })
 
 test_that("it should create a spotrate with NAs", {

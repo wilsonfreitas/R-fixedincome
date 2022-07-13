@@ -93,7 +93,7 @@
 #' SpotRate vectors also are created with the concatenation function `c`.
 #'
 #' ```{r}
-#' c(sr_disc, 0.1, 0.13, 0.14, 0.,15)
+#' c(sr_disc, 0.1, 0.13, 0.14, 0.15)
 #' ```
 #'
 #' Furtherly, all indexing operations of numeric objects are supported by
@@ -106,7 +106,7 @@
 #'
 #' This happens with the following operations:
 #'
-#' - Compare: >, <, <=, >=, ==, !=
+#' - Compare: >, <, <=, >=
 #' - Arithmetic: +, -, *, /
 #' - Concatenation: `c`
 #'
@@ -353,15 +353,93 @@ setMethod(
 #'
 #' spr <- as.spotrate("0.06 simple actual/365 actual")
 #' spr == 0.06
+#' spr != 0.05
+#' spr > 0.05
+#' spr < 0.1
+#' spr >= 0.05
+#' spr <= 0.1
+#'
+#' spr1 <- spotrate(0.06, "simple", "actual/365", "actual")
+#' spr2 <- spotrate(0.02, "simple", "actual/365", "actual")
+#' spr1 == spr2
+#' spr1 != spr2
+#' spr1 > spr2
+#' spr1 < spr2
+#' spr1 >= spr2
+#' spr1 <= spr2
+#'
+#' # compare spotrate with different slots
+#' spr2 <- spotrate(0.06, "discrete", "actual/365", "actual")
+#' spr1 == spr2
+#' spr1 != spr2
+#' try(spr1 > spr2)
+#' try(spr1 < spr2)
+#' try(spr1 >= spr2)
+#' try(spr1 <= spr2)
+#'
 NULL
 
 #' @rdname spotrate-compare-method
 #' @export
 setMethod(
-  "Compare",
+  ">=",
+  signature(e1 = "SpotRate", e2 = "SpotRate"),
+  function(e1, e2) {
+    stop_if_spotrate_slots_differ(e1, e2, "SpotRate objects have different slots")
+    callGeneric(e1@.Data, e2@.Data)
+  }
+)
+
+#' @rdname spotrate-compare-method
+#' @export
+setMethod(
+  "<=",
+  signature(e1 = "SpotRate", e2 = "SpotRate"),
+  function(e1, e2) {
+    stop_if_spotrate_slots_differ(e1, e2, "SpotRate objects have different slots")
+    callGeneric(e1@.Data, e2@.Data)
+  }
+)
+
+#' @rdname spotrate-compare-method
+#' @export
+setMethod(
+  "<",
+  signature(e1 = "SpotRate", e2 = "SpotRate"),
+  function(e1, e2) {
+    stop_if_spotrate_slots_differ(e1, e2, "SpotRate objects have different slots")
+    callGeneric(e1@.Data, e2@.Data)
+  }
+)
+
+#' @rdname spotrate-compare-method
+#' @export
+setMethod(
+  ">",
+  signature(e1 = "SpotRate", e2 = "SpotRate"),
+  function(e1, e2) {
+    stop_if_spotrate_slots_differ(e1, e2, "SpotRate objects have different slots")
+    callGeneric(e1@.Data, e2@.Data)
+  }
+)
+
+#' @rdname spotrate-compare-method
+#' @export
+setMethod(
+  "==",
   signature(e1 = "SpotRate", e2 = "SpotRate"),
   function(e1, e2) {
     callGeneric(e1@.Data, e2@.Data) & check_slots(e1, e2)
+  }
+)
+
+#' @rdname spotrate-compare-method
+#' @export
+setMethod(
+  "!=",
+  signature(e1 = "SpotRate", e2 = "SpotRate"),
+  function(e1, e2) {
+    callGeneric(e1@.Data, e2@.Data) | !check_slots(e1, e2)
   }
 )
 

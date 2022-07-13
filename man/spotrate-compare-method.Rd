@@ -2,12 +2,27 @@
 % Please edit documentation in R/spotrate-class.R
 \name{spotrate-compare-method}
 \alias{spotrate-compare-method}
-\alias{Compare,SpotRate,SpotRate-method}
+\alias{>=,SpotRate,SpotRate-method}
+\alias{<=,SpotRate,SpotRate-method}
+\alias{<,SpotRate,SpotRate-method}
+\alias{>,SpotRate,SpotRate-method}
+\alias{==,SpotRate,SpotRate-method}
+\alias{!=,SpotRate,SpotRate-method}
 \alias{Compare,SpotRate,numeric-method}
 \alias{Compare,numeric,SpotRate-method}
 \title{SpotRate comparison operations}
 \usage{
-\S4method{Compare}{SpotRate,SpotRate}(e1, e2)
+\S4method{>=}{SpotRate,SpotRate}(e1, e2)
+
+\S4method{<=}{SpotRate,SpotRate}(e1, e2)
+
+\S4method{<}{SpotRate,SpotRate}(e1, e2)
+
+\S4method{>}{SpotRate,SpotRate}(e1, e2)
+
+\S4method{==}{SpotRate,SpotRate}(e1, e2)
+
+\S4method{!=}{SpotRate,SpotRate}(e1, e2)
 
 \S4method{Compare}{SpotRate,numeric}(e1, e2)
 
@@ -35,4 +50,28 @@ variables.
 
 spr <- as.spotrate("0.06 simple actual/365 actual")
 spr == 0.06
+spr != 0.05
+spr > 0.05
+spr < 0.1
+spr >= 0.05
+spr <= 0.1
+
+spr1 <- spotrate(0.06, "simple", "actual/365", "actual")
+spr2 <- spotrate(0.02, "simple", "actual/365", "actual")
+spr1 == spr2
+spr1 != spr2
+spr1 > spr2
+spr1 < spr2
+spr1 >= spr2
+spr1 <= spr2
+
+# compare spotrate with different slots
+spr2 <- spotrate(0.06, "discrete", "actual/365", "actual")
+spr1 == spr2
+spr1 != spr2
+try(spr1 > spr2)
+try(spr1 < spr2)
+try(spr1 >= spr2)
+try(spr1 <= spr2)
+
 }
