@@ -86,7 +86,7 @@ term.Date <- function(x, end_date, calendar, ...) {
 #' ```
 #'
 #' Arithmetic and comparison operations between Term object are not implemented,
-#' so an error is raised on these operations.
+#' so these operations raise an error.
 #'
 #' ```{r}
 #' try(term(1, "days") + term(2 , "days"))

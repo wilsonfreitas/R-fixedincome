@@ -29,7 +29,7 @@ Numeric values can be summed or subtracted from a Term object numeric part.\if{h
 }
 
 Arithmetic and comparison operations between Term object are not implemented,
-so an error is raised on these operations.\if{html}{\out{<div class="sourceCode r">}}\preformatted{try(term(1, "days") + term(2 , "days"))
+so these operations raise an error.\if{html}{\out{<div class="sourceCode r">}}\preformatted{try(term(1, "days") + term(2 , "days"))
 }\if{html}{\out{</div>}}\preformatted{## Error in term(1, "days") + term(2, "days") : Not implemented
 }
 \subsection{DateRangeTerm objects}{
