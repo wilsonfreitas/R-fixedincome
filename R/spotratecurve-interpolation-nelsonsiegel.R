@@ -43,9 +43,9 @@ setMethod(
   "prepare_interpolation",
   signature(object = "NelsonSiegel", x = "SpotRateCurve"),
   function(object, x, ...) {
-    object@func <- function(term) {
-      term <- toyears(x@daycount, term, "days")
-      ns(term, object@beta1, object@beta2, object@beta3, object@lambda1)
+    object@func <- function(term_) {
+      term_ <- as.numeric(toyears(x@daycount, term(term_, "days")))
+      ns(term_, object@beta1, object@beta2, object@beta3, object@lambda1)
     }
     object
   }
@@ -63,7 +63,7 @@ setMethod(
       upper = c(0.3, 0.3,  1,    5),
       method = "L-BFGS-B",
       val = as.numeric(x),
-      term = toyears(x@daycount, x@terms)
+      term = as.numeric(toyears(x@daycount, x@terms))
     )
     do.call(interp_nelsonsiegel, as.list(res$par))
   }
@@ -101,10 +101,10 @@ setMethod(
   "prepare_interpolation",
   signature(object = "NelsonSiegelSvensson", x = "SpotRateCurve"),
   function(object, x, ...) {
-    object@func <- function(term) {
-      term <- toyears(x@daycount, term, "days")
+    object@func <- function(term_) {
+      term_ <- as.numeric(toyears(x@daycount, term(term_, "days")))
       nss(
-        term, object@beta1, object@beta2, object@beta3, object@beta4,
+        term_, object@beta1, object@beta2, object@beta3, object@beta4,
         object@lambda1, object@lambda2
       )
     }
@@ -124,7 +124,7 @@ setMethod(
       upper = c(0.3, 0.3,  1,  1,   5,  3),
       method = "L-BFGS-B",
       val = as.numeric(x),
-      term = toyears(x@daycount, x@terms)
+      term = as.numeric(toyears(x@daycount, x@terms))
     )
     do.call(interp_nelsonsiegelsvensson, as.list(res$par))
   }

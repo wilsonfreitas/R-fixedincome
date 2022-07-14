@@ -105,7 +105,7 @@ setMethod(
   signature(x = "SpotRate", t = "numeric", val = "character"),
   function(x, t, val = "days") {
     tm <- term(t, val)
-    tf <- toyears(x@daycount, tm)
+    tf <- as.numeric(toyears(x@daycount, tm))
     callGeneric(x@compounding, tf, x@.Data)
   }
 )
@@ -114,7 +114,7 @@ setMethod(
   "compound",
   signature(x = "SpotRate", t = "Term", val = "missing"),
   function(x, t, val) {
-    tf <- toyears(x@daycount, t)
+    tf <- as.numeric(toyears(x@daycount, t))
     callGeneric(x@compounding, tf, x@.Data)
   }
 )
@@ -124,7 +124,7 @@ setMethod(
   signature(x = "SpotRate", t = "Date", val = "Date"),
   function(x, t, val) {
     tm <- term(t, val, x@calendar)
-    tf <- toyears(x@daycount, tm)
+    tf <- as.numeric(toyears(x@daycount, tm))
     callGeneric(x@compounding, tf, x@.Data)
   }
 )

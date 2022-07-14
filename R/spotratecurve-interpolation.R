@@ -142,10 +142,10 @@ setMethod(
     interp_fun <- approxfun(interp_coords, method = "linear")
     dc <- x@daycount
     comp <- x@compounding
-    object@func <- function(term) {
-      log.price <- interp_fun(term)
+    object@func <- function(term_) {
+      log.price <- interp_fun(term_)
       price <- exp(log.price)
-      rates(comp, toyears(dc, term, "days"), price)
+      rates(comp, as.numeric(toyears(dc, term(term_, "days"))), price)
     }
     object
   }

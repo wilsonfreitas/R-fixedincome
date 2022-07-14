@@ -91,97 +91,114 @@ setMethod(
   }
 )
 
-#' Terms in years according to Daycount
+#' Convert Term in different units
 #'
 #' @description
-#' \code{toyears} returns a numeric representing a Term in years.
+#' `toyears`, `tomonths` and `todays` functions convert Term objects according
+#' to Daycount.
 #'
 #' @details
-#' \code{toyears} returns the given term in years, since we are assuming
-#' annual rates.
-#' The \code{t} argument can be a term instance, a string defining a term
-#' or a numeric.
-#' In the last alternative, the \code{units} argument must be
-#' provided with a valid Term units (days, months, years).
+#' `toyears` returns the given Term in years units.
+#' `tomonths` returns the given Term in months units.
+#' `todays` returns the given Term in days units.
 #'
 #' @param x a Daycount object.
-#' @param t represents the term to compound. Can be a numeric, a \code{Term},
-#'        or a character representing a \code{Term}. See Details.
-#' @param units a character with the Term units. Can also be missing.
-#'        See Details.
+#' @param t a Term object.
 #'
 #' @aliases
-#' toyears,Daycount,Term,missing-method
-#' toyears,Daycount,character,missing-method
-#' toyears,Daycount,numeric,character-method
+#' toyears,Daycount,Term-method
+#' tomonths,Daycount,Term-method
+#' todays,Daycount,Term-method
 #'
-#' @return A numeric with the value of the given `Term` in years.
+#' @return A Term object converted to the units accordingly the used function.
 #'
+#' @name term-conversion
 #' @examples
 #' dc <- daycount("actual/360")
-#' toyears(dc, 10, "days")
 #' t <- term(10, "months")
 #' toyears(dc, t)
+#' tomonths(dc, t)
+#' todays(dc, t)
+NULL
+
+#' @rdname term-conversion
 #' @export
 setGeneric(
   "toyears",
-  function(x, t, units) {
+  function(x, t) {
     standardGeneric("toyears")
   }
 )
 
-ym_conv_map <- list(
-  month = list(month = 1, year = 12),
-  year = list(month = 1 / 12, year = 1)
+#' @rdname term-conversion
+#' @export
+setGeneric(
+  "tomonths",
+  function(x, t) {
+    standardGeneric("tomonths")
+  }
 )
 
-convert_term_value <- function(x, dib) {
-  term_value <- x[, 1]
-  from_units <- x[, 2]
-  to_units <- x[, 3]
-  if (from_units == "day") {
-    term_value / dib
-  } else {
-    term_value * ym_conv_map[[to_units]][[from_units]]
+#' @rdname term-conversion
+#' @export
+setGeneric(
+  "todays",
+  function(x, t) {
+    standardGeneric("todays")
   }
+)
+
+create_conv_map <- function(dib) {
+  dim <- dib / 12
+  matrix(
+    c(
+      1,       dim,    dib,
+      1 / dim, 1,      12,
+      1 / dib, 1 / 12, 1
+    ),
+    nrow = 3,
+    dimnames = list(
+      from = c("day", "month", "year"),
+      to = c("day", "month", "year")
+    )
+  )
 }
 
-toyears_ <- function(term_value, from_units, to_units, dib) {
+to_unit_ <- function(term_value, from_units, to_units, dib) {
   ax <- data.frame(term_value, from_units, to_units, stringsAsFactors = FALSE)
-  rx <- sapply(split(ax, seq_len(nrow(ax))), convert_term_value, dib = dib)
+  ym_conv_map <- create_conv_map(dib)
+  rx <- sapply(split(ax, seq_len(nrow(ax))), function(x) {
+    term_value <- x[, 1]
+    from_units <- x[, 2]
+    to_units <- x[, 3]
+    term_value * ym_conv_map[from_units, to_units]
+  })
   unname(rx)
 }
 
 setMethod(
   "toyears",
-  signature(x = "Daycount", t = "Term", units = "missing"),
-  function(x, t, units) {
-    toyears_(as(t, "numeric"), t@units, "year", dib(x))
+  signature(x = "Daycount", t = "Term"),
+  function(x, t) {
+    t <- to_unit_(as(t, "numeric"), t@units, "year", dib(x))
+    term(t, "year")
   }
 )
 
 setMethod(
-  "toyears",
-  signature(x = "Daycount", t = "character", units = "missing"),
-  function(x, t, units) {
-    tm <- as.term(t)
-    toyears_(as(tm, "numeric"), tm@units, "year", dib(x))
+  "tomonths",
+  signature(x = "Daycount", t = "Term"),
+  function(x, t) {
+    t <- to_unit_(as(t, "numeric"), t@units, "month", dib(x))
+    term(t, "month")
   }
 )
 
 setMethod(
-  "toyears",
-  signature(x = "Daycount", t = "Term", units = "missing"),
-  function(x, t, units) {
-    toyears_(as(t, "numeric"), t@units, "year", dib(x))
-  }
-)
-
-setMethod(
-  "toyears",
-  signature(x = "Daycount", t = "numeric", units = "character"),
-  function(x, t, units) {
-    tm <- term(t, units)
-    toyears_(as(tm, "numeric"), tm@units, "year", dib(x))
+  "todays",
+  signature(x = "Daycount", t = "Term"),
+  function(x, t) {
+    t <- to_unit_(as(t, "numeric"), t@units, "day", dib(x))
+    term(t, "day")
   }
 )

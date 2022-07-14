@@ -138,7 +138,7 @@ as.spotratecurve.ForwardRate <- function(x, refdate = Sys.Date(), ...) {
   cumfact <- cumprod(compound(x))
   cumterms <- term(cumsum(x@terms), x@terms@units)
 
-  tf <- toyears(x@daycount, cumterms)
+  tf <- as.numeric(toyears(x@daycount, cumterms))
   rates_ <- rates(x@compounding, tf, cumfact)
 
   spotratecurve(rates_, cumterms,
@@ -557,7 +557,7 @@ setMethod(
   "first",
   signature(x = "SpotRateCurve", t = "Term"),
   function(x, t) {
-    idx <- toyears(x@daycount, x@terms) <= toyears(x@daycount, t)
+    idx <- as.numeric(toyears(x@daycount, x@terms)) <= as.numeric(toyears(x@daycount, t))
     x[idx]
   }
 )
@@ -583,10 +583,10 @@ setMethod(
   "last",
   signature(x = "SpotRateCurve", t = "Term"),
   function(x, t) {
-    t_tf <- toyears(x@daycount, t)
-    x_tf <- toyears(x@daycount, x@terms)
+    t_tf <- as.numeric(toyears(x@daycount, t))
+    x_tf <- as.numeric(toyears(x@daycount, x@terms))
     limit_tf <- max(x_tf) - t_tf
-    idx <- toyears(x@daycount, x@terms) >= limit_tf
+    idx <- as.numeric(toyears(x@daycount, x@terms)) >= limit_tf
     x[idx]
   }
 )
@@ -612,8 +612,8 @@ setMethod(
   "closest",
   signature(x = "SpotRateCurve", t = "Term"),
   function(x, t) {
-    t_tf <- toyears(x@daycount, t)
-    x_tf <- toyears(x@daycount, x@terms)
+    t_tf <- as.numeric(toyears(x@daycount, t))
+    x_tf <- as.numeric(toyears(x@daycount, x@terms))
     x[which.min(abs(x_tf - t_tf))]
   }
 )
