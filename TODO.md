@@ -33,7 +33,7 @@
 - [ ] create 30/360 daycount
 - [ ] Other daycounts <https://en.wikipedia.org/wiki/Day_count_convention>
 - [ ] use DayCount with Term
-- [ ] Create function convert_term(dc, "10 days", "months") to help converting terms' units
+- [x] Create functions `tomonths` and `todays`
 
 ### SpotRate
 
