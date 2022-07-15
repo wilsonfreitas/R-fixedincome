@@ -67,6 +67,11 @@
 <li>The <code>interpolate</code> function, for NelsonSiegel and NelsonSiegelSvensson models, converts <code>term</code> argument to years with <code>toyears</code>.</li>
 <li>Organized nelsonsiegel and nelsonsiegelsvensson code.<ul><li>New objective functions (and their gradients) have been created to improve the optimization.</li></ul></li>
 <li>New SpotRateCurve method <code>[[</code> for missing returns interpolated curve in curve’s terms.</li>
+<li>SpotRate Compare method split into spectific methods: ==, !=, &gt;, &lt;, &gt;=, &lt;=. The methods &gt;, &lt;, &gt;=, &lt;= raise error for objects with different slots: compounding, daycount, calendar.</li>
+<li>SpotRate Arith methods raise error for objects with different slots: compounding, daycount, calendar.</li>
+<li>
+<code>toyears</code> returns Term objects</li>
+<li>New methods <code>tomonths</code> and <code>todays</code> for Term conversion in different units.</li>
 <li>Updated to bizdays version 0.1.10 (Issue <a href="https://github.com/wilsonfreitas/R-fixedincome/issues/21" class="external-link">#21</a>)</li>
 <li>Code refactoring</li>
 </ul></div>

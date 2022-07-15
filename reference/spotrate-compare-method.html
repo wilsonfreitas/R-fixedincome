@@ -70,14 +70,29 @@ variables.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for SpotRate,SpotRate</span></span>
-<span><span class="fu">Compare</span><span class="op">(</span><span class="va">e1</span>, <span class="va">e2</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for SpotRate,numeric</span></span>
-<span><span class="fu">Compare</span><span class="op">(</span><span class="va">e1</span>, <span class="va">e2</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for numeric,SpotRate</span></span>
-<span><span class="fu">Compare</span><span class="op">(</span><span class="va">e1</span>, <span class="va">e2</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre><code># S4 method for SpotRate,SpotRate
+&amp;gt;=(e1, e2)
+
+# S4 method for SpotRate,SpotRate
+&amp;lt;=(e1, e2)
+
+# S4 method for SpotRate,SpotRate
+&amp;lt;(e1, e2)
+
+# S4 method for SpotRate,SpotRate
+&amp;gt;(e1, e2)
+
+# S4 method for SpotRate,SpotRate
+==(e1, e2)
+
+# S4 method for SpotRate,SpotRate
+!=(e1, e2)
+
+# S4 method for SpotRate,numeric
+Compare(e1, e2)
+
+# S4 method for numeric,SpotRate
+Compare(e1, e2)</code></pre></div>
     </div>
 
     <div id="arguments">
@@ -108,6 +123,51 @@ this is a syntax sugar for a shortcut that is commonly applied.</p>
 <span class="r-in"><span><span class="va">spr</span> <span class="op">&lt;-</span> <span class="fu"><a href="as.spotrate.html">as.spotrate</a></span><span class="op">(</span><span class="st">"0.06 simple actual/365 actual"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">spr</span> <span class="op">==</span> <span class="fl">0.06</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span><span class="va">spr</span> <span class="op">!=</span> <span class="fl">0.05</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span><span class="va">spr</span> <span class="op">&gt;</span> <span class="fl">0.05</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span><span class="va">spr</span> <span class="op">&lt;</span> <span class="fl">0.1</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span><span class="va">spr</span> <span class="op">&gt;=</span> <span class="fl">0.05</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span><span class="va">spr</span> <span class="op">&lt;=</span> <span class="fl">0.1</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">spr1</span> <span class="op">&lt;-</span> <span class="fu"><a href="spotrate.html">spotrate</a></span><span class="op">(</span><span class="fl">0.06</span>, <span class="st">"simple"</span>, <span class="st">"actual/365"</span>, <span class="st">"actual"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">spr2</span> <span class="op">&lt;-</span> <span class="fu"><a href="spotrate.html">spotrate</a></span><span class="op">(</span><span class="fl">0.02</span>, <span class="st">"simple"</span>, <span class="st">"actual/365"</span>, <span class="st">"actual"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">spr1</span> <span class="op">==</span> <span class="va">spr2</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-in"><span><span class="va">spr1</span> <span class="op">!=</span> <span class="va">spr2</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span><span class="va">spr1</span> <span class="op">&gt;</span> <span class="va">spr2</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span><span class="va">spr1</span> <span class="op">&lt;</span> <span class="va">spr2</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-in"><span><span class="va">spr1</span> <span class="op">&gt;=</span> <span class="va">spr2</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span><span class="va">spr1</span> <span class="op">&lt;=</span> <span class="va">spr2</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># compare spotrate with different slots</span></span></span>
+<span class="r-in"><span><span class="va">spr2</span> <span class="op">&lt;-</span> <span class="fu"><a href="spotrate.html">spotrate</a></span><span class="op">(</span><span class="fl">0.06</span>, <span class="st">"discrete"</span>, <span class="st">"actual/365"</span>, <span class="st">"actual"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">spr1</span> <span class="op">==</span> <span class="va">spr2</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-in"><span><span class="va">spr1</span> <span class="op">!=</span> <span class="va">spr2</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">spr1</span> <span class="op">&gt;</span> <span class="va">spr2</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in stop_if_spotrate_slots_differ(e1, e2, "SpotRate objects have different slots") : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   SpotRate objects have different slots</span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">spr1</span> <span class="op">&lt;</span> <span class="va">spr2</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in stop_if_spotrate_slots_differ(e1, e2, "SpotRate objects have different slots") : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   SpotRate objects have different slots</span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">spr1</span> <span class="op">&gt;=</span> <span class="va">spr2</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in stop_if_spotrate_slots_differ(e1, e2, "SpotRate objects have different slots") : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   SpotRate objects have different slots</span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">spr1</span> <span class="op">&lt;=</span> <span class="va">spr2</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in stop_if_spotrate_slots_differ(e1, e2, "SpotRate objects have different slots") : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   SpotRate objects have different slots</span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
