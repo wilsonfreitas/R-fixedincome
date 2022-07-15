@@ -80,6 +80,12 @@ spotratecurve.numeric <- function(x, terms, compounding, daycount,
     .copyfrom = .copyfrom
   )
 
+  terms <- if (is(terms, "Term")) {
+    todays(.underlying@daycount, terms)
+  } else if (is(terms, "numeric")) {
+    term(terms, "days")
+  }
+
   .Object <- new("SpotRateCurve",
     .Data = .underlying@.Data,
     compounding = .underlying@compounding,
@@ -101,6 +107,12 @@ spotratecurve.numeric <- function(x, terms, compounding, daycount,
 spotratecurve.SpotRate <- function(x, terms,
                                    refdate = Sys.Date(),
                                    .copyfrom = NULL, ...) {
+  terms <- if (is(terms, "Term")) {
+    todays(.underlying@daycount, terms)
+  } else if (is(terms, "numeric")) {
+    term(terms, "days")
+  }
+
   .Object <- new("SpotRateCurve",
     .Data = x@.Data,
     compounding = x@compounding,

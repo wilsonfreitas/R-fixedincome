@@ -80,7 +80,7 @@ test_that("it should handle terms if they are not ordered", {
   ix <- order(.terms)
   curve <- spotratecurve(spr, .terms)
   expect_equal(as.numeric(curve), rates[ix])
-  expect_true(all(curve@terms == terms))
+  expect_true(all(as.numeric(curve@terms) == terms))
 })
 
 
