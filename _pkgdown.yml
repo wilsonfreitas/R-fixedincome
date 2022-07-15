@@ -3,3 +3,65 @@ template:
   params:
     bootswatch: yeti
 
+reference:
+- title: Spot Rate
+  contents:
+  - SpotRate-class
+  - spotrate
+  - as.spotrate
+  - compound
+  - spotrate-compare-method
+
+- title: Compounding
+  contents:
+  - Compounding-class
+  - compounding
+  - implied_rate
+  - compound
+
+- title: Daycount
+  contents:
+  - Daycount-class
+  - daycount
+  - dib
+  - toyears
+
+- title: Term
+  contents:
+  - Term-class
+  - term
+  - as.term
+  - diff,Term-method
+  - toyears
+
+- title: Spot Rate Curve
+  contents:
+  - SpotRateCurve-class
+  - spotratecurve
+  - as.spotratecurve
+  - compound
+  - interpolation
+  - first
+  - maturities
+  - interpolation_error
+
+- title: Interpolation
+  contents:
+  - Interpolation-class
+  - interp_linear
+  - prepare_interpolation
+  - fit_interpolation
+  - parameters
+
+- title: Forward Rate
+  contents:
+  - ForwardRate-class
+  - forwardrate
+  - as.forwardrate
+
+- title: Misc
+  contents:
+  - datasets
+  - shift
+  - fixedincome-package
+
