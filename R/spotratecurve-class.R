@@ -108,7 +108,7 @@ spotratecurve.SpotRate <- function(x, terms,
                                    refdate = Sys.Date(),
                                    .copyfrom = NULL, ...) {
   terms <- if (is(terms, "Term")) {
-    todays(.underlying@daycount, terms)
+    todays(x@daycount, terms)
   } else if (is(terms, "numeric")) {
     term(terms, "days")
   }
@@ -151,7 +151,7 @@ as.spotratecurve.ForwardRate <- function(x, refdate = Sys.Date(), ...) {
   cumterms <- term(cumsum(x@terms), x@terms@units)
 
   tf <- as.numeric(toyears(x@daycount, cumterms))
-  rates_ <- rates(x@compounding, tf, cumfact)
+  rates_ <- implied_rate(x@compounding, tf, cumfact)
 
   spotratecurve(rates_, cumterms,
     compounding = x@compounding,

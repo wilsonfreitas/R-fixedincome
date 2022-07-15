@@ -29,5 +29,5 @@ compounding("continuous")
 
 comp <- compounding("discrete")
 compound(comp, 0.06, 2) # equals (1 + 0.06) ^ 2 = 1.1236
-rates(comp, 1.1236, 2) # equals 0.06
+implied_rate(comp, 1.1236, 2) # equals 0.06
 }

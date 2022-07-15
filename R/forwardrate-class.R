@@ -28,7 +28,7 @@ setClass(
 #' @param t1 initial term
 #' @param t2 final term
 #' @param ... additional arguments.
-#' 
+#'
 #' @return A `ForwardRate` object.
 #'
 #' The arguments \code{t1} and \code{t2} define initial and final term used to
@@ -79,7 +79,7 @@ forwardrate.SpotRateCurve <- function(x, t1 = NULL, t2 = NULL, ...) {
     dub <- diff(x@terms, fill = NA)
     tf <- as.numeric(toyears(x@daycount, dub))
     # first element is NA
-    rates_ <- rates(x@compounding, tf, factor_rate / factor_rate_b)[-1]
+    rates_ <- implied_rate(x@compounding, tf, factor_rate / factor_rate_b)[-1]
 
     .Object <- new("ForwardRate",
       .Data = c(as.numeric(x[1]), rates_),
@@ -96,7 +96,7 @@ forwardrate.SpotRateCurve <- function(x, t1 = NULL, t2 = NULL, ...) {
 
     fwd_term <- t2 - t1
     tf <- as.numeric(toyears(x@daycount, fwd_term))
-    rates_ <- rates(x@compounding, tf, fact2 / fact1)
+    rates_ <- implied_rate(x@compounding, tf, fact2 / fact1)
 
     .Object <- new("ForwardRate",
       .Data = rates_,
@@ -118,7 +118,7 @@ forwardrate.SpotRateCurve <- function(x, t1 = NULL, t2 = NULL, ...) {
 #' @param terms a numeric with positive values representing terms or a Term
 #'        object.
 #' @param ... additional arguments
-#' 
+#'
 #' @return
 #' A `ForwardRate` object created from another object, `SpotRate` or
 #' `SpotRateCurve`.

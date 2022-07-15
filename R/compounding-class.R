@@ -68,7 +68,7 @@ ContinuousCompoundingClass <- setClass(
 #'
 #' comp <- compounding("discrete")
 #' compound(comp, 0.06, 2) # equals (1 + 0.06) ^ 2 = 1.1236
-#' rates(comp, 1.1236, 2) # equals 0.06
+#' implied_rate(comp, 1.1236, 2) # equals 0.06
 #' @export
 compounding <- function(x = c("simple", "discrete", "continuous")) {
   x <- match.arg(x)
@@ -134,47 +134,47 @@ setMethod(
 #' @return A numeric value that represents a spot rate.
 #'
 #' @aliases
-#' rates,Continuous,numeric,numeric-method
-#' rates,Discrete,numeric,numeric-method
-#' rates,Simple,numeric,numeric-method
-#' rates,character,numeric,numeric-method
+#' implied_rate,Continuous,numeric,numeric-method
+#' implied_rate,Discrete,numeric,numeric-method
+#' implied_rate,Simple,numeric,numeric-method
+#' implied_rate,character,numeric,numeric-method
 #'
 #' @examples
-#' rates("simple", 2, 1.1)
-#' rates("discrete", 2, 1.1025)
-#' rates("continuous", 2, 1.105170918)
+#' implied_rate("simple", 2, 1.1)
+#' implied_rate("discrete", 2, 1.1025)
+#' implied_rate("continuous", 2, 1.105170918)
 #'
 #' comp <- compounding("discrete")
 #' compound(comp, 0.06, 2) # equals (1 + 0.06) ^ 2 = 1.1236
-#' rates(comp, 1.1236, 2) # equals 0.06
+#' implied_rate(comp, 1.1236, 2) # equals 0.06
 #' @export
 setGeneric(
-  "rates",
+  "implied_rate",
   function(x, t, val, ...) {
-    standardGeneric("rates")
+    standardGeneric("implied_rate")
   }
 )
 
 setMethod(
-  "rates",
+  "implied_rate",
   signature(x = "Simple", t = "numeric", val = "numeric"),
   function(x, t, val, ...) (val - 1) * (1 / t)
 )
 
 setMethod(
-  "rates",
+  "implied_rate",
   signature(x = "Discrete", t = "numeric", val = "numeric"),
   function(x, t, val, ...) val^(1 / t) - 1
 )
 
 setMethod(
-  "rates",
+  "implied_rate",
   signature(x = "Continuous", t = "numeric", val = "numeric"),
   function(x, t, val, ...) log(val) * (1 / t)
 )
 
 setMethod(
-  "rates",
+  "implied_rate",
   signature(x = "character", t = "numeric", val = "numeric"),
   function(x, t, val, ...) {
     obj <- compounding(x)

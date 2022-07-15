@@ -51,47 +51,47 @@ for the simple interest rate we have\if{html}{\out{<div class="sourceCode r">}}\
 
 SpotRate objects can be created with vectors\if{html}{\out{<div class="sourceCode r">}}\preformatted{sr_vec <- spotrate(abs(rnorm(10)), "discrete", "business/252", "Brazil/ANBIMA")
 sr_vec
-}\if{html}{\out{</div>}}\preformatted{##  [1] "0.321022784 discrete business/252 Brazil/ANBIMA"
-##  [2] "0.443680604 discrete business/252 Brazil/ANBIMA"
-##  [3] "0.567109395 discrete business/252 Brazil/ANBIMA"
-##  [4] "0.323281763 discrete business/252 Brazil/ANBIMA"
-##  [5] "0.721988663 discrete business/252 Brazil/ANBIMA"
-##  [6] "0.122457753 discrete business/252 Brazil/ANBIMA"
-##  [7] "0.780679980 discrete business/252 Brazil/ANBIMA"
-##  [8] "0.279189697 discrete business/252 Brazil/ANBIMA"
-##  [9] "1.725217560 discrete business/252 Brazil/ANBIMA"
-## [10] "0.000400265 discrete business/252 Brazil/ANBIMA"
+}\if{html}{\out{</div>}}\preformatted{##  [1] "0.32983709 discrete business/252 Brazil/ANBIMA"
+##  [2] "0.96201916 discrete business/252 Brazil/ANBIMA"
+##  [3] "1.36411849 discrete business/252 Brazil/ANBIMA"
+##  [4] "0.69326154 discrete business/252 Brazil/ANBIMA"
+##  [5] "0.92496359 discrete business/252 Brazil/ANBIMA"
+##  [6] "1.36284840 discrete business/252 Brazil/ANBIMA"
+##  [7] "2.34379850 discrete business/252 Brazil/ANBIMA"
+##  [8] "0.87733577 discrete business/252 Brazil/ANBIMA"
+##  [9] "0.07547628 discrete business/252 Brazil/ANBIMA"
+## [10] "0.81242454 discrete business/252 Brazil/ANBIMA"
 }
 
 and can be put into a \code{data.frame}\if{html}{\out{<div class="sourceCode r">}}\preformatted{data.frame(spot_rate = sr_vec)
-}\if{html}{\out{</div>}}\preformatted{##                                          spot_rate
-## 1  0.321022784 discrete business/252 Brazil/ANBIMA
-## 2  0.443680604 discrete business/252 Brazil/ANBIMA
-## 3  0.567109395 discrete business/252 Brazil/ANBIMA
-## 4  0.323281763 discrete business/252 Brazil/ANBIMA
-## 5  0.721988663 discrete business/252 Brazil/ANBIMA
-## 6  0.122457753 discrete business/252 Brazil/ANBIMA
-## 7  0.780679980 discrete business/252 Brazil/ANBIMA
-## 8  0.279189697 discrete business/252 Brazil/ANBIMA
-## 9  1.725217560 discrete business/252 Brazil/ANBIMA
-## 10 0.000400265 discrete business/252 Brazil/ANBIMA
+}\if{html}{\out{</div>}}\preformatted{##                                         spot_rate
+## 1  0.32983709 discrete business/252 Brazil/ANBIMA
+## 2  0.96201916 discrete business/252 Brazil/ANBIMA
+## 3  1.36411849 discrete business/252 Brazil/ANBIMA
+## 4  0.69326154 discrete business/252 Brazil/ANBIMA
+## 5  0.92496359 discrete business/252 Brazil/ANBIMA
+## 6  1.36284840 discrete business/252 Brazil/ANBIMA
+## 7  2.34379850 discrete business/252 Brazil/ANBIMA
+## 8  0.87733577 discrete business/252 Brazil/ANBIMA
+## 9  0.07547628 discrete business/252 Brazil/ANBIMA
+## 10 0.81242454 discrete business/252 Brazil/ANBIMA
 }
 
 once in a \code{data.frame}, dplyr verbs can be used to manipulate it.\if{html}{\out{<div class="sourceCode r">}}\preformatted{require(dplyr, warn.conflicts = FALSE)
 }\if{html}{\out{</div>}}\preformatted{## Loading required package: dplyr
 }\if{html}{\out{<div class="sourceCode r">}}\preformatted{data.frame(spot_rate = sr_vec) |>
    mutate(comp = compound(spot_rate, term(5, "months")))
-}\if{html}{\out{</div>}}\preformatted{##                                          spot_rate     comp
-## 1  0.321022784 discrete business/252 Brazil/ANBIMA 1.122999
-## 2  0.443680604 discrete business/252 Brazil/ANBIMA 1.165323
-## 3  0.567109395 discrete business/252 Brazil/ANBIMA 1.205845
-## 4  0.323281763 discrete business/252 Brazil/ANBIMA 1.123799
-## 5  0.721988663 discrete business/252 Brazil/ANBIMA 1.254140
-## 6  0.122457753 discrete business/252 Brazil/ANBIMA 1.049311
-## 7  0.780679980 discrete business/252 Brazil/ANBIMA 1.271776
-## 8  0.279189697 discrete business/252 Brazil/ANBIMA 1.108042
-## 9  1.725217560 discrete business/252 Brazil/ANBIMA 1.518508
-## 10 0.000400265 discrete business/252 Brazil/ANBIMA 1.000167
+}\if{html}{\out{</div>}}\preformatted{##                                         spot_rate     comp
+## 1  0.32983709 discrete business/252 Brazil/ANBIMA 1.126115
+## 2  0.96201916 discrete business/252 Brazil/ANBIMA 1.324219
+## 3  1.36411849 discrete business/252 Brazil/ANBIMA 1.431184
+## 4  0.69326154 discrete business/252 Brazil/ANBIMA 1.245379
+## 5  0.92496359 discrete business/252 Brazil/ANBIMA 1.313740
+## 6  1.36284840 discrete business/252 Brazil/ANBIMA 1.430864
+## 7  2.34379850 discrete business/252 Brazil/ANBIMA 1.653611
+## 8  0.87733577 discrete business/252 Brazil/ANBIMA 1.300097
+## 9  0.07547628 discrete business/252 Brazil/ANBIMA 1.030782
+## 10 0.81242454 discrete business/252 Brazil/ANBIMA 1.281175
 }
 
 SpotRate is \code{numeric}, so it executes arithmetic and comparison operations
@@ -101,28 +101,28 @@ with \code{numeric} objects.\if{html}{\out{<div class="sourceCode r">}}\preforma
      check_gt_1pp = spot_rate > 0.01,
      check_gt_nsr = spot_rate > new_spot_rate
    )
-}\if{html}{\out{</div>}}\preformatted{##                                          spot_rate
-## 1  0.321022784 discrete business/252 Brazil/ANBIMA
-## 2  0.443680604 discrete business/252 Brazil/ANBIMA
-## 3  0.567109395 discrete business/252 Brazil/ANBIMA
-## 4  0.323281763 discrete business/252 Brazil/ANBIMA
-## 5  0.721988663 discrete business/252 Brazil/ANBIMA
-## 6  0.122457753 discrete business/252 Brazil/ANBIMA
-## 7  0.780679980 discrete business/252 Brazil/ANBIMA
-## 8  0.279189697 discrete business/252 Brazil/ANBIMA
-## 9  1.725217560 discrete business/252 Brazil/ANBIMA
-## 10 0.000400265 discrete business/252 Brazil/ANBIMA
+}\if{html}{\out{</div>}}\preformatted{##                                         spot_rate
+## 1  0.32983709 discrete business/252 Brazil/ANBIMA
+## 2  0.96201916 discrete business/252 Brazil/ANBIMA
+## 3  1.36411849 discrete business/252 Brazil/ANBIMA
+## 4  0.69326154 discrete business/252 Brazil/ANBIMA
+## 5  0.92496359 discrete business/252 Brazil/ANBIMA
+## 6  1.36284840 discrete business/252 Brazil/ANBIMA
+## 7  2.34379850 discrete business/252 Brazil/ANBIMA
+## 8  0.87733577 discrete business/252 Brazil/ANBIMA
+## 9  0.07547628 discrete business/252 Brazil/ANBIMA
+## 10 0.81242454 discrete business/252 Brazil/ANBIMA
 ##                                     new_spot_rate check_gt_1pp check_gt_nsr
-## 1  0.34102278 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
-## 2  0.46368060 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
-## 3  0.58710940 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
-## 4  0.34328176 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
-## 5  0.74198866 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
-## 6  0.14245775 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
-## 7  0.80067998 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
-## 8  0.29918970 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
-## 9  1.74521756 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
-## 10 0.02040026 discrete business/252 Brazil/ANBIMA        FALSE        FALSE
+## 1  0.34983709 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
+## 2  0.98201916 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
+## 3  1.38411849 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
+## 4  0.71326154 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
+## 5  0.94496359 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
+## 6  1.38284840 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
+## 7  2.36379850 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
+## 8  0.89733577 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
+## 9  0.09547628 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
+## 10 0.83242454 discrete business/252 Brazil/ANBIMA         TRUE        FALSE
 }
 
 SpotRate vectors also are created with the concatenation function \code{c}.\if{html}{\out{<div class="sourceCode r">}}\preformatted{c(sr_disc, 0.1, 0.13, 0.14, 0.15)
