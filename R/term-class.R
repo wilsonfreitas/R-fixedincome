@@ -236,6 +236,16 @@ setMethod(
 )
 
 #' @export
+setMethod(
+  "[",
+  signature(x = "Term", i = "logical"),
+  function(x, i, ...) {
+    .val <- x@.Data
+    term(.val[i], x@units)
+  }
+)
+
+#' @export
 c.Term <- function(x, ...) {
   dots <- list(...)
   nempty <- sapply(dots, length) != 0

@@ -16,6 +16,7 @@ hidden_aliases <- NULL
 #' !=,Compounding,Compounding-method
 #' ==,Compounding,Compounding-method
 #' [,Term,numeric,ANY-method
+#' [,Term,logical,ANY-method
 #' [,ForwardRate,missing,missing-method
 #' [,ForwardRate,numeric,missing-method
 #' [,SpotRateCurve,logical,missing-method

@@ -10,6 +10,7 @@
 \alias{!=,Compounding,Compounding-method}
 \alias{==,Compounding,Compounding-method}
 \alias{[,Term,numeric,ANY-method}
+\alias{[,Term,logical,ANY-method}
 \alias{[,ForwardRate,missing,missing-method}
 \alias{[,ForwardRate,numeric,missing-method}
 \alias{[,SpotRateCurve,logical,missing-method}

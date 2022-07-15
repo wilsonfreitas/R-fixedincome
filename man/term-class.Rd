@@ -37,7 +37,7 @@ so these operations raise an error.\if{html}{\out{<div class="sourceCode r">}}\p
 The DateRangeTerm class inherits Term and defines start and end dates
 and a calendar to count the amount of working days between these two dates.
 This is a Term between two dates.\if{html}{\out{<div class="sourceCode r">}}\preformatted{term(Sys.Date() - 5, Sys.Date(), "Brazil/ANBIMA")
-}\if{html}{\out{</div>}}\preformatted{## [1] "3 days"
+}\if{html}{\out{</div>}}\preformatted{## [1] "4 days"
 }
 
 In financial markets it is fairly usual to evaluate interest rates between
