@@ -163,9 +163,9 @@ setMethod(
       "^([0-9]+)(\\.[0-9]+)? (years|months|days|year|month|day)?$",
       x
     )
-    m <- unlist(regmatches(x, m))
+    m <- do.call(rbind, regmatches(x, m))
     if (length(m)) {
-      term(as.numeric(paste0(m[2], m[3])), m[4])
+      term(as.numeric(paste0(m[, 2], m[, 3])), m[, 4])
     } else {
       stop("Invalid term: ", x)
     }

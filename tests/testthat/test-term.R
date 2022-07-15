@@ -44,10 +44,19 @@ test_that("it should raise error", {
 })
 
 test_that("it should create a term object from a string", {
-  t <- as.term("6 month")
+  t <- as.term("6 months")
   expect_true(as.numeric(t) == 6)
   expect_true(t@units == "month")
+
   expect_error(as.term("nada"))
+
+  t <- as.term(c("6 months", "12 months"))
+  expect_equal(as.numeric(t), c(6, 12))
+  expect_equal(t@units, c("month", "month"))
+
+  t <- as.term(c("6 months", "1 year"))
+  expect_equal(as.numeric(t), c(6, 1))
+  expect_equal(t@units, c("month", "year"))
 })
 
 test_that("it should check the length of a term", {
