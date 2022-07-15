@@ -60,42 +60,34 @@
     </div>
 
     <table class="ref-index"><colgroup><col class="alias"><col class="title"></colgroup><tbody><tr><th colspan="2">
-          <h2 id="all-functions">All functions <a href="#all-functions" class="anchor" aria-hidden="true"></a></h2>
+          <h2 id="spot-rate">Spot Rate <a href="#spot-rate" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="ForwardRate-class.html">ForwardRate-class</a></code> </p>
+          <p><code><a href="spotrate-class.html">SpotRate-class</a></code> </p>
         </td>
-        <td><p>ForwardRate class</p></td>
+        <td><p>SpotRate class</p></td>
       </tr><tr><td>
-          <p><code><a href="Interpolation-class.html">Interpolation-class</a></code> </p>
+          <p><code><a href="spotrate.html">spotrate()</a></code> </p>
         </td>
-        <td><p>Interpolation classes</p></td>
-      </tr><tr><td>
-          <p><code><a href="SpotRateCurve-class.html">SpotRateCurve-class</a></code> </p>
-        </td>
-        <td><p>SpotRateCurve class</p></td>
-      </tr><tr><td>
-          <p><code><a href="as.forwardrate.html">as.forwardrate()</a></code> </p>
-        </td>
-        <td><p>Coerce objects to ForwardRate</p></td>
+        <td><p>Create SpotRate objects</p></td>
       </tr><tr><td>
           <p><code><a href="as.spotrate.html">as.spotrate()</a></code> </p>
         </td>
         <td><p>Coerce to SpotRate</p></td>
       </tr><tr><td>
-          <p><code><a href="as.spotratecurve.html">as.spotratecurve()</a></code> </p>
-        </td>
-        <td><p>Coerce objects to spotratecurve</p></td>
-      </tr><tr><td>
-          <p><code><a href="as.term.html">as.term()</a></code> </p>
-        </td>
-        <td><p>Coerce a character to a Term</p></td>
-      </tr><tr><td>
           <p><code><a href="compound.html">compound()</a></code> <code><a href="compound.html">discount()</a></code> </p>
         </td>
         <td><p>Compound method</p></td>
       </tr><tr><td>
+          <p><code><a href="spotrate-compare-method.html">`&gt;=`(<i>&lt;SpotRate&gt;</i>,<i>&lt;SpotRate&gt;</i>)</a></code> <code><a href="spotrate-compare-method.html">`&lt;=`(<i>&lt;SpotRate&gt;</i>,<i>&lt;SpotRate&gt;</i>)</a></code> <code><a href="spotrate-compare-method.html">`&lt;`(<i>&lt;SpotRate&gt;</i>,<i>&lt;SpotRate&gt;</i>)</a></code> <code><a href="spotrate-compare-method.html">`&gt;`(<i>&lt;SpotRate&gt;</i>,<i>&lt;SpotRate&gt;</i>)</a></code> <code><a href="spotrate-compare-method.html">`==`(<i>&lt;SpotRate&gt;</i>,<i>&lt;SpotRate&gt;</i>)</a></code> <code><a href="spotrate-compare-method.html">`!=`(<i>&lt;SpotRate&gt;</i>,<i>&lt;SpotRate&gt;</i>)</a></code> <code><a href="spotrate-compare-method.html">Compare(<i>&lt;SpotRate&gt;</i>,<i>&lt;numeric&gt;</i>)</a></code> <code><a href="spotrate-compare-method.html">Compare(<i>&lt;numeric&gt;</i>,<i>&lt;SpotRate&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>SpotRate comparison operations</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="compounding">Compounding <a href="#compounding" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
           <p><code><a href="compounding-class.html">Compounding-class</a></code> </p>
         </td>
         <td><p>Compounding class</p></td>
@@ -104,10 +96,18 @@
         </td>
         <td><p>Create Compounding class</p></td>
       </tr><tr><td>
-          <p><code><a href="datasets.html">datasets</a></code> </p>
+          <p><code><a href="implied_rate.html">implied_rate()</a></code> </p>
         </td>
-        <td><p>Datasets</p></td>
+        <td><p>Implied rates</p></td>
       </tr><tr><td>
+          <p><code><a href="compound.html">compound()</a></code> <code><a href="compound.html">discount()</a></code> </p>
+        </td>
+        <td><p>Compound method</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="daycount">Daycount <a href="#daycount" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
           <p><code><a href="daycount-class.html">Daycount-class</a></code> </p>
         </td>
         <td><p>Daycount class</p></td>
@@ -120,85 +120,125 @@
         </td>
         <td><p>Days in base for Daycount</p></td>
       </tr><tr><td>
+          <p><code><a href="term-conversion.html">toyears()</a></code> <code><a href="term-conversion.html">tomonths()</a></code> <code><a href="term-conversion.html">todays()</a></code> </p>
+        </td>
+        <td><p>Convert Term in different units</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="term">Term <a href="#term" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="term-class.html">Term-class</a></code> </p>
+        </td>
+        <td><p>Term class</p></td>
+      </tr><tr><td>
+          <p><code><a href="term.html">term()</a></code> </p>
+        </td>
+        <td><p>Create Term class</p></td>
+      </tr><tr><td>
+          <p><code><a href="as.term.html">as.term()</a></code> </p>
+        </td>
+        <td><p>Coerce a character to a Term</p></td>
+      </tr><tr><td>
           <p><code><a href="diff-Term-method.html">diff(<i>&lt;Term&gt;</i>)</a></code> </p>
         </td>
         <td><p>Calculate lagged differences of Term objects</p></td>
       </tr><tr><td>
-          <p><code><a href="fit_interpolation.html">fit_interpolation()</a></code> </p>
+          <p><code><a href="term-conversion.html">toyears()</a></code> <code><a href="term-conversion.html">tomonths()</a></code> <code><a href="term-conversion.html">todays()</a></code> </p>
         </td>
-        <td><p>Fit parametric interpolation functions</p></td>
-      </tr><tr><td>
-          <p><code><a href="fixedincome-package.html">fixedincome-package</a></code> </p>
+        <td><p>Convert Term in different units</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="spot-rate-curve">Spot Rate Curve <a href="#spot-rate-curve" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="SpotRateCurve-class.html">SpotRateCurve-class</a></code> </p>
         </td>
-        <td><p>Fixed income models, calculations and data structures</p></td>
-      </tr><tr><td>
-          <p><code><a href="forwardrate.html">forwardrate()</a></code> </p>
-        </td>
-        <td><p>Create a ForwardRate object</p></td>
-      </tr><tr><td>
-          <p><code><a href="interpolation-constructor.html">interp_flatforward()</a></code> <code><a href="interpolation-constructor.html">interp_linear()</a></code> <code><a href="interpolation-constructor.html">interp_loglinear()</a></code> <code><a href="interpolation-constructor.html">interp_naturalspline()</a></code> <code><a href="interpolation-constructor.html">interp_hermitespline()</a></code> <code><a href="interpolation-constructor.html">interp_monotonespline()</a></code> <code><a href="interpolation-constructor.html">interp_nelsonsiegel()</a></code> <code><a href="interpolation-constructor.html">interp_nelsonsiegelsvensson()</a></code> </p>
-        </td>
-        <td><p>Create Interpolation objects</p></td>
-      </tr><tr><td>
-          <p><code><a href="interpolation.html">interpolation()</a></code> <code><a href="interpolation.html">`interpolation&lt;-`()</a></code> </p>
-        </td>
-        <td><p>Set/Get interpolation to SpotRateCurve</p></td>
-      </tr><tr><td>
-          <p><code><a href="interpolation_error.html">interpolation_error()</a></code> </p>
-        </td>
-        <td><p>Interpolation error</p></td>
-      </tr><tr><td>
-          <p><code><a href="maturities.html">maturities()</a></code> </p>
-        </td>
-        <td><p>Get SpotRateCurve terms as Date objects</p></td>
-      </tr><tr><td>
-          <p><code><a href="parameters.html">parameters()</a></code> </p>
-        </td>
-        <td><p>Get parameters of the interpolation models</p></td>
-      </tr><tr><td>
-          <p><code><a href="prepare_interpolation.html">prepare_interpolation()</a></code> </p>
-        </td>
-        <td><p>Create the interpolation function</p></td>
-      </tr><tr><td>
-          <p><code><a href="rates.html">rates()</a></code> </p>
-        </td>
-        <td><p>Implied rates</p></td>
-      </tr><tr><td>
-          <p><code><a href="shift.html">shift()</a></code> </p>
-        </td>
-        <td><p>Shift vectors</p></td>
-      </tr><tr><td>
-          <p><code><a href="spotrate-class.html">SpotRate-class</a></code> </p>
-        </td>
-        <td><p>SpotRate class</p></td>
-      </tr><tr><td>
-          <p><code><a href="spotrate-compare-method.html">`&gt;=`(<i>&lt;SpotRate&gt;</i>,<i>&lt;SpotRate&gt;</i>)</a></code> <code><a href="spotrate-compare-method.html">`&lt;=`(<i>&lt;SpotRate&gt;</i>,<i>&lt;SpotRate&gt;</i>)</a></code> <code><a href="spotrate-compare-method.html">`&lt;`(<i>&lt;SpotRate&gt;</i>,<i>&lt;SpotRate&gt;</i>)</a></code> <code><a href="spotrate-compare-method.html">`&gt;`(<i>&lt;SpotRate&gt;</i>,<i>&lt;SpotRate&gt;</i>)</a></code> <code><a href="spotrate-compare-method.html">`==`(<i>&lt;SpotRate&gt;</i>,<i>&lt;SpotRate&gt;</i>)</a></code> <code><a href="spotrate-compare-method.html">`!=`(<i>&lt;SpotRate&gt;</i>,<i>&lt;SpotRate&gt;</i>)</a></code> <code><a href="spotrate-compare-method.html">Compare(<i>&lt;SpotRate&gt;</i>,<i>&lt;numeric&gt;</i>)</a></code> <code><a href="spotrate-compare-method.html">Compare(<i>&lt;numeric&gt;</i>,<i>&lt;SpotRate&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>SpotRate comparison operations</p></td>
-      </tr><tr><td>
-          <p><code><a href="spotrate.html">spotrate()</a></code> </p>
-        </td>
-        <td><p>Create SpotRate objects</p></td>
-      </tr><tr><td>
-          <p><code><a href="spotratecurve-helpers.html">first()</a></code> <code><a href="spotratecurve-helpers.html">last()</a></code> <code><a href="spotratecurve-helpers.html">closest()</a></code> </p>
-        </td>
-        <td><p>SpotRateCurve helpers</p></td>
+        <td><p>SpotRateCurve class</p></td>
       </tr><tr><td>
           <p><code><a href="spotratecurve.html">spotratecurve()</a></code> </p>
         </td>
         <td><p>Create a SpotRateCurve object</p></td>
       </tr><tr><td>
-          <p><code><a href="term-class.html">Term-class</a></code> </p>
+          <p><code><a href="as.spotratecurve.html">as.spotratecurve()</a></code> </p>
         </td>
-        <td><p>Term class</p></td>
+        <td><p>Coerce objects to spotratecurve</p></td>
       </tr><tr><td>
-          <p><code><a href="term-conversion.html">toyears()</a></code> <code><a href="term-conversion.html">tomonths()</a></code> <code><a href="term-conversion.html">todays()</a></code> </p>
+          <p><code><a href="compound.html">compound()</a></code> <code><a href="compound.html">discount()</a></code> </p>
         </td>
-        <td><p>Convert Term in different units</p></td>
+        <td><p>Compound method</p></td>
       </tr><tr><td>
-          <p><code><a href="term.html">term()</a></code> </p>
+          <p><code><a href="interpolation.html">interpolation()</a></code> <code><a href="interpolation.html">`interpolation&lt;-`()</a></code> </p>
         </td>
-        <td><p>Create Term class</p></td>
+        <td><p>Set/Get interpolation to SpotRateCurve</p></td>
+      </tr><tr><td>
+          <p><code><a href="spotratecurve-helpers.html">first()</a></code> <code><a href="spotratecurve-helpers.html">last()</a></code> <code><a href="spotratecurve-helpers.html">closest()</a></code> </p>
+        </td>
+        <td><p>SpotRateCurve helpers</p></td>
+      </tr><tr><td>
+          <p><code><a href="maturities.html">maturities()</a></code> </p>
+        </td>
+        <td><p>Get SpotRateCurve terms as Date objects</p></td>
+      </tr><tr><td>
+          <p><code><a href="interpolation_error.html">interpolation_error()</a></code> </p>
+        </td>
+        <td><p>Interpolation error</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="interpolation">Interpolation <a href="#interpolation" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="Interpolation-class.html">Interpolation-class</a></code> </p>
+        </td>
+        <td><p>Interpolation classes</p></td>
+      </tr><tr><td>
+          <p><code><a href="interpolation-constructor.html">interp_flatforward()</a></code> <code><a href="interpolation-constructor.html">interp_linear()</a></code> <code><a href="interpolation-constructor.html">interp_loglinear()</a></code> <code><a href="interpolation-constructor.html">interp_naturalspline()</a></code> <code><a href="interpolation-constructor.html">interp_hermitespline()</a></code> <code><a href="interpolation-constructor.html">interp_monotonespline()</a></code> <code><a href="interpolation-constructor.html">interp_nelsonsiegel()</a></code> <code><a href="interpolation-constructor.html">interp_nelsonsiegelsvensson()</a></code> </p>
+        </td>
+        <td><p>Create Interpolation objects</p></td>
+      </tr><tr><td>
+          <p><code><a href="prepare_interpolation.html">prepare_interpolation()</a></code> </p>
+        </td>
+        <td><p>Create the interpolation function</p></td>
+      </tr><tr><td>
+          <p><code><a href="fit_interpolation.html">fit_interpolation()</a></code> </p>
+        </td>
+        <td><p>Fit parametric interpolation functions</p></td>
+      </tr><tr><td>
+          <p><code><a href="parameters.html">parameters()</a></code> </p>
+        </td>
+        <td><p>Get parameters of the interpolation models</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="forward-rate">Forward Rate <a href="#forward-rate" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="ForwardRate-class.html">ForwardRate-class</a></code> </p>
+        </td>
+        <td><p>ForwardRate class</p></td>
+      </tr><tr><td>
+          <p><code><a href="forwardrate.html">forwardrate()</a></code> </p>
+        </td>
+        <td><p>Create a ForwardRate object</p></td>
+      </tr><tr><td>
+          <p><code><a href="as.forwardrate.html">as.forwardrate()</a></code> </p>
+        </td>
+        <td><p>Coerce objects to ForwardRate</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="misc">Misc <a href="#misc" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="datasets.html">datasets</a></code> </p>
+        </td>
+        <td><p>Datasets</p></td>
+      </tr><tr><td>
+          <p><code><a href="shift.html">shift()</a></code> </p>
+        </td>
+        <td><p>Shift vectors</p></td>
+      </tr><tr><td>
+          <p><code><a href="fixedincome-package.html">fixedincome-package</a></code> </p>
+        </td>
+        <td><p>Fixed income models, calculations and data structures</p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -103,7 +103,7 @@ function, passing a string with the name of one of the compounding regimes:
 <span class="r-in"><span><span class="va">comp</span> <span class="op">&lt;-</span> <span class="fu">compounding</span><span class="op">(</span><span class="st">"discrete"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="compound.html">compound</a></span><span class="op">(</span><span class="va">comp</span>, <span class="fl">0.06</span>, <span class="fl">2</span><span class="op">)</span> <span class="co"># equals (1 + 0.06) ^ 2 = 1.1236</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.068138</span>
-<span class="r-in"><span><span class="fu"><a href="rates.html">rates</a></span><span class="op">(</span><span class="va">comp</span>, <span class="fl">1.1236</span>, <span class="fl">2</span><span class="op">)</span> <span class="co"># equals 0.06</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="implied_rate.html">implied_rate</a></span><span class="op">(</span><span class="va">comp</span>, <span class="fl">1.1236</span>, <span class="fl">2</span><span class="op">)</span> <span class="co"># equals 0.06</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.8531716</span>
 </code></pre></div>
     </div>

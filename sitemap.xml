@@ -85,6 +85,9 @@
     <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/hidden_aliases.html</loc>
   </url>
   <url>
+    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/implied_rate.html</loc>
+  </url>
+  <url>
     <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/index.html</loc>
   </url>
   <url>
@@ -107,9 +110,6 @@
   </url>
   <url>
     <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/prepare_interpolation.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/rates.html</loc>
   </url>
   <url>
     <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/shift.html</loc>
