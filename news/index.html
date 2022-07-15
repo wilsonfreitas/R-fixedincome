@@ -62,19 +62,41 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.2" id="fixedincome-002">fixedincome 0.0.2<a class="anchor" aria-label="anchor" href="#fixedincome-002"></a></h2>
-<ul><li>Added <code>progagate</code> slot to <code>Interpolation</code> class. It defines if the interpolation method is propagated to interpolated curves.</li>
-<li>The curve methods <code>[</code> and <code>[[</code> don’t propagate interpolation. The returned curves don’t have interpolation. This avoids recurrent <code>prepare_interpolation</code> calls.</li>
-<li>The <code>interpolate</code> function, for NelsonSiegel and NelsonSiegelSvensson models, converts <code>term</code> argument to years with <code>toyears</code>.</li>
-<li>Organized nelsonsiegel and nelsonsiegelsvensson code.<ul><li>New objective functions (and their gradients) have been created to improve the optimization.</li></ul></li>
-<li>New SpotRateCurve method <code>[[</code> for missing returns interpolated curve in curve’s terms.</li>
-<li>SpotRate Compare method split into spectific methods: ==, !=, &gt;, &lt;, &gt;=, &lt;=. The methods &gt;, &lt;, &gt;=, &lt;= raise error for objects with different slots: compounding, daycount, calendar.</li>
-<li>SpotRate Arith methods raise error for objects with different slots: compounding, daycount, calendar.</li>
+<div class="section level3">
+<h3 id="term-class-0-0-2">Term class<a class="anchor" aria-label="anchor" href="#term-class-0-0-2"></a></h3>
+<ul><li>Term class accepts multiple units.</li>
 <li>
 <code>toyears</code> returns Term objects</li>
 <li>New methods <code>tomonths</code> and <code>todays</code> for Term conversion in different units.</li>
-<li>Updated to bizdays version 0.1.10 (Issue <a href="https://github.com/wilsonfreitas/R-fixedincome/issues/21" class="external-link">#21</a>)</li>
-<li>Code refactoring</li>
 </ul></div>
+<div class="section level3">
+<h3 id="spotrate-0-0-2">SpotRate<a class="anchor" aria-label="anchor" href="#spotrate-0-0-2"></a></h3>
+<ul><li>SpotRate Compare method split into spectific methods: ==, !=, &gt;, &lt;, &gt;=, &lt;=. The methods &gt;, &lt;, &gt;=, &lt;= raise error for objects with different slots: compounding, daycount, calendar.</li>
+<li>SpotRate Arith methods raise error for objects with different slots: compounding, daycount, calendar.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="spotratecurve-0-0-2">SpotRateCurve<a class="anchor" aria-label="anchor" href="#spotratecurve-0-0-2"></a></h3>
+<ul><li>The curve methods <code>[</code> and <code>[[</code> don’t propagate interpolation. The returned curves don’t have interpolation. This avoids recurrent <code>prepare_interpolation</code> calls.</li>
+<li>New SpotRateCurve method <code>[[</code> for missing returns interpolated curve in curve’s terms.</li>
+<li>SpotRateCurve converts terms to <code>days</code> units, so <code>days</code> units becomes the default units to SpotRateCurve.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="interpolation-0-0-2">Interpolation<a class="anchor" aria-label="anchor" href="#interpolation-0-0-2"></a></h3>
+<ul><li>Added <code>progagate</code> slot to <code>Interpolation</code> class. It defines if the interpolation method is propagated to interpolated curves.</li>
+<li>The <code>interpolate</code> function, for NelsonSiegel and NelsonSiegelSvensson models, converts <code>term</code> argument to years with <code>toyears</code>.</li>
+<li>Organized nelsonsiegel and nelsonsiegelsvensson code.<ul><li>New objective functions (and their gradients) have been created to improve the optimization.</li></ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="compounding-0-0-2">Compounding<a class="anchor" aria-label="anchor" href="#compounding-0-0-2"></a></h3>
+<ul><li>
+<code>rates</code> method has been renamed to <code>implied_rate</code>
+</li></ul></div>
+<div class="section level3">
+<h3 id="misc-0-0-2">Misc<a class="anchor" aria-label="anchor" href="#misc-0-0-2"></a></h3>
+<ul><li>Code refactoring</li>
+<li>Updated to bizdays version 0.1.10 (Issue <a href="https://github.com/wilsonfreitas/R-fixedincome/issues/21" class="external-link">#21</a>)</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.1" id="fixedincome-001">fixedincome 0.0.1<small>2022-03-17</small><a class="anchor" aria-label="anchor" href="#fixedincome-001"></a></h2>
 <ul><li>First CRAN version.</li></ul></div>
