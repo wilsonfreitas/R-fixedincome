@@ -29,13 +29,12 @@ term <- function(x, ...) {
 term.numeric <- function(x, units = "days", ...) {
   value <- x
 
-  if (length(units) > 1) {
-    warning("units length > 1 and only the first element will be used")
-    units <- units[1]
+  if (length(units) != length(x) & length(units) > 1) {
+    stop("units and data are different sizes")
   }
 
   units <- sub("^(.*)s$", "\\1", units)
-  stopifnot(units %in% c("year", "month", "day"))
+  stopifnot(unique(units) %in% c("year", "month", "day"))
 
   new("Term", .Data = value, units = units)
 }

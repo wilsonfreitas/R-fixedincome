@@ -32,11 +32,11 @@ test_that("it should coerce term to character", {
     as(t, "character"),
     c("6 months", "7 months", "8 months", "9 months")
   )
-  expect_warning(t <- term(6:9, c("month", "year")))
-  expect_equal(
-    as(t, "character"),
-    c("6 months", "7 months", "8 months", "9 months")
-  )
+  # expect_warning(t <- term(6:9, c("month", "year")))
+  # expect_equal(
+  #   as(t, "character"),
+  #   c("6 months", "7 months", "8 months", "9 months")
+  # )
 })
 
 test_that("it should raise error", {
@@ -74,9 +74,10 @@ test_that("it should put a term object into a data.frame column", {
 })
 
 test_that("it should not create terms with different units", {
-  expect_warning(t1 <- term(c(1, 2), c("day", "month")))
-  expect_equal(length(t1@units), 1)
-  expect_equal(t1@units, "day")
+  t1 <- term(c(1, 2), c("day", "month"))
+  expect_equal(length(t1@units), 2)
+  expect_equal(t1@units, c("day", "month"))
+  expect_error(t1 <- term(c(1, 2), c("day", "month", "year")))
 })
 
 test_that("it should ops terms", {
