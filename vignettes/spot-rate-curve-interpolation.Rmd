@@ -50,7 +50,7 @@ Use the `bizdays::getdate` function to get the last business day, according to `
 calendar.
 
 ```{r}
-refdate <- getdate("last bizday", Sys.Date(), "Brazil/ANBIMA")
+refdate <- getdate("last bizday", Sys.Date() - 1, "Brazil/ANBIMA")
 ```
 
 In order to build a term structure formed only by futures maturities, the yield curve data and
