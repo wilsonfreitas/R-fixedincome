@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# fixedincome
+# fixedincome <img src="man/figures/logo.png" align="right" width="120" />
 
 <!-- badges: start -->
 
@@ -87,6 +87,17 @@ Spot rates can be put inside data.frames.
 
 ``` r
 library(dplyr)
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:fixedincome':
+#> 
+#>     first, last
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
 library(fixedincome)
 
 df <- tibble(
@@ -130,6 +141,11 @@ Let’s create a spot rate curve using web scraping (from B3 website)
 
 ``` r
 source("examples/utils-functions.R")
+#> 
+#> Attaching package: 'bizdays'
+#> The following object is masked from 'package:stats':
+#> 
+#>     offset
 curve <- get_curve_from_web("2022-02-23")
 curve
 #>          SpotRateCurve
