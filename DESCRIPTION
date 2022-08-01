@@ -1,6 +1,6 @@
 Package: fixedincome
 Title: Fixed Income Models, Calculations, Data Structures and Instruments
-Version: 0.0.2
+Version: 0.0.3
 Authors@R: person("Wilson", "Freitas", email = "wilson.freitas@gmail.com",
     role = c("aut", "cre"))
 License: MIT + file LICENSE
@@ -44,7 +44,7 @@ Collate:
     "hidden.R"
     "zzz.R"
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 Encoding: UTF-8
 LazyData: true
 Config/testthat/edition: 3

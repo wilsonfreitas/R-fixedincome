@@ -1,3 +1,7 @@
+# fixedincome 0.0.3
+
+* Updated vignette "Spot Rate Curve Interpolation"
+
 # fixedincome 0.0.2
 
 ## Term class
