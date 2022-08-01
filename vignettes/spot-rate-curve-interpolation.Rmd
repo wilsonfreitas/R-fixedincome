@@ -67,6 +67,7 @@ yc <- bind_rows(
   yc_ss |> filter(!is.na(symbol))
 )
 
+yc <- yc[!duplicated(yc$biz_days), ]
 yc
 ```
 
