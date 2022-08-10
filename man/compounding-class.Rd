@@ -6,6 +6,9 @@
 \alias{Simple-class}
 \alias{Discrete-class}
 \alias{Continuous-class}
+\alias{SimpleCompoundingClass}
+\alias{DiscreteCompoundingClass}
+\alias{ContinuousCompoundingClass}
 \title{Compounding class}
 \description{
 The Compounding class abstracts the compounding regime used to

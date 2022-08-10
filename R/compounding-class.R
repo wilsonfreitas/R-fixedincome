@@ -20,6 +20,9 @@
 #' }
 #'
 #' @aliases Simple-class Discrete-class Continuous-class
+#' @aliases SimpleCompoundingClass
+#' @aliases DiscreteCompoundingClass
+#' @aliases ContinuousCompoundingClass
 #'
 #' @export
 setClass(
@@ -27,18 +30,21 @@ setClass(
   contains = "VIRTUAL"
 )
 
+#' @rdname Compounding
 #' @export
 SimpleCompoundingClass <- setClass(
   "Simple",
   contains = "Compounding"
 )
 
+#' @rdname Compounding
 #' @export
 DiscreteCompoundingClass <- setClass(
   "Discrete",
   contains = "Compounding"
 )
 
+#' @rdname Compounding
 #' @export
 ContinuousCompoundingClass <- setClass(
   "Continuous",
