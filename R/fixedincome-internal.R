@@ -14,6 +14,7 @@
 #' @author Wilson Freitas \email{wilson.freitas@gmail.com}
 #' @references Frank Fabozzi. Fixed Income Mathematics, Wiley, 1994.
 #' @references Bruce Tuckman. Fixed Income Securities, Wiley, 1994.
+#' @import ggplot2
 #' @import bizdays
 #' @import methods
 #' @importFrom graphics par axis abline points lines legend

@@ -20,7 +20,9 @@ Imports:
     graphics,
     stats,
     grDevices,
-    utils
+    utils,
+    ggplot2,
+    scales
 Suggests: 
     knitr,
     rmarkdown,
@@ -39,6 +41,7 @@ Collate:
     "spotratecurve-interpolation.R"
     "spotratecurve-interpolation-nelsonsiegel.R"
     "plot.R"
+    "autoplot.R"
     "forwardrate-class.R"
     "compound-method.R"
     "hidden.R"
