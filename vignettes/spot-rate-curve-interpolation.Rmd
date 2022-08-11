@@ -41,16 +41,8 @@ Firstly, the packages have to be loaded.
 
 ```{r message=FALSE, warning=FALSE}
 library(rb3)
-library(bizdays)
 library(dplyr)
 library(fixedincome)
-```
-
-Use the `bizdays::getdate` function to get the last business day, according to `Brazil/ANBIMA`
-calendar.
-
-```{r}
-refdate <- getdate("last bizday", Sys.Date(), "Brazil/ANBIMA")
 ```
 
 In order to build a term structure formed only by futures maturities, the yield curve data and
@@ -59,15 +51,16 @@ Once the superset is returned, the rows related to futures maturities can be fil
 The first term, usually 1 business day term, is also used to anchor the curve's short part.
 
 ```{r}
+refdate <- as.Date("2022-08-05")
 yc_ <- yc_get(refdate)
 fut_ <- futures_get(refdate)
 yc_ss <- yc_superset(yc_, fut_)
 yc <- bind_rows(
   yc_ss |> slice(1),
   yc_ss |> filter(!is.na(symbol))
-)
+) |>
+  filter(!duplicated(biz_days))
 
-yc <- yc[!duplicated(yc$biz_days), ]
 yc
 ```
 
