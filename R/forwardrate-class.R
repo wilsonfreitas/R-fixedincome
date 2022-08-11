@@ -124,6 +124,8 @@ forwardrate.SpotRateCurve <- function(x, t1 = NULL, t2 = NULL, ...) {
 #' @param terms a numeric with positive values representing terms or a Term
 #'        object.
 #' @param refdate the curve reference date.
+#' @param t1 initial term
+#' @param t2 final term
 #' @param ... additional arguments
 #'
 #' @return

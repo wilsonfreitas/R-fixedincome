@@ -21,6 +21,10 @@ as.forwardrate(x, ...)
 object.}
 
 \item{refdate}{the curve reference date.}
+
+\item{t1}{initial term}
+
+\item{t2}{final term}
 }
 \value{
 A \code{ForwardRate} object created from another object, \code{SpotRate} or
