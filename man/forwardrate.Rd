@@ -8,7 +8,16 @@
 \usage{
 forwardrate(x, ...)
 
-\method{forwardrate}{numeric}(x, terms, compounding, daycount, calendar, .copyfrom = NULL, ...)
+\method{forwardrate}{numeric}(
+  x,
+  terms,
+  compounding,
+  daycount,
+  calendar,
+  .copyfrom = NULL,
+  refdate = NULL,
+  ...
+)
 
 \method{forwardrate}{SpotRateCurve}(x, t1 = NULL, t2 = NULL, ...)
 }
@@ -28,6 +37,8 @@ the forward rates.}
 
 \item{.copyfrom}{a SpotRate object that is used as reference to build
 the SpotRateCurve object.}
+
+\item{refdate}{the curve reference date.}
 
 \item{t1}{initial term}
 

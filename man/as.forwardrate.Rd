@@ -8,9 +8,9 @@
 \usage{
 as.forwardrate(x, ...)
 
-\method{as.forwardrate}{SpotRate}(x, terms, ...)
+\method{as.forwardrate}{SpotRate}(x, terms, refdate = NULL, ...)
 
-\method{as.forwardrate}{SpotRateCurve}(x, ...)
+\method{as.forwardrate}{SpotRateCurve}(x, t1 = NULL, t2 = NULL, ...)
 }
 \arguments{
 \item{x}{a \code{SpotRate} or a \code{SpotRateCurve} object.}
@@ -19,6 +19,8 @@ as.forwardrate(x, ...)
 
 \item{terms}{a numeric with positive values representing terms or a Term
 object.}
+
+\item{refdate}{the curve reference date.}
 }
 \value{
 A \code{ForwardRate} object created from another object, \code{SpotRate} or

@@ -8,7 +8,8 @@
 setClass(
   "ForwardRate",
   slots = c(
-    terms = "Term"
+    terms = "Term",
+    refdate = "Date"
   ),
   contains = "SpotRate"
 )
@@ -25,6 +26,7 @@ setClass(
 #' @param calendar a calendar object.
 #' @param .copyfrom a SpotRate object that is used as reference to build
 #'        the SpotRateCurve object.
+#' @param refdate the curve reference date.
 #' @param t1 initial term
 #' @param t2 final term
 #' @param ... additional arguments.
@@ -42,7 +44,7 @@ forwardrate <- function(x, ...) {
 #' @rdname forwardrate
 #' @export
 forwardrate.numeric <- function(x, terms, compounding, daycount,
-                                calendar, .copyfrom = NULL, ...) {
+                                calendar, .copyfrom = NULL, refdate = NULL, ...) {
   if (!is.null(.copyfrom)) {
     compounding <- if (missing(compounding)) {
       .copyfrom@compounding
@@ -58,7 +60,8 @@ forwardrate.numeric <- function(x, terms, compounding, daycount,
     compounding = compounding,
     daycount = daycount,
     calendar = calendar,
-    terms = terms
+    terms = terms,
+    refdate = refdate
   )
 }
 
@@ -71,7 +74,8 @@ forwardrate.SpotRateCurve <- function(x, t1 = NULL, t2 = NULL, ...) {
       compounding = x@compounding,
       daycount = x@daycount,
       calendar = x@calendar,
-      terms = x@terms
+      terms = x@terms,
+      refdate = x@refdate
     )
   } else if (is.null(t1) && is.null(t2)) {
     factor_rate <- compound(x)
@@ -86,7 +90,8 @@ forwardrate.SpotRateCurve <- function(x, t1 = NULL, t2 = NULL, ...) {
       terms = c(x@terms[1], dub[-1]),
       compounding = x@compounding,
       daycount = x@daycount,
-      calendar = x@calendar
+      calendar = x@calendar,
+      refdate = x@refdate
     )
   } else {
     pos <- match(c(t1, t2), x@terms)
@@ -103,7 +108,8 @@ forwardrate.SpotRateCurve <- function(x, t1 = NULL, t2 = NULL, ...) {
       compounding = x@compounding,
       daycount = x@daycount,
       calendar = x@calendar,
-      terms = fwd_term
+      terms = fwd_term,
+      refdate = x@refdate
     )
   }
   .Object
@@ -117,6 +123,7 @@ forwardrate.SpotRateCurve <- function(x, t1 = NULL, t2 = NULL, ...) {
 #' @param x a `SpotRate` or a `SpotRateCurve` object.
 #' @param terms a numeric with positive values representing terms or a Term
 #'        object.
+#' @param refdate the curve reference date.
 #' @param ... additional arguments
 #'
 #' @return
@@ -130,26 +137,21 @@ as.forwardrate <- function(x, ...) {
 
 #' @rdname as.forwardrate
 #' @export
-as.forwardrate.SpotRate <- function(x, terms, ...) {
+as.forwardrate.SpotRate <- function(x, terms, refdate = NULL, ...) {
   new("ForwardRate",
     .Data = as.numeric(x),
     compounding = x@compounding,
     daycount = x@daycount,
     calendar = x@calendar,
-    terms = terms
+    terms = terms,
+    refdate = refdate
   )
 }
 
 #' @rdname as.forwardrate
 #' @export
-as.forwardrate.SpotRateCurve <- function(x, ...) {
-  new("ForwardRate",
-    .Data = as.numeric(x),
-    compounding = x@compounding,
-    daycount = x@daycount,
-    calendar = x@calendar,
-    terms = x@terms
-  )
+as.forwardrate.SpotRateCurve <- function(x, t1 = NULL, t2 = NULL, ...) {
+  forwardrate.SpotRateCurve(x, t1, t2)
 }
 
 #' @export
@@ -162,7 +164,9 @@ setMethod(
     elements <- lapply(dots[nempty], spr_builder(x))
     values_ <- c(x@.Data, unlist(lapply(elements, as.numeric)))
     terms_ <- c(x@terms, unlist(lapply(dots, function(dx) dx@terms)))
-    forwardrate(values_, terms_, x@compounding, x@daycount, x@calendar)
+    forwardrate(values_, terms_, x@compounding, x@daycount, x@calendar,
+      refdate = x@refdate
+    )
   }
 )
 
@@ -192,7 +196,9 @@ setMethod(
   "[",
   signature(x = "ForwardRate", i = "numeric", j = "missing"),
   function(x, i, j, ..., drop = TRUE) {
-    forwardrate(x@.Data[i], x@terms[i], x@compounding, x@daycount, x@calendar)
+    forwardrate(x@.Data[i], x@terms[i], x@compounding, x@daycount, x@calendar,
+      refdate = x@refdate
+    )
   }
 )
 
@@ -201,7 +207,9 @@ setMethod(
   "[",
   signature(x = "ForwardRate", i = "missing", j = "missing"),
   function(x, i, j, ..., drop = TRUE) {
-    forwardrate(x@.Data, x@terms, x@compounding, x@daycount, x@calendar)
+    forwardrate(x@.Data, x@terms, x@compounding, x@daycount, x@calendar,
+      refdate = x@refdate
+    )
   }
 )
 
@@ -223,6 +231,35 @@ setMethod(
   signature(x = "ForwardRate"),
   function(x, row.names = NULL, optional = FALSE, ...) {
     spotrate_ <- as.spotrate(x)
-    data.frame(terms = x@terms, rates = spotrate_)
+    if (is.null(x@refdate)) {
+      data.frame(
+        terms = x@terms,
+        rates = spotrate_
+      )
+    } else {
+      terms_ <- term(cumsum(x@terms), x@terms@units)
+      dates_ <- offset(x@refdate, terms_, x@calendar)
+      data.frame(
+        terms = terms_,
+        forward_terms = x@terms,
+        dates = dates_,
+        rates = spotrate_
+      )
+    }
+  }
+)
+
+#' @rdname as.spotrate
+#' @export
+setMethod(
+  "as.spotrate",
+  signature(x = "ForwardRate"),
+  function(x, ...) {
+    spotrate(
+      x = x@.Data,
+      compounding = x@compounding,
+      daycount = x@daycount,
+      calendar = x@calendar
+    )
   }
 )
