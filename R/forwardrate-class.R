@@ -9,7 +9,7 @@ setClass(
   "ForwardRate",
   slots = c(
     terms = "Term",
-    refdate = "Date"
+    refdate = "ANY"
   ),
   contains = "SpotRate"
 )
