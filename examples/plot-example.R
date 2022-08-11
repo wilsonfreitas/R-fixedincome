@@ -2,7 +2,6 @@
 library(rb3)
 library(bizdays)
 library(fixedincome)
-library(copom)
 library(tidyverse)
 
 get_di1_curve <- function(refdate) {
@@ -22,28 +21,34 @@ get_di1_curve <- function(refdate) {
   )
 }
 
-
 refdate <- getdate("last bizday", Sys.Date(), "Brazil/ANBIMA")
 curve <- get_di1_curve(refdate)
 curve2 <- get_di1_curve(refdate - 1)
 
-copom_dates <- get_copom_dates(refdate, 8)
-interpolation(curve) <- interp_flatforwardcopom(copom_dates, "second")
+forwardrate(curve) |> as.data.frame()
+
+interpolation(curve) <- interp_flatforward()
 ggspotratecurveplot(curve, title = "AA", subtitle = "BB", caption = "WW")
 
 ggspotratecurveplot(curve,
   title = "AA", subtitle = "BB", caption = "WW",
-  curve.x.axis = "dates"
+  curve.x.axis = "terms"
 )
 
-g <- ggspotratecurveplot(curve, curve.x.axis = "dates")
+g <- ggspotratecurveplot(curve)
 
 g +
-  autolayer(curve2, curve.x.axis = "dates", size = 1) +
-  autolayer(curve2, curve.x.axis = "dates", curve.geom = "point", size = 2)
+  autolayer(curve2, size = 1) +
+  autolayer(curve2, curve.geom = "point", size = 2)
 
 autoplot(curve, size = 1, curve.interpolation = TRUE) +
   autolayer(curve, curve.name = "no interp")
+
+autoplot(curve)
+
+autoplot(curve) +
+  autolayer(forwardrate(curve), size = 1) +
+  theme_wf()
 
 autoplot(curve |> fixedincome::first("2 years"), size = 1) +
   autolayer(forwardrate(curve |> fixedincome::first("2 years")), size = 1) +

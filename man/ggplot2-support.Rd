@@ -13,7 +13,7 @@
   curve.name = NULL,
   curve.geom = c("line", "point"),
   curve.interpolation = FALSE,
-  curve.x.axis = c("terms", "dates")
+  curve.x.axis = c("dates", "terms")
 )
 
 \method{autolayer}{SpotRateCurve}(
@@ -22,14 +22,15 @@
   curve.name = NULL,
   curve.geom = c("line", "point"),
   curve.interpolation = FALSE,
-  curve.x.axis = c("terms", "dates")
+  curve.x.axis = c("dates", "terms")
 )
 
 \method{autolayer}{ForwardRate}(
   object,
   ...,
   curve.name = NULL,
-  curve.geom = c("step", "line", "point")
+  curve.geom = c("step", "line", "point"),
+  curve.x.axis = c("dates", "terms")
 )
 }
 \arguments{

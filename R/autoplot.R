@@ -22,7 +22,7 @@ autoplot.SpotRateCurve <- function(object, ...,
                                    curve.name = NULL,
                                    curve.geom = c("line", "point"),
                                    curve.interpolation = FALSE,
-                                   curve.x.axis = c("terms", "dates")) {
+                                   curve.x.axis = c("dates", "terms")) {
   curve.geom <- match.arg(curve.geom)
   curve.x.axis <- match.arg(curve.x.axis)
   curve <- object
@@ -43,6 +43,7 @@ autoplot.SpotRateCurve <- function(object, ...,
   if (is.null(curve.name)) {
     curve.name <- format(curve@refdate)
   }
+  curve_spt[["curve.name"]] <- curve.name
   if (curve.x.axis == "terms") {
     curve_spt[["x"]] <- curve_spt[["terms"]]
   } else if (curve.x.axis == "dates") {
@@ -50,7 +51,7 @@ autoplot.SpotRateCurve <- function(object, ...,
   }
   p <- ggplot(
     data = curve_spt,
-    mapping = aes_string(x = "x", y = "rates", colour = curve.name)
+    mapping = aes_string(x = "x", y = "rates", colour = "curve.name")
   )
   pp <- if (curve.geom == "line") {
     geom_line(...)
@@ -66,13 +67,14 @@ autolayer.SpotRateCurve <- function(object, ...,
                                     curve.name = NULL,
                                     curve.geom = c("line", "point"),
                                     curve.interpolation = FALSE,
-                                    curve.x.axis = c("terms", "dates")) {
+                                    curve.x.axis = c("dates", "terms")) {
   curve.geom <- match.arg(curve.geom)
   curve.x.axis <- match.arg(curve.x.axis)
   curve <- object
   if (curve.interpolation && is.null(interpolation(curve))) {
     stop("Curve does not have interpolation")
   }
+  curve_spt <- as.data.frame(curve)
   if (curve.interpolation) {
     terms_mm <- range(as.numeric(curve@terms))
     curve_it <- curve[[seq(terms_mm[1], terms_mm[2])]]
@@ -87,6 +89,7 @@ autolayer.SpotRateCurve <- function(object, ...,
   if (is.null(curve.name)) {
     curve.name <- format(curve@refdate)
   }
+  curve_spt[["curve.name"]] <- curve.name
   if (curve.x.axis == "terms") {
     curve_spt[["x"]] <- curve_spt[["terms"]]
   } else if (curve.x.axis == "dates") {
@@ -94,11 +97,11 @@ autolayer.SpotRateCurve <- function(object, ...,
   }
   if (curve.geom == "line") {
     geom_line(
-      data = curve_spt, mapping = aes_string(x = "x", y = "rates", colour = curve.name), ...
+      data = curve_spt, mapping = aes_string(x = "x", y = "rates", colour = "curve.name"), ...
     )
   } else if (curve.geom == "point") {
     geom_point(
-      data = curve_spt, mapping = aes_string(x = "x", y = "rates", colour = curve.name), ...
+      data = curve_spt, mapping = aes_string(x = "x", y = "rates", colour = "curve.name"), ...
     )
   }
 }
@@ -107,28 +110,41 @@ autolayer.SpotRateCurve <- function(object, ...,
 #' @export
 autolayer.ForwardRate <- function(object, ...,
                                   curve.name = NULL,
-                                  curve.geom = c("step", "line", "point")) {
+                                  curve.geom = c("step", "line", "point"),
+                                  curve.x.axis = c("dates", "terms")) {
   curve.geom <- match.arg(curve.geom)
+  curve.x.axis <- match.arg(curve.x.axis)
   curve_fwd <- object
-  df <- data.frame(
-    terms = cumsum(as.numeric(curve_fwd@terms)),
-    rates = as.numeric(curve_fwd)
-  )
+  df <- as.data.frame(object)
+  df[["terms"]] <- as.numeric(df[["terms"]])
+  df[["rates"]] <- as.numeric(df[["rates"]])
   if (is.null(curve.name)) {
     curve.name <- "Forward Rate"
   }
+  df[["curve.name"]] <- curve.name
+  if (curve.x.axis == "terms") {
+    df[["x"]] <- df[["terms"]]
+  } else if (curve.x.axis == "dates") {
+    df[["x"]] <- df[["dates"]]
+  }
   if (curve.geom == "line") {
     geom_line(
-      data = df, mapping = aes_string(x = "terms", y = "rates", colour = curve.name), ...
+      data = df,
+      mapping = aes_string(x = "x", y = "rates", colour = "curve.name"),
+      ...
     )
   } else if (curve.geom == "step") {
     geom_step(
-      data = df, mapping = aes_string(x = "terms", y = "rates", colour = curve.name),
-      direction = "vh", ...
+      data = df,
+      mapping = aes_string(x = "x", y = "rates", colour = "curve.name"),
+      direction = "vh",
+      ...
     )
   } else if (curve.geom == "point") {
     geom_point(
-      data = df, mapping = aes_string(x = "terms", y = "rates", colour = curve.name), ...
+      data = df,
+      mapping = aes_string(x = "x", y = "rates", colour = "curve.name"),
+      ...
     )
   }
 }
