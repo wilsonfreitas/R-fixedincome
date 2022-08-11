@@ -10,6 +10,7 @@ ggspotratecurveplot(
   subtitle = NULL,
   caption = NULL,
   curve.name = NULL,
+  curve.interpolation = FALSE,
   curve.x.axis = c("dates", "terms"),
   ...
 )
@@ -24,6 +25,9 @@ ggspotratecurveplot(
 \item{caption}{plot caption}
 
 \item{curve.name}{Curve's name, if not provided curve's refdate is used.}
+
+\item{curve.interpolation}{logical indicating to use daily interpolation
+instead of curve points. Defaults to \code{FALSE}.}
 
 \item{curve.x.axis}{x axis can be presented with a numeric scale representing
 business days (\code{terms}) or dates (\code{dates}). Defaults to \code{dates}.}

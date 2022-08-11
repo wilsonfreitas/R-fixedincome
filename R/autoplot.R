@@ -158,6 +158,8 @@ autolayer.ForwardRate <- function(object, ...,
 #' @param subtitle plot subtitle
 #' @param caption plot caption
 #' @param curve.name Curve's name, if not provided curve's refdate is used.
+#' @param curve.interpolation logical indicating to use daily interpolation
+#' instead of curve points. Defaults to `FALSE`.
 #' @param curve.x.axis x axis can be presented with a numeric scale representing
 #' business days (`terms`) or dates (`dates`). Defaults to `dates`.
 #' @param ... additional arguments (not used)
