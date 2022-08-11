@@ -75,6 +75,7 @@
 <span>  subtitle <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  caption <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  curve.name <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  curve.interpolation <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  curve.x.axis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dates"</span>, <span class="st">"terms"</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -100,6 +101,11 @@
 
 <dt>curve.name</dt>
 <dd><p>Curve's name, if not provided curve's refdate is used.</p></dd>
+
+
+<dt>curve.interpolation</dt>
+<dd><p>logical indicating to use daily interpolation
+instead of curve points. Defaults to <code>FALSE</code>.</p></dd>
 
 
 <dt>curve.x.axis</dt>

@@ -124,10 +124,10 @@
 <span>  <span class="va">yc</span><span class="op">$</span><span class="va">r_252</span>, <span class="va">yc</span><span class="op">$</span><span class="va">biz_days</span>, <span class="st">"discrete"</span>, <span class="st">"business/252"</span>, <span class="st">"Brazil/ANBIMA"</span>,</span>
 <span>  refdate <span class="op">=</span> <span class="va">refdate</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div class="section level3">
-<h3 id="baseplot">
+<div class="section level2">
+<h2 id="baseplot">
 <code>base::plot</code><a class="anchor" aria-label="anchor" href="#baseplot"></a>
-</h3>
+</h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">curve</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spot-rate-curve-plotting_files/figure-html/unnamed-chunk-4-1.png" width="100%"></p>
@@ -151,9 +151,9 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">curve_2y</span>, use_interpolation <span class="op">=</span> <span class="cn">TRUE</span>, show_forward <span class="op">=</span> <span class="cn">TRUE</span>, legend_location <span class="op">=</span> <span class="st">"bottomleft"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spot-rate-curve-plotting_files/figure-html/unnamed-chunk-9-1.png" width="100%"></p>
 </div>
-<div class="section level3">
-<h3 id="ggplot2">ggplot2<a class="anchor" aria-label="anchor" href="#ggplot2"></a>
-</h3>
+<div class="section level2">
+<h2 id="ggplot2">ggplot2<a class="anchor" aria-label="anchor" href="#ggplot2"></a>
+</h2>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/ggspotratecurveplot.html">ggspotratecurveplot</a></span><span class="op">(</span><span class="va">curve</span>,</span>
 <span>  title <span class="op">=</span> <span class="st">"DI1 spot rates"</span>, subtitle <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">refdate</span><span class="op">)</span>, caption <span class="op">=</span> <span class="st">"Data from {rb3} package"</span></span>
@@ -190,12 +190,50 @@
 <span>    curve.geom <span class="op">=</span> <span class="st">"line"</span>, curve.name <span class="op">=</span> <span class="st">"Forward Rate"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="spot-rate-curve-plotting_files/figure-html/unnamed-chunk-15-1.png" width="100%"></p>
+<div class="section level3">
+<h3 id="plotting-multiple-curves">Plotting Multiple Curves<a class="anchor" aria-label="anchor" href="#plotting-multiple-curves"></a>
+</h3>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">refdate2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2022-03-09"</span><span class="op">)</span></span>
+<span><span class="va">yc_</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://wilsonfreitas.github.io/rb3/reference/yc_get.html" class="external-link">yc_get</a></span><span class="op">(</span><span class="va">refdate2</span><span class="op">)</span></span>
+<span><span class="va">fut_</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://wilsonfreitas.github.io/rb3/reference/futures_get.html" class="external-link">futures_get</a></span><span class="op">(</span><span class="va">refdate2</span><span class="op">)</span></span>
+<span><span class="va">yc_ss</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://wilsonfreitas.github.io/rb3/reference/yc_superset.html" class="external-link">yc_superset</a></span><span class="op">(</span><span class="va">yc_</span>, <span class="va">fut_</span><span class="op">)</span></span>
+<span><span class="va">yc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
+<span>  <span class="va">yc_ss</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,</span>
+<span>  <span class="va">yc_ss</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">symbol</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/duplicated.html" class="external-link">duplicated</a></span><span class="op">(</span><span class="va">biz_days</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">curve2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spotratecurve.html">spotratecurve</a></span><span class="op">(</span></span>
+<span>  <span class="va">yc</span><span class="op">$</span><span class="va">r_252</span>, <span class="va">yc</span><span class="op">$</span><span class="va">biz_days</span>, <span class="st">"discrete"</span>, <span class="st">"business/252"</span>, <span class="st">"Brazil/ANBIMA"</span>,</span>
+<span>  refdate <span class="op">=</span> <span class="va">refdate2</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/ggspotratecurveplot.html">ggspotratecurveplot</a></span><span class="op">(</span><span class="va">curve</span>,</span>
+<span>  title <span class="op">=</span> <span class="st">"DI1 spot rates"</span>, caption <span class="op">=</span> <span class="st">"Data from {rb3} package"</span>,</span>
+<span>  curve.x.axis <span class="op">=</span> <span class="st">"terms"</span></span>
+<span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autolayer.html" class="external-link">autolayer</a></span><span class="op">(</span><span class="va">curve2</span>, curve.x.axis <span class="op">=</span> <span class="st">"terms"</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autolayer.html" class="external-link">autolayer</a></span><span class="op">(</span><span class="va">curve2</span>, curve.geom <span class="op">=</span> <span class="st">"point"</span>, curve.x.axis <span class="op">=</span> <span class="st">"terms"</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<p><img src="spot-rate-curve-plotting_files/figure-html/unnamed-chunk-17-1.png" width="100%"></p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">curve2_2y</span> <span class="op">&lt;-</span> <span class="va">curve2</span> <span class="op">|&gt;</span> <span class="fu">fixedincome</span><span class="fu">::</span><span class="fu"><a href="../reference/spotratecurve-helpers.html">first</a></span><span class="op">(</span><span class="st">"2 years"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/ggspotratecurveplot.html">ggspotratecurveplot</a></span><span class="op">(</span><span class="va">curve_2y</span>,</span>
+<span>  title <span class="op">=</span> <span class="st">"DI1 spot rates"</span>, caption <span class="op">=</span> <span class="st">"Data from {rb3} package"</span>,</span>
+<span>  curve.x.axis <span class="op">=</span> <span class="st">"terms"</span></span>
+<span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autolayer.html" class="external-link">autolayer</a></span><span class="op">(</span><span class="va">curve2_2y</span>, curve.x.axis <span class="op">=</span> <span class="st">"terms"</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autolayer.html" class="external-link">autolayer</a></span><span class="op">(</span><span class="va">curve2_2y</span>, curve.geom <span class="op">=</span> <span class="st">"point"</span>, curve.x.axis <span class="op">=</span> <span class="st">"terms"</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<p><img src="spot-rate-curve-plotting_files/figure-html/unnamed-chunk-18-1.png" width="100%"></p>
+</div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 
