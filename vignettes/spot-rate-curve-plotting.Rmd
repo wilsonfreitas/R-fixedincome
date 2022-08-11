@@ -1,0 +1,120 @@
+---
+title: "Plotting Spot Rate Curves"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Plotting Spot Rate Curves}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  out.width = "100%"
+)
+```
+
+Visualization of yield curves is fairly relevant and the package fixedincome brings the usual
+`plot` function to create plots with the SpotRateCurve objects and also a ggplot2 set of methods
+that helps with the visualization of the term structures using all ggplot2 features.
+
+Before the start let's get the necessary packages loaded.
+
+```{r message=FALSE, warning=FALSE}
+library(rb3)
+library(dplyr)
+library(fixedincome)
+```
+
+As the second step, the yield curve must be created and this is done with data from {rb3} package.
+
+```{r}
+refdate <- as.Date("2022-08-09")
+yc_ <- yc_get(refdate)
+fut_ <- futures_get(refdate)
+yc_ss <- yc_superset(yc_, fut_)
+yc <- bind_rows(
+  yc_ss |> slice(1),
+  yc_ss |> filter(!is.na(symbol))
+) |>
+  filter(!duplicated(biz_days))
+
+curve <- spotratecurve(
+  yc$r_252, yc$biz_days, "discrete", "business/252", "Brazil/ANBIMA",
+  refdate = refdate
+)
+```
+
+### `base::plot`
+```{r fig.width=10, fig.height=5}
+plot(curve)
+```
+
+```{r fig.width=10, fig.height=5}
+plot(curve, show_forward = TRUE)
+```
+
+```{r fig.width=10, fig.height=5}
+curve |>
+  fixedincome::first("3 years") |>
+  plot(curve, show_forward = TRUE)
+```
+
+```{r fig.width=10, fig.height=5}
+curve_2y <- curve |> fixedincome::first("2 years")
+interpolation(curve_2y) <- interp_naturalspline()
+plot(curve_2y, use_interpolation = TRUE)
+```
+
+```{r fig.width=10, fig.height=5}
+plot(curve_2y, use_interpolation = TRUE, show_forward = TRUE)
+```
+
+```{r fig.width=10, fig.height=5}
+plot(curve_2y, use_interpolation = TRUE, show_forward = TRUE, legend_location = "bottomleft")
+```
+
+### ggplot2
+
+```{r fig.width=10, fig.height=5}
+ggspotratecurveplot(curve,
+  title = "DI1 spot rates", subtitle = format(refdate), caption = "Data from {rb3} package"
+)
+```
+
+```{r fig.width=10, fig.height=5}
+ggspotratecurveplot(curve,
+  title = "DI1 spot rates", subtitle = format(refdate), caption = "Data from {rb3} package",
+  curve.x.axis = "terms"
+)
+```
+
+```{r fig.width=10, fig.height=5}
+ggspotratecurveplot(curve,
+  title = "DI1 spot rates", subtitle = format(refdate), caption = "Data from {rb3} package"
+) +
+  autolayer(forwardrate(curve), size = 1)
+```
+
+```{r fig.width=10, fig.height=5}
+ggspotratecurveplot(curve_2y,
+  title = "DI1 spot rates", subtitle = format(refdate), caption = "Data from {rb3} package",
+  curve.interpolation = TRUE
+)
+```
+
+```{r fig.width=10, fig.height=5}
+autoplot(curve_2y, curve.geom = "point") +
+  autolayer(curve_2y, curve.geom = "line", curve.name = "Interpolation", curve.interpolation = TRUE)
+```
+
+```{r fig.width=10, fig.height=5}
+terms_ <- do.call(seq, as.list(range(curve_2y@terms)))
+curve_2y_interp <- curve_2y[[terms_]]
+autoplot(curve_2y, curve.geom = "point") +
+  autolayer(curve_2y_interp, curve.geom = "line") +
+  autolayer(forwardrate(curve_2y_interp),
+    curve.geom = "line", curve.name = "Forward Rate"
+  )
+```
