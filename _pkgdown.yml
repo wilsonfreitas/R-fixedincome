@@ -59,6 +59,11 @@ reference:
   - forwardrate
   - as.forwardrate
 
+- title: Plotting
+  contents:
+  - ggplot2-support
+  - ggspotratecurveplot
+
 - title: Misc
   contents:
   - datasets

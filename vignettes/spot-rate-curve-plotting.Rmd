@@ -25,6 +25,7 @@ Before the start let's get the necessary packages loaded.
 library(rb3)
 library(dplyr)
 library(fixedincome)
+library(ggplot2)
 ```
 
 As the second step, the yield curve must be created and this is done with data from {rb3} package.

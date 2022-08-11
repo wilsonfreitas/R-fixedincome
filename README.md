@@ -194,11 +194,9 @@ plot(fixedincome::first(curve, "2 years"), show_forward = TRUE)
 Once interpolation is set, it can be used in the plot.
 
 ``` r
-interpolation(curve) <- interp_flatforward()
-plot(
-  fixedincome::first(curve, "2 years"),
-  use_interpolation = TRUE, legend_location = "bottomright"
-)
+curve_2y <- fixedincome::first(curve, "2 years")
+interpolation(curve_2y) <- interp_flatforward()
+plot(curve_2y, use_interpolation = TRUE, legend_location = "bottomright")
 ```
 
 <img src="man/figures/README-unnamed-chunk-13-1.png" width="100%" />
@@ -222,7 +220,7 @@ Once set to the curve it is used in the plot to show daily forward
 rates.
 
 ``` r
-plot(curve, use_interpolation = TRUE, show_forward = TRUE)
+plot(curve, use_interpolation = TRUE, show_forward = TRUE, legend_location = "bottom")
 ```
 
 <img src="man/figures/README-unnamed-chunk-15-1.png" width="100%" />
@@ -247,6 +245,7 @@ in risk management to build risk factors.
 ``` r
 risk_terms <- c(1, c(3, 6, 9) * 21, c(1, 5, 10) * 252)
 risk_curve <- curve[[risk_terms]]
+interpolation(risk_curve) <- interp_flatforward()
 plot(risk_curve, use_interpolation = TRUE)
 ```
 
