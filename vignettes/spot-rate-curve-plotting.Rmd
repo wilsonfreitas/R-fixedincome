@@ -47,7 +47,8 @@ curve <- spotratecurve(
 )
 ```
 
-### `base::plot`
+## `base::plot`
+
 ```{r fig.width=10, fig.height=5}
 plot(curve)
 ```
@@ -76,7 +77,7 @@ plot(curve_2y, use_interpolation = TRUE, show_forward = TRUE)
 plot(curve_2y, use_interpolation = TRUE, show_forward = TRUE, legend_location = "bottomleft")
 ```
 
-### ggplot2
+## ggplot2
 
 ```{r fig.width=10, fig.height=5}
 ggspotratecurveplot(curve,
@@ -118,4 +119,42 @@ autoplot(curve_2y, curve.geom = "point") +
   autolayer(forwardrate(curve_2y_interp),
     curve.geom = "line", curve.name = "Forward Rate"
   )
+```
+
+### Plotting Multiple Curves
+
+```{r}
+refdate2 <- as.Date("2022-03-09")
+yc_ <- yc_get(refdate2)
+fut_ <- futures_get(refdate2)
+yc_ss <- yc_superset(yc_, fut_)
+yc <- bind_rows(
+  yc_ss |> slice(1),
+  yc_ss |> filter(!is.na(symbol))
+) |>
+  filter(!duplicated(biz_days))
+
+curve2 <- spotratecurve(
+  yc$r_252, yc$biz_days, "discrete", "business/252", "Brazil/ANBIMA",
+  refdate = refdate2
+)
+```
+
+```{r fig.width=10, fig.height=5}
+ggspotratecurveplot(curve,
+  title = "DI1 spot rates", caption = "Data from {rb3} package",
+  curve.x.axis = "terms"
+) +
+  autolayer(curve2, curve.x.axis = "terms", size = 1) +
+  autolayer(curve2, curve.geom = "point", curve.x.axis = "terms", size = 2)
+```
+
+```{r fig.width=10, fig.height=5}
+curve2_2y <- curve2 |> fixedincome::first("2 years")
+ggspotratecurveplot(curve_2y,
+  title = "DI1 spot rates", caption = "Data from {rb3} package",
+  curve.x.axis = "terms"
+) +
+  autolayer(curve2_2y, curve.x.axis = "terms", size = 1) +
+  autolayer(curve2_2y, curve.geom = "point", curve.x.axis = "terms", size = 2)
 ```
