@@ -38,6 +38,9 @@ a SpotRateCurve."><meta property="og:image" content="http://wilsonfreitas.github
     <li>
       <a href="../articles/spot-rate-curve-interpolation.html">Spot Rate Curve Interpolation</a>
     </li>
+    <li>
+      <a href="../articles/spot-rate-curve-plotting.html">Plotting Spot Rate Curves</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -71,10 +74,10 @@ a <code>SpotRateCurve</code>.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">as.forwardrate</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for SpotRate</span></span>
-<span><span class="fu">as.forwardrate</span><span class="op">(</span><span class="va">x</span>, <span class="va">terms</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">as.forwardrate</span><span class="op">(</span><span class="va">x</span>, <span class="va">terms</span>, refdate <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for SpotRateCurve</span></span>
-<span><span class="fu">as.forwardrate</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">as.forwardrate</span><span class="op">(</span><span class="va">x</span>, t1 <span class="op">=</span> <span class="cn">NULL</span>, t2 <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -90,6 +93,18 @@ a <code>SpotRateCurve</code>.</p>
 <dt>terms</dt>
 <dd><p>a numeric with positive values representing terms or a Term
 object.</p></dd>
+
+
+<dt>refdate</dt>
+<dd><p>the curve reference date.</p></dd>
+
+
+<dt>t1</dt>
+<dd><p>initial term</p></dd>
+
+
+<dt>t2</dt>
+<dd><p>final term</p></dd>
 
 </dl></div>
     <div id="value">

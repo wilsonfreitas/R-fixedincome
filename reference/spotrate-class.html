@@ -38,6 +38,9 @@ to handle many calculations on it."><meta property="og:image" content="http://wi
     <li>
       <a href="../articles/spot-rate-curve-interpolation.html">Spot Rate Curve Interpolation</a>
     </li>
+    <li>
+      <a href="../articles/spot-rate-curve-plotting.html">Plotting Spot Rate Curves</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -81,92 +84,104 @@ adjusted to the spot rate frequency.</p></li>
 interest rate and that has the slots: <code>compounding</code>, <code>daycount</code>
 and <code>calendar</code>.</p>
 <p>For example, an annual simple interest rate of 6%, that compounds in
-calendar days, is defined as follows:</p><div class="sourceCode r"><pre><code><span><span class="va">sr_simple</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spotrate.html">spotrate</a></span><span class="op">(</span><span class="fl">0.06</span>, <span class="st">"simple"</span>, <span class="st">"actual/360"</span>, <span class="st">"actual"</span><span class="op">)</span></span>
-<span><span class="va">sr_simple</span></span></code></pre><p></p></div><div class="sourceCode"><pre><code><span><span class="co">## [1] "0.06 simple actual/360 actual"</span></span></code></pre></div>
-
+calendar days, is defined as follows:</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="va">sr_simple</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spotrate.html">spotrate</a></span><span class="op">(</span><span class="fl">0.06</span>, <span class="st">"simple"</span>, <span class="st">"actual/360"</span>, <span class="st">"actual"</span><span class="op">)</span></span>
+<span><span class="va">sr_simple</span></span>
+<span><span class="co">#&gt; [1] "0.06 simple actual/360 actual"</span></span></code></pre><p></p></div>
 <p><code>actual/360</code> is the daycount rule and <code>actual</code> is the calendar.</p>
 <p>Differently, an annual compound interest rate of 10%, that compounds
-in business days according to calendar <code>Brazil/ANBIMA</code> is</p><div class="sourceCode r"><pre><code><span><span class="va">sr_disc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spotrate.html">spotrate</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="st">"discrete"</span>, <span class="st">"business/252"</span>, <span class="st">"Brazil/ANBIMA"</span><span class="op">)</span></span>
-<span><span class="va">sr_disc</span></span></code></pre><p></p></div><div class="sourceCode"><pre><code><span><span class="co">## [1] "0.1 discrete business/252 Brazil/ANBIMA"</span></span></code></pre></div>
-
+in business days according to calendar <code>Brazil/ANBIMA</code> is</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="va">sr_disc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spotrate.html">spotrate</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="st">"discrete"</span>, <span class="st">"business/252"</span>, <span class="st">"Brazil/ANBIMA"</span><span class="op">)</span></span>
+<span><span class="va">sr_disc</span></span>
+<span><span class="co">#&gt; [1] "0.1 discrete business/252 Brazil/ANBIMA"</span></span></code></pre><p></p></div>
 <p>The <code>calendar</code> slot is a <code>bizdays</code> calendar.</p>
 <p>An $100,000 investment in an instrument that pays that interst rate for 5
-years has the future value.</p><div class="sourceCode r"><pre><code><span><span class="fl">100000</span> <span class="op">*</span> <span class="fu"><a href="../reference/compound.html">compound</a></span><span class="op">(</span><span class="va">sr_disc</span>, <span class="fu"><a href="../reference/term.html">term</a></span><span class="op">(</span><span class="fl">5</span>, <span class="st">"years"</span><span class="op">)</span><span class="op">)</span></span></code></pre><p></p></div><div class="sourceCode"><pre><code><span><span class="co">## [1] 161051</span></span></code></pre></div>
-
-<p>for the simple interest rate we have</p><div class="sourceCode r"><pre><code><span><span class="fl">100000</span> <span class="op">*</span> <span class="fu"><a href="../reference/compound.html">compound</a></span><span class="op">(</span><span class="va">sr_simple</span>, <span class="fu"><a href="../reference/term.html">term</a></span><span class="op">(</span><span class="fl">5</span>, <span class="st">"years"</span><span class="op">)</span><span class="op">)</span></span></code></pre><p></p></div><div class="sourceCode"><pre><code><span><span class="co">## [1] 130000</span></span></code></pre></div>
-
-<p>SpotRate objects can be created with vectors</p><div class="sourceCode r"><pre><code><span><span class="va">sr_vec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spotrate.html">spotrate</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span>, <span class="st">"discrete"</span>, <span class="st">"business/252"</span>, <span class="st">"Brazil/ANBIMA"</span><span class="op">)</span></span>
-<span><span class="va">sr_vec</span></span></code></pre><p></p></div><div class="sourceCode"><pre><code><span><span class="co">##  [1] "0.32983709 discrete business/252 Brazil/ANBIMA"</span></span>
-<span><span class="co">##  [2] "0.96201916 discrete business/252 Brazil/ANBIMA"</span></span>
-<span><span class="co">##  [3] "1.36411849 discrete business/252 Brazil/ANBIMA"</span></span>
-<span><span class="co">##  [4] "0.69326154 discrete business/252 Brazil/ANBIMA"</span></span>
-<span><span class="co">##  [5] "0.92496359 discrete business/252 Brazil/ANBIMA"</span></span>
-<span><span class="co">##  [6] "1.36284840 discrete business/252 Brazil/ANBIMA"</span></span>
-<span><span class="co">##  [7] "2.34379850 discrete business/252 Brazil/ANBIMA"</span></span>
-<span><span class="co">##  [8] "0.87733577 discrete business/252 Brazil/ANBIMA"</span></span>
-<span><span class="co">##  [9] "0.07547628 discrete business/252 Brazil/ANBIMA"</span></span>
-<span><span class="co">## [10] "0.81242454 discrete business/252 Brazil/ANBIMA"</span></span></code></pre></div>
-
-<p>and can be put into a <code>data.frame</code></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>spot_rate <span class="op">=</span> <span class="va">sr_vec</span><span class="op">)</span></span></code></pre><p></p></div><div class="sourceCode"><pre><code><span><span class="co">##                                         spot_rate</span></span>
-<span><span class="co">## 1  0.32983709 discrete business/252 Brazil/ANBIMA</span></span>
-<span><span class="co">## 2  0.96201916 discrete business/252 Brazil/ANBIMA</span></span>
-<span><span class="co">## 3  1.36411849 discrete business/252 Brazil/ANBIMA</span></span>
-<span><span class="co">## 4  0.69326154 discrete business/252 Brazil/ANBIMA</span></span>
-<span><span class="co">## 5  0.92496359 discrete business/252 Brazil/ANBIMA</span></span>
-<span><span class="co">## 6  1.36284840 discrete business/252 Brazil/ANBIMA</span></span>
-<span><span class="co">## 7  2.34379850 discrete business/252 Brazil/ANBIMA</span></span>
-<span><span class="co">## 8  0.87733577 discrete business/252 Brazil/ANBIMA</span></span>
-<span><span class="co">## 9  0.07547628 discrete business/252 Brazil/ANBIMA</span></span>
-<span><span class="co">## 10 0.81242454 discrete business/252 Brazil/ANBIMA</span></span></code></pre></div>
-
-<p>once in a <code>data.frame</code>, dplyr verbs can be used to manipulate it.</p><div class="sourceCode r"><pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre><p></p></div><div class="sourceCode"><pre><code><span><span class="co">## Loading required package: dplyr</span></span></code></pre></div><p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>spot_rate <span class="op">=</span> <span class="va">sr_vec</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>comp <span class="op">=</span> <span class="fu"><a href="../reference/compound.html">compound</a></span><span class="op">(</span><span class="va">spot_rate</span>, <span class="fu"><a href="../reference/term.html">term</a></span><span class="op">(</span><span class="fl">5</span>, <span class="st">"months"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre><p></p></div><div class="sourceCode"><pre><code><span><span class="co">##                                         spot_rate     comp</span></span>
-<span><span class="co">## 1  0.32983709 discrete business/252 Brazil/ANBIMA 1.126115</span></span>
-<span><span class="co">## 2  0.96201916 discrete business/252 Brazil/ANBIMA 1.324219</span></span>
-<span><span class="co">## 3  1.36411849 discrete business/252 Brazil/ANBIMA 1.431184</span></span>
-<span><span class="co">## 4  0.69326154 discrete business/252 Brazil/ANBIMA 1.245379</span></span>
-<span><span class="co">## 5  0.92496359 discrete business/252 Brazil/ANBIMA 1.313740</span></span>
-<span><span class="co">## 6  1.36284840 discrete business/252 Brazil/ANBIMA 1.430864</span></span>
-<span><span class="co">## 7  2.34379850 discrete business/252 Brazil/ANBIMA 1.653611</span></span>
-<span><span class="co">## 8  0.87733577 discrete business/252 Brazil/ANBIMA 1.300097</span></span>
-<span><span class="co">## 9  0.07547628 discrete business/252 Brazil/ANBIMA 1.030782</span></span>
-<span><span class="co">## 10 0.81242454 discrete business/252 Brazil/ANBIMA 1.281175</span></span></code></pre></div>
-
+years has the future value.</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="fl">100000</span> <span class="op">*</span> <span class="fu"><a href="../reference/compound.html">compound</a></span><span class="op">(</span><span class="va">sr_disc</span>, <span class="fu"><a href="../reference/term.html">term</a></span><span class="op">(</span><span class="fl">5</span>, <span class="st">"years"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 161051</span></span></code></pre><p></p></div>
+<p>for the simple interest rate we have</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="fl">100000</span> <span class="op">*</span> <span class="fu"><a href="../reference/compound.html">compound</a></span><span class="op">(</span><span class="va">sr_simple</span>, <span class="fu"><a href="../reference/term.html">term</a></span><span class="op">(</span><span class="fl">5</span>, <span class="st">"years"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 130000</span></span></code></pre><p></p></div>
+<p>SpotRate objects can be created with vectors</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="va">sr_vec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spotrate.html">spotrate</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span>, <span class="st">"discrete"</span>, <span class="st">"business/252"</span>, <span class="st">"Brazil/ANBIMA"</span><span class="op">)</span></span>
+<span><span class="va">sr_vec</span></span>
+<span><span class="co">#&gt;  [1] "0.86672532 discrete business/252 Brazil/ANBIMA"</span></span>
+<span><span class="co">#&gt;  [2] "0.03464431 discrete business/252 Brazil/ANBIMA"</span></span>
+<span><span class="co">#&gt;  [3] "0.85367021 discrete business/252 Brazil/ANBIMA"</span></span>
+<span><span class="co">#&gt;  [4] "0.34312519 discrete business/252 Brazil/ANBIMA"</span></span>
+<span><span class="co">#&gt;  [5] "0.87847078 discrete business/252 Brazil/ANBIMA"</span></span>
+<span><span class="co">#&gt;  [6] "0.94804384 discrete business/252 Brazil/ANBIMA"</span></span>
+<span><span class="co">#&gt;  [7] "0.30661161 discrete business/252 Brazil/ANBIMA"</span></span>
+<span><span class="co">#&gt;  [8] "0.53746114 discrete business/252 Brazil/ANBIMA"</span></span>
+<span><span class="co">#&gt;  [9] "1.45423675 discrete business/252 Brazil/ANBIMA"</span></span>
+<span><span class="co">#&gt; [10] "0.07353385 discrete business/252 Brazil/ANBIMA"</span></span></code></pre><p></p></div>
+<p>and can be put into a <code>data.frame</code></p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>spot_rate <span class="op">=</span> <span class="va">sr_vec</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                                         spot_rate</span></span>
+<span><span class="co">#&gt; 1  0.86672532 discrete business/252 Brazil/ANBIMA</span></span>
+<span><span class="co">#&gt; 2  0.03464431 discrete business/252 Brazil/ANBIMA</span></span>
+<span><span class="co">#&gt; 3  0.85367021 discrete business/252 Brazil/ANBIMA</span></span>
+<span><span class="co">#&gt; 4  0.34312519 discrete business/252 Brazil/ANBIMA</span></span>
+<span><span class="co">#&gt; 5  0.87847078 discrete business/252 Brazil/ANBIMA</span></span>
+<span><span class="co">#&gt; 6  0.94804384 discrete business/252 Brazil/ANBIMA</span></span>
+<span><span class="co">#&gt; 7  0.30661161 discrete business/252 Brazil/ANBIMA</span></span>
+<span><span class="co">#&gt; 8  0.53746114 discrete business/252 Brazil/ANBIMA</span></span>
+<span><span class="co">#&gt; 9  1.45423675 discrete business/252 Brazil/ANBIMA</span></span>
+<span><span class="co">#&gt; 10 0.07353385 discrete business/252 Brazil/ANBIMA</span></span></code></pre><p></p></div>
+<p>once in a <code>data.frame</code>, dplyr verbs can be used to manipulate it.</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Loading required package: dplyr</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>spot_rate <span class="op">=</span> <span class="va">sr_vec</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>comp <span class="op">=</span> <span class="fu"><a href="../reference/compound.html">compound</a></span><span class="op">(</span><span class="va">spot_rate</span>, <span class="fu"><a href="../reference/term.html">term</a></span><span class="op">(</span><span class="fl">5</span>, <span class="st">"months"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                                         spot_rate     comp</span></span>
+<span><span class="co">#&gt; 1  0.86672532 discrete business/252 Brazil/ANBIMA 1.297030</span></span>
+<span><span class="co">#&gt; 2  0.03464431 discrete business/252 Brazil/ANBIMA 1.014292</span></span>
+<span><span class="co">#&gt; 3  0.85367021 discrete business/252 Brazil/ANBIMA 1.293243</span></span>
+<span><span class="co">#&gt; 4  0.34312519 discrete business/252 Brazil/ANBIMA 1.130790</span></span>
+<span><span class="co">#&gt; 5  0.87847078 discrete business/252 Brazil/ANBIMA 1.300425</span></span>
+<span><span class="co">#&gt; 6  0.94804384 discrete business/252 Brazil/ANBIMA 1.320280</span></span>
+<span><span class="co">#&gt; 7  0.30661161 discrete business/252 Brazil/ANBIMA 1.117878</span></span>
+<span><span class="co">#&gt; 8  0.53746114 discrete business/252 Brazil/ANBIMA 1.196286</span></span>
+<span><span class="co">#&gt; 9  1.45423675 discrete business/252 Brazil/ANBIMA 1.453668</span></span>
+<span><span class="co">#&gt; 10 0.07353385 discrete business/252 Brazil/ANBIMA 1.030006</span></span></code></pre><p></p></div>
 <p>SpotRate is <code>numeric</code>, so it executes arithmetic and comparison operations
-with <code>numeric</code> objects.</p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>spot_rate <span class="op">=</span> <span class="va">sr_vec</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+with <code>numeric</code> objects.</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>spot_rate <span class="op">=</span> <span class="va">sr_vec</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>     new_spot_rate <span class="op">=</span> <span class="va">spot_rate</span> <span class="op">+</span> <span class="fl">0.02</span>,</span>
 <span>     check_gt_1pp <span class="op">=</span> <span class="va">spot_rate</span> <span class="op">&gt;</span> <span class="fl">0.01</span>,</span>
 <span>     check_gt_nsr <span class="op">=</span> <span class="va">spot_rate</span> <span class="op">&gt;</span> <span class="va">new_spot_rate</span></span>
-<span>   <span class="op">)</span></span></code></pre><p></p></div><div class="sourceCode"><pre><code><span><span class="co">##                                         spot_rate</span></span>
-<span><span class="co">## 1  0.32983709 discrete business/252 Brazil/ANBIMA</span></span>
-<span><span class="co">## 2  0.96201916 discrete business/252 Brazil/ANBIMA</span></span>
-<span><span class="co">## 3  1.36411849 discrete business/252 Brazil/ANBIMA</span></span>
-<span><span class="co">## 4  0.69326154 discrete business/252 Brazil/ANBIMA</span></span>
-<span><span class="co">## 5  0.92496359 discrete business/252 Brazil/ANBIMA</span></span>
-<span><span class="co">## 6  1.36284840 discrete business/252 Brazil/ANBIMA</span></span>
-<span><span class="co">## 7  2.34379850 discrete business/252 Brazil/ANBIMA</span></span>
-<span><span class="co">## 8  0.87733577 discrete business/252 Brazil/ANBIMA</span></span>
-<span><span class="co">## 9  0.07547628 discrete business/252 Brazil/ANBIMA</span></span>
-<span><span class="co">## 10 0.81242454 discrete business/252 Brazil/ANBIMA</span></span>
-<span><span class="co">##                                     new_spot_rate check_gt_1pp check_gt_nsr</span></span>
-<span><span class="co">## 1  0.34983709 discrete business/252 Brazil/ANBIMA         TRUE        FALSE</span></span>
-<span><span class="co">## 2  0.98201916 discrete business/252 Brazil/ANBIMA         TRUE        FALSE</span></span>
-<span><span class="co">## 3  1.38411849 discrete business/252 Brazil/ANBIMA         TRUE        FALSE</span></span>
-<span><span class="co">## 4  0.71326154 discrete business/252 Brazil/ANBIMA         TRUE        FALSE</span></span>
-<span><span class="co">## 5  0.94496359 discrete business/252 Brazil/ANBIMA         TRUE        FALSE</span></span>
-<span><span class="co">## 6  1.38284840 discrete business/252 Brazil/ANBIMA         TRUE        FALSE</span></span>
-<span><span class="co">## 7  2.36379850 discrete business/252 Brazil/ANBIMA         TRUE        FALSE</span></span>
-<span><span class="co">## 8  0.89733577 discrete business/252 Brazil/ANBIMA         TRUE        FALSE</span></span>
-<span><span class="co">## 9  0.09547628 discrete business/252 Brazil/ANBIMA         TRUE        FALSE</span></span>
-<span><span class="co">## 10 0.83242454 discrete business/252 Brazil/ANBIMA         TRUE        FALSE</span></span></code></pre></div>
-
-<p>SpotRate vectors also are created with the concatenation function <code>c</code>.</p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">sr_disc</span>, <span class="fl">0.1</span>, <span class="fl">0.13</span>, <span class="fl">0.14</span>, <span class="fl">0.15</span><span class="op">)</span></span></code></pre><p></p></div><div class="sourceCode"><pre><code><span><span class="co">## [1] "0.10 discrete business/252 Brazil/ANBIMA"</span></span>
-<span><span class="co">## [2] "0.10 discrete business/252 Brazil/ANBIMA"</span></span>
-<span><span class="co">## [3] "0.13 discrete business/252 Brazil/ANBIMA"</span></span>
-<span><span class="co">## [4] "0.14 discrete business/252 Brazil/ANBIMA"</span></span>
-<span><span class="co">## [5] "0.15 discrete business/252 Brazil/ANBIMA"</span></span></code></pre></div>
-
+<span>   <span class="op">)</span></span>
+<span><span class="co">#&gt;                                         spot_rate</span></span>
+<span><span class="co">#&gt; 1  0.86672532 discrete business/252 Brazil/ANBIMA</span></span>
+<span><span class="co">#&gt; 2  0.03464431 discrete business/252 Brazil/ANBIMA</span></span>
+<span><span class="co">#&gt; 3  0.85367021 discrete business/252 Brazil/ANBIMA</span></span>
+<span><span class="co">#&gt; 4  0.34312519 discrete business/252 Brazil/ANBIMA</span></span>
+<span><span class="co">#&gt; 5  0.87847078 discrete business/252 Brazil/ANBIMA</span></span>
+<span><span class="co">#&gt; 6  0.94804384 discrete business/252 Brazil/ANBIMA</span></span>
+<span><span class="co">#&gt; 7  0.30661161 discrete business/252 Brazil/ANBIMA</span></span>
+<span><span class="co">#&gt; 8  0.53746114 discrete business/252 Brazil/ANBIMA</span></span>
+<span><span class="co">#&gt; 9  1.45423675 discrete business/252 Brazil/ANBIMA</span></span>
+<span><span class="co">#&gt; 10 0.07353385 discrete business/252 Brazil/ANBIMA</span></span>
+<span><span class="co">#&gt;                                     new_spot_rate check_gt_1pp check_gt_nsr</span></span>
+<span><span class="co">#&gt; 1  0.88672532 discrete business/252 Brazil/ANBIMA         TRUE        FALSE</span></span>
+<span><span class="co">#&gt; 2  0.05464431 discrete business/252 Brazil/ANBIMA         TRUE        FALSE</span></span>
+<span><span class="co">#&gt; 3  0.87367021 discrete business/252 Brazil/ANBIMA         TRUE        FALSE</span></span>
+<span><span class="co">#&gt; 4  0.36312519 discrete business/252 Brazil/ANBIMA         TRUE        FALSE</span></span>
+<span><span class="co">#&gt; 5  0.89847078 discrete business/252 Brazil/ANBIMA         TRUE        FALSE</span></span>
+<span><span class="co">#&gt; 6  0.96804384 discrete business/252 Brazil/ANBIMA         TRUE        FALSE</span></span>
+<span><span class="co">#&gt; 7  0.32661161 discrete business/252 Brazil/ANBIMA         TRUE        FALSE</span></span>
+<span><span class="co">#&gt; 8  0.55746114 discrete business/252 Brazil/ANBIMA         TRUE        FALSE</span></span>
+<span><span class="co">#&gt; 9  1.47423675 discrete business/252 Brazil/ANBIMA         TRUE        FALSE</span></span>
+<span><span class="co">#&gt; 10 0.09353385 discrete business/252 Brazil/ANBIMA         TRUE        FALSE</span></span></code></pre><p></p></div>
+<p>SpotRate vectors also are created with the concatenation function <code>c</code>.</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">sr_disc</span>, <span class="fl">0.1</span>, <span class="fl">0.13</span>, <span class="fl">0.14</span>, <span class="fl">0.15</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "0.10 discrete business/252 Brazil/ANBIMA"</span></span>
+<span><span class="co">#&gt; [2] "0.10 discrete business/252 Brazil/ANBIMA"</span></span>
+<span><span class="co">#&gt; [3] "0.13 discrete business/252 Brazil/ANBIMA"</span></span>
+<span><span class="co">#&gt; [4] "0.14 discrete business/252 Brazil/ANBIMA"</span></span>
+<span><span class="co">#&gt; [5] "0.15 discrete business/252 Brazil/ANBIMA"</span></span></code></pre><p></p></div>
 <p>Furtherly, all indexing operations of numeric objects are supported by
 SpotRate objects.</p><div class="section">
 <h3 id="invalid-operations">Invalid Operations<a class="anchor" aria-label="anchor" href="#invalid-operations"></a></h3>
@@ -177,11 +192,15 @@ SpotRate objects.</p><div class="section">
 <p>This happens with the following operations:</p><ul><li><p>Compare: &gt;, &lt;, &lt;=, &gt;=</p></li>
 <li><p>Arithmetic: +, -, *, /</p></li>
 <li><p>Concatenation: <code>c</code></p></li>
-</ul><p></p><div class="sourceCode r"><pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">sr_simple</span> <span class="op">+</span> <span class="va">sr_disc</span><span class="op">)</span></span></code></pre><p></p></div><div class="sourceCode"><pre><code><span><span class="co">## Error in stop_if_spotrate_slots_differ(e1, e2, "SpotRate objects have different slots") : </span></span>
-<span><span class="co">##   SpotRate objects have different slots</span></span></code></pre></div><p></p><div class="sourceCode r"><pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">sr_simple</span> <span class="op">&gt;</span> <span class="va">sr_disc</span><span class="op">)</span></span></code></pre><p></p></div><div class="sourceCode"><pre><code><span><span class="co">## Error in stop_if_spotrate_slots_differ(e1, e2, "SpotRate objects have different slots") : </span></span>
-<span><span class="co">##   SpotRate objects have different slots</span></span></code></pre></div><p></p><div class="sourceCode r"><pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">sr_simple</span>, <span class="va">sr_disc</span><span class="op">)</span><span class="op">)</span></span></code></pre><p></p></div><div class="sourceCode"><pre><code><span><span class="co">## Error in stop_if_spotrate_slots_differ(x, values_, "SpotRate objects have different slots") : </span></span>
-<span><span class="co">##   SpotRate objects have different slots</span></span></code></pre></div>
-
+</ul><p></p><div class="sourceCode r"><pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">sr_simple</span> <span class="op">+</span> <span class="va">sr_disc</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in stop_if_spotrate_slots_differ(e1, e2, "SpotRate objects have different slots") : </span></span>
+<span><span class="co">#&gt;   SpotRate objects have different slots</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">sr_simple</span> <span class="op">&gt;</span> <span class="va">sr_disc</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in stop_if_spotrate_slots_differ(e1, e2, "SpotRate objects have different slots") : </span></span>
+<span><span class="co">#&gt;   SpotRate objects have different slots</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">sr_simple</span>, <span class="va">sr_disc</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in stop_if_spotrate_slots_differ(x, values_, "SpotRate objects have different slots") : </span></span>
+<span><span class="co">#&gt;   SpotRate objects have different slots</span></span></code></pre><p></p></div>
 </div>
 
     </div>

@@ -67,6 +67,9 @@
     <li>
       <a href="articles/spot-rate-curve-interpolation.html">Spot Rate Curve Interpolation</a>
     </li>
+    <li>
+      <a href="articles/spot-rate-curve-plotting.html">Plotting Spot Rate Curves</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -222,11 +225,9 @@
 <p><img src="reference/figures/README-unnamed-chunk-12-1.png" width="100%"></p>
 <p>Once interpolation is set, it can be used in the plot.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/interpolation-constructor.html">interp_flatforward</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
-<span>  <span class="fu">fixedincome</span><span class="fu">::</span><span class="fu"><a href="reference/spotratecurve-helpers.html">first</a></span><span class="op">(</span><span class="va">curve</span>, <span class="st">"2 years"</span><span class="op">)</span>,</span>
-<span>  use_interpolation <span class="op">=</span> <span class="cn">TRUE</span>, legend_location <span class="op">=</span> <span class="st">"bottomright"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">curve_2y</span> <span class="op">&lt;-</span> <span class="fu">fixedincome</span><span class="fu">::</span><span class="fu"><a href="reference/spotratecurve-helpers.html">first</a></span><span class="op">(</span><span class="va">curve</span>, <span class="st">"2 years"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">curve_2y</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/interpolation-constructor.html">interp_flatforward</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">curve_2y</span>, use_interpolation <span class="op">=</span> <span class="cn">TRUE</span>, legend_location <span class="op">=</span> <span class="st">"bottomright"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-13-1.png" width="100%"></p>
 <p>Parametric models like the Nelson-Siegel-Svensson model can be fitted to the curve.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
@@ -241,7 +242,7 @@
 <span><span class="co">#&gt;   0.300  -0.181  -0.858   0.611   0.053   0.054</span></span></code></pre></div>
 <p>Once set to the curve it is used in the plot to show daily forward rates.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">curve</span>, use_interpolation <span class="op">=</span> <span class="cn">TRUE</span>, show_forward <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">curve</span>, use_interpolation <span class="op">=</span> <span class="cn">TRUE</span>, show_forward <span class="op">=</span> <span class="cn">TRUE</span>, legend_location <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-15-1.png" width="100%"></p>
 <p>The interpolation can be changed in order to compare different interpolations and the effects in forward rates.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
@@ -256,6 +257,7 @@
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">risk_terms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">9</span><span class="op">)</span> <span class="op">*</span> <span class="fl">21</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span> <span class="op">*</span> <span class="fl">252</span><span class="op">)</span></span>
 <span><span class="va">risk_curve</span> <span class="op">&lt;-</span> <span class="va">curve</span><span class="op">[[</span><span class="va">risk_terms</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="fu"><a href="reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">risk_curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/interpolation-constructor.html">interp_flatforward</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">risk_curve</span>, use_interpolation <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-17-1.png" width="100%"></p>
 </div>

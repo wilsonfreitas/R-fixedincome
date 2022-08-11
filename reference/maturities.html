@@ -38,6 +38,9 @@ reference date."><meta property="og:image" content="http://wilsonfreitas.github.
     <li>
       <a href="../articles/spot-rate-curve-interpolation.html">Spot Rate Curve Interpolation</a>
     </li>
+    <li>
+      <a href="../articles/spot-rate-curve-plotting.html">Plotting Spot Rate Curves</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -91,7 +94,7 @@ curve's <code>refdate</code> as a starting point.</p>
 <span class="r-in"><span><span class="va">rates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.0719</span>, <span class="fl">0.056</span>, <span class="fl">0.0674</span>, <span class="fl">0.0687</span>, <span class="fl">0.07</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">curve</span> <span class="op">&lt;-</span> <span class="fu"><a href="spotratecurve.html">spotratecurve</a></span><span class="op">(</span><span class="va">rates</span>, <span class="va">terms</span>, <span class="st">"discrete"</span>, <span class="st">"actual/365"</span>, <span class="st">"actual"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">maturities</span><span class="op">(</span><span class="va">curve</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2022-08-02" "2022-08-12" "2022-08-27" "2022-08-28" "2022-08-29"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2022-08-12" "2022-08-22" "2022-09-06" "2022-09-07" "2022-09-08"</span>
 </code></pre></div>
     </div>
   </div>

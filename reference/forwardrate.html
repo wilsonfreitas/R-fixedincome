@@ -37,6 +37,9 @@
     <li>
       <a href="../articles/spot-rate-curve-interpolation.html">Spot Rate Curve Interpolation</a>
     </li>
+    <li>
+      <a href="../articles/spot-rate-curve-plotting.html">Plotting Spot Rate Curves</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -69,7 +72,16 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">forwardrate</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for numeric</span></span>
-<span><span class="fu">forwardrate</span><span class="op">(</span><span class="va">x</span>, <span class="va">terms</span>, <span class="va">compounding</span>, <span class="va">daycount</span>, <span class="va">calendar</span>, .copyfrom <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">forwardrate</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">terms</span>,</span>
+<span>  <span class="va">compounding</span>,</span>
+<span>  <span class="va">daycount</span>,</span>
+<span>  <span class="va">calendar</span>,</span>
+<span>  .copyfrom <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  refdate <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for SpotRateCurve</span></span>
 <span><span class="fu">forwardrate</span><span class="op">(</span><span class="va">x</span>, t1 <span class="op">=</span> <span class="cn">NULL</span>, t2 <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
@@ -105,6 +117,10 @@ the forward rates.</p></dd>
 <dt>.copyfrom</dt>
 <dd><p>a SpotRate object that is used as reference to build
 the SpotRateCurve object.</p></dd>
+
+
+<dt>refdate</dt>
+<dd><p>the curve reference date.</p></dd>
 
 
 <dt>t1</dt>

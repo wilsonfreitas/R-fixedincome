@@ -62,6 +62,9 @@
     <li>
       <a href="../articles/spot-rate-curve-interpolation.html">Spot Rate Curve Interpolation</a>
     </li>
+    <li>
+      <a href="../articles/spot-rate-curve-plotting.html">Plotting Spot Rate Curves</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -122,41 +125,38 @@
 <p>Firstly, the packages have to be loaded.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonfreitas/rb3" class="external-link">rb3</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonfreitas/R-bizdays" class="external-link">bizdays</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonfreitas/R-fixedincome" class="external-link">fixedincome</a></span><span class="op">)</span></span></code></pre></div>
-<p>Use the <code><a href="https://rdrr.io/pkg/bizdays/man/getdate.html" class="external-link">bizdays::getdate</a></code> function to get the last business day, according to <code>Brazil/ANBIMA</code> calendar.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">refdate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/bizdays/man/getdate.html" class="external-link">getdate</a></span><span class="op">(</span><span class="st">"last bizday"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>, <span class="st">"Brazil/ANBIMA"</span><span class="op">)</span></span></code></pre></div>
 <p>In order to build a term structure formed only by futures maturities, the yield curve data and futures data have to be mixed and this is done with the <code><a href="http://wilsonfreitas.github.io/rb3/reference/yc_superset.html" class="external-link">rb3::yc_superset</a></code> function. Once the superset is returned, the rows related to futures maturities can be filtered. The first term, usually 1 business day term, is also used to anchor the curve’s short part.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">yc_</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://wilsonfreitas.github.io/rb3/reference/yc_get.html" class="external-link">yc_get</a></span><span class="op">(</span><span class="va">refdate</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">refdate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2022-08-05"</span><span class="op">)</span></span>
+<span><span class="va">yc_</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://wilsonfreitas.github.io/rb3/reference/yc_get.html" class="external-link">yc_get</a></span><span class="op">(</span><span class="va">refdate</span><span class="op">)</span></span>
 <span><span class="va">fut_</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://wilsonfreitas.github.io/rb3/reference/futures_get.html" class="external-link">futures_get</a></span><span class="op">(</span><span class="va">refdate</span><span class="op">)</span></span>
 <span><span class="va">yc_ss</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://wilsonfreitas.github.io/rb3/reference/yc_superset.html" class="external-link">yc_superset</a></span><span class="op">(</span><span class="va">yc_</span>, <span class="va">fut_</span><span class="op">)</span></span>
 <span><span class="va">yc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
 <span>  <span class="va">yc_ss</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,</span>
 <span>  <span class="va">yc_ss</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">symbol</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/duplicated.html" class="external-link">duplicated</a></span><span class="op">(</span><span class="va">biz_days</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">yc</span> <span class="op">&lt;-</span> <span class="va">yc</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/duplicated.html" class="external-link">duplicated</a></span><span class="op">(</span><span class="va">yc</span><span class="op">$</span><span class="va">biz_days</span><span class="op">)</span>, <span class="op">]</span></span>
 <span><span class="va">yc</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 38 × 7</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 39 × 7</span></span></span>
 <span><span class="co">#&gt;    refdate    cur_days biz_days forward_date r_252 r_360 symbol</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2022-07-29        3        1 2022-08-01   0.132 0     DI1Q22</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2022-07-29       34       24 2022-09-01   0.136 0.137 DI1U22</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2022-07-29       66       45 2022-10-03   0.136 0.132 DI1V22</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2022-07-29       95       65 2022-11-01   0.137 0.134 DI1X22</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2022-07-29      125       85 2022-12-01   0.138 0.134 DI1Z22</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2022-07-29      157      107 2023-01-02   0.138 0.134 DI1F23</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2022-07-29      187      129 2023-02-01   0.138 0.136 DI1G23</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2022-07-29      215      147 2023-03-01   0.138 0.135 DI1H23</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2022-07-29      248      170 2023-04-03   0.138 0.135 DI1J23</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2022-07-29      277      188 2023-05-02   0.138 0.134 DI1K23</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 28 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2022-08-05        3        1 2022-08-08   0.136 0     <span style="color: #BB0000;">NA</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2022-08-05       27       19 2022-09-01   0.136 0.137 DI1U22</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2022-08-05       59       40 2022-10-03   0.137 0.132 DI1V22</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2022-08-05       88       60 2022-11-01   0.137 0.133 DI1X22</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2022-08-05      118       80 2022-12-01   0.138 0.133 DI1Z22</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2022-08-05      150      102 2023-01-02   0.138 0.134 DI1F23</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2022-08-05      180      124 2023-02-01   0.138 0.135 DI1G23</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2022-08-05      208      142 2023-03-01   0.138 0.134 DI1H23</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2022-08-05      241      165 2023-04-03   0.138 0.134 DI1J23</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2022-08-05      270      183 2023-05-02   0.138 0.133 DI1K23</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 29 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ Use `print(n = ...)` to see more rows</span></span></span></code></pre></div>
 <p>With the curve data prepared, the <code>spotratecurve</code> is created.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sp_curve</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spotratecurve.html">spotratecurve</a></span><span class="op">(</span></span>
 <span>  <span class="va">yc</span><span class="op">$</span><span class="va">r_252</span>, <span class="va">yc</span><span class="op">$</span><span class="va">biz_days</span>,</span>
 <span>  <span class="st">"discrete"</span>, <span class="st">"business/252"</span>, <span class="st">"Brazil/ANBIMA"</span>,</span>
@@ -165,70 +165,70 @@
 <span></span>
 <span><span class="va">sp_curve</span></span>
 <span><span class="co">#&gt;          SpotRateCurve</span></span>
-<span><span class="co">#&gt; 1 day           0.1315</span></span>
-<span><span class="co">#&gt; 24 days         0.1356</span></span>
-<span><span class="co">#&gt; 45 days         0.1363</span></span>
-<span><span class="co">#&gt; 65 days         0.1371</span></span>
-<span><span class="co">#&gt; 85 days         0.1377</span></span>
-<span><span class="co">#&gt; 107 days        0.1379</span></span>
-<span><span class="co">#&gt; 129 days        0.1383</span></span>
-<span><span class="co">#&gt; 147 days        0.1382</span></span>
-<span><span class="co">#&gt; 170 days        0.1385</span></span>
-<span><span class="co">#&gt; 188 days        0.1382</span></span>
-<span><span class="co">#&gt; # ... with 28 more rows</span></span>
+<span><span class="co">#&gt; 1 day           0.1365</span></span>
+<span><span class="co">#&gt; 19 days         0.1365</span></span>
+<span><span class="co">#&gt; 40 days         0.1368</span></span>
+<span><span class="co">#&gt; 60 days         0.1372</span></span>
+<span><span class="co">#&gt; 80 days         0.1376</span></span>
+<span><span class="co">#&gt; 102 days        0.1377</span></span>
+<span><span class="co">#&gt; 124 days        0.1378</span></span>
+<span><span class="co">#&gt; 142 days        0.1376</span></span>
+<span><span class="co">#&gt; 165 days        0.1377</span></span>
+<span><span class="co">#&gt; 183 days        0.1375</span></span>
+<span><span class="co">#&gt; # ... with 29 more rows</span></span>
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
-<span><span class="co">#&gt; Reference date: 2022-07-29</span></span></code></pre></div>
+<span><span class="co">#&gt; Reference date: 2022-08-05</span></span></code></pre></div>
 <p>From the output above it is possible to observe that this curve does not have an interpolation method defined.</p>
 <p>Let’s, for example, define a flat forward interpolation for this curve. The FlatForward object is created and set to the curve with the <code>interpolation&lt;-</code> method.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">sp_curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolation-constructor.html">interp_flatforward</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">sp_curve</span></span>
 <span><span class="co">#&gt;          SpotRateCurve</span></span>
-<span><span class="co">#&gt; 1 day           0.1315</span></span>
-<span><span class="co">#&gt; 24 days         0.1356</span></span>
-<span><span class="co">#&gt; 45 days         0.1363</span></span>
-<span><span class="co">#&gt; 65 days         0.1371</span></span>
-<span><span class="co">#&gt; 85 days         0.1377</span></span>
-<span><span class="co">#&gt; 107 days        0.1379</span></span>
-<span><span class="co">#&gt; 129 days        0.1383</span></span>
-<span><span class="co">#&gt; 147 days        0.1382</span></span>
-<span><span class="co">#&gt; 170 days        0.1385</span></span>
-<span><span class="co">#&gt; 188 days        0.1382</span></span>
-<span><span class="co">#&gt; # ... with 28 more rows</span></span>
+<span><span class="co">#&gt; 1 day           0.1365</span></span>
+<span><span class="co">#&gt; 19 days         0.1365</span></span>
+<span><span class="co">#&gt; 40 days         0.1368</span></span>
+<span><span class="co">#&gt; 60 days         0.1372</span></span>
+<span><span class="co">#&gt; 80 days         0.1376</span></span>
+<span><span class="co">#&gt; 102 days        0.1377</span></span>
+<span><span class="co">#&gt; 124 days        0.1378</span></span>
+<span><span class="co">#&gt; 142 days        0.1376</span></span>
+<span><span class="co">#&gt; 165 days        0.1377</span></span>
+<span><span class="co">#&gt; 183 days        0.1375</span></span>
+<span><span class="co">#&gt; # ... with 29 more rows</span></span>
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
-<span><span class="co">#&gt; Reference date: 2022-07-29 </span></span>
+<span><span class="co">#&gt; Reference date: 2022-08-05 </span></span>
 <span><span class="co">#&gt; Interpolation: flatforward</span></span></code></pre></div>
 <p>Now the output shows the curve with the interpolation defined.</p>
 <div class="section level2">
 <h2 id="interpolate-with">Interpolate with <code>[[</code><a class="anchor" aria-label="anchor" href="#interpolate-with"></a>
 </h2>
 <p>The spot rate curve method <code>[[</code> is used to interpolte the curve. The term is passed as a Term object or numeric and a spot rate curve is returned with all interpolated values.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sp_curve</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">21</span>, <span class="fl">42</span>, <span class="fl">63</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="co">#&gt;         SpotRateCurve</span></span>
-<span><span class="co">#&gt; 21 days        0.1356</span></span>
-<span><span class="co">#&gt; 42 days        0.1362</span></span>
-<span><span class="co">#&gt; 63 days        0.1370</span></span>
+<span><span class="co">#&gt; 21 days        0.1366</span></span>
+<span><span class="co">#&gt; 42 days        0.1369</span></span>
+<span><span class="co">#&gt; 63 days        0.1373</span></span>
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
-<span><span class="co">#&gt; Reference date: 2022-07-29</span></span></code></pre></div>
+<span><span class="co">#&gt; Reference date: 2022-08-05</span></span></code></pre></div>
 <p>The term 21 doesn’t exist in the spot rate curve, so it is interpolated according to the interpolation method defined. Since the flat forward interpolation just connect the dots, the terms 42 and 63 have the same values of the spot rate curve.</p>
 <p>Other interpolation methods can be set with the <code>interpolation</code> method overriding any method set previously.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">sp_curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolation-constructor.html">interp_naturalspline</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">sp_curve</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">21</span>, <span class="fl">42</span>, <span class="fl">63</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="co">#&gt;         SpotRateCurve</span></span>
-<span><span class="co">#&gt; 21 days        0.1353</span></span>
-<span><span class="co">#&gt; 42 days        0.1363</span></span>
-<span><span class="co">#&gt; 63 days        0.1370</span></span>
+<span><span class="co">#&gt; 21 days        0.1365</span></span>
+<span><span class="co">#&gt; 42 days        0.1368</span></span>
+<span><span class="co">#&gt; 63 days        0.1373</span></span>
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
-<span><span class="co">#&gt; Reference date: 2022-07-29</span></span></code></pre></div>
+<span><span class="co">#&gt; Reference date: 2022-08-05</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="unset-interpolation">Unset interpolation<a class="anchor" aria-label="anchor" href="#unset-interpolation"></a>
 </h2>
 <p>Set interpolation to <code>NULL</code> to unset the interpolation.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">sp_curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
 <span><span class="va">sp_curve</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">21</span>, <span class="fl">42</span>, <span class="fl">63</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="co">#&gt;         SpotRateCurve</span></span>
@@ -236,37 +236,37 @@
 <span><span class="co">#&gt; 42 days            NA</span></span>
 <span><span class="co">#&gt; 63 days            NA</span></span>
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
-<span><span class="co">#&gt; Reference date: 2022-07-29</span></span></code></pre></div>
+<span><span class="co">#&gt; Reference date: 2022-08-05</span></span></code></pre></div>
 <p>Note that for those terms in the <code>[[</code> method that don’t have a related term in the spot rate curve, <code>NA</code> is returned.</p>
 </div>
 <div class="section level2">
 <h2 id="plot-with-interpolation">Plot with interpolation<a class="anchor" aria-label="anchor" href="#plot-with-interpolation"></a>
 </h2>
 <p>The <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">fixedincome::plot</a></code> method for the spot rate curve has an argument <code>use_interpolation</code> that shows the interpolation together with the curve points. This argument defaults to <code>FALSE</code>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">sp_curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolation-constructor.html">interp_flatforward</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sp_curve</span>, use_interpolation <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="spot-rate-curve-interpolation_files/figure-html/unnamed-chunk-10-1.png" width="100%"></p>
+<p><img src="spot-rate-curve-interpolation_files/figure-html/unnamed-chunk-9-1.png" width="100%"></p>
 <div class="section level3">
 <h3 id="forward-rates-with-and-without-interpolation-set">Forward rates with and without interpolation set<a class="anchor" aria-label="anchor" href="#forward-rates-with-and-without-interpolation-set"></a>
 </h3>
 <p>Once the interpolation is set, the <code>plot</code> method uses it to calculate daily forward rates. Otherwise, it uses the forward rates between the curve terms. Set the <code>show_forward</code> argument to <code>TRUE</code> to show the forward rates.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">sp_curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sp_curve</span>, show_forward <span class="op">=</span> <span class="cn">TRUE</span>, legend_location <span class="op">=</span> <span class="st">"bottomright"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="spot-rate-curve-interpolation_files/figure-html/unnamed-chunk-11-1.png" width="100%"></p>
+<p><img src="spot-rate-curve-interpolation_files/figure-html/unnamed-chunk-10-1.png" width="100%"></p>
 <p>The forward rates are drawn with step lines.</p>
 <p>If the <code>use_interpolation</code> argument is <code>TRUE</code> then the daily forward rates are calculated with the defined interpolation.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">sp_curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolation-constructor.html">interp_flatforward</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sp_curve</span>, use_interpolation <span class="op">=</span> <span class="cn">TRUE</span>, show_forward <span class="op">=</span> <span class="cn">TRUE</span>, legend_location <span class="op">=</span> <span class="st">"bottomright"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="spot-rate-curve-interpolation_files/figure-html/unnamed-chunk-12-1.png" width="100%"></p>
+<p><img src="spot-rate-curve-interpolation_files/figure-html/unnamed-chunk-11-1.png" width="100%"></p>
 <p>It is possible to note that the flat forward daily rates are fairly close to curve terms forward rates.</p>
 <p>As the interpolation changes its effects can be viewed in the forward rates dynamic.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">sp_curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolation-constructor.html">interp_naturalspline</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sp_curve</span>, use_interpolation <span class="op">=</span> <span class="cn">TRUE</span>, show_forward <span class="op">=</span> <span class="cn">TRUE</span>, legend_location <span class="op">=</span> <span class="st">"bottomright"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="spot-rate-curve-interpolation_files/figure-html/unnamed-chunk-13-1.png" width="100%"></p>
+<p><img src="spot-rate-curve-interpolation_files/figure-html/unnamed-chunk-12-1.png" width="100%"></p>
 </div>
 </div>
   </div>

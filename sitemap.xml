@@ -19,6 +19,9 @@
     <loc>http://wilsonfreitas.github.io/R-fixedincome/articles/spot-rate-curve-interpolation.html</loc>
   </url>
   <url>
+    <loc>http://wilsonfreitas.github.io/R-fixedincome/articles/spot-rate-curve-plotting.html</loc>
+  </url>
+  <url>
     <loc>http://wilsonfreitas.github.io/R-fixedincome/authors.html</loc>
   </url>
   <url>
@@ -80,6 +83,12 @@
   </url>
   <url>
     <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/forwardrate.html</loc>
+  </url>
+  <url>
+    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/ggplot2-support.html</loc>
+  </url>
+  <url>
+    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/ggspotratecurveplot.html</loc>
   </url>
   <url>
     <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/hidden_aliases.html</loc>
