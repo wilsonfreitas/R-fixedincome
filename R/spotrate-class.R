@@ -59,7 +59,8 @@
 #' SpotRate objects can be created with vectors
 #'
 #' ```{r}
-#' sr_vec <- spotrate(abs(rnorm(10)), "discrete", "business/252", "Brazil/ANBIMA")
+#' rates <- c(1.69, 0.16, 0.07, 0.72, 0.10, 1.60, 0.18, 1.56, 0.60, 1.69)
+#' sr_vec <- spotrate(rates, "discrete", "business/252", "Brazil/ANBIMA")
 #' sr_vec
 #' ```
 #'
