@@ -176,10 +176,18 @@ ggspotratecurveplot <- function(curve,
                                 subtitle = NULL,
                                 caption = NULL,
                                 curve.name = NULL,
+                                curve.interpolation = FALSE,
                                 curve.x.axis = c("dates", "terms"), ...) {
   curve.x.axis <- match.arg(curve.x.axis)
+  .xlab <- if (curve.x.axis == "dates") {
+    "Date"
+  } else if (curve.x.axis == "terms") {
+    "Terms"
+  }
   autoplot(curve,
-    curve.name = curve.name, curve.x.axis = curve.x.axis, size = 1
+    curve.name = curve.name, curve.x.axis = curve.x.axis,
+    curve.interpolation = curve.interpolation,
+    size = 1
   ) +
     autolayer(curve,
       curve.name = curve.name, curve.x.axis = curve.x.axis, curve.geom = "point",
@@ -188,7 +196,7 @@ ggspotratecurveplot <- function(curve,
     theme_wf() +
     theme(legend.title = element_blank()) +
     labs(
-      y = NULL, x = "Tenor (Business Days)",
+      y = NULL, x = .xlab,
       title = title, subtitle = subtitle, caption = caption
     ) +
     scale_y_continuous(labels = percent)
