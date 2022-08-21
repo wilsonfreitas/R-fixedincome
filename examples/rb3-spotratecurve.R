@@ -5,11 +5,12 @@ library(tidyverse)
 library(fixedincome)
 library(nloptr)
 
-refdate <- getdate("last bizday", Sys.Date(), "Brazil/ANBIMA")
+# refdate <- getdate("last bizday", Sys.Date(), "Brazil/ANBIMA")
+refdate <- as.Date("2022-02-23")
 yc <- yc_get(refdate)
 fut <- futures_get(refdate)
 yc_ss <- yc_superset(yc, fut)
-yc_ss_first <- yc_ss |> slice(1)
+yc_ss_first <- yc_ss |> filter(biz_days == 1)
 yc_ss_curve <- yc_ss |> filter(!is.na(symbol))
 yc_ <- bind_rows(yc_ss_first, yc_ss_curve)
 
@@ -19,11 +20,13 @@ sp_curve <- spotratecurve(
   refdate = refdate
 )
 
-plot(sp_curve)
+ggspotratecurveplot(sp_curve)
+
+# ----
 
 f_obj <- function(x, val, term) {
   rates_ <- fixedincome:::nss(term, x[1], x[2], x[3], x[4], x[5], x[6])
-  sqrt(sum((val - rates_)^2))
+  sum((val - rates_)^2)
 }
 
 gr_par <- function(x, val, term, n = 1) {
@@ -62,14 +65,14 @@ gr_f_obj <- function(x, val, term) {
   rates_ <- fixedincome:::nss(term, x[1], x[2], x[3], x[4], x[5], x[6])
   obj <- f_obj(x, val, term)
   v <- c(
-    sum((val - rates_) * -d_beta1(term)),
-    sum((val - rates_) * -d_beta2(term, x[5])),
-    sum((val - rates_) * -d_beta3(term, x[5])),
-    sum((val - rates_) * -d_beta3(term, x[6])),
-    sum((val - rates_) * -d_lambda1(term, x[5], x[2], x[3])),
-    sum((val - rates_) * -d_lambda2(term, x[6], x[4]))
+    2 * sum((val - rates_) * -d_beta1(term)),
+    2 * sum((val - rates_) * -d_beta2(term, x[5])),
+    2 * sum((val - rates_) * -d_beta3(term, x[5])),
+    2 * sum((val - rates_) * -d_beta3(term, x[6])),
+    2 * sum((val - rates_) * -d_lambda1(term, x[5], x[2], x[3])),
+    2 * sum((val - rates_) * -d_lambda2(term, x[6], x[4]))
   )
-  v / obj
+  v
 }
 
 g_obj <- function(x, val, term) {
@@ -92,11 +95,11 @@ gr_g_obj <- function(x, val, term) {
   )
 }
 
-gr_par(par,
-  val = as.numeric(sp_curve), term = toyears(sp_curve@daycount, sp_curve@terms),
-  n = 6
-)
-gr_obj(par, val = as.numeric(sp_curve), term = toyears(sp_curve@daycount, sp_curve@terms))
+# gr_par(par,
+#   val = as.numeric(sp_curve), term = toyears(sp_curve@daycount, sp_curve@terms),
+#   n = 6
+# )
+# gr_obj(par, val = as.numeric(sp_curve), term = toyears(sp_curve@daycount, sp_curve@terms))
 
 # interp <- interp_nelsonsiegelsvensson(beta0, beta1, 0.01, 0.01, 2 / 252, 1 / 1008)
 # interpolation(sp_curve) <- fit_interpolation(interp, sp_curve)
@@ -120,12 +123,11 @@ res <- nloptr(par,
   ub = c(0.3, 0.3,  1,  1,   5,  3),
   opts = opts,
   val = as.numeric(sp_curve),
-  term = toyears(sp_curve@daycount, sp_curve@terms)
+  term = as.numeric(toyears(sp_curve@daycount, sp_curve@terms))
 )
 do.call(interp_nelsonsiegelsvensson, as.list(res$solution))
-
 interpolation(sp_curve) <- do.call(interp_nelsonsiegelsvensson, as.list(res$solution))
-sp_curve |> plot(use_interpolation = TRUE, show_forward = TRUE)
+sp_curve |> plot(use_interpolation = TRUE, show_forward = FALSE)
 
 # NLOPT_LD ----
 par <- c(beta0, beta1, 0.01, 0.01, 3, 0.5)
@@ -144,7 +146,7 @@ res1 <- nloptr(par,
   ub = c(0.3, 0.3,  1,  1,   5,  3),
   opts = opts,
   val = as.numeric(sp_curve),
-  term = toyears(sp_curve@daycount, sp_curve@terms)
+  term = as.numeric(toyears(sp_curve@daycount, sp_curve@terms))
 )
 do.call(interp_nelsonsiegelsvensson, as.list(res1$solution))
 
@@ -160,16 +162,54 @@ res2 <- optim(par,
   upper = c(0.3, 0.3,  1,  1,   5,  3),
   method = "L-BFGS-B",
   val = as.numeric(sp_curve),
-  term = toyears(sp_curve@daycount, sp_curve@terms)
+  term = as.numeric(toyears(sp_curve@daycount, sp_curve@terms))
 )
 do.call(interp_nelsonsiegelsvensson, as.list(res2$par))
 
 interpolation(sp_curve) <- do.call(interp_nelsonsiegelsvensson, as.list(res2$par))
 sp_curve |> plot(use_interpolation = TRUE)
 
-# S4 ----
+# optim ----
+f_obj <- function(x, val, term) {
+  rates_ <- fixedincome:::nss(term, x[1], x[2], x[3], x[4], x[5], x[6])
+  sum((val - rates_)^2) + 0.00005 * sum(x ^ 2)
+}
 
-fit_interpolation(interp_nelsonsiegelsvensson(beta0, beta1, 0.01, 0.01, 1, 0.5), sp_curve)
+par <- c(beta0, beta1, 0.01, 0.01, 3, 0.5)
+res2 <- optim(par,
+  fn = f_obj,
+  # gr = gr_f_obj,
+  lower = c(0,  -0.3, -1, -1,  1e-6, 1e-6),
+  upper = c(0.3, 0.3,  1,  1,   5,  3),
+  method = "L-BFGS-B",
+  val = as.numeric(sp_curve),
+  term = as.numeric(toyears(sp_curve@daycount, sp_curve@terms))
+)
+interp_ <- do.call(interp_nelsonsiegelsvensson, as.list(res2$par))
+0.00005 * sum(parameters(interp_) ^ 2)
+interp_
+interpolation(sp_curve) <- do.call(interp_nelsonsiegelsvensson, as.list(res2$par))
+sp_curve |> plot(use_interpolation = TRUE)
+
+# S4 ----
+# try 1
+beta0 <- as.numeric(fixedincome::last(sp_curve, "1 day"))
+beta1 <- as.numeric(sp_curve[1]) - beta0
+interp_ <- interp_nelsonsiegelsvensson(beta0, beta1, 0.01, 0.01, 3, 0.5) |>
+  fit_interpolation(sp_curve)
+interp_
+interpolation(sp_curve) <- fit_interpolation(interp_, sp_curve)
+sp_curve |> plot(use_interpolation = TRUE)
+# try 2
+beta0 <- as.numeric(fixedincome::closest(sp_curve, "10 years"))
+beta1 <- as.numeric(sp_curve[1]) - beta0
+interp_ <- interp_nelsonsiegelsvensson(beta0, beta1, 0.01, 0.01, 3, 0.5) |>
+  fit_interpolation(sp_curve)
+interp_
+interpolation(sp_curve) <- fit_interpolation(interp_, sp_curve)
+
+ggspotratecurveplot(sp_curve) +
+  ggplot2::autolayer(sp_curve, curve.interpolation = TRUE, curve.name = "interp")
 
 interpolation(sp_curve) <- fit_interpolation(interp_nelsonsiegel(beta0, beta1, 0.01, 1), sp_curve)
 sp_curve |> plot(use_interpolation = TRUE)
