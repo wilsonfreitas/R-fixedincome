@@ -6,7 +6,7 @@ ns <- function(t, b1, b2, b3, l1) {
 
 f_ns_obj <- function(x, val, term) {
   rates_ <- ns(term, x[1], x[2], x[3], x[4])
-  sqrt(sum((val - rates_)^2))
+  sum((val - rates_)^2)
 }
 
 d_ns_beta1 <- function(term, l) {
@@ -30,12 +30,12 @@ gr_f_ns_obj <- function(x, val, term) {
   rates_ <- ns(term, x[1], x[2], x[3], x[4])
   obj <- f_ns_obj(x, val, term)
   v <- c(
-    sum((val - rates_) * -d_ns_beta1(term)),
-    sum((val - rates_) * -d_ns_beta2(term, x[4])),
-    sum((val - rates_) * -d_ns_beta3(term, x[4])),
-    sum((val - rates_) * -d_ns_lambda1(term, x[4], x[2], x[3]))
+    2 * sum((val - rates_) * -d_ns_beta1(term)),
+    2 * sum((val - rates_) * -d_ns_beta2(term, x[4])),
+    2 * sum((val - rates_) * -d_ns_beta3(term, x[4])),
+    2 * sum((val - rates_) * -d_ns_lambda1(term, x[4], x[2], x[3]))
   )
-  v / obj
+  v
 }
 
 #' @export
@@ -75,7 +75,7 @@ nss <- function(t, b1, b2, b3, b4, l1, l2) {
 
 f_nss_obj <- function(x, val, term) {
   rates_ <- nss(term, x[1], x[2], x[3], x[4], x[5], x[6])
-  sqrt(sum((val - rates_)^2))
+  sum((val - rates_)^2)
 }
 
 d_nss_lambda2 <- function(term, l, b4) {
@@ -86,14 +86,14 @@ gr_f_nss_obj <- function(x, val, term) {
   rates_ <- nss(term, x[1], x[2], x[3], x[4], x[5], x[6])
   obj <- f_nss_obj(x, val, term)
   v <- c(
-    sum((val - rates_) * -d_ns_beta1(term)),
-    sum((val - rates_) * -d_ns_beta2(term, x[5])),
-    sum((val - rates_) * -d_ns_beta3(term, x[5])),
-    sum((val - rates_) * -d_ns_beta3(term, x[6])),
-    sum((val - rates_) * -d_ns_lambda1(term, x[5], x[2], x[3])),
-    sum((val - rates_) * -d_nss_lambda2(term, x[6], x[4]))
+    2 * sum((val - rates_) * -d_ns_beta1(term)),
+    2 * sum((val - rates_) * -d_ns_beta2(term, x[5])),
+    2 * sum((val - rates_) * -d_ns_beta3(term, x[5])),
+    2 * sum((val - rates_) * -d_ns_beta3(term, x[6])),
+    2 * sum((val - rates_) * -d_ns_lambda1(term, x[5], x[2], x[3])),
+    2 * sum((val - rates_) * -d_nss_lambda2(term, x[6], x[4]))
   )
-  v / obj
+  v
 }
 
 #' @export
@@ -121,10 +121,11 @@ setMethod(
       fn = f_nss_obj,
       gr = gr_f_nss_obj,
       lower = c(0,  -0.3, -1, -1,  1e-6, 1e-6),
-      upper = c(0.3, 0.3,  1,  1,   5,  3),
+      upper = c(0.3, 0.3,  1,  1,     5,    5),
       method = "L-BFGS-B",
       val = as.numeric(x),
-      term = as.numeric(toyears(x@daycount, x@terms))
+      term = as.numeric(toyears(x@daycount, x@terms)),
+      control = list(factr = 1e-10, maxit = 1000)
     )
     do.call(interp_nelsonsiegelsvensson, as.list(res$par))
   }
