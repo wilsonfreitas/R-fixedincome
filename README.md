@@ -87,17 +87,6 @@ Spot rates can be put inside data.frames.
 
 ``` r
 library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:fixedincome':
-#> 
-#>     first, last
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
 library(fixedincome)
 
 df <- tibble(
@@ -141,11 +130,6 @@ Let’s create a spot rate curve using web scraping (from B3 website)
 
 ``` r
 source("examples/utils-functions.R")
-#> 
-#> Attaching package: 'bizdays'
-#> The following object is masked from 'package:stats':
-#> 
-#>     offset
 curve <- get_curve_from_web("2022-02-23")
 curve
 #>          SpotRateCurve
@@ -205,15 +189,17 @@ Parametric models like the Nelson-Siegel-Svensson model can be fitted to
 the curve.
 
 ``` r
+beta1 <- as.numeric(fixedincome::last(curve, "1 day"))
+beta2 <- as.numeric(curve[1]) - beta1
 interpolation(curve) <- fit_interpolation(
-  interp_nelsonsiegelsvensson(0.01, 0.01, 0.01, 0.01, 0.01, 0.01), curve
+  interp_nelsonsiegelsvensson(beta1, beta2, 0.01, 0.01, 2, 1), curve
 )
 
 interpolation(curve)
 #> <Interpolation: nelsonsiegelsvensson > 
 #>  Parameters:
 #>   beta1   beta2   beta3   beta4 lambda1 lambda2 
-#>   0.300  -0.181  -0.858   0.611   0.053   0.054
+#>   0.119  -0.013   1.000  -0.975   1.195   1.122
 ```
 
 Once set to the curve it is used in the plot to show daily forward

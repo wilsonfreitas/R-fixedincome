@@ -150,8 +150,10 @@ plot(curve_2y, use_interpolation = TRUE, legend_location = "bottomright")
 Parametric models like the Nelson-Siegel-Svensson model can be fitted to the curve.
 
 ```{r}
+beta1 <- as.numeric(fixedincome::last(curve, "1 day"))
+beta2 <- as.numeric(curve[1]) - beta1
 interpolation(curve) <- fit_interpolation(
-  interp_nelsonsiegelsvensson(0.01, 0.01, 0.01, 0.01, 0.01, 0.01), curve
+  interp_nelsonsiegelsvensson(beta1, beta2, 0.01, 0.01, 2, 1), curve
 )
 
 interpolation(curve)
