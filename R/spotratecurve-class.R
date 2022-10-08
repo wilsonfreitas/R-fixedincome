@@ -247,10 +247,10 @@ setMethod(
   function(x, i, j, ...) {
     if (is.null(x@interpolation)) {
       if (any(i < 0)) {
-        mx <- -match(abs(i), x@terms)
+        mx <- -match(abs(i), unclass(x@terms))
         ix <- x@terms[mx]
       } else {
-        mx <- match(i, x@terms)
+        mx <- match(i, unclass(x@terms))
         ix <- i
       }
       obj <- spotratecurve(x@.Data[mx], ix, x@compounding, x@daycount,

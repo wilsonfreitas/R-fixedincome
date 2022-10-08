@@ -94,7 +94,7 @@ forwardrate.SpotRateCurve <- function(x, t1 = NULL, t2 = NULL, ...) {
       refdate = x@refdate
     )
   } else {
-    pos <- match(c(t1, t2), x@terms)
+    pos <- match(c(t1, t2), unclass(x@terms))
     fact <- compound(x)
     fact1 <- fact[pos[1]]
     fact2 <- fact[pos[2]]

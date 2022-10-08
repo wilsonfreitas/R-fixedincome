@@ -119,11 +119,11 @@ test_that("it should replace or insert elements into the curve", {
   expect_s4_class(curve[[10]], "SpotRateCurve")
   expect_equal(as.numeric(curve[[10]]), 0.051)
   expect_equal(length(curve), length(terms) + 1)
-  expect_equal(match(10, curve@terms), 2)
+  expect_equal(match(10, unclass(curve@terms)), 2)
   # insert more new elements
   curve[[c(8, 9)]] <- c(0.048, 0.049)
   expect_equal(as.numeric(curve[[c(8, 9)]]), c(0.048, 0.049))
-  expect_equal(match(c(8, 9), curve@terms), c(2, 3))
+  expect_equal(match(c(8, 9), unclass(curve@terms)), c(2, 3))
   # 2
   curve[[c(12, 13)]] <- 0.049
   expect_equal(as.numeric(curve[[c(12, 13)]]), c(0.049, 0.049))
