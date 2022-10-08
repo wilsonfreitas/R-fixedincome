@@ -4,9 +4,10 @@ library(bizdays)
 library(tidyverse)
 library(fixedincome)
 library(nloptr)
+library(DEoptim)
 
 # refdate <- getdate("last bizday", Sys.Date(), "Brazil/ANBIMA")
-refdate <- as.Date("2022-02-23")
+refdate <- as.Date("2022-01-14")
 yc <- yc_get(refdate)
 fut <- futures_get(refdate)
 yc_ss <- yc_superset(yc, fut)
@@ -79,6 +80,7 @@ g_obj <- function(x, val, term) {
   c(
     -x[1],
     -x[1] - x[2],
+    x[3] * x[4],
     -x[5],
     -x[6],
     -x[5] + x[6]
@@ -87,11 +89,12 @@ g_obj <- function(x, val, term) {
 
 gr_g_obj <- function(x, val, term) {
   rbind(
-    c(-1,  0, 0, 0, 0, 0),
-    c(-1, -1, 0, 0, 0, 0),
-    c(0, 0, 0, 0, -1, 0),
-    c(0, 0, 0, 0, 0, -1),
-    c(0, 0, 0, 0, -1, 1)
+    c(-1,  0, 0, 0,  0, 0),
+    c(-1, -1, 0, 0,  0, 0),
+    c(0,   0, 1, 1,  0, 0),
+    c(0,   0, 0, 0, -1, 0),
+    c(0,   0, 0, 0,  0, -1),
+    c(0,   0, 0, 0, -1, 1)
   )
 }
 
@@ -107,13 +110,13 @@ gr_g_obj <- function(x, val, term) {
 # sp_curve@interpolation
 
 # NLOPT_GN_ISRES ----
-beta0 <- as.numeric(fixedincome::last(sp_curve, "1 day"))
-beta1 <- as.numeric(sp_curve[1]) - beta0
-par <- c(beta0, beta1, 0.01, 0.01, 3, 0.5)
+beta1 <- as.numeric(fixedincome::last(sp_curve, "1 day"))
+beta2 <- as.numeric(sp_curve[1]) - beta1
+par <- c(beta1, beta2, 0.01, -0.01, 2, 1)
 opts <- list(
   "algorithm"   = "NLOPT_GN_ISRES",
   "xtol_rel"    = 1.0e-16,
-  "maxeval"     = 500000,
+  "maxeval"     = 50000,
   "print_level" = 0
 )
 res <- nloptr(par,
@@ -130,11 +133,13 @@ interpolation(sp_curve) <- do.call(interp_nelsonsiegelsvensson, as.list(res$solu
 sp_curve |> plot(use_interpolation = TRUE, show_forward = FALSE)
 
 # NLOPT_LD ----
-par <- c(beta0, beta1, 0.01, 0.01, 3, 0.5)
+beta1 <- as.numeric(fixedincome::last(sp_curve, "1 day"))
+beta2 <- as.numeric(sp_curve[1]) - beta1
+par <- c(beta1, beta2, 0.01, -0.01, 1, 1)
 opts <- list(
   "algorithm"   = "NLOPT_LD_MMA",
   "xtol_rel"    = 1.0e-16,
-  "maxeval"     = 500000,
+  "maxeval"     = 50000,
   "print_level" = 0
 )
 res1 <- nloptr(par,
@@ -149,7 +154,24 @@ res1 <- nloptr(par,
   term = as.numeric(toyears(sp_curve@daycount, sp_curve@terms))
 )
 do.call(interp_nelsonsiegelsvensson, as.list(res1$solution))
+interpolation(sp_curve) <- do.call(interp_nelsonsiegelsvensson, as.list(res1$solution))
+sp_curve |> plot(use_interpolation = TRUE)
 
+# DEoptim ----
+opts <- DEoptim.control(
+  NP = 1000,
+  itermax = 100,
+  trace = FALSE
+)
+res4 <- DEoptim(f_obj,
+  lower = c(0,  -0.3, -1, -1,  1e-6, 1e-6),
+  upper = c(0.3, 0.3,  1,  1,   5,  3),
+  control = opts,
+  val = as.numeric(sp_curve),
+  term = as.numeric(toyears(sp_curve@daycount, sp_curve@terms))
+)
+plot(res4)
+do.call(interp_nelsonsiegelsvensson, as.list(unname(res4$optim$bestmem)))
 interpolation(sp_curve) <- do.call(interp_nelsonsiegelsvensson, as.list(res1$solution))
 sp_curve |> plot(use_interpolation = TRUE)
 
