@@ -1,3 +1,8 @@
+# fixedincome 0.0.4
+
+* Improved nelsonsiegel and nelsonsiegelsvensson optimization.
+* Corrected bug due to recent changes in `match` in R-devel
+
 # fixedincome 0.0.3
 
 * ggplot2 support.
