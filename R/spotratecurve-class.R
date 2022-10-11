@@ -295,8 +295,8 @@ setMethod(
 )
 
 replace_double_brackets <- function(x, i, value) {
-  contained_from <- i %in% x@terms
-  contained_to <- x@terms %in% i
+  contained_from <- i %in% unclass(x@terms)
+  contained_to <- unclass(x@terms) %in% i
   if (any(contained_from)) {
     x@.Data[contained_to] <- if (length(value) == 1) {
       value
@@ -361,8 +361,8 @@ setReplaceMethod(
       x, value,
       "Given SpotRate objects have different slots"
     )
-    contained_from <- value@terms %in% x@terms
-    contained_to <- x@terms %in% value@terms
+    contained_from <- unclass(value@terms) %in% unclass(x@terms)
+    contained_to <- unclass(x@terms) %in% unclass(value@terms)
     if (any(contained_from)) {
       x@.Data[contained_to] <- value@.Data[contained_from]
       x@terms[contained_to] <- value@terms[contained_from]
