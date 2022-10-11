@@ -104,7 +104,7 @@ term.Date <- function(x, end_date, calendar, ...) {
 #' In financial markets it is fairly usual to evaluate interest rates between
 #' two dates.
 #'
-#' @aliases DateRangeTerm-class
+#' @aliases DateRangeTerm-class Term-class
 #' @export
 setClass(
   "Term",

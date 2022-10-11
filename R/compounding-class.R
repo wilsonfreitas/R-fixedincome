@@ -19,7 +19,7 @@
 #'         in a given term.
 #' }
 #'
-#' @aliases Simple-class Discrete-class Continuous-class
+#' @aliases Simple-class Discrete-class Continuous-class Compounding-class
 #' @aliases SimpleCompoundingClass
 #' @aliases DiscreteCompoundingClass
 #' @aliases ContinuousCompoundingClass
