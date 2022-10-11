@@ -29,7 +29,7 @@ term <- function(x, ...) {
 term.numeric <- function(x, units = "days", ...) {
   value <- x
 
-  if (length(units) != length(x) & length(units) > 1) {
+  if (length(units) != length(x) && length(units) > 1) {
     stop("units and data are different sizes")
   }
 
