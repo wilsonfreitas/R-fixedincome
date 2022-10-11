@@ -9,6 +9,7 @@
 status](https://www.r-pkg.org/badges/version/fixedincome)](https://CRAN.R-project.org/package=fixedincome)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![R-CMD-check](https://github.com/wilsonfreitas/R-fixedincome/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/wilsonfreitas/R-fixedincome/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 Calculations involving interest rates are usually very easy and
@@ -87,6 +88,17 @@ Spot rates can be put inside data.frames.
 
 ``` r
 library(dplyr)
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:fixedincome':
+#> 
+#>     first, last
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
 library(fixedincome)
 
 df <- tibble(
@@ -130,6 +142,11 @@ Let’s create a spot rate curve using web scraping (from B3 website)
 
 ``` r
 source("examples/utils-functions.R")
+#> 
+#> Attaching package: 'bizdays'
+#> The following object is masked from 'package:stats':
+#> 
+#>     offset
 curve <- get_curve_from_web("2022-02-23")
 curve
 #>          SpotRateCurve
