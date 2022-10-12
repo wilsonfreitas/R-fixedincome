@@ -240,7 +240,7 @@ setMethod(
       )
     } else {
       terms_ <- term(cumsum(x@terms), x@terms@units)
-      dates_ <- offset(x@refdate, terms_, x@calendar)
+      dates_ <- offset(x@refdate, as.numeric(terms_), x@calendar)
       data.frame(
         terms = terms_,
         forward_terms = x@terms,

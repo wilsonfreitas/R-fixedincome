@@ -404,7 +404,7 @@ setMethod(
     spotrate_ <- as.spotrate(x)
     data.frame(
       terms = x@terms,
-      dates = offset(x@refdate, x@terms, x@calendar),
+      dates = offset(x@refdate, unclass(x@terms), x@calendar),
       rates = spotrate_
     )
   }
