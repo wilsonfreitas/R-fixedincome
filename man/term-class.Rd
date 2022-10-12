@@ -47,7 +47,7 @@ and a calendar to count the amount of working days between these two dates.
 This is a Term between two dates.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{term(Sys.Date() - 5, Sys.Date(), "Brazil/ANBIMA")
-#> [1] "3 days"
+#> [1] "2 days"
 }\if{html}{\out{</div>}}
 
 In financial markets it is fairly usual to evaluate interest rates between
