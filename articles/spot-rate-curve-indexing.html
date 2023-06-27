@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">fixedincome</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5</span>
       </span>
     </div>
 
@@ -88,7 +88,7 @@
 
       
 
-      </header><script src="spot-rate-curve-indexing_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Spot Rate Curve Indexing</h1>
@@ -101,8 +101,10 @@
 
     
     
-<p>In order to make it easy and fun the use of fixedincome spot rate curve, a few operators have been implemented.</p>
-<p>The fixedincome package is loaded and one curve <code>crv</code> is created.</p>
+<p>In order to make it easy and fun the use of fixedincome spot rate
+curve, a few operators have been implemented.</p>
+<p>The fixedincome package is loaded and one curve <code>crv</code> is
+created.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonfreitas/R-fixedincome" class="external-link">fixedincome</a></span><span class="op">)</span></span>
 <span></span>
@@ -116,8 +118,10 @@
 <div class="section level2">
 <h2 id="positional-indexing">Positional Indexing<a class="anchor" aria-label="anchor" href="#positional-indexing"></a>
 </h2>
-<p>The operator <code>[</code> indexes the elements by their positions and returns one SpotRateCurve object.</p>
-<p>The code below returns one SpotRateCurve object with the first, third and fifth elements.</p>
+<p>The operator <code>[</code> indexes the elements by their positions
+and returns one SpotRateCurve object.</p>
+<p>The code below returns one SpotRateCurve object with the first, third
+and fifth elements.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">crv</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">5</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt;          SpotRateCurve</span></span>
@@ -125,19 +129,21 @@
 <span><span class="co">#&gt; 42 days         0.1338</span></span>
 <span><span class="co">#&gt; 126 days        0.1372</span></span>
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
-<span><span class="co">#&gt; Reference date: 2022-10-13</span></span></code></pre></div>
+<span><span class="co">#&gt; Reference date: 2023-06-27</span></span></code></pre></div>
 <p>This curve has the terms 1, 42, and 126 days.</p>
 <div class="section level3">
 <h3 id="boolean-indexing">Boolean indexing<a class="anchor" aria-label="anchor" href="#boolean-indexing"></a>
 </h3>
-<p>The positional indexing also works with <code>logical</code> vectors. For example, let’s get the part of the curve that is greater than 13.5%</p>
+<p>The positional indexing also works with <code>logical</code> vectors.
+For example, let’s get the part of the curve that is greater than
+13.5%</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">crv</span><span class="op">[</span><span class="va">crv</span> <span class="op">&gt;</span> <span class="fl">0.135</span><span class="op">]</span></span>
 <span><span class="co">#&gt;          SpotRateCurve</span></span>
 <span><span class="co">#&gt; 126 days        0.1372</span></span>
 <span><span class="co">#&gt; 252 days        0.1381</span></span>
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
-<span><span class="co">#&gt; Reference date: 2022-10-13</span></span></code></pre></div>
+<span><span class="co">#&gt; Reference date: 2023-06-27</span></span></code></pre></div>
 <p>or the elements which terms are even.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">crv</span><span class="op">[</span><span class="op">(</span><span class="va">crv</span><span class="op">@</span><span class="va">terms</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%%</a></span> <span class="fl">2</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">]</span></span>
@@ -146,14 +152,16 @@
 <span><span class="co">#&gt; 126 days        0.1372</span></span>
 <span><span class="co">#&gt; 252 days        0.1381</span></span>
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
-<span><span class="co">#&gt; Reference date: 2022-10-13</span></span></code></pre></div>
+<span><span class="co">#&gt; Reference date: 2023-06-27</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="term-indexing">Term Indexing<a class="anchor" aria-label="anchor" href="#term-indexing"></a>
 </h2>
-<p>The operator <code>[[</code> indexes the elements according to the terms of the term structured and returns one SpotRateCurve object.</p>
-<p>The code below returns one SpotRateCurve object with the terms 1, 21, and 42.</p>
+<p>The operator <code>[[</code> indexes the elements according to the
+terms of the term structured and returns one SpotRateCurve object.</p>
+<p>The code below returns one SpotRateCurve object with the terms 1, 21,
+and 42.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">crv</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">21</span>, <span class="fl">42</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="co">#&gt;         SpotRateCurve</span></span>
@@ -161,8 +169,10 @@
 <span><span class="co">#&gt; 21 days        0.1319</span></span>
 <span><span class="co">#&gt; 42 days        0.1338</span></span>
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
-<span><span class="co">#&gt; Reference date: 2022-10-13</span></span></code></pre></div>
-<p>All these terms are present in the SpotRateCurve. If any given term doesn’t correspond to the SpotRateCurve terms, <code>NA</code> is returned for the unmatched elements.</p>
+<span><span class="co">#&gt; Reference date: 2023-06-27</span></span></code></pre></div>
+<p>All these terms are present in the SpotRateCurve. If any given term
+doesn’t correspond to the SpotRateCurve terms, <code>NA</code> is
+returned for the unmatched elements.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">crv</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">13</span>, <span class="fl">42</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="co">#&gt;         SpotRateCurve</span></span>
@@ -170,8 +180,9 @@
 <span><span class="co">#&gt; 13 days            NA</span></span>
 <span><span class="co">#&gt; 42 days        0.1338</span></span>
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
-<span><span class="co">#&gt; Reference date: 2022-10-13</span></span></code></pre></div>
-<p>To solve that an interpolation has to be set and in these cases the interpolation fulfills these gaps.</p>
+<span><span class="co">#&gt; Reference date: 2023-06-27</span></span></code></pre></div>
+<p>To solve that an interpolation has to be set and in these cases the
+interpolation fulfills these gaps.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">crv</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolation-constructor.html">interp_linear</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">crv</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">13</span>, <span class="fl">42</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
@@ -180,7 +191,7 @@
 <span><span class="co">#&gt; 13 days        0.1317</span></span>
 <span><span class="co">#&gt; 42 days        0.1338</span></span>
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
-<span><span class="co">#&gt; Reference date: 2022-10-13</span></span></code></pre></div>
+<span><span class="co">#&gt; Reference date: 2023-06-27</span></span></code></pre></div>
 <p>Let’s get back to the original curve removing the interpolation.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">crv</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span></code></pre></div>
@@ -188,7 +199,8 @@
 <div class="section level2">
 <h2 id="positional-replacement">Positional Replacement<a class="anchor" aria-label="anchor" href="#positional-replacement"></a>
 </h2>
-<p>The spot rate elements in an SpotRateCurve object can be replaced positionally with the operator <code>[</code>.</p>
+<p>The spot rate elements in an SpotRateCurve object can be replaced
+positionally with the operator <code>[</code>.</p>
 <p>For example, the second element can be set accordingly.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">crv</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0.14</span></span>
@@ -198,7 +210,7 @@
 <span><span class="co">#&gt; 21 days        0.1400</span></span>
 <span><span class="co">#&gt; 42 days        0.1338</span></span>
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
-<span><span class="co">#&gt; Reference date: 2022-10-13</span></span></code></pre></div>
+<span><span class="co">#&gt; Reference date: 2023-06-27</span></span></code></pre></div>
 <p>Negative indexes remove elements</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">crv</span><span class="op">[</span><span class="op">-</span><span class="fl">2</span><span class="op">]</span></span>
@@ -209,8 +221,9 @@
 <span><span class="co">#&gt; 126 days        0.1372</span></span>
 <span><span class="co">#&gt; 252 days        0.1381</span></span>
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
-<span><span class="co">#&gt; Reference date: 2022-10-13</span></span></code></pre></div>
-<p>But it doesn’t change the object in place, instead returns a new object without the removed elements.</p>
+<span><span class="co">#&gt; Reference date: 2023-06-27</span></span></code></pre></div>
+<p>But it doesn’t change the object in place, instead returns a new
+object without the removed elements.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">crv</span></span>
 <span><span class="co">#&gt;          SpotRateCurve</span></span>
@@ -221,13 +234,14 @@
 <span><span class="co">#&gt; 126 days        0.1372</span></span>
 <span><span class="co">#&gt; 252 days        0.1381</span></span>
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
-<span><span class="co">#&gt; Reference date: 2022-10-13</span></span></code></pre></div>
+<span><span class="co">#&gt; Reference date: 2023-06-27</span></span></code></pre></div>
 <p>The second element (term 21) hasn’t been removed.</p>
 </div>
 <div class="section level2">
 <h2 id="replacement-by-term">Replacement by Term<a class="anchor" aria-label="anchor" href="#replacement-by-term"></a>
 </h2>
-<p>The spot rate elements in an SpotRateCurve object can be replaced by term with the operator <code>[[</code>.</p>
+<p>The spot rate elements in an SpotRateCurve object can be replaced by
+term with the operator <code>[[</code>.</p>
 <p>For example, let’s replace the element related to the term 21.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">crv</span><span class="op">[[</span><span class="fl">21</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0.1320</span></span>
@@ -237,7 +251,7 @@
 <span><span class="co">#&gt; 21 days        0.1320</span></span>
 <span><span class="co">#&gt; 42 days        0.1338</span></span>
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
-<span><span class="co">#&gt; Reference date: 2022-10-13</span></span></code></pre></div>
+<span><span class="co">#&gt; Reference date: 2023-06-27</span></span></code></pre></div>
 <p>Negative terms also remove elements.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">crv</span><span class="op">[[</span><span class="op">-</span><span class="fl">21</span><span class="op">]</span><span class="op">]</span></span>
@@ -248,8 +262,9 @@
 <span><span class="co">#&gt; 126 days        0.1372</span></span>
 <span><span class="co">#&gt; 252 days        0.1381</span></span>
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
-<span><span class="co">#&gt; Reference date: 2022-10-13</span></span></code></pre></div>
-<p>Nonetheless, if the interpolation is defined, negative terms raises an error.</p>
+<span><span class="co">#&gt; Reference date: 2023-06-27</span></span></code></pre></div>
+<p>Nonetheless, if the interpolation is defined, negative terms raises
+an error.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">crv</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolation-constructor.html">interp_linear</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">crv</span><span class="op">[[</span><span class="op">-</span><span class="fl">21</span><span class="op">]</span><span class="op">]</span></span>
@@ -258,9 +273,12 @@
 <div class="section level2">
 <h2 id="special-methods">Special methods<a class="anchor" aria-label="anchor" href="#special-methods"></a>
 </h2>
-<p>The methods <code>first</code> and <code>last</code> are handy to slice parts of the SpotRateCurve.</p>
-<p><code>first</code> and <code>last</code> return spot rate curve according to the term given in the second argument.</p>
-<p>For example, the following call returns the elements that lies inside the first 50 days.</p>
+<p>The methods <code>first</code> and <code>last</code> are handy to
+slice parts of the SpotRateCurve.</p>
+<p><code>first</code> and <code>last</code> return spot rate curve
+according to the term given in the second argument.</p>
+<p>For example, the following call returns the elements that lies inside
+the first 50 days.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fixedincome</span><span class="fu">::</span><span class="fu"><a href="../reference/spotratecurve-helpers.html">first</a></span><span class="op">(</span><span class="va">crv</span>, <span class="st">"50 days"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;         SpotRateCurve</span></span>
@@ -268,23 +286,30 @@
 <span><span class="co">#&gt; 21 days        0.1320</span></span>
 <span><span class="co">#&gt; 42 days        0.1338</span></span>
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
-<span><span class="co">#&gt; Reference date: 2022-10-13</span></span></code></pre></div>
-<p>The <code>fixedincome::</code> prefix is necessary to avoid conflicts with dplyr’s methods.</p>
-<p>We can do similar with the <code>last</code> method, for example, let’s get the elements in the last 6 months of the spot rate curve.</p>
+<span><span class="co">#&gt; Reference date: 2023-06-27</span></span></code></pre></div>
+<p>The <code>fixedincome::</code> prefix is necessary to avoid conflicts
+with dplyr’s methods.</p>
+<p>We can do similar with the <code>last</code> method, for example,
+let’s get the elements in the last 6 months of the spot rate curve.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fixedincome</span><span class="fu">::</span><span class="fu"><a href="../reference/spotratecurve-helpers.html">last</a></span><span class="op">(</span><span class="va">crv</span>, <span class="st">"6 months"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;          SpotRateCurve</span></span>
 <span><span class="co">#&gt; 126 days        0.1372</span></span>
 <span><span class="co">#&gt; 252 days        0.1381</span></span>
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
-<span><span class="co">#&gt; Reference date: 2022-10-13</span></span></code></pre></div>
-<p>There is one last <code>spotratecurve</code> method that isn’t properly an indexing method, in the usual way, but certainly it is useful. This is the <code><a href="../reference/spotratecurve-helpers.html">fixedincome::closest</a></code> method, for the <code>spotratecurve</code>, it returns the element of the curve that is close to the given term. For example, to get the curve element that is the closest to 1 year, we do</p>
+<span><span class="co">#&gt; Reference date: 2023-06-27</span></span></code></pre></div>
+<p>There is one last <code>spotratecurve</code> method that isn’t
+properly an indexing method, in the usual way, but certainly it is
+useful. This is the <code><a href="../reference/spotratecurve-helpers.html">fixedincome::closest</a></code> method, for the
+<code>spotratecurve</code>, it returns the element of the curve that is
+close to the given term. For example, to get the curve element that is
+the closest to 1 year, we do</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fixedincome</span><span class="fu">::</span><span class="fu"><a href="../reference/spotratecurve-helpers.html">closest</a></span><span class="op">(</span><span class="va">crv</span>, <span class="st">"1 year"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;          SpotRateCurve</span></span>
 <span><span class="co">#&gt; 252 days        0.1381</span></span>
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
-<span><span class="co">#&gt; Reference date: 2022-10-13</span></span></code></pre></div>
+<span><span class="co">#&gt; Reference date: 2023-06-27</span></span></code></pre></div>
 </div>
   </div>
 
@@ -305,7 +330,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>

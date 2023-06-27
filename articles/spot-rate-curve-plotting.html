@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">fixedincome</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5</span>
       </span>
     </div>
 
@@ -88,7 +88,7 @@
 
       
 
-      </header><script src="spot-rate-curve-plotting_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Plotting Spot Rate Curves</h1>
@@ -101,20 +101,25 @@
 
     
     
-<p>Visualization of yield curves is fairly relevant and the package fixedincome brings the usual <code>plot</code> function to create plots with the SpotRateCurve objects and also a ggplot2 set of methods that helps with the visualization of the term structures using all ggplot2 features.</p>
+<p>Visualization of yield curves is fairly relevant and the package
+fixedincome brings the usual <code>plot</code> function to create plots
+with the SpotRateCurve objects and also a ggplot2 set of methods that
+helps with the visualization of the term structures using all ggplot2
+features.</p>
 <p>Before the start let’s get the necessary packages loaded.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonfreitas/rb3" class="external-link">rb3</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/rb3" class="external-link">rb3</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonfreitas/R-fixedincome" class="external-link">fixedincome</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
-<p>As the second step, the yield curve must be created and this is done with data from {rb3} package.</p>
+<p>As the second step, the yield curve must be created and this is done
+with data from {rb3} package.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">refdate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2022-08-09"</span><span class="op">)</span></span>
-<span><span class="va">yc_</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://wilsonfreitas.github.io/rb3/reference/yc_get.html" class="external-link">yc_get</a></span><span class="op">(</span><span class="va">refdate</span><span class="op">)</span></span>
-<span><span class="va">fut_</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://wilsonfreitas.github.io/rb3/reference/futures_get.html" class="external-link">futures_get</a></span><span class="op">(</span><span class="va">refdate</span><span class="op">)</span></span>
-<span><span class="va">yc_ss</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://wilsonfreitas.github.io/rb3/reference/yc_superset.html" class="external-link">yc_superset</a></span><span class="op">(</span><span class="va">yc_</span>, <span class="va">fut_</span><span class="op">)</span></span>
-<span><span class="va">yc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
+<span><span class="va">yc_</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://docs.ropensci.org/rb3/reference/yc_get.html" class="external-link">yc_get</a></span><span class="op">(</span><span class="va">refdate</span><span class="op">)</span></span>
+<span><span class="va">fut_</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://docs.ropensci.org/rb3/reference/futures_get.html" class="external-link">futures_get</a></span><span class="op">(</span><span class="va">refdate</span><span class="op">)</span></span>
+<span><span class="va">yc_ss</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://docs.ropensci.org/rb3/reference/yc_superset.html" class="external-link">yc_superset</a></span><span class="op">(</span><span class="va">yc_</span>, <span class="va">fut_</span><span class="op">)</span></span>
+<span><span class="va">yc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
 <span>  <span class="va">yc_ss</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,</span>
 <span>  <span class="va">yc_ss</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">symbol</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -195,10 +200,10 @@
 </h3>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">refdate2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2022-03-09"</span><span class="op">)</span></span>
-<span><span class="va">yc_</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://wilsonfreitas.github.io/rb3/reference/yc_get.html" class="external-link">yc_get</a></span><span class="op">(</span><span class="va">refdate2</span><span class="op">)</span></span>
-<span><span class="va">fut_</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://wilsonfreitas.github.io/rb3/reference/futures_get.html" class="external-link">futures_get</a></span><span class="op">(</span><span class="va">refdate2</span><span class="op">)</span></span>
-<span><span class="va">yc_ss</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://wilsonfreitas.github.io/rb3/reference/yc_superset.html" class="external-link">yc_superset</a></span><span class="op">(</span><span class="va">yc_</span>, <span class="va">fut_</span><span class="op">)</span></span>
-<span><span class="va">yc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
+<span><span class="va">yc_</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://docs.ropensci.org/rb3/reference/yc_get.html" class="external-link">yc_get</a></span><span class="op">(</span><span class="va">refdate2</span><span class="op">)</span></span>
+<span><span class="va">fut_</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://docs.ropensci.org/rb3/reference/futures_get.html" class="external-link">futures_get</a></span><span class="op">(</span><span class="va">refdate2</span><span class="op">)</span></span>
+<span><span class="va">yc_ss</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://docs.ropensci.org/rb3/reference/yc_superset.html" class="external-link">yc_superset</a></span><span class="op">(</span><span class="va">yc_</span>, <span class="va">fut_</span><span class="op">)</span></span>
+<span><span class="va">yc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
 <span>  <span class="va">yc_ss</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,</span>
 <span>  <span class="va">yc_ss</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">symbol</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -246,7 +251,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>

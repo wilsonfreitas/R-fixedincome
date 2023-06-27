@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">fixedincome</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5</span>
       </span>
     </div>
 
@@ -63,6 +63,7 @@
     </div>
 
 <div id="fixedincome" class="section level1">
+
 <div class="section level2">
 <h2 id="classes">Classes<a class="anchor" aria-label="anchor" href="#classes"></a></h2>
 <ul><li><code>SpotRate</code></li>
@@ -77,11 +78,12 @@
 <h2 id="todo">TODO<a class="anchor" aria-label="anchor" href="#todo"></a></h2>
 <div class="section level3">
 <h3 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a></h3>
-<ul><li>
+<ul class="task-list"><li>
 <input type="checkbox" disabled checked>Term</li>
 <li>
-<input type="checkbox" disabled checked>Compounding<ul><li>
-<input type="checkbox" disabled checked>Compounding Methods</li></ul></li>
+<input type="checkbox" disabled checked>Compounding<ul class="task-list"><li>
+<input type="checkbox" disabled checked>Compounding Methods</li>
+</ul></li>
 <li>
 <input type="checkbox" disabled checked>Daycount</li>
 <li>
@@ -95,11 +97,12 @@
 </ul></div>
 <div class="section level3">
 <h3 id="term">Term<a class="anchor" aria-label="anchor" href="#term"></a></h3>
-<ul><li>
-<input type="checkbox" disabled>work with different units: terms(c(1, 6, 1, 2), c(“months”, “months”, “years”, “years”))</li></ul></div>
+<ul class="task-list"><li>
+<input type="checkbox" disabled>work with different units: terms(c(1, 6, 1, 2), c(“months”, “months”, “years”, “years”))</li>
+</ul></div>
 <div class="section level3">
 <h3 id="daycount">Daycount<a class="anchor" aria-label="anchor" href="#daycount"></a></h3>
-<ul><li>
+<ul class="task-list"><li>
 <input type="checkbox" disabled>create 30/360 daycount</li>
 <li>
 <input type="checkbox" disabled>Other daycounts <a href="https://en.wikipedia.org/wiki/Day_count_convention" class="external-link uri">https://en.wikipedia.org/wiki/Day_count_convention</a>
@@ -112,14 +115,15 @@
 </ul></div>
 <div class="section level3">
 <h3 id="spotrate">SpotRate<a class="anchor" aria-label="anchor" href="#spotrate"></a></h3>
-<ul><li>
-<input type="checkbox" disabled>compound and discount functions accept (character, character) date arguments discount(r, “2017-08-01”, “2017-08-21”)</li></ul></div>
+<ul class="task-list"><li>
+<input type="checkbox" disabled>compound and discount functions accept (character, character) date arguments discount(r, “2017-08-01”, “2017-08-21”)</li>
+</ul></div>
 <div class="section level3">
 <h3 id="spotratecurve">SpotRateCurve<a class="anchor" aria-label="anchor" href="#spotratecurve"></a></h3>
-<ul><li>
+<ul class="task-list"><li>
 <input type="checkbox" disabled checked>A spotrate should be removed from a spotratecurve: curve[-10] - curve[-n] should return a spotratecurve without the removed spotrate</li>
 <li>
-<input type="checkbox" disabled>spotratecurve indexing:<ul><li>
+<input type="checkbox" disabled>spotratecurve indexing:<ul class="task-list"><li>
 <input type="checkbox" disabled checked>positional indexing: <code>curve[1]</code> for the first term, <code>curve[2]</code> for the second and so on. If the given index exceeds the curve length this operation returns <code>NA</code>.</li>
 <li>
 <input type="checkbox" disabled checked>replacement with positional index <code>curve[1] \&lt;- 0.01</code>
@@ -133,7 +137,7 @@
 <li>
 <input type="checkbox" disabled checked>replacement with associative index</li>
 <li>
-<input type="checkbox" disabled>date indexes<ul><li>
+<input type="checkbox" disabled>date indexes<ul class="task-list"><li>
 <input type="checkbox" disabled>select</li>
 <li>
 <input type="checkbox" disabled>remove</li>
@@ -141,7 +145,7 @@
 <input type="checkbox" disabled>replace</li>
 </ul></li>
 <li>
-<input type="checkbox" disabled checked>term indexes<ul><li>
+<input type="checkbox" disabled checked>term indexes<ul class="task-list"><li>
 <input type="checkbox" disabled checked>select</li>
 <li>
 <input type="checkbox" disabled>remove</li>
@@ -166,11 +170,12 @@
 </ul></div>
 <div class="section level3">
 <h3 id="multi-spotratecurve">Multi SpotRateCurve<a class="anchor" aria-label="anchor" href="#multi-spotratecurve"></a></h3>
-<ul><li>
-<input type="checkbox" disabled>Data structure for multiple SpotRateCurve objects, like a matrix. Useful for historical data and to build historical risk factors.</li></ul></div>
+<ul class="task-list"><li>
+<input type="checkbox" disabled>Data structure for multiple SpotRateCurve objects, like a matrix. Useful for historical data and to build historical risk factors.</li>
+</ul></div>
 <div class="section level3">
 <h3 id="forwardrate">ForwardRate<a class="anchor" aria-label="anchor" href="#forwardrate"></a></h3>
-<ul><li>
+<ul class="task-list"><li>
 <input type="checkbox" disabled checked>create forward rates</li>
 <li>
 <input type="checkbox" disabled checked>daily forward rates with interpolated data</li>
@@ -179,14 +184,14 @@
 </ul></div>
 <div class="section level3">
 <h3 id="interpolation">Interpolation<a class="anchor" aria-label="anchor" href="#interpolation"></a></h3>
-<ul><li>
+<ul class="task-list"><li>
 <input type="checkbox" disabled checked>set interpolation to SpotRateCurve</li>
 <li>
 <input type="checkbox" disabled checked>unset interpolation to SpotRateCurve</li>
 <li>
 <input type="checkbox" disabled checked>Interpolation will be used with associative indexing. If interpolation is set and a missing index is passed, then this value is interpolated.</li>
 <li>
-<input type="checkbox" disabled>Methods<ul><li>
+<input type="checkbox" disabled>Methods<ul class="task-list"><li>
 <input type="checkbox" disabled checked>FlatForward</li>
 <li>
 <input type="checkbox" disabled checked>Linear</li>
@@ -228,28 +233,28 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bonds">Bonds<a class="anchor" aria-label="anchor" href="#bonds"></a></h3>
-<ul><li>
+<ul class="task-list"><li>
 <input type="checkbox" disabled>define bonds</li>
 <li>
 <input type="checkbox" disabled>pricing bonds</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bootstrap">Bootstrap<a class="anchor" aria-label="anchor" href="#bootstrap"></a></h3>
-<ul><li>
+<ul class="task-list"><li>
 <input type="checkbox" disabled>bonds bootstrap</li>
 <li>
 <input type="checkbox" disabled>Curve models: Nelson-Siegel, Diebold-Li, Nelson-Siegel-Svensson</li>
 </ul></div>
 <div class="section level3">
 <h3 id="other-classes">Other classes<a class="anchor" aria-label="anchor" href="#other-classes"></a></h3>
-<ul><li>
+<ul class="task-list"><li>
 <input type="checkbox" disabled>IndexCurve - for inflation index or IDI index, for example - rbcb integration</li>
 <li>
 <input type="checkbox" disabled>HistoricalRates - for CDI historical data, for example - rbcb integration</li>
 </ul></div>
 <div class="section level3">
 <h3 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a></h3>
-<ul><li>
+<ul class="task-list"><li>
 <input type="checkbox" disabled checked>SpotRateCurve: points and lines</li>
 <li>
 <input type="checkbox" disabled checked>SpotRateCurve: lines with daily interpolated points</li>
@@ -264,7 +269,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="other-issues">Other issues<a class="anchor" aria-label="anchor" href="#other-issues"></a></h3>
-<ul><li>
+<ul class="task-list"><li>
 <input type="checkbox" disabled>IR functions: <a href="https://support.google.com/docs/table/25273?hl=en" class="external-link uri">https://support.google.com/docs/table/25273?hl=en</a>
 </li>
 <li>
@@ -274,11 +279,12 @@
 </ul></div>
 <div class="section level3">
 <h3 id="register">Register<a class="anchor" aria-label="anchor" href="#register"></a></h3>
-<ul><li>
+<ul class="task-list"><li>
 <input type="checkbox" disabled>naming objects and register (aka container)<ul><li>Objects like HistoricalRates, SpotRateCurve, IndexCurve and Calendar should be referenced by their names. These objects are used by many others and their copies should imply unnecessary memory use.</li>
 <li>Integrate with rbcb package to transform series into IndexCurve or HistoricalRates.</li>
 <li>Methods which work with these objects should work with characters that represent the objects.</li>
-</ul></li></ul><hr></div>
+</ul></li>
+</ul><hr></div>
 </div>
 <div class="section level2">
 <h2 id="legacy">Legacy<a class="anchor" aria-label="anchor" href="#legacy"></a></h2>
@@ -293,11 +299,15 @@
 <li>[&lt;-, [[&lt;- (x,i, j, …, value)</li>
 <li>$, $&lt;- (x, name, value)</li>
 <li>summary.S3</li>
-<li>Arith<ul><li>(., ANY), (ANY, .)</li></ul></li>
-<li>Compare<ul><li>(., character), (character, .)</li>
+<li>Arith
+<ul><li>(., ANY), (ANY, .)</li>
+</ul></li>
+<li>Compare
+<ul><li>(., character), (character, .)</li>
 <li>(., numeric), (numeric, .)</li>
 </ul></li>
-<li>as.term<ul><li>character</li>
+<li>as.term
+<ul><li>character</li>
 <li>numeric</li>
 </ul></li>
 </ul><p>Bonds can be created using a <code>data.frame</code> and <code>spotrate</code> can be set as one of columns.</p>
@@ -364,7 +374,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

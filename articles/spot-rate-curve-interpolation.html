@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">fixedincome</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5</span>
       </span>
     </div>
 
@@ -88,7 +88,7 @@
 
       
 
-      </header><script src="spot-rate-curve-interpolation_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Spot Rate Curve Interpolation</h1>
@@ -101,8 +101,13 @@
 
     
     
-<p>The <code>fixedincome</code> package implements many interpolation methods for spot rate curve. All interpolation methods inherits the S4 class <code>Interpolation</code>. Once you instantiate an Interpolation object, it has to be set to a SpotRateCurve object and this is done throught the curve’s <code>interpolation&lt;-</code> method.</p>
-<p>There is a list with the interpolation methods implemented and their constructors:</p>
+<p>The <code>fixedincome</code> package implements many interpolation
+methods for spot rate curve. All interpolation methods inherits the S4
+class <code>Interpolation</code>. Once you instantiate an Interpolation
+object, it has to be set to a SpotRateCurve object and this is done
+throught the curve’s <code>interpolation&lt;-</code> method.</p>
+<p>There is a list with the interpolation methods implemented and their
+constructors:</p>
 <ul>
 <li>Flat Forward: <code>interp_flatforward</code>
 </li>
@@ -116,24 +121,31 @@
 </li>
 <li>Nelson Siegel: <code>interp_nelsonsiegel</code>
 </li>
-<li>Nelson Siegel Svensson: <code>interp_nelsonsiegelsvensson</code>
+<li>Nelson Siegel Svensson:
+<code>interp_nelsonsiegelsvensson</code>
 </li>
 <li>Flat Forward COPOM: <code>interp_flatforwardcopom</code> (thru <a href="https://github.com/wilsonfreitas/copom" class="external-link">copom</a> package)</li>
 </ul>
-<p>Here it follows an example on how to create and set an interpolation to a spot rate curve.</p>
+<p>Here it follows an example on how to create and set an interpolation
+to a spot rate curve.</p>
 <p>Let’s start by creating a curve using data obtained with <a href="https://github.com/wilsonfreitas/rb3" class="external-link">rb3</a> package.</p>
 <p>Firstly, the packages have to be loaded.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonfreitas/rb3" class="external-link">rb3</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/rb3" class="external-link">rb3</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonfreitas/R-fixedincome" class="external-link">fixedincome</a></span><span class="op">)</span></span></code></pre></div>
-<p>In order to build a term structure formed only by futures maturities, the yield curve data and futures data have to be mixed and this is done with the <code><a href="http://wilsonfreitas.github.io/rb3/reference/yc_superset.html" class="external-link">rb3::yc_superset</a></code> function. Once the superset is returned, the rows related to futures maturities can be filtered. The first term, usually 1 business day term, is also used to anchor the curve’s short part.</p>
+<p>In order to build a term structure formed only by futures maturities,
+the yield curve data and futures data have to be mixed and this is done
+with the <code><a href="https://docs.ropensci.org/rb3/reference/yc_superset.html" class="external-link">rb3::yc_superset</a></code> function. Once the superset is
+returned, the rows related to futures maturities can be filtered. The
+first term, usually 1 business day term, is also used to anchor the
+curve’s short part.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">refdate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2022-08-05"</span><span class="op">)</span></span>
-<span><span class="va">yc_</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://wilsonfreitas.github.io/rb3/reference/yc_get.html" class="external-link">yc_get</a></span><span class="op">(</span><span class="va">refdate</span><span class="op">)</span></span>
-<span><span class="va">fut_</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://wilsonfreitas.github.io/rb3/reference/futures_get.html" class="external-link">futures_get</a></span><span class="op">(</span><span class="va">refdate</span><span class="op">)</span></span>
-<span><span class="va">yc_ss</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://wilsonfreitas.github.io/rb3/reference/yc_superset.html" class="external-link">yc_superset</a></span><span class="op">(</span><span class="va">yc_</span>, <span class="va">fut_</span><span class="op">)</span></span>
-<span><span class="va">yc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
+<span><span class="va">yc_</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://docs.ropensci.org/rb3/reference/yc_get.html" class="external-link">yc_get</a></span><span class="op">(</span><span class="va">refdate</span><span class="op">)</span></span>
+<span><span class="va">fut_</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://docs.ropensci.org/rb3/reference/futures_get.html" class="external-link">futures_get</a></span><span class="op">(</span><span class="va">refdate</span><span class="op">)</span></span>
+<span><span class="va">yc_ss</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://docs.ropensci.org/rb3/reference/yc_superset.html" class="external-link">yc_superset</a></span><span class="op">(</span><span class="va">yc_</span>, <span class="va">fut_</span><span class="op">)</span></span>
+<span><span class="va">yc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
 <span>  <span class="va">yc_ss</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,</span>
 <span>  <span class="va">yc_ss</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">symbol</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -153,8 +165,9 @@
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2022-08-05      208      142 2023-03-01   0.138 0.134 DI1H23</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2022-08-05      241      165 2023-04-03   0.138 0.134 DI1J23</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2022-08-05      270      183 2023-05-02   0.138 0.133 DI1K23</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 29 more rows</span></span></span></code></pre></div>
-<p>With the curve data prepared, the <code>spotratecurve</code> is created.</p>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 29 more rows</span></span></span></code></pre></div>
+<p>With the curve data prepared, the <code>spotratecurve</code> is
+created.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sp_curve</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spotratecurve.html">spotratecurve</a></span><span class="op">(</span></span>
 <span>  <span class="va">yc</span><span class="op">$</span><span class="va">r_252</span>, <span class="va">yc</span><span class="op">$</span><span class="va">biz_days</span>,</span>
@@ -177,8 +190,11 @@
 <span><span class="co">#&gt; # ... with 29 more rows</span></span>
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
 <span><span class="co">#&gt; Reference date: 2022-08-05</span></span></code></pre></div>
-<p>From the output above it is possible to observe that this curve does not have an interpolation method defined.</p>
-<p>Let’s, for example, define a flat forward interpolation for this curve. The FlatForward object is created and set to the curve with the <code>interpolation&lt;-</code> method.</p>
+<p>From the output above it is possible to observe that this curve does
+not have an interpolation method defined.</p>
+<p>Let’s, for example, define a flat forward interpolation for this
+curve. The FlatForward object is created and set to the curve with the
+<code>interpolation&lt;-</code> method.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">sp_curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolation-constructor.html">interp_flatforward</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -202,7 +218,9 @@
 <div class="section level2">
 <h2 id="interpolate-with">Interpolate with <code>[[</code><a class="anchor" aria-label="anchor" href="#interpolate-with"></a>
 </h2>
-<p>The spot rate curve method <code>[[</code> is used to interpolte the curve. The term is passed as a Term object or numeric and a spot rate curve is returned with all interpolated values.</p>
+<p>The spot rate curve method <code>[[</code> is used to interpolte the
+curve. The term is passed as a Term object or numeric and a spot rate
+curve is returned with all interpolated values.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sp_curve</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">21</span>, <span class="fl">42</span>, <span class="fl">63</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="co">#&gt;         SpotRateCurve</span></span>
@@ -211,8 +229,13 @@
 <span><span class="co">#&gt; 63 days        0.1373</span></span>
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
 <span><span class="co">#&gt; Reference date: 2022-08-05</span></span></code></pre></div>
-<p>The term 21 doesn’t exist in the spot rate curve, so it is interpolated according to the interpolation method defined. Since the flat forward interpolation just connect the dots, the terms 42 and 63 have the same values of the spot rate curve.</p>
-<p>Other interpolation methods can be set with the <code>interpolation</code> method overriding any method set previously.</p>
+<p>The term 21 doesn’t exist in the spot rate curve, so it is
+interpolated according to the interpolation method defined. Since the
+flat forward interpolation just connect the dots, the terms 42 and 63
+have the same values of the spot rate curve.</p>
+<p>Other interpolation methods can be set with the
+<code>interpolation</code> method overriding any method set
+previously.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">sp_curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolation-constructor.html">interp_naturalspline</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">sp_curve</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">21</span>, <span class="fl">42</span>, <span class="fl">63</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
@@ -226,7 +249,8 @@
 <div class="section level2">
 <h2 id="unset-interpolation">Unset interpolation<a class="anchor" aria-label="anchor" href="#unset-interpolation"></a>
 </h2>
-<p>Set interpolation to <code>NULL</code> to unset the interpolation.</p>
+<p>Set interpolation to <code>NULL</code> to unset the
+interpolation.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">sp_curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
 <span><span class="va">sp_curve</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">21</span>, <span class="fl">42</span>, <span class="fl">63</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
@@ -236,12 +260,17 @@
 <span><span class="co">#&gt; 63 days            NA</span></span>
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
 <span><span class="co">#&gt; Reference date: 2022-08-05</span></span></code></pre></div>
-<p>Note that for those terms in the <code>[[</code> method that don’t have a related term in the spot rate curve, <code>NA</code> is returned.</p>
+<p>Note that for those terms in the <code>[[</code> method that don’t
+have a related term in the spot rate curve, <code>NA</code> is
+returned.</p>
 </div>
 <div class="section level2">
 <h2 id="plot-with-interpolation">Plot with interpolation<a class="anchor" aria-label="anchor" href="#plot-with-interpolation"></a>
 </h2>
-<p>The <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">fixedincome::plot</a></code> method for the spot rate curve has an argument <code>use_interpolation</code> that shows the interpolation together with the curve points. This argument defaults to <code>FALSE</code>.</p>
+<p>The <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">fixedincome::plot</a></code> method for the spot rate curve has
+an argument <code>use_interpolation</code> that shows the interpolation
+together with the curve points. This argument defaults to
+<code>FALSE</code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">sp_curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolation-constructor.html">interp_flatforward</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sp_curve</span>, use_interpolation <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
@@ -249,19 +278,26 @@
 <div class="section level3">
 <h3 id="forward-rates-with-and-without-interpolation-set">Forward rates with and without interpolation set<a class="anchor" aria-label="anchor" href="#forward-rates-with-and-without-interpolation-set"></a>
 </h3>
-<p>Once the interpolation is set, the <code>plot</code> method uses it to calculate daily forward rates. Otherwise, it uses the forward rates between the curve terms. Set the <code>show_forward</code> argument to <code>TRUE</code> to show the forward rates.</p>
+<p>Once the interpolation is set, the <code>plot</code> method uses it
+to calculate daily forward rates. Otherwise, it uses the forward rates
+between the curve terms. Set the <code>show_forward</code> argument to
+<code>TRUE</code> to show the forward rates.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">sp_curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sp_curve</span>, show_forward <span class="op">=</span> <span class="cn">TRUE</span>, legend_location <span class="op">=</span> <span class="st">"bottomright"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spot-rate-curve-interpolation_files/figure-html/unnamed-chunk-10-1.png" width="100%"></p>
 <p>The forward rates are drawn with step lines.</p>
-<p>If the <code>use_interpolation</code> argument is <code>TRUE</code> then the daily forward rates are calculated with the defined interpolation.</p>
+<p>If the <code>use_interpolation</code> argument is <code>TRUE</code>
+then the daily forward rates are calculated with the defined
+interpolation.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">sp_curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolation-constructor.html">interp_flatforward</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sp_curve</span>, use_interpolation <span class="op">=</span> <span class="cn">TRUE</span>, show_forward <span class="op">=</span> <span class="cn">TRUE</span>, legend_location <span class="op">=</span> <span class="st">"bottomright"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spot-rate-curve-interpolation_files/figure-html/unnamed-chunk-11-1.png" width="100%"></p>
-<p>It is possible to note that the flat forward daily rates are fairly close to curve terms forward rates.</p>
-<p>As the interpolation changes its effects can be viewed in the forward rates dynamic.</p>
+<p>It is possible to note that the flat forward daily rates are fairly
+close to curve terms forward rates.</p>
+<p>As the interpolation changes its effects can be viewed in the forward
+rates dynamic.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">sp_curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolation-constructor.html">interp_naturalspline</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sp_curve</span>, use_interpolation <span class="op">=</span> <span class="cn">TRUE</span>, show_forward <span class="op">=</span> <span class="cn">TRUE</span>, legend_location <span class="op">=</span> <span class="st">"bottomright"</span><span class="op">)</span></span></code></pre></div>
@@ -287,7 +323,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
