@@ -10,7 +10,7 @@ Description: Fixed income mathematics made easy. A rich set of functions
     forward rates and term structure of interest rates.
     Many interpolation methods and parametric curve models commonly used by practitioners
     are implemented.
-URL: https://github.com/wilsonfreitas/R-fixedincome
+URL: https://github.com/wilsonfreitas/R-fixedincome, https://wilsonfreitas.github.io/R-fixedincome/
 BugReports: https://github.com/wilsonfreitas/R-fixedincome/issues
 Depends:
     R (>= 4.0.0),
