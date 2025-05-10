@@ -1,150 +1,52 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/404.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/TODO.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/articles/spot-rate-curve-indexing.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/articles/spot-rate-curve-interpolation.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/articles/spot-rate-curve-plotting.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/authors.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/index.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/news/index.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/ForwardRate-class.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/Interpolation-class.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/SpotRateCurve-class.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/as.forwardrate.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/as.spotrate.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/as.spotratecurve.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/as.term.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/compound.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/compounding-class.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/compounding.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/datasets.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/daycount-class.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/daycount.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/dib.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/diff-Term-method.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/fit_interpolation.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/fixedincome-package.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/forwardrate.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/ggplot2-support.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/ggspotratecurveplot.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/hidden_aliases.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/implied_rate.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/interpolate.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/interpolation-constructor.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/interpolation.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/interpolation_error.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/maturities.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/parameters.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/prepare_interpolation.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/shift.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/spotrate-class.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/spotrate-compare-method.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/spotrate.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/spotratecurve-helpers.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/spotratecurve.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/term-class.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/term-conversion.html</loc>
-  </url>
-  <url>
-    <loc>http://wilsonfreitas.github.io/R-fixedincome/reference/term.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/404.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/LICENSE-text.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/TODO.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/articles/index.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/articles/spot-rate-curve-indexing.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/articles/spot-rate-curve-interpolation.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/articles/spot-rate-curve-plotting.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/authors.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/index.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/news/index.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/ForwardRate-class.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/Interpolation-class.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/SpotRateCurve-class.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/as.forwardrate.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/as.spotrate.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/as.spotratecurve.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/as.term.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/compound.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/compounding-class.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/compounding.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/datasets.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/daycount-class.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/daycount.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/dib.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/diff-Term-method.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/fit_interpolation.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/fixedincome-package.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/forwardrate.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/ggplot2-support.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/ggspotratecurveplot.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/hidden_aliases.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/implied_rate.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/index.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/interpolate.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/interpolation-constructor.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/interpolation.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/interpolation_error.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/maturities.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/parameters.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/prepare_interpolation.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/shift.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/spotrate-class.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/spotrate-compare-method.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/spotrate.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/spotratecurve-helpers.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/spotratecurve.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/term-class.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/term-conversion.html</loc></url>
+<url><loc>http://wilsonfreitas.github.io/R-fixedincome/reference/term.html</loc></url>
 </urlset>
+
