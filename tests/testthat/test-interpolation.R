@@ -16,3 +16,13 @@ test_that("it should prepare an interpolation with a curve", {
   prep_interp <- prepare_interpolation(interp, curve)
   expect_s4_class(prep_interp, "Interpolation")
 })
+
+test_that("it should interpolate many terms at once", {
+  curve <- spotratecurve(rates, terms, "simple", "actual/365", "actual")
+  interp <- interp_flatforward()
+  interpolation(curve) <- interp
+  x <- interpolate(curve@interpolation, 1:10)
+  expect_type(x, "double")
+  x <- interpolate(curve@interpolation, term(1:10, "days"))
+  expect_type(x, "double")
+})
