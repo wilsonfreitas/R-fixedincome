@@ -189,3 +189,14 @@ test_that("it should diff terms", {
 #   t2 <- term(1, "days", "business/252")
 #   expect_true(t1 != t2)
 # })
+test_that("c() keeps the units of each element", {
+  expect_equal(c(term(1, "day"), term(5, "days")), term(c(1, 5), "days"))
+  x <- c(term(1, "day"), term(c(2, 3), "months"))
+  expect_equal(as.numeric(x), c(1, 2, 3))
+  expect_equal(x@units, c("day", "month", "month"))
+  expect_equal(c(term(1, "month"), 2), term(c(1, 2), "months"))
+})
+
+test_that("it should format NA terms", {
+  expect_equal(format(term(c(NA, 1, 21), "days")), c("NA days", "1 day", "21 days"))
+})

@@ -232,7 +232,7 @@ setMethod(
 format.Term <- function(x, ...) {
   value <- x@.Data
   abrev <- x@units
-  abrev <- ifelse(abs(value) > 1, paste0(abrev, "s"), abrev)
+  abrev <- ifelse(is.na(value) | abs(value) > 1, paste0(abrev, "s"), abrev)
   paste(value, abrev, sep = " ")
 }
 
@@ -262,7 +262,11 @@ c.Term <- function(x, ...) {
   nempty <- sapply(dots, length) != 0
   elements <- dots[nempty]
   values_ <- c(x@.Data, unlist(lapply(elements, as.numeric)))
-  term(values_, x@units)
+  # each element keeps its own units; plain numbers take the units of x
+  units_ <- unlist(lapply(c(list(x), elements), function(e) {
+    rep_len(if (is(e, "Term")) e@units else x@units[1], length(e))
+  }))
+  term(values_, if (length(unique(units_)) == 1) units_[1] else units_)
 }
 
 # Units of the result of an operation between two Terms. Terms with
