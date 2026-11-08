@@ -33,3 +33,4 @@ images
 ^\.gitattributes$
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
+^README-curves\.rds$

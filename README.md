@@ -14,9 +14,9 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 
 Calculations involving interest rates are usually very easy and
 straightforward, but sometimes it involves specific issues that makes
-the task of writing structured and reproducible code for it chalenging
+the task of writing structured and reproducible code for it challenging
 and annoying. The `fixedincome` package brings many functions to
-strucutre and create facilities to handle with interest rates, term
+structure and create facilities to handle with interest rates, term
 structure of interest rates and specific issues regarding compounding
 rates and day count rules, for example.
 
@@ -43,16 +43,15 @@ devtools::install_github("wilsonfreitas/R-fixedincome")
 
 To create an interest rate we need to specify 4 elements:
 
--   the value of the interest rate itself, a decimal number
--   the compounding regime of interest rate, that can be `simple`,
-    `discrete` or `continuous`.
--   the day count rule which defines how interest is accrued over time,
-    we have a few options, for example, `actual/360` where the days
-    between two dates are calculated as the difference and the year is
-    assumed to be 360 days.
--   the calendar used to count the number of days between two dates, we
-    have `actual` calendar that compute the difference between two
-    dates.
+- the value of the interest rate itself, a decimal number
+- the compounding regime of interest rate, that can be `simple`,
+  `discrete` or `continuous`.
+- the day count rule which defines how interest is accrued over time, we
+  have a few options, for example, `actual/360` where the days between
+  two dates are calculated as the difference and the year is assumed to
+  be 360 days.
+- the calendar used to count the number of days between two dates, we
+  have `actual` calendar that compute the difference between two dates.
 
 There is another important topic that wasn’t declared here that is the
 *frequency* of interest. To start with the things simple `fixedincome`
@@ -111,7 +110,7 @@ df <- tibble(
 )
 
 df
-#> # A tibble: 5 x 2
+#> # A tibble: 5 × 2
 #>   rate                                       terms  
 #>   <SpotRate>                                 <Term> 
 #> 1 0.1056 discrete business/252 Brazil/ANBIMA 1 year 
@@ -126,7 +125,7 @@ classes.
 
 ``` r
 df |> mutate(fact = compound(rate, terms))
-#> # A tibble: 5 x 3
+#> # A tibble: 5 × 3
 #>   rate                                       terms    fact
 #>   <SpotRate>                                 <Term>  <dbl>
 #> 1 0.1056 discrete business/252 Brazil/ANBIMA 1 year   1.11
@@ -138,16 +137,43 @@ df |> mutate(fact = compound(rate, terms))
 
 ### Spot rate curves
 
-Let’s create a spot rate curve using web scraping (from B3 website)
+Let’s create a spot rate curve with the DI1 futures prices from B3,
+using the [rb3](https://CRAN.R-project.org/package=rb3) package. The 1
+day rate is the CDI rate.
 
 ``` r
-source("examples/utils-functions.R")
-#> 
-#> Attaching package: 'bizdays'
-#> The following object is masked from 'package:stats':
-#> 
-#>     offset
-curve <- get_curve_from_web("2022-02-23")
+library(rb3)
+library(bizdays)
+
+di1_curve <- function(date, cdi) {
+  months <- c(F = 1, G = 2, H = 3, J = 4, K = 5, M = 6, N = 7, Q = 8, U = 9, V = 10, X = 11, Z = 12)
+  di1 <- futures_get() |>
+    filter(commodity == "DI1", refdate == date) |>
+    collect() |>
+    mutate(
+      maturity = sprintf("20%s-%02d-01", substr(maturity_code, 2, 3), months[substr(maturity_code, 1, 1)]),
+      maturity = following(as.Date(maturity), "Brazil/ANBIMA"),
+      business_days = bizdays(refdate, maturity, "Brazil/ANBIMA"),
+      rate = (100000 / price)^(252 / business_days) - 1
+    ) |>
+    filter(business_days != 0) |>
+    arrange(business_days)
+  curve <- spotratecurve(
+    di1$rate, di1$business_days, "discrete", "business/252", "Brazil/ANBIMA",
+    refdate = date
+  )
+  curve[[1]] <- cdi
+  curve
+}
+
+curves <- list(
+  "2022-02-23" = di1_curve(as.Date("2022-02-23"), 0.1065),
+  "2011-02-23" = di1_curve(as.Date("2011-02-23"), 0.1116)
+)
+```
+
+``` r
+curve <- curves[["2022-02-23"]]
 curve
 #>          SpotRateCurve
 #> 1 day           0.1065
@@ -171,26 +197,26 @@ curve
 plot(curve)
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-12-1.png" width="100%" />
 
 For another date.
 
 ``` r
-curve <- get_curve_from_web("2011-02-23")
+curve <- curves[["2011-02-23"]]
 plot(curve)
 ```
 
-<img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-13-1.png" width="100%" />
 
 It can show the forward rates for the short term by selecting the first
 two years.
 
 ``` r
-curve <- get_curve_from_web("2022-02-23")
+curve <- curves[["2022-02-23"]]
 plot(fixedincome::first(curve, "2 years"), show_forward = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-12-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-14-1.png" width="100%" />
 
 Once interpolation is set, it can be used in the plot.
 
@@ -200,7 +226,7 @@ interpolation(curve_2y) <- interp_flatforward()
 plot(curve_2y, use_interpolation = TRUE, legend_location = "bottomright")
 ```
 
-<img src="man/figures/README-unnamed-chunk-13-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-15-1.png" width="100%" />
 
 Parametric models like the Nelson-Siegel-Svensson model can be fitted to
 the curve.
@@ -216,7 +242,7 @@ interpolation(curve)
 #> <Interpolation: nelsonsiegelsvensson > 
 #>  Parameters:
 #>   beta1   beta2   beta3   beta4 lambda1 lambda2 
-#>   0.119  -0.013   1.000  -0.975   1.195   1.122
+#>   0.119  -0.014   1.000  -0.975   1.202   1.129
 ```
 
 Once set to the curve it is used in the plot to show daily forward
@@ -226,7 +252,7 @@ rates.
 plot(curve, use_interpolation = TRUE, show_forward = TRUE, legend_location = "bottom")
 ```
 
-<img src="man/figures/README-unnamed-chunk-15-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-17-1.png" width="100%" />
 
 The interpolation can be changed in order to compare different
 interpolations and the effects in forward rates.
@@ -240,7 +266,7 @@ plot(
 )
 ```
 
-<img src="man/figures/README-unnamed-chunk-16-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-18-1.png" width="100%" />
 
 Interpolation enables the creation of standardized curves, commonly used
 in risk management to build risk factors.
@@ -252,4 +278,4 @@ interpolation(risk_curve) <- interp_flatforward()
 plot(risk_curve, use_interpolation = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-17-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-19-1.png" width="100%" />

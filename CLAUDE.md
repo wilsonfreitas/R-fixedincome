@@ -17,7 +17,7 @@ devtools::test()                     # run all tests (testthat, edition 3)
 devtools::test(filter = "spotratecurve")   # single test file: tests/testthat/test-spotratecurve.R
 testthat::test_file("tests/testthat/test-term.R")
 devtools::check()                    # full R CMD check (what CI runs)
-rmarkdown::render("README.Rmd")      # README.md is generated — edit README.Rmd
+LANGUAGE=en Rscript -e 'rmarkdown::render("README.Rmd")'   # README.md is generated — edit README.Rmd; install the package first
 pkgdown::build_site()                # docs site (config in _pkgdown.yml)
 ```
 
@@ -45,6 +45,6 @@ Plotting: base graphics in `R/plot.R`, ggplot2 in `R/autoplot.R`.
 - `NAMESPACE` and `man/` are roxygen-generated (markdown enabled) — never edit by hand; run `devtools::document()`.
 - S4 methods that need a doc entry but would clutter the index get an alias in `R/hidden.R` (`hidden_aliases`). Add new method aliases there if `R CMD check` complains about undocumented S4 methods.
 - Dataset `ZeroCurveBRL` (`data/`) is documented in `R/fixedincome-internal.R`.
-- Vignettes don't download data: the rb3 (>= 0.1.0, not in Suggests: it pulls in arrow) code is shown with `eval=FALSE`, and a hidden chunk loads `vignettes/yc-<date>.rds` (made once from a local rb3 cache, because B3 no longer serves those 2022 files).
+- Vignettes don't download data: the rb3 (>= 0.1.0, not in Suggests: it pulls in arrow) code is shown with `eval=FALSE`, and a hidden chunk loads `vignettes/yc-<date>.rds` (made once from a local rb3 cache, because B3 no longer serves those 2022 files). The README does the same with `README-curves.rds`.
 - Only annual rates are supported (no frequency concept).
 - `examples/`, `resources/`, `images/` are scratch/legacy material excluded from the build (`.Rbuildignore`); they are not tests and may not run against the current API.
