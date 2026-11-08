@@ -75,7 +75,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">spotrate</span><span class="op">(</span><span class="va">x</span>, <span class="va">compounding</span>, <span class="va">daycount</span>, <span class="va">calendar</span>, .copyfrom <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">spotrate</span><span class="op">(</span><span class="va">x</span>, <span class="va">compounding</span>, <span class="va">daycount</span>, <span class="va">calendar</span>, period <span class="op">=</span> <span class="cn">NULL</span>, .copyfrom <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -98,6 +98,14 @@
 <dd><p>a <code>bizdays</code> calendar.</p></dd>
 
 
+<dt id="arg-period">period<a class="anchor" aria-label="anchor" href="#arg-period"></a></dt>
+<dd><p>the period of the rates in <code>x</code>, a <code>Term</code> object or a string
+like <code>"1 month"</code>. The rates are converted to the equivalent annual
+rates, using <code>compounding</code> and <code>daycount</code>. A <code>DateRangeTerm</code> gives
+the rate for a fixed period between two dates. Defaults to one year,
+meaning that <code>x</code> is already annual.</p></dd>
+
+
 <dt id="arg--copyfrom">.copyfrom<a class="anchor" aria-label="anchor" href="#arg--copyfrom"></a></dt>
 <dd><p>a <code>SpotRate</code> object used as reference to copy
 attributes.</p></dd>
@@ -105,7 +113,7 @@ attributes.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>SpotRate</code> object.</p>
+    <p>A <code>SpotRate</code> object. Its rates are always annual.</p>
     </div>
 
     <div id="ref-examples">
@@ -115,6 +123,23 @@ attributes.</p></dd>
 <span class="r-in"><span><span class="fu">spotrate</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.06</span>, <span class="fl">0.07</span>, <span class="fl">0.08</span><span class="op">)</span>, <span class="st">"continuous"</span>, <span class="st">"actual/365"</span>, <span class="st">"actual"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0.06 continuous actual/365 actual" "0.07 continuous actual/365 actual"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [3] "0.08 continuous actual/365 actual"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># a monthly inflation rate, stored as the equivalent annual rate</span></span></span>
+<span class="r-in"><span><span class="va">infl</span> <span class="op">&lt;-</span> <span class="fu">spotrate</span><span class="op">(</span><span class="fl">0.0045</span>, <span class="st">"discrete"</span>, <span class="st">"business/252"</span>, <span class="st">"Brazil/ANBIMA"</span>,</span></span>
+<span class="r-in"><span>  period <span class="op">=</span> <span class="st">"1 month"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">infl</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0.05535675 discrete business/252 Brazil/ANBIMA"</span>
+<span class="r-in"><span><span class="fu"><a href="compound.html">compound</a></span><span class="op">(</span><span class="va">infl</span>, <span class="fu"><a href="term.html">term</a></span><span class="op">(</span><span class="fl">1</span>, <span class="st">"month"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.0045</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># a rate for a fixed period: January 2024 has 22 business days</span></span></span>
+<span class="r-in"><span><span class="va">jan</span> <span class="op">&lt;-</span> <span class="fu"><a href="term.html">term</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-01-01"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-02-01"</span><span class="op">)</span>, <span class="st">"Brazil/ANBIMA"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">infl_jan</span> <span class="op">&lt;-</span> <span class="fu">spotrate</span><span class="op">(</span><span class="fl">0.0045</span>, <span class="st">"discrete"</span>, <span class="st">"business/252"</span>, <span class="st">"Brazil/ANBIMA"</span>,</span></span>
+<span class="r-in"><span>  period <span class="op">=</span> <span class="va">jan</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="compound.html">compound</a></span><span class="op">(</span><span class="va">infl_jan</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-01-01"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-02-01"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.0045</span>
 </code></pre></div>
     </div>
   </div>

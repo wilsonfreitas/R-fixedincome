@@ -241,13 +241,68 @@ rate depends on the dates: another period has another number of business
 days.</p>
 </div>
 <div class="section level2">
+<h2 id="rates-for-other-periods">Rates for other periods<a class="anchor" aria-label="anchor" href="#rates-for-other-periods"></a>
+</h2>
+<p><code>SpotRate</code> objects are always annual, but many rates are
+quoted for other periods: inflation per month, the DI rate per day,
+coupons per semester. The <code>period</code> argument of
+<code><a href="../reference/spotrate.html">spotrate()</a></code> takes the rate for one period and stores the
+equivalent annual rate: the rate with the same compounding factor over
+that period. The period is a <code>Term</code>, or a string like
+<code>"1 month"</code>, and the daycount of the rate turns it into a
+fraction of a year.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">inflation</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spotrate.html">spotrate</a></span><span class="op">(</span><span class="fl">0.0045</span>, <span class="st">"discrete"</span>, <span class="st">"business/252"</span>, <span class="st">"Brazil/ANBIMA"</span>,</span>
+<span>  period <span class="op">=</span> <span class="st">"1 month"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">inflation</span></span>
+<span><span class="co">#&gt; [1] "0.05535675 discrete business/252 Brazil/ANBIMA"</span></span>
+<span><span class="fu"><a href="../reference/compound.html">compound</a></span><span class="op">(</span><span class="va">inflation</span>, <span class="fu"><a href="../reference/term.html">term</a></span><span class="op">(</span><span class="fl">1</span>, <span class="st">"month"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 1.0045</span></span></code></pre></div>
+<p>With <code>business/252</code> one month is 21 business days, but
+calendar months have 17 to 23 business days in Brazil. For a rate tied
+to a specific month, use a <code>Term</code> created from two dates: the
+rate is converted with the business days of that month, so compounding
+between those dates gives back the monthly rate.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">jan</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/term.html">term</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-01-01"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-02-01"</span><span class="op">)</span>, <span class="st">"Brazil/ANBIMA"</span><span class="op">)</span></span>
+<span><span class="va">jan</span></span>
+<span><span class="co">#&gt; [1] "22 days"</span></span>
+<span><span class="va">inflation_jan</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spotrate.html">spotrate</a></span><span class="op">(</span><span class="fl">0.0045</span>, <span class="st">"discrete"</span>, <span class="st">"business/252"</span>, <span class="st">"Brazil/ANBIMA"</span>,</span>
+<span>  period <span class="op">=</span> <span class="va">jan</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/compound.html">compound</a></span><span class="op">(</span><span class="va">inflation_jan</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-01-01"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-02-01"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 1.0045</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="real-interest-rates">Real interest rates<a class="anchor" aria-label="anchor" href="#real-interest-rates"></a>
+</h2>
+<p>The real rate is the nominal rate discounted by inflation:
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><mtext mathvariant="normal">real</mtext><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><mtext mathvariant="normal">nominal</mtext><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><mtext mathvariant="normal">inflation</mtext><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1 + \text{real}) = (1 + \text{nominal}) / (1 + \text{inflation})</annotation></semantics></math>.
+With discrete compounding this holds for any period, so it can be
+computed directly with annual <code>SpotRate</code> objects that have
+the same compounding, daycount and calendar.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">nominal</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spotrate.html">spotrate</a></span><span class="op">(</span><span class="fl">0.1065</span>, <span class="st">"discrete"</span>, <span class="st">"business/252"</span>, <span class="st">"Brazil/ANBIMA"</span><span class="op">)</span></span>
+<span><span class="va">real</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">nominal</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">inflation</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span></span>
+<span><span class="va">real</span></span>
+<span><span class="co">#&gt; [1] "0.04846063 discrete business/252 Brazil/ANBIMA"</span></span></code></pre></div>
+<p>The real rate for one month is the same with both ways of computing
+it.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/compound.html">compound</a></span><span class="op">(</span><span class="va">real</span>, <span class="fu"><a href="../reference/term.html">term</a></span><span class="op">(</span><span class="fl">1</span>, <span class="st">"month"</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span></span>
+<span><span class="co">#&gt; [1] 0.003951371</span></span>
+<span><span class="fu"><a href="../reference/compound.html">compound</a></span><span class="op">(</span><span class="va">nominal</span>, <span class="fu"><a href="../reference/term.html">term</a></span><span class="op">(</span><span class="fl">1</span>, <span class="st">"month"</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="../reference/compound.html">compound</a></span><span class="op">(</span><span class="va">inflation</span>, <span class="fu"><a href="../reference/term.html">term</a></span><span class="op">(</span><span class="fl">1</span>, <span class="st">"month"</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span></span>
+<span><span class="co">#&gt; [1] 0.003951371</span></span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="converting-terms">Converting Terms<a class="anchor" aria-label="anchor" href="#converting-terms"></a>
 </h2>
 <p>A <code>Term</code> can be in days, months or years, and the daycount
 says how many days there are in one year (or in one month, which is one
 twelfth of a year). <code><a href="../reference/term-conversion.html">todays()</a></code>, <code><a href="../reference/term-conversion.html">tomonths()</a></code> and
 <code><a href="../reference/term-conversion.html">toyears()</a></code> convert Terms with a daycount.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/term-conversion.html">todays</a></span><span class="op">(</span><span class="fu"><a href="../reference/daycount.html">daycount</a></span><span class="op">(</span><span class="st">"business/252"</span><span class="op">)</span>, <span class="fu"><a href="../reference/term.html">term</a></span><span class="op">(</span><span class="fl">1</span>, <span class="st">"year"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "252 days"</span></span>
 <span><span class="fu"><a href="../reference/term-conversion.html">todays</a></span><span class="op">(</span><span class="fu"><a href="../reference/daycount.html">daycount</a></span><span class="op">(</span><span class="st">"actual/365"</span><span class="op">)</span>, <span class="fu"><a href="../reference/term.html">term</a></span><span class="op">(</span><span class="fl">1</span>, <span class="st">"year"</span><span class="op">)</span><span class="op">)</span></span>
@@ -256,7 +311,7 @@ twelfth of a year). <code><a href="../reference/term-conversion.html">todays()</
 <span><span class="co">#&gt; [1] "0.25 year"</span></span></code></pre></div>
 <p><code><a href="../reference/with_daycount.html">with_daycount()</a></code> evaluates operations between Terms with
 different units.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/with_daycount.html">with_daycount</a></span><span class="op">(</span><span class="st">"business/252"</span>, <span class="fu"><a href="../reference/term.html">term</a></span><span class="op">(</span><span class="fl">1</span>, <span class="st">"month"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/term.html">term</a></span><span class="op">(</span><span class="fl">12</span>, <span class="st">"days"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "33 days"</span></span>
 <span><span class="fu"><a href="../reference/with_daycount.html">with_daycount</a></span><span class="op">(</span><span class="st">"actual/360"</span>, <span class="fu"><a href="../reference/term.html">term</a></span><span class="op">(</span><span class="fl">6</span>, <span class="st">"months"</span><span class="op">)</span> <span class="op">==</span> <span class="fu"><a href="../reference/term.html">term</a></span><span class="op">(</span><span class="fl">180</span>, <span class="st">"days"</span><span class="op">)</span><span class="op">)</span></span>
@@ -272,7 +327,7 @@ Terms.</p>
 the calendar, so an <code>actual/360</code> rate with the
 <code>"Brazil/ANBIMA"</code> calendar counts business days, and gives a
 smaller factor than the <code>actual/360</code> rate above.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/compound.html">compound</a></span><span class="op">(</span><span class="fu"><a href="../reference/spotrate.html">spotrate</a></span><span class="op">(</span><span class="fl">0.10</span>, <span class="st">"simple"</span>, <span class="st">"actual/360"</span>, <span class="st">"Brazil/ANBIMA"</span><span class="op">)</span>, <span class="va">d1</span>, <span class="va">d2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 1.034722</span></span></code></pre></div>
 <p>Use the <code>"actual"</code> calendar with <code>actual/...</code>
@@ -281,7 +336,7 @@ daycounts, and a business calendar with <code>business/...</code>.</p>
 Arithmetic and comparison between two SpotRates require the same
 compounding, daycount and calendar. Convert one of them first, as in
 “Equivalent rates”.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sr1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spotrate.html">spotrate</a></span><span class="op">(</span><span class="fl">0.10</span>, <span class="st">"discrete"</span>, <span class="st">"business/252"</span>, <span class="st">"Brazil/ANBIMA"</span><span class="op">)</span></span>
 <span><span class="va">sr2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spotrate.html">spotrate</a></span><span class="op">(</span><span class="fl">0.10</span>, <span class="st">"discrete"</span>, <span class="st">"actual/365"</span>, <span class="st">"actual"</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">sr1</span> <span class="op">-</span> <span class="va">sr2</span><span class="op">)</span></span>
@@ -289,7 +344,7 @@ compounding, daycount and calendar. Convert one of them first, as in
 <p><strong>Only 30E/360 is supported among the 30/360 variants.</strong>
 The US (NASD) and ISDA versions treat the end of the month differently,
 and <code><a href="../reference/daycount.html">daycount()</a></code> rejects them.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="../reference/daycount.html">daycount</a></span><span class="op">(</span><span class="st">"30/360"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Error in daycount("30/360") : </span></span>
 <span><span class="co">#&gt;   Unsupported daycount (30/360): only actual/..., business/... and 30E/360 are implemented</span></span></code></pre></div>
