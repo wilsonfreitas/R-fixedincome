@@ -32,6 +32,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/daycount.html">Day Count Conventions</a>
+    </li>
+    <li>
       <a href="../articles/spot-rate-curve-indexing.html">Spot Rate Curve Indexing</a>
     </li>
     <li>
@@ -69,6 +72,8 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="fixedincome-development-version">fixedincome (development version)<a class="anchor" aria-label="anchor" href="#fixedincome-development-version"></a></h2>
 <ul><li>New daycount <code>30E/360</code> (Eurobond basis): every month has 30 days, and the 31st is moved to the 30th. <code><a href="../reference/compound.html">compound()</a></code> and <code><a href="../reference/compound.html">discount()</a></code> with dates count the days with this rule instead of the calendar. Other 30/360 variants are still rejected. (Issue <a href="https://github.com/wilsonfreitas/R-fixedincome/issues/5" class="external-link">#5</a>)</li>
+<li>New vignette “Day Count Conventions”.</li>
+<li>The error for operations between SpotRates with different slots says which slots: compounding, daycount or calendar.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.0" id="fixedincome-010">fixedincome 0.1.0<a class="anchor" aria-label="anchor" href="#fixedincome-010"></a></h2>
