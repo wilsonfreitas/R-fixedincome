@@ -465,3 +465,63 @@ test_that("it should coerce a spotratecurve into a data.frame", {
 # 	expect_equal(tail(curve), curve)
 # 	expect_error(tail(curve, 10))
 # })
+# fixes for issues #22, #24, #17
+.crv <- function() {
+  spotratecurve(
+    c(0.1315, 0.1319, 0.1338, 0.1348, 0.1372, 0.1381),
+    c(1, 21, 42, 63, 126, 252),
+    "discrete", "business/252", "Brazil/ANBIMA",
+    refdate = as.Date("2022-08-05")
+  )
+}
+
+test_that("[[ converts Term units before indexing (#22)", {
+  crv <- .crv()
+  expect_equal(as.numeric(crv[[term(252, "days")]]), 0.1381)
+  expect_equal(as.numeric(crv[[term(1, "years")]]), 0.1381)
+  expect_equal(as.numeric(crv[[term(6, "months")]]), 0.1372)
+  interpolation(crv) <- interp_flatforward()
+  expect_equal(as.numeric(crv[[term(1, "years")]]), as.numeric(crv[[252]]))
+  expect_equal(as.numeric(crv[[term(1, "months")]]), as.numeric(crv[[21]]))
+  expect_equal(crv[[term(1, "years")]]@terms, term(252, "days"))
+})
+
+test_that("[[<- converts Term units before replacing (#22)", {
+  crv <- .crv()
+  crv[[term(1, "years")]] <- 0.2
+  expect_equal(as.numeric(crv[[252]]), 0.2)
+  expect_equal(length(crv), 6)
+})
+
+test_that("[ gives a clear error for NA or out of range index (#24)", {
+  crv <- .crv()
+  expect_error(crv[c(1, NA, 5)], "NA or out of range")
+  expect_error(crv[10], "NA or out of range")
+  expect_error(crv[c(TRUE, NA, FALSE, TRUE, TRUE, TRUE)], "NA or out of range")
+  expect_equal(length(crv[c(1, 5)]), 2)
+})
+
+test_that("forwardrate accepts numeric and Term t1/t2 (#17)", {
+  crv <- .crv()
+  r <- as.numeric(crv)
+  expected <- ((1 + r[3])^(42 / 252) / (1 + r[2])^(21 / 252))^(252 / 21) - 1
+  fwd <- forwardrate(crv, 21, 42)
+  expect_s4_class(fwd, "ForwardRate")
+  expect_equal(as.numeric(fwd), expected)
+  expect_equal(fwd@terms, term(21, "days"))
+  expect_equal(forwardrate(crv, term(1, "months"), term(2, "months")), fwd)
+  expect_equal(
+    as.numeric(forwardrate(crv, c(1, 21), c(21, 42))),
+    c(as.numeric(forwardrate(crv, 1, 21)), expected)
+  )
+  expect_true(is.na(as.numeric(forwardrate(crv, 10, 30))))
+})
+
+test_that("forwardrate uses the curve interpolation (#17)", {
+  crv <- .crv()
+  interpolation(crv) <- interp_flatforward()
+  r10 <- as.numeric(crv[[10]])
+  r30 <- as.numeric(crv[[30]])
+  expected <- ((1 + r30)^(30 / 252) / (1 + r10)^(10 / 252))^(252 / 20) - 1
+  expect_equal(as.numeric(forwardrate(crv, 10, 30)), expected)
+})

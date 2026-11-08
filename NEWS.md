@@ -1,3 +1,12 @@
+# fixedincome 0.0.5
+
+* `[[` and `[[<-` on `SpotRateCurve` now convert `Term` objects to days before indexing. Before, `curve[[term(1, "years")]]` silently returned the rate at 1 day. (Issue #22)
+* `forwardrate(curve, t1, t2)` accepts numeric or `Term` vectors and uses the curve's interpolation. (Issue #17)
+* `[` on `SpotRateCurve` gives a clear error for NA or out of range indices. (Issue #24)
+* `daycount()` rejects daycounts other than `actual/...` and `business/...`, such as `30/360`, which were silently computed as actual days. (Issue #5)
+* Vignettes updated to rb3 >= 0.1.0 and no longer download data.
+* Requires R >= 4.1.0.
+
 # fixedincome 0.0.4
 
 * Improved nelsonsiegel and nelsonsiegelsvensson optimization.

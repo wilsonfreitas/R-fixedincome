@@ -168,6 +168,9 @@ setMethod(
   "[",
   signature(x = "SpotRateCurve", i = "numeric", j = "missing"),
   function(x, i, j, ..., drop = TRUE) {
+    if (anyNA(unclass(x@terms)[i])) {
+      stop("Invalid index: it has NA or out of range values")
+    }
     obj <- spotratecurve(x@.Data[i], x@terms[i], x@compounding, x@daycount,
       x@calendar,
       refdate = x@refdate
@@ -184,6 +187,9 @@ setMethod(
   "[",
   signature(x = "SpotRateCurve", i = "logical", j = "missing"),
   function(x, i, j, ..., drop = TRUE) {
+    if (anyNA(unclass(x@terms)[i])) {
+      stop("Invalid index: it has NA or out of range values")
+    }
     obj <- spotratecurve(x@.Data[i], x@terms[i], x@compounding, x@daycount,
       x@calendar,
       refdate = x@refdate
@@ -270,6 +276,35 @@ setMethod(
     }
     obj
   }
+)
+
+# Term extends numeric: without these methods `[[` would use the raw value and ignore units
+#' @export
+setMethod(
+  "[[",
+  signature(x = "SpotRateCurve", i = "Term", j = "missing"),
+  function(x, i, j, ...) {
+    x[[as.numeric(todays(x@daycount, i))]]
+  }
+)
+
+replace_double_brackets_term <- function(x, i, j, ..., value) {
+  x[[as.numeric(todays(x@daycount, i))]] <- value
+  x
+}
+
+#' @export
+setReplaceMethod(
+  "[[",
+  signature(x = "SpotRateCurve", i = "Term", j = "missing", value = "numeric"),
+  replace_double_brackets_term
+)
+
+#' @export
+setReplaceMethod(
+  "[[",
+  signature(x = "SpotRateCurve", i = "Term", j = "missing", value = "SpotRate"),
+  replace_double_brackets_term
 )
 
 #' @export

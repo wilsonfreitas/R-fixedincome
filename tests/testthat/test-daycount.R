@@ -84,3 +84,8 @@ test_that("it should raise an error for invalid specification", {
 #   dc <- as.daycount('fixed/22')
 #   expect_equal(dib(dc), 22)
 # })
+test_that("it should reject daycounts it can't compute (#5)", {
+  expect_error(daycount("30/360"), "Unsupported daycount")
+  expect_s4_class(daycount("business/252"), "Daycount")
+  expect_s4_class(daycount("actual/365"), "Daycount")
+})

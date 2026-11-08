@@ -94,14 +94,28 @@ forwardrate.SpotRateCurve <- function(x, t1 = NULL, t2 = NULL, ...) {
       refdate = x@refdate
     )
   } else {
-    pos <- match(c(t1, t2), unclass(x@terms))
-    fact <- compound(x)
-    fact1 <- fact[pos[1]]
-    fact2 <- fact[pos[2]]
+    # t1 and t2 can be numeric (days) or Term (any units), and vectors
+    to_days <- function(t) {
+      if (is(t, "Term")) as.numeric(todays(x@daycount, t)) else as.numeric(t)
+    }
+    # rates at terms in days: interpolated if possible, else NA off the curve
+    rates_at <- function(t) {
+      if (is.null(x@interpolation)) {
+        x@.Data[match(t, unclass(x@terms))]
+      } else {
+        interpolate(x@interpolation, t)
+      }
+    }
+    factor_at <- function(t) {
+      tf <- as.numeric(toyears(x@daycount, term(t, "days")))
+      compound(x@compounding, tf, rates_at(t))
+    }
+    t1 <- to_days(t1)
+    t2 <- to_days(t2)
 
-    fwd_term <- t2 - t1
+    fwd_term <- term(t2 - t1, "days")
     tf <- as.numeric(toyears(x@daycount, fwd_term))
-    rates_ <- implied_rate(x@compounding, tf, fact2 / fact1)
+    rates_ <- implied_rate(x@compounding, tf, factor_at(t2) / factor_at(t1))
 
     .Object <- new("ForwardRate",
       .Data = rates_,

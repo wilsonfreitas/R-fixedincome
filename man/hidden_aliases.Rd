@@ -21,6 +21,9 @@
 \alias{[<-,SpotRateCurve,numeric,missing,SpotRate-method}
 \alias{[[,SpotRateCurve,numeric,missing-method}
 \alias{[[,SpotRateCurve,missing,missing-method}
+\alias{[[,SpotRateCurve,Term,missing-method}
+\alias{[[<-,SpotRateCurve,Term,missing,numeric-method}
+\alias{[[<-,SpotRateCurve,Term,missing,SpotRate-method}
 \alias{[[<-,SpotRateCurve,missing,missing,SpotRateCurve-method}
 \alias{[[<-,SpotRateCurve,numeric,missing,SpotRate-method}
 \alias{[[<-,SpotRateCurve,numeric,missing,numeric-method}

@@ -27,6 +27,9 @@ hidden_aliases <- NULL
 #' [<-,SpotRateCurve,numeric,missing,SpotRate-method
 #' [[,SpotRateCurve,numeric,missing-method
 #' [[,SpotRateCurve,missing,missing-method
+#' [[,SpotRateCurve,Term,missing-method
+#' [[<-,SpotRateCurve,Term,missing,numeric-method
+#' [[<-,SpotRateCurve,Term,missing,SpotRate-method
 #' [[<-,SpotRateCurve,missing,missing,SpotRateCurve-method
 #' [[<-,SpotRateCurve,numeric,missing,SpotRate-method
 #' [[<-,SpotRateCurve,numeric,missing,numeric-method

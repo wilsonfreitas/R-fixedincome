@@ -37,6 +37,10 @@ daycount <- function(x, ...) {
   if (length(spec_parts) != 2) {
     stop("Invalid daycount specitication provided (", x, ")")
   }
+  # day counting comes from the calendar, so only these two are computed correctly
+  if (!spec_parts[1] %in% c("actual", "business")) {
+    stop("Unsupported daycount (", x, "): only actual/... and business/... are implemented")
+  }
   new("Daycount", .Data = x)
 }
 
