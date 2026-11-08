@@ -55,4 +55,9 @@ hidden_aliases <- NULL
 #' as.character,Term-method
 #' as.character,SpotRate-method
 #' as.character,Compounding-method
+#' Arith,Bps,Bps-method
+#' Arith,SpotRate,Bps-method
+#' Arith,Bps,SpotRate-method
+#' [,Bps,ANY,ANY-method
+#' show,Bps-method
 NULL

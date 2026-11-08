@@ -298,6 +298,15 @@ setMethod(
   }
 )
 
+# After the rates of a SpotRateCurve change, its interpolation must be
+# prepared again, otherwise it keeps returning the old rates.
+refresh_interpolation <- function(x) {
+  if (is(x, "SpotRateCurve") && !is.null(x@interpolation)) {
+    interpolation(x) <- x@interpolation
+  }
+  x
+}
+
 #' @export
 setMethod(
   "Arith",
@@ -308,7 +317,7 @@ setMethod(
       e1, e2,
       "SpotRate objects have different slots"
     )
-    e1
+    refresh_interpolation(e1)
   }
 )
 
@@ -318,7 +327,7 @@ setMethod(
   signature(e1 = "SpotRate", e2 = "numeric"),
   function(e1, e2) {
     e1@.Data <- callGeneric(e1@.Data, e2)
-    e1
+    refresh_interpolation(e1)
   }
 )
 
@@ -328,7 +337,7 @@ setMethod(
   signature(e1 = "numeric", e2 = "SpotRate"),
   function(e1, e2) {
     e2@.Data <- callGeneric(e1, e2@.Data)
-    e2
+    refresh_interpolation(e2)
   }
 )
 

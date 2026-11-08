@@ -49,6 +49,11 @@
 \alias{as.character,Term-method}
 \alias{as.character,SpotRate-method}
 \alias{as.character,Compounding-method}
+\alias{Arith,Bps,Bps-method}
+\alias{Arith,SpotRate,Bps-method}
+\alias{Arith,Bps,SpotRate-method}
+\alias{[,Bps,ANY,ANY-method}
+\alias{show,Bps-method}
 \title{Internal page for hidden aliases}
 \description{
 For S4 methods that require a documentation entry but only clutter the index.

@@ -11,6 +11,7 @@ reference:
   - as.spotrate
   - compound
   - spotrate-compare-method
+  - bps
 
 - title: Compounding
   contents:

@@ -36,6 +36,7 @@ Collate:
     "compounding-class.R"
     "interpolation-class.R"
     "spotrate-class.R"
+    "bps-class.R"
     "spotratecurve-class.R"
     "spotratecurve-interpolation.R"
     "spotratecurve-interpolation-nelsonsiegel.R"
