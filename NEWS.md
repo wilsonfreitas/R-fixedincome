@@ -1,17 +1,29 @@
+# fixedincome 0.1.0
+
+## Breaking changes
+
+* `daycount()` rejects daycounts other than `actual/...` and `business/...`, such as `30/360`, which were silently computed as actual days. (Issue #5)
+* Requires R >= 4.1.0.
+
+## New features
+
+* New `Bps` class for basis points: `bps(10)` is 0.001, `as.bps()` converts a rate difference, and `c()` combines them. Adding or subtracting `Bps` to a `SpotRate` or `SpotRateCurve` shifts the rates and keeps the other slots. (Issue #33)
+* New `with_daycount()` evaluates operations between `Term` objects with different units using a daycount, e.g. `with_daycount("business/252", term(1, "month") + term(12, "days"))` gives 33 days. (Issue #27)
+* Arithmetic (`+`, `-`, `%%`, `/`, `%/%`) and comparison between `Term` objects with the same units; before, any operation between two Terms raised "Not implemented". Terms with different units raise an error explaining how to convert them. (Issue #28)
+* `forwardrate(curve, t1, t2)` accepts numeric or `Term` vectors and uses the curve's interpolation. (Issue #17)
+* New vignette "Working with Terms", and a section about basis points in "Spot Rate Curve Interpolation".
+
+## Bug fixes
+
+* `[[` and `[[<-` on `SpotRateCurve` convert `Term` objects to days before indexing. Before, `curve[[term(1, "years")]]` silently returned the rate at 1 day. (Issue #22)
+* Arithmetic on a `SpotRateCurve` with an interpolation prepares the interpolation again; before, `curve + 0.01` kept returning the old rates from `[[`.
+* `c()` on `Term` objects keeps the units of each element; before, all elements took the units of the first one.
+* `[` on `SpotRateCurve` gives a clear error for NA or out of range indices. (Issue #24)
+* Vignettes no longer run rb3 code or download data, and rb3 was removed from Suggests (the package was archived on CRAN because rb3 was not used conditionally). The rb3 code shown is updated to rb3 >= 0.1.0.
+
 # fixedincome 0.0.5
 
-* New vignette "Working with Terms".
-* `c()` on `Term` objects keeps the units of each element; before, all elements took the units of the first one.
-* Arithmetic (`+`, `-`, `%%`, `/`, `%/%`) and comparison between `Term` objects with the same units. Terms with different units raise an error asking to convert them first. (Issue #28)
-* New `with_daycount()` evaluates operations between `Term` objects with different units using a daycount, e.g. `with_daycount("business/252", term(1, "month") + term(12, "days"))` gives 33 days. (Issue #27)
-* New `Bps` class for basis points: `bps(10)` is 0.001, `as.bps()` converts a rate difference, and `c()` combines them. Adding or subtracting `Bps` to a `SpotRate` or `SpotRateCurve` shifts the rates and keeps the other slots. (Issue #33)
-* Arithmetic on a `SpotRateCurve` with an interpolation now prepares the interpolation again; before, `curve + 0.01` kept returning the old rates from `[[`.
-* `[[` and `[[<-` on `SpotRateCurve` now convert `Term` objects to days before indexing. Before, `curve[[term(1, "years")]]` silently returned the rate at 1 day. (Issue #22)
-* `forwardrate(curve, t1, t2)` accepts numeric or `Term` vectors and uses the curve's interpolation. (Issue #17)
-* `[` on `SpotRateCurve` gives a clear error for NA or out of range indices. (Issue #24)
-* `daycount()` rejects daycounts other than `actual/...` and `business/...`, such as `30/360`, which were silently computed as actual days. (Issue #5)
-* Vignettes updated to rb3 >= 0.1.0 and no longer download data; rb3 removed from Suggests.
-* Requires R >= 4.1.0.
+* Maintenance release: updated GitHub Actions and documentation.
 
 # fixedincome 0.0.4
 

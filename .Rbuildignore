@@ -31,3 +31,4 @@ images
 ^README\.Rmd$
 ^CLAUDE\.md$
 ^\.gitattributes$
+^cran-comments\.md$
