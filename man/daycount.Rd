@@ -18,8 +18,19 @@ A \code{Daycount} object.
 \description{
 \code{daycount} creates a \code{Daycount} object.
 It accepts the following daycount rules: \code{actual/365},
-\code{actual/360}, \code{business/252}.
+\code{actual/360}, \code{business/252} and \code{30E/360}.
+}
+\details{
+With \code{actual/...} and \code{business/...} the days between two dates are
+counted with the calendar of the rate.
+With \verb{30E/360} (also called Eurobond basis) every month has 30 days:
+a date on the 31st is moved to the 30th, and the calendar is not used.
+Dates computed from the terms of a curve, as in \code{maturities()}, still use
+the calendar.
 }
 \examples{
 dc <- daycount("actual/360")
+
+sr <- spotrate(0.05, "simple", "30E/360", "actual")
+compound(sr, as.Date("2024-01-31"), as.Date("2024-03-31"))
 }

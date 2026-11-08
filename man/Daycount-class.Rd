@@ -15,5 +15,5 @@ two dates.
 }
 \details{
 Common day count rules are: \code{actual/365}, \code{actual/360},
-\code{business/252}, \code{30/360}, ...
+\code{business/252}, \verb{30E/360}, ...
 }

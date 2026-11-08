@@ -9,7 +9,7 @@
 #' two dates.
 #'
 #' Common day count rules are: \code{actual/365}, \code{actual/360},
-#' `business/252`, `30/360`, ...
+#' `business/252`, `30E/360`, ...
 #'
 #' @export
 setClass(
@@ -21,7 +21,14 @@ setClass(
 #'
 #' \code{daycount} creates a \code{Daycount} object.
 #' It accepts the following daycount rules: \code{actual/365},
-#' \code{actual/360}, \code{business/252}.
+#' \code{actual/360}, \code{business/252} and \code{30E/360}.
+#'
+#' With `actual/...` and `business/...` the days between two dates are
+#' counted with the calendar of the rate.
+#' With `30E/360` (also called Eurobond basis) every month has 30 days:
+#' a date on the 31st is moved to the 30th, and the calendar is not used.
+#' Dates computed from the terms of a curve, as in `maturities()`, still use
+#' the calendar.
 #'
 #' @param x a character representing a daycount rule, like: \code{business/252},
 #'        \code{actual/365}, \code{actual/360}, ...
@@ -31,15 +38,21 @@ setClass(
 #'
 #' @examples
 #' dc <- daycount("actual/360")
+#'
+#' sr <- spotrate(0.05, "simple", "30E/360", "actual")
+#' compound(sr, as.Date("2024-01-31"), as.Date("2024-03-31"))
 #' @export
 daycount <- function(x, ...) {
   spec_parts <- strsplit(x, "/")[[1]]
   if (length(spec_parts) != 2) {
     stop("Invalid daycount specitication provided (", x, ")")
   }
-  # day counting comes from the calendar, so only these two are computed correctly
-  if (!spec_parts[1] %in% c("actual", "business")) {
-    stop("Unsupported daycount (", x, "): only actual/... and business/... are implemented")
+  # actual/business days are counted by the calendar, 30E/360 by count_days()
+  if (!spec_parts[1] %in% c("actual", "business") && x != "30E/360") {
+    stop(
+      "Unsupported daycount (", x, "): only actual/..., business/... ",
+      "and 30E/360 are implemented"
+    )
   }
   new("Daycount", .Data = x)
 }
@@ -206,3 +219,14 @@ setMethod(
     term(t, "day")
   }
 )
+# Days between two dates for a daycount: 30E/360 counts every month as 30
+# days (31st moved to the 30th); the others count with the calendar.
+count_days <- function(daycount, start, end, calendar) {
+  if (daycount@.Data != "30E/360") {
+    return(bizdays(start, end, calendar))
+  }
+  d1 <- as.POSIXlt(start)
+  d2 <- as.POSIXlt(end)
+  360 * (d2$year - d1$year) + 30 * (d2$mon - d1$mon) +
+    (pmin(d2$mday, 30) - pmin(d1$mday, 30))
+}

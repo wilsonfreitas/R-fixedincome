@@ -89,3 +89,44 @@ test_that("it should reject daycounts it can't compute (#5)", {
   expect_s4_class(daycount("business/252"), "Daycount")
   expect_s4_class(daycount("actual/365"), "Daycount")
 })
+
+test_that("it should count days with 30E/360 (#5)", {
+  dc <- daycount("30E/360")
+  expect_equal(dib(dc), 360)
+  d <- function(x) as.Date(x)
+  # the 31st is moved to the 30th
+  expect_equal(count_days(dc, d("2024-01-31"), d("2024-03-31")), 60)
+  expect_equal(count_days(dc, d("2024-01-30"), d("2024-01-31")), 0)
+  # February has 30 days too
+  expect_equal(count_days(dc, d("2024-02-28"), d("2024-03-31")), 32)
+  expect_equal(count_days(dc, d("2023-12-15"), d("2024-06-15")), 180)
+  expect_equal(count_days(dc, d("2024-01-01"), d("2025-01-01")), 360)
+  # vectors
+  expect_equal(
+    count_days(dc, d("2024-01-15"), d(c("2024-02-15", "2024-07-31"))),
+    c(30, 195)
+  )
+  # other daycounts still use the calendar
+  expect_equal(
+    count_days(daycount("actual/360"), d("2024-01-31"), d("2024-03-31"), "actual"),
+    60
+  )
+  expect_equal(
+    count_days(daycount("actual/360"), d("2024-01-01"), d("2024-03-01"), "actual"),
+    60
+  )
+})
+
+test_that("it should compound with 30E/360 dates (#5)", {
+  sr <- spotrate(0.05, "simple", "30E/360", "actual")
+  expect_equal(
+    compound(sr, as.Date("2024-01-31"), as.Date("2024-03-31")),
+    1 + 0.05 * 60 / 360
+  )
+  expect_equal(
+    discount(sr, as.Date("2024-01-01"), as.Date("2025-01-01")),
+    1 / 1.05
+  )
+  expect_equal(compound(sr, term(1, "year")), 1.05)
+  expect_equal(as.numeric(todays(daycount("30E/360"), term(6, "months"))), 180)
+})

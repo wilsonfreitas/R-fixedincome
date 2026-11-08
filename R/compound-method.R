@@ -123,7 +123,7 @@ setMethod(
   "compound",
   signature(x = "SpotRate", t = "Date", val = "Date"),
   function(x, t, val) {
-    tm <- term(t, val, x@calendar)
+    tm <- term(count_days(x@daycount, t, val, x@calendar), "days")
     tf <- as.numeric(toyears(x@daycount, tm))
     callGeneric(x@compounding, tf, x@.Data)
   }

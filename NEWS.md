@@ -1,3 +1,7 @@
+# fixedincome (development version)
+
+* New daycount `30E/360` (Eurobond basis): every month has 30 days, and the 31st is moved to the 30th. `compound()` and `discount()` with dates count the days with this rule instead of the calendar. Other 30/360 variants are still rejected. (Issue #5)
+
 # fixedincome 0.1.0
 
 ## Breaking changes
