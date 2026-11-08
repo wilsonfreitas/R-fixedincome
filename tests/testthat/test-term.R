@@ -173,22 +173,46 @@ test_that("it should diff terms", {
   expect_equal(as.numeric(t), c(NA, rep(1, 4)))
 })
 
-# test_that("it should compare terms with different units", {
-#   t1 <- term(252, "days", "business/252")
-#   t2 <- term(1, "year", "business/252")
-#   expect_true(t1 == t2)
-#   t1 <- term(12, "months", "business/252")
-#   t2 <- term(1, "year", "business/252")
-#   expect_true(t1 == t2)
-#   # this is annoying - we can compare terms with different daycounts
-#   t1 <- term(12, "months", "actual/360")
-#   t2 <- term(1, "year", "business/252")
-#   expect_true(t1 == t2)
-#   # this is annoying - we can't compare terms with different daycounts
-#   t1 <- term(1, "days", "actual/360")
-#   t2 <- term(1, "days", "business/252")
-#   expect_true(t1 != t2)
-# })
+test_that("with_daycount() converts terms with different units (#27)", {
+  expect_true(with_daycount("business/252", term(252, "days") == term(1, "year")))
+  expect_false(with_daycount("actual/360", term(252, "days") == term(1, "year")))
+  expect_true(with_daycount("actual/360", term(12, "months") == term(1, "year")))
+  expect_equal(
+    with_daycount("business/252", term(1, "month") + term(12, "days")),
+    term(33, "days")
+  )
+  expect_equal(
+    with_daycount("business/252", term(1, "year") + term(6, "months")),
+    term(18, "months")
+  )
+  expect_equal(
+    with_daycount(daycount("actual/360"), term(1, "year") / term(30, "days")),
+    12
+  )
+  expect_equal(
+    with_daycount("business/252", term(1:2, c("day", "month")) + term(1, "day")),
+    term(c(2, 43), "days")
+  )
+  # same units don't need conversion
+  expect_equal(
+    with_daycount("business/252", term(1, "year") + term(2, "years")),
+    term(3, "years")
+  )
+})
+
+test_that("with_daycount() is restored after evaluation (#27)", {
+  with_daycount("business/252", {
+    expect_equal(
+      with_daycount("actual/360", term(1, "year") - term(0, "days")),
+      term(360, "days")
+    )
+    expect_equal(term(1, "year") - term(0, "days"), term(252, "days"))
+  })
+  expect_error(term(1, "year") - term(0, "days"), "with_daycount")
+  try(with_daycount("business/252", stop("boom")), silent = TRUE)
+  expect_error(term(1, "year") - term(0, "days"), "different units")
+})
+
 test_that("c() keeps the units of each element", {
   expect_equal(c(term(1, "day"), term(5, "days")), term(c(1, 5), "days"))
   x <- c(term(1, "day"), term(c(2, 3), "months"))

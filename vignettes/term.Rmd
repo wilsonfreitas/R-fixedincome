@@ -166,6 +166,26 @@ Convert first, then operate.
 todays(daycount("business/252"), term(1, "month")) + term(12, "days")
 ```
 
+Or evaluate the operations with a daycount, using `with_daycount()`.
+The Terms are converted to the smallest unit among them: years become months,
+and months become days.
+
+```{r}
+with_daycount("business/252", term(1, "month") + term(12, "days"))
+with_daycount("business/252", term(1, "year") + term(6, "months"))
+```
+
+The result depends on the daycount: one year is 252 days with
+`business/252`, but not with `actual/360`.
+
+```{r}
+with_daycount("business/252", term(252, "days") == term(1, "year"))
+with_daycount("actual/360", term(252, "days") == term(1, "year"))
+```
+
+Outside `with_daycount()` the daycount is not set, so these operations raise
+an error again.
+
 ### Other functions
 
 `c()` combines Terms, and each element keeps its own units.

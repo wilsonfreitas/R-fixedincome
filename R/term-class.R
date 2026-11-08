@@ -95,11 +95,13 @@ term.Date <- function(x, end_date, calendar, ...) {
 #' ```
 #'
 #' Terms with different units raise an error, because converting them
-#' requires a daycount; use `todays()`, `tomonths()` or `toyears()` first.
+#' requires a daycount; use `todays()`, `tomonths()` or `toyears()` first,
+#' or evaluate the operation with [with_daycount()].
 #'
 #' ```{r}
 #' try(term(1, "months") + term(12, "days"))
 #' todays(daycount("business/252"), term(1, "months")) + term(12, "days")
+#' with_daycount("business/252", term(1, "months") + term(12, "days"))
 #' ```
 #'
 #' ## DateRangeTerm objects
@@ -269,19 +271,60 @@ c.Term <- function(x, ...) {
   term(values_, if (length(unique(units_)) == 1) units_[1] else units_)
 }
 
-# Units of the result of an operation between two Terms. Terms with
-# different units need a daycount to be converted, so they raise an error.
-term_common_units <- function(e1, e2) {
+# Daycount set by with_daycount(), used to convert Terms with different units.
+.term_context <- new.env(parent = emptyenv())
+
+#' Evaluate Term operations with a daycount
+#'
+#' Operations between Terms with different units need a daycount to convert
+#' them: one year has 252 days with `business/252` and 360 days with
+#' `actual/360`.
+#' `with_daycount()` evaluates `expr` with the given daycount, so
+#' arithmetic and comparison between Terms with different units work.
+#' The Terms are converted to the smallest unit among them (years to months,
+#' months to days).
+#' Outside `with_daycount()` these operations raise an error.
+#'
+#' @param x a `Daycount` object or a string, like `"business/252"`.
+#' @param expr the expression to evaluate.
+#'
+#' @return the value of `expr`.
+#'
+#' @examples
+#' with_daycount("business/252", term(1, "month") + term(12, "days"))
+#' with_daycount("business/252", term(252, "days") == term(1, "year"))
+#' with_daycount("actual/360", term(252, "days") == term(1, "year"))
+#'
+#' @export
+with_daycount <- function(x, expr) {
+  if (!is(x, "Daycount")) x <- daycount(x)
+  old <- .term_context$daycount
+  .term_context$daycount <- x
+  on.exit(.term_context$daycount <- old)
+  expr
+}
+
+# Puts two Terms in the same units. With different units it needs the
+# daycount set by with_daycount(), otherwise it raises an error.
+term_align <- function(e1, e2) {
   n <- max(length(e1), length(e2))
   u1 <- rep_len(e1@units, n)
-  if (!all(u1 == rep_len(e2@units, n))) {
+  u2 <- rep_len(e2@units, n)
+  if (all(u1 == u2)) {
+    units <- if (length(unique(u1)) == 1) u1[1] else u1
+    return(list(as.numeric(e1), as.numeric(e2), units))
+  }
+  dc <- .term_context$daycount
+  if (is.null(dc)) {
     stop(
       "Terms with different units: convert them first ",
-      "with todays(), tomonths() or toyears()",
+      "with todays(), tomonths() or toyears(), or use with_daycount()",
       call. = FALSE
     )
   }
-  if (length(unique(u1)) == 1) u1[1] else u1
+  units <- intersect(c("day", "month", "year"), c(u1, u2))[1]
+  conv <- function(e) as.numeric(to_unit_(as.numeric(e), e@units, units, dib(dc)))
+  list(conv(e1), conv(e2), units)
 }
 
 #' @export
@@ -289,8 +332,9 @@ setMethod(
   "Arith",
   signature(e1 = "Term", e2 = "Term"),
   function(e1, e2) {
-    units <- term_common_units(e1, e2)
-    value <- callGeneric(as.numeric(e1), as.numeric(e2))
+    a <- term_align(e1, e2)
+    units <- a[[3]]
+    value <- callGeneric(a[[1]], a[[2]])
     switch(.Generic,
       "+" = ,
       "-" = ,
@@ -307,8 +351,8 @@ setMethod(
   "Compare",
   signature(e1 = "Term", e2 = "Term"),
   function(e1, e2) {
-    term_common_units(e1, e2)
-    callGeneric(as.numeric(e1), as.numeric(e2))
+    a <- term_align(e1, e2)
+    callGeneric(a[[1]], a[[2]])
   }
 )
 

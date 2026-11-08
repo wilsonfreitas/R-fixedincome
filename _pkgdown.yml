@@ -33,6 +33,7 @@ reference:
   - as.term
   - diff,Term-method
   - toyears
+  - with_daycount
 
 - title: Spot Rate Curve
   contents:

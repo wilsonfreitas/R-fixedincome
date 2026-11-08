@@ -47,11 +47,14 @@ term(10, "days") > term(5, "days")
 }\if{html}{\out{</div>}}
 
 Terms with different units raise an error, because converting them
-requires a daycount; use \code{todays()}, \code{tomonths()} or \code{toyears()} first.
+requires a daycount; use \code{todays()}, \code{tomonths()} or \code{toyears()} first,
+or evaluate the operation with \code{\link[=with_daycount]{with_daycount()}}.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{try(term(1, "months") + term(12, "days"))
-#> Error : Terms with different units: convert them first with todays(), tomonths() or toyears()
+#> Error : Terms with different units: convert them first with todays(), tomonths() or toyears(), or use with_daycount()
 todays(daycount("business/252"), term(1, "months")) + term(12, "days")
+#> [1] "33 days"
+with_daycount("business/252", term(1, "months") + term(12, "days"))
 #> [1] "33 days"
 }\if{html}{\out{</div>}}
 \subsection{DateRangeTerm objects}{
