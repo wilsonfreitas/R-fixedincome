@@ -1,0 +1,190 @@
+---
+title: "B3's Yield Curve and Flat Forward Interpolation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{B3's Yield Curve and Flat Forward Interpolation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  out.width = "100%"
+)
+```
+
+Every business day B3, the Brazilian exchange, publishes the `PRE` curve: the
+fixed rate (pre-fixed) yield curve in BRL, with rates for hundreds of
+maturities.
+The curve is built from the settlement prices of the DI1 futures, and the
+rates between two DI1 maturities are interpolated with the flat forward
+method: the forward rate is constant between two vertices.
+
+In this article we build a curve from the DI1 futures only, interpolate it
+with `interp_flatforward()`, and compare it with the curve that B3 publishes.
+
+```{r setup, message=FALSE}
+library(fixedincome)
+```
+
+## The data
+
+Both curves are downloaded with the
+[rb3](https://github.com/wilsonfreitas/rb3) package.
+`yc_brl_get()` returns the curve published by B3 and
+`yc_brl_with_futures_get()` returns the same curve with the DI1 contract of
+each maturity.
+The DI1 curve is the first vertex of B3's curve (one business day, the
+overnight rate) plus the vertices of the DI1 contracts.
+
+```{r eval=FALSE}
+library(rb3)
+library(dplyr)
+
+refdate <- as.Date("2026-09-11")
+fetch_marketdata("b3-reference-rates", refdate = refdate, curve_name = "PRE")
+fetch_marketdata("b3-futures-settlement-prices", refdate = refdate)
+
+b3 <- yc_brl_get() |>
+  filter(refdate == !!refdate) |>
+  collect() |>
+  select(refdate, forward_date, biz_days, r_252) |>
+  filter(!is.na(r_252)) |>
+  arrange(biz_days)
+
+futures <- yc_brl_with_futures_get(refdate) |>
+  filter(!is.na(r_252), !is.na(symbol)) |>
+  distinct(biz_days, .keep_all = TRUE) |>
+  select(refdate, forward_date, biz_days, r_252, symbol) |>
+  arrange(biz_days)
+futures <- bind_rows(b3 |> slice(1), futures)
+```
+
+```{r echo=FALSE}
+# Saved output of the chunk above, so the vignette doesn't download data
+refdate <- as.Date("2026-09-11")
+data <- readRDS("b3-curve-2026-09-11.rds")
+b3 <- data$b3
+futures <- data$futures
+```
+
+B3's curve has `r nrow(b3)` vertices and the DI1 curve has
+`r nrow(futures)`.
+
+```{r}
+head(as.data.frame(futures))
+```
+
+## The two curves
+
+The DI1 curve gets a flat forward interpolation.
+
+```{r}
+di1_curve <- spotratecurve(
+  futures$r_252, futures$biz_days,
+  "discrete", "business/252", "Brazil/ANBIMA",
+  refdate = refdate
+)
+interpolation(di1_curve) <- interp_flatforward()
+di1_curve
+```
+
+B3's curve is created the same way, without interpolation: we only need its
+rates.
+
+```{r}
+b3_curve <- spotratecurve(
+  b3$r_252, b3$biz_days,
+  "discrete", "business/252", "Brazil/ANBIMA",
+  refdate = refdate
+)
+```
+
+With `[[` the DI1 curve is interpolated at the terms of B3's curve, so both
+curves have rates for the same terms.
+
+```{r}
+interp_curve <- di1_curve[[b3_curve@terms]]
+```
+
+```{r fig.height=4.5}
+plot(as.numeric(b3_curve@terms), as.numeric(b3_curve) * 100,
+  type = "l", xlab = "Business days", ylab = "Rate (%)",
+  main = paste("PRE curve", refdate)
+)
+lines(as.numeric(b3_curve@terms), as.numeric(interp_curve) * 100,
+  col = "blue", lty = 2
+)
+points(futures$biz_days, futures$r_252 * 100, pch = 19, col = "red", cex = 0.6)
+legend("bottomright",
+  c("B3", "flat forward", "DI1 vertices"),
+  col = c("black", "blue", "red"), lty = c(1, 2, NA), pch = c(NA, NA, 19)
+)
+```
+
+The red points are the DI1 vertices.
+At this scale the curves can't be told apart, so let's look at the
+differences.
+
+## The differences
+
+The difference between the curves is measured in basis points (bps): one
+basis point is 0.01%.
+
+```{r}
+diff_bps <- (as.numeric(interp_curve) - as.numeric(b3_curve)) * 1e4
+summary(diff_bps)
+```
+
+```{r fig.height=4}
+plot(as.numeric(b3_curve@terms), diff_bps,
+  type = "h",
+  xlab = "Business days", ylab = "Difference (bps)",
+  main = "fixedincome flat forward minus B3",
+  ylim = c(-0.1, 0.1)
+)
+abline(h = c(-0.05, 0.05), lty = 2, col = "gray")
+points(as.numeric(futures$biz_days), rep(0, nrow(futures)), pch = 19, col = "red", cex = 0.6)
+```
+
+The largest difference is `r sprintf("%.3f", max(abs(diff_bps), na.rm = TRUE))`
+bps.
+B3 publishes the rates with 5 decimal places, so each rate is rounded to
+0.1 bps and the rounding error is up to 0.05 bps: the dashed lines.
+All differences are inside these lines, which means that `interp_flatforward()`
+gives the same curve as B3, apart from the rounding.
+At the DI1 vertices (the red points) both curves have the same rates, so the
+difference is zero.
+
+The table shows the rates at a few vertices between two DI1 maturities.
+
+```{r}
+terms <- as.numeric(b3_curve@terms)
+between <- which(!(terms %in% futures$biz_days) & terms < max(futures$biz_days))
+idx <- between[c(10, 50, 100, 150, 190)]
+data.frame(
+  biz_days = as.numeric(b3_curve@terms)[idx],
+  b3 = as.numeric(b3_curve)[idx],
+  flatforward = round(as.numeric(interp_curve)[idx], 5),
+  diff_bps = round(diff_bps[idx], 3)
+)
+```
+
+Rounding the interpolated rates to 5 decimal places gives B3's rates.
+
+## After the last DI1 contract
+
+The last DI1 contract on this date has
+`r max(futures$biz_days)` business days, but B3's curve goes up to
+`r max(b3$biz_days)` business days.
+`fixedincome` doesn't extrapolate, so the interpolated curve has `NA` for
+these terms.
+
+```{r}
+sum(is.na(as.numeric(interp_curve)))
+tail(as.data.frame(b3), 3)
+```
+
+These are the `NA` values in the summary above.

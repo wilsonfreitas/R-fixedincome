@@ -167,14 +167,11 @@ This happens with the following operations:
 }
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{try(sr_simple + sr_disc)
-#> Error in stop_if_spotrate_slots_differ(e1, e2, "SpotRate objects have different slots") : 
-#>   SpotRate objects have different slots
+#> Error : SpotRate objects have different slots (compounding, daycount or calendar)
 try(sr_simple > sr_disc)
-#> Error in stop_if_spotrate_slots_differ(e1, e2, "SpotRate objects have different slots") : 
-#>   SpotRate objects have different slots
+#> Error : SpotRate objects have different slots (compounding, daycount or calendar)
 try(c(sr_simple, sr_disc))
-#> Error in stop_if_spotrate_slots_differ(x, values_, "SpotRate objects have different slots") : 
-#>   SpotRate objects have different slots
+#> Error : SpotRate objects have different slots (compounding, daycount or calendar)
 }\if{html}{\out{</div>}}
 }
 }

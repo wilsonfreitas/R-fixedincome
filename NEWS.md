@@ -2,6 +2,7 @@
 
 * New daycount `30E/360` (Eurobond basis): every month has 30 days, and the 31st is moved to the 30th. `compound()` and `discount()` with dates count the days with this rule instead of the calendar. Other 30/360 variants are still rejected. (Issue #5)
 * New vignette "Day Count Conventions".
+* New vignette "B3's Yield Curve and Flat Forward Interpolation": a curve built from DI1 futures with `interp_flatforward()` matches the `PRE` curve published by B3, apart from rounding.
 * New `period` argument in `spotrate()`: rates for other periods, like a monthly inflation rate (`period = "1 month"`) or a rate for a fixed period between two dates (`period = term(d1, d2, calendar)`), are converted to the equivalent annual rate. The vignette "Day Count Conventions" shows how to compute real interest rates. (Issue #25)
 * The error for operations between SpotRates with different slots says which slots: compounding, daycount or calendar.
 
