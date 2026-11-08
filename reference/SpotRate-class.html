@@ -33,6 +33,9 @@ to handle many calculations on it."><meta property="og:image" content="http://wi
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/b3-curve-flatforward.html">B3's Yield Curve and Flat Forward Interpolation</a>
+    </li>
+    <li>
       <a href="../articles/daycount.html">Day Count Conventions</a>
     </li>
     <li>
@@ -199,14 +202,11 @@ SpotRate objects.</p><div class="section">
 <li><p>Arithmetic: +, -, *, /</p></li>
 <li><p>Concatenation: <code>c</code></p></li>
 </ul><p></p><div class="sourceCode r"><pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">sr_simple</span> <span class="op">+</span> <span class="va">sr_disc</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in stop_if_spotrate_slots_differ(e1, e2, "SpotRate objects have different slots") :</span></span>
-<span><span class="co">#&gt;   SpotRate objects have different slots</span></span>
+<span><span class="co">#&gt; Error : SpotRate objects have different slots (compounding, daycount or calendar)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">sr_simple</span> <span class="op">&gt;</span> <span class="va">sr_disc</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in stop_if_spotrate_slots_differ(e1, e2, "SpotRate objects have different slots") :</span></span>
-<span><span class="co">#&gt;   SpotRate objects have different slots</span></span>
+<span><span class="co">#&gt; Error : SpotRate objects have different slots (compounding, daycount or calendar)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">sr_simple</span>, <span class="va">sr_disc</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in stop_if_spotrate_slots_differ(x, values_, "SpotRate objects have different slots") :</span></span>
-<span><span class="co">#&gt;   SpotRate objects have different slots</span></span></code></pre><p></p></div>
+<span><span class="co">#&gt; Error : SpotRate objects have different slots (compounding, daycount or calendar)</span></span></code></pre><p></p></div>
 </div>
 
     </div>
