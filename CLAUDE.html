@@ -111,7 +111,7 @@
 <code>NAMESPACE</code> and <code>man/</code> are roxygen-generated (markdown enabled) — never edit by hand; run <code>devtools::document()</code>.</li>
 <li>S4 methods that need a doc entry but would clutter the index get an alias in <code>R/hidden.R</code> (<code>hidden_aliases</code>). Add new method aliases there if <code>R CMD check</code> complains about undocumented S4 methods.</li>
 <li>Dataset <code>ZeroCurveBRL</code> (<code>data/</code>) is documented in <code>R/fixedincome-internal.R</code>.</li>
-<li>Vignettes don’t download data: the rb3 (&gt;= 0.1.0) code is shown with <code>eval=FALSE</code>, and a hidden chunk loads <code>vignettes/yc-&lt;date&gt;.rds</code> (made once from a local rb3 cache, because B3 no longer serves those 2022 files).</li>
+<li>Vignettes don’t download data: the rb3 (&gt;= 0.1.0, not in Suggests: it pulls in arrow) code is shown with <code>eval=FALSE</code>, and a hidden chunk loads <code>vignettes/yc-&lt;date&gt;.rds</code> (made once from a local rb3 cache, because B3 no longer serves those 2022 files).</li>
 <li>Only annual rates are supported (no frequency concept).</li>
 <li>
 <code>examples/</code>, <code>resources/</code>, <code>images/</code> are scratch/legacy material excluded from the build (<code>.Rbuildignore</code>); they are not tests and may not run against the current API.</li>

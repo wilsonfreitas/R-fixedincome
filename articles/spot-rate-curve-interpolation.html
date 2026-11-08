@@ -127,8 +127,7 @@ to a spot rate curve.</p>
 <p>Let’s start by creating a curve using data obtained with <a href="https://github.com/wilsonfreitas/rb3" class="external-link">rb3</a> package.</p>
 <p>Firstly, the packages have to be loaded.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/rb3" class="external-link">rb3</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonfreitas/R-fixedincome" class="external-link">fixedincome</a></span><span class="op">)</span></span></code></pre></div>
 <p>In order to build a term structure formed only by futures maturities,
 the yield curve data and futures data have to be mixed and this is done
@@ -138,7 +137,8 @@ curve is returned, the rows related to futures maturities can be
 filtered. The first term, usually 1 business day term, is also used to
 anchor the curve’s short part.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">refdate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2022-08-05"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/rb3" class="external-link">rb3</a></span><span class="op">)</span></span>
+<span><span class="va">refdate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2022-08-05"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://docs.ropensci.org/rb3/reference/fetch_marketdata.html" class="external-link">fetch_marketdata</a></span><span class="op">(</span><span class="st">"b3-reference-rates"</span>, refdate <span class="op">=</span> <span class="va">refdate</span>, curve_name <span class="op">=</span> <span class="st">"PRE"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://docs.ropensci.org/rb3/reference/fetch_marketdata.html" class="external-link">fetch_marketdata</a></span><span class="op">(</span><span class="st">"b3-futures-settlement-prices"</span>, refdate <span class="op">=</span> <span class="va">refdate</span><span class="op">)</span></span>
 <span><span class="va">yc_ss</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://docs.ropensci.org/rb3/reference/superdataset.html" class="external-link">yc_brl_with_futures_get</a></span><span class="op">(</span><span class="va">refdate</span><span class="op">)</span> <span class="op">|&gt;</span></span>
