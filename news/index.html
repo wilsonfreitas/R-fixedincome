@@ -72,6 +72,7 @@
 <li>
 <code><a href="https://rdrr.io/r/base/c.html" class="external-link">c()</a></code> on <code>Term</code> objects keeps the units of each element; before, all elements took the units of the first one.</li>
 <li>Arithmetic (<code>+</code>, <code>-</code>, <code>%%</code>, <code>/</code>, <code>%/%</code>) and comparison between <code>Term</code> objects with the same units. Terms with different units raise an error asking to convert them first. (Issue <a href="https://github.com/wilsonfreitas/R-fixedincome/issues/28" class="external-link">#28</a>)</li>
+<li>New <code><a href="../reference/with_daycount.html">with_daycount()</a></code> evaluates operations between <code>Term</code> objects with different units using a daycount, e.g. <code>with_daycount("business/252", term(1, "month") + term(12, "days"))</code> gives 33 days. (Issue <a href="https://github.com/wilsonfreitas/R-fixedincome/issues/27" class="external-link">#27</a>)</li>
 <li>
 <code>[[</code> and <code>[[&lt;-</code> on <code>SpotRateCurve</code> now convert <code>Term</code> objects to days before indexing. Before, <code>curve[[term(1, "years")]]</code> silently returned the rate at 1 day. (Issue <a href="https://github.com/wilsonfreitas/R-fixedincome/issues/22" class="external-link">#22</a>)</li>
 <li>
