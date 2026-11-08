@@ -22,7 +22,6 @@ that helps with the visualization of the term structures using all ggplot2 featu
 Before the start let's get the necessary packages loaded.
 
 ```{r message=FALSE, warning=FALSE}
-library(rb3)
 library(dplyr)
 library(fixedincome)
 library(ggplot2)
@@ -31,6 +30,7 @@ library(ggplot2)
 As the second step, the yield curve must be created and this is done with data from {rb3} package.
 
 ```{r eval=FALSE}
+library(rb3)
 refdate <- as.Date("2022-08-09")
 fetch_marketdata("b3-reference-rates", refdate = refdate, curve_name = "PRE")
 fetch_marketdata("b3-futures-settlement-prices", refdate = refdate)

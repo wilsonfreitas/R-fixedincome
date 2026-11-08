@@ -40,7 +40,6 @@ package.
 Firstly, the packages have to be loaded.
 
 ```{r message=FALSE, warning=FALSE}
-library(rb3)
 library(dplyr)
 library(fixedincome)
 ```
@@ -52,6 +51,7 @@ Once the curve is returned, the rows related to futures maturities can be filter
 The first term, usually 1 business day term, is also used to anchor the curve's short part.
 
 ```{r eval=FALSE}
+library(rb3)
 refdate <- as.Date("2022-08-05")
 fetch_marketdata("b3-reference-rates", refdate = refdate, curve_name = "PRE")
 fetch_marketdata("b3-futures-settlement-prices", refdate = refdate)

@@ -4,7 +4,7 @@
 * `forwardrate(curve, t1, t2)` accepts numeric or `Term` vectors and uses the curve's interpolation. (Issue #17)
 * `[` on `SpotRateCurve` gives a clear error for NA or out of range indices. (Issue #24)
 * `daycount()` rejects daycounts other than `actual/...` and `business/...`, such as `30/360`, which were silently computed as actual days. (Issue #5)
-* Vignettes updated to rb3 >= 0.1.0 and no longer download data.
+* Vignettes updated to rb3 >= 0.1.0 and no longer download data; rb3 removed from Suggests.
 * Requires R >= 4.1.0.
 
 # fixedincome 0.0.4
