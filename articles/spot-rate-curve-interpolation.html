@@ -246,11 +246,41 @@ previously.</p>
 <span><span class="co">#&gt; Reference date: 2022-08-05</span></span></code></pre></div>
 </div>
 <div class="section level2">
+<h2 id="shift-the-curve-with-basis-points">Shift the curve with basis points<a class="anchor" aria-label="anchor" href="#shift-the-curve-with-basis-points"></a>
+</h2>
+<p>A basis point (bp) is 0.01%, and rate changes are usually given in
+basis points. <code><a href="../reference/bps.html">bps()</a></code> creates basis points, and adding them
+to the curve shifts all its rates. The result is still a spot rate curve
+with the same terms and interpolation, so the interpolated rates also
+move.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">shifted</span> <span class="op">&lt;-</span> <span class="va">sp_curve</span> <span class="op">+</span> <span class="fu"><a href="../reference/bps.html">bps</a></span><span class="op">(</span><span class="fl">50</span><span class="op">)</span></span>
+<span><span class="va">shifted</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">21</span>, <span class="fl">42</span>, <span class="fl">63</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="co">#&gt;         SpotRateCurve</span></span>
+<span><span class="co">#&gt; 21 days        0.1415</span></span>
+<span><span class="co">#&gt; 42 days        0.1418</span></span>
+<span><span class="co">#&gt; 63 days        0.1423</span></span>
+<span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
+<span><span class="co">#&gt; Reference date: 2022-08-05</span></span></code></pre></div>
+<p><code><a href="../reference/bps.html">as.bps()</a></code> shows the difference between two curves in
+basis points.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/bps.html">as.bps</a></span><span class="op">(</span><span class="va">shifted</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">21</span>, <span class="fl">42</span>, <span class="fl">63</span><span class="op">)</span><span class="op">]</span><span class="op">]</span> <span class="op">-</span> <span class="va">sp_curve</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">21</span>, <span class="fl">42</span>, <span class="fl">63</span><span class="op">)</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "50 bps" "50 bps" "50 bps"</span></span></code></pre></div>
+<p>A vector of basis points, one for each term, changes the shape of the
+curve. Here the short rates don’t move, and the long rates go up by up
+to 100 bps.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">steeper</span> <span class="op">&lt;-</span> <span class="va">sp_curve</span> <span class="op">+</span> <span class="fu"><a href="../reference/bps.html">bps</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, length.out <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">sp_curve</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/bps.html">as.bps</a></span><span class="op">(</span><span class="va">steeper</span> <span class="op">-</span> <span class="va">sp_curve</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">sp_curve</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt; [1] "0 bps"   "100 bps"</span></span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="unset-interpolation">Unset interpolation<a class="anchor" aria-label="anchor" href="#unset-interpolation"></a>
 </h2>
 <p>Set interpolation to <code>NULL</code> to unset the
 interpolation.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">sp_curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
 <span><span class="va">sp_curve</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">21</span>, <span class="fl">42</span>, <span class="fl">63</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="co">#&gt;         SpotRateCurve</span></span>
@@ -270,10 +300,10 @@ returned.</p>
 an argument <code>use_interpolation</code> that shows the interpolation
 together with the curve points. This argument defaults to
 <code>FALSE</code>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">sp_curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolation-constructor.html">interp_flatforward</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sp_curve</span>, use_interpolation <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="spot-rate-curve-interpolation_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="100%"></p>
+<p><img src="spot-rate-curve-interpolation_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="" width="100%"></p>
 <div class="section level3">
 <h3 id="forward-rates-with-and-without-interpolation-set">Forward rates with and without interpolation set<a class="anchor" aria-label="anchor" href="#forward-rates-with-and-without-interpolation-set"></a>
 </h3>
@@ -281,26 +311,26 @@ together with the curve points. This argument defaults to
 to calculate daily forward rates. Otherwise, it uses the forward rates
 between the curve terms. Set the <code>show_forward</code> argument to
 <code>TRUE</code> to show the forward rates.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">sp_curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sp_curve</span>, show_forward <span class="op">=</span> <span class="cn">TRUE</span>, legend_location <span class="op">=</span> <span class="st">"bottomright"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="spot-rate-curve-interpolation_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="100%"></p>
+<p><img src="spot-rate-curve-interpolation_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" alt="" width="100%"></p>
 <p>The forward rates are drawn with step lines.</p>
 <p>If the <code>use_interpolation</code> argument is <code>TRUE</code>
 then the daily forward rates are calculated with the defined
 interpolation.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">sp_curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolation-constructor.html">interp_flatforward</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sp_curve</span>, use_interpolation <span class="op">=</span> <span class="cn">TRUE</span>, show_forward <span class="op">=</span> <span class="cn">TRUE</span>, legend_location <span class="op">=</span> <span class="st">"bottomright"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="spot-rate-curve-interpolation_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="" width="100%"></p>
+<p><img src="spot-rate-curve-interpolation_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" alt="" width="100%"></p>
 <p>It is possible to note that the flat forward daily rates are fairly
 close to curve terms forward rates.</p>
 <p>As the interpolation changes its effects can be viewed in the forward
 rates dynamic.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">sp_curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolation-constructor.html">interp_naturalspline</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sp_curve</span>, use_interpolation <span class="op">=</span> <span class="cn">TRUE</span>, show_forward <span class="op">=</span> <span class="cn">TRUE</span>, legend_location <span class="op">=</span> <span class="st">"bottomright"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="spot-rate-curve-interpolation_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="" width="100%"></p>
+<p><img src="spot-rate-curve-interpolation_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" alt="" width="100%"></p>
 </div>
 </div>
   </div>
