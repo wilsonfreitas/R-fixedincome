@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">fixedincome</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.9000</span>
       </span>
     </div>
 
@@ -75,15 +75,14 @@
 <div class="section level2">
 <h2 id="commands">Commands<a class="anchor" aria-label="anchor" href="#commands"></a></h2>
 <p>Run from the repo root in R (or <code>Rscript -e '...'</code>):</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">load_all</span><span class="op">(</span><span class="op">)</span>                 <span class="co"># load package for interactive work</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">document</span><span class="op">(</span><span class="op">)</span>                 <span class="co"># regenerate man/ and NAMESPACE from roxygen</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">test</span><span class="op">(</span><span class="op">)</span>                     <span class="co"># run all tests (testthat, edition 3)</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">test</span><span class="op">(</span>filter <span class="op">=</span> <span class="st">"spotratecurve"</span><span class="op">)</span>   <span class="co"># single test file: tests/testthat/test-spotratecurve.R</span></span>
-<span><span class="fu">testthat</span><span class="fu">::</span><span class="fu"><a href="https://testthat.r-lib.org/reference/test_file.html" class="external-link">test_file</a></span><span class="op">(</span><span class="st">"tests/testthat/test-term.R"</span><span class="op">)</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">check</span><span class="op">(</span><span class="op">)</span>                    <span class="co"># full R CMD check (what CI runs)</span></span>
-<span><span class="fu">rmarkdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgs.rstudio.com/rmarkdown/reference/render.html" class="external-link">render</a></span><span class="op">(</span><span class="st">"README.Rmd"</span><span class="op">)</span>      <span class="co"># README.md is generated — edit README.Rmd</span></span>
-<span><span class="fu">pkgdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">build_site</a></span><span class="op">(</span><span class="op">)</span>                <span class="co"># docs site (config in _pkgdown.yml)</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">load_all</span>()                 <span class="co"># load package for interactive work</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">document</span>()                 <span class="co"># regenerate man/ and NAMESPACE from roxygen</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">test</span>()                     <span class="co"># run all tests (testthat, edition 3)</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">test</span>(<span class="at">filter =</span> <span class="st">"spotratecurve"</span>)   <span class="co"># single test file: tests/testthat/test-spotratecurve.R</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>testthat<span class="sc">::</span><span class="fu">test_file</span>(<span class="st">"tests/testthat/test-term.R"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">check</span>()                    <span class="co"># full R CMD check (what CI runs)</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>LANGUAGE<span class="ot">=</span>en Rscript <span class="sc">-</span>e <span class="st">'rmarkdown::render("README.Rmd")'</span>   <span class="co"># README.md is generated — edit README.Rmd; install the package first</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>pkgdown<span class="sc">::</span><span class="fu">build_site</span>()                <span class="co"># docs site (config in _pkgdown.yml)</span></span></code></pre></div>
 <p>CI (<code>.github/workflows/R-CMD-check.yaml</code>) runs <code>rcmdcheck</code> on macOS, Windows and Ubuntu (devel/release/oldrel-1).</p>
 </div>
 <div class="section level2">
@@ -114,7 +113,7 @@
 <code>NAMESPACE</code> and <code>man/</code> are roxygen-generated (markdown enabled) — never edit by hand; run <code>devtools::document()</code>.</li>
 <li>S4 methods that need a doc entry but would clutter the index get an alias in <code>R/hidden.R</code> (<code>hidden_aliases</code>). Add new method aliases there if <code>R CMD check</code> complains about undocumented S4 methods.</li>
 <li>Dataset <code>ZeroCurveBRL</code> (<code>data/</code>) is documented in <code>R/fixedincome-internal.R</code>.</li>
-<li>Vignettes don’t download data: the rb3 (&gt;= 0.1.0, not in Suggests: it pulls in arrow) code is shown with <code>eval=FALSE</code>, and a hidden chunk loads <code>vignettes/yc-&lt;date&gt;.rds</code> (made once from a local rb3 cache, because B3 no longer serves those 2022 files).</li>
+<li>Vignettes don’t download data: the rb3 (&gt;= 0.1.0, not in Suggests: it pulls in arrow) code is shown with <code>eval=FALSE</code>, and a hidden chunk loads <code>vignettes/yc-&lt;date&gt;.rds</code> (made once from a local rb3 cache, because B3 no longer serves those 2022 files). The README does the same with <code>README-curves.rds</code>.</li>
 <li>Only annual rates are supported (no frequency concept).</li>
 <li>
 <code>examples/</code>, <code>resources/</code>, <code>images/</code> are scratch/legacy material excluded from the build (<code>.Rbuildignore</code>); they are not tests and may not run against the current API.</li>

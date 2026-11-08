@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">fixedincome</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.9000</span>
       </span>
     </div>
 
@@ -96,7 +96,7 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>Calculations involving interest rates are usually very easy and straightforward, but sometimes it involves specific issues that makes the task of writing structured and reproducible code for it chalenging and annoying. The <code>fixedincome</code> package brings many functions to strucutre and create facilities to handle with interest rates, term structure of interest rates and specific issues regarding compounding rates and day count rules, for example.</p>
+<p>Calculations involving interest rates are usually very easy and straightforward, but sometimes it involves specific issues that makes the task of writing structured and reproducible code for it challenging and annoying. The <code>fixedincome</code> package brings many functions to structure and create facilities to handle with interest rates, term structure of interest rates and specific issues regarding compounding rates and day count rules, for example.</p>
 <p>Below there are a few examples on how to create and make calculations with interest rates using <code>fixedincome</code>.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -160,7 +160,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">df</span></span>
-<span><span class="co">#&gt; # A tibble: 5 x 2</span></span>
+<span><span class="co">#&gt; # A tibble: 5 × 2</span></span>
 <span><span class="co">#&gt;   rate                                       terms  </span></span>
 <span><span class="co">#&gt;   &lt;SpotRate&gt;                                 &lt;Term&gt; </span></span>
 <span><span class="co">#&gt; 1 0.1056 discrete business/252 Brazil/ANBIMA 1 year </span></span>
@@ -171,7 +171,7 @@
 <p>The tidyverse verbs can be easily used with <code>SpotRate</code> and <code>Term</code> classes.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>fact <span class="op">=</span> <span class="fu"><a href="reference/compound.html">compound</a></span><span class="op">(</span><span class="va">rate</span>, <span class="va">terms</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 5 x 3</span></span>
+<span><span class="co">#&gt; # A tibble: 5 × 3</span></span>
 <span><span class="co">#&gt;   rate                                       terms    fact</span></span>
 <span><span class="co">#&gt;   &lt;SpotRate&gt;                                 &lt;Term&gt;  &lt;dbl&gt;</span></span>
 <span><span class="co">#&gt; 1 0.1056 discrete business/252 Brazil/ANBIMA 1 year   1.11</span></span>
@@ -182,15 +182,38 @@
 <div class="section level3">
 <h3 id="spot-rate-curves">Spot rate curves<a class="anchor" aria-label="anchor" href="#spot-rate-curves"></a>
 </h3>
-<p>Let’s create a spot rate curve using web scraping (from B3 website)</p>
+<p>Let’s create a spot rate curve with the DI1 futures prices from B3, using the <a href="https://CRAN.R-project.org/package=rb3" class="external-link">rb3</a> package. The 1 day rate is the CDI rate.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"examples/utils-functions.R"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'bizdays'</span></span>
-<span><span class="co">#&gt; The following object is masked from 'package:stats':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     offset</span></span>
-<span><span class="va">curve</span> <span class="op">&lt;-</span> <span class="fu">get_curve_from_web</span><span class="op">(</span><span class="st">"2022-02-23"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/rb3" class="external-link">rb3</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://wilsonfreitas.github.io/R-bizdays/" class="external-link">bizdays</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">di1_curve</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">date</span>, <span class="va">cdi</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">months</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>F <span class="op">=</span> <span class="fl">1</span>, G <span class="op">=</span> <span class="fl">2</span>, H <span class="op">=</span> <span class="fl">3</span>, J <span class="op">=</span> <span class="fl">4</span>, K <span class="op">=</span> <span class="fl">5</span>, M <span class="op">=</span> <span class="fl">6</span>, N <span class="op">=</span> <span class="fl">7</span>, Q <span class="op">=</span> <span class="fl">8</span>, U <span class="op">=</span> <span class="fl">9</span>, V <span class="op">=</span> <span class="fl">10</span>, X <span class="op">=</span> <span class="fl">11</span>, Z <span class="op">=</span> <span class="fl">12</span><span class="op">)</span></span>
+<span>  <span class="va">di1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://docs.ropensci.org/rb3/reference/futures_get.html" class="external-link">futures_get</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">commodity</span> <span class="op">==</span> <span class="st">"DI1"</span>, <span class="va">refdate</span> <span class="op">==</span> <span class="va">date</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>      maturity <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"20%s-%02d-01"</span>, <span class="fu"><a href="https://rdrr.io/r/base/substr.html" class="external-link">substr</a></span><span class="op">(</span><span class="va">maturity_code</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, <span class="va">months</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/substr.html" class="external-link">substr</a></span><span class="op">(</span><span class="va">maturity_code</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>      maturity <span class="op">=</span> <span class="fu"><a href="http://wilsonfreitas.github.io/R-bizdays/reference/adjust.date.html" class="external-link">following</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">maturity</span><span class="op">)</span>, <span class="st">"Brazil/ANBIMA"</span><span class="op">)</span>,</span>
+<span>      business_days <span class="op">=</span> <span class="fu"><a href="http://wilsonfreitas.github.io/R-bizdays/reference/bizdays.html" class="external-link">bizdays</a></span><span class="op">(</span><span class="va">refdate</span>, <span class="va">maturity</span>, <span class="st">"Brazil/ANBIMA"</span><span class="op">)</span>,</span>
+<span>      rate <span class="op">=</span> <span class="op">(</span><span class="fl">100000</span> <span class="op">/</span> <span class="va">price</span><span class="op">)</span><span class="op">^</span><span class="op">(</span><span class="fl">252</span> <span class="op">/</span> <span class="va">business_days</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">business_days</span> <span class="op">!=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">business_days</span><span class="op">)</span></span>
+<span>  <span class="va">curve</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/spotratecurve.html">spotratecurve</a></span><span class="op">(</span></span>
+<span>    <span class="va">di1</span><span class="op">$</span><span class="va">rate</span>, <span class="va">di1</span><span class="op">$</span><span class="va">business_days</span>, <span class="st">"discrete"</span>, <span class="st">"business/252"</span>, <span class="st">"Brazil/ANBIMA"</span>,</span>
+<span>    refdate <span class="op">=</span> <span class="va">date</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="va">curve</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">cdi</span></span>
+<span>  <span class="va">curve</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">curves</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  <span class="st">"2022-02-23"</span> <span class="op">=</span> <span class="fu">di1_curve</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2022-02-23"</span><span class="op">)</span>, <span class="fl">0.1065</span><span class="op">)</span>,</span>
+<span>  <span class="st">"2011-02-23"</span> <span class="op">=</span> <span class="fu">di1_curve</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2011-02-23"</span><span class="op">)</span>, <span class="fl">0.1116</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">curve</span> <span class="op">&lt;-</span> <span class="va">curves</span><span class="op">[[</span><span class="st">"2022-02-23"</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="va">curve</span></span>
 <span><span class="co">#&gt;          SpotRateCurve</span></span>
 <span><span class="co">#&gt; 1 day           0.1065</span></span>
@@ -207,27 +230,27 @@
 <span><span class="co">#&gt; discrete business/252 Brazil/ANBIMA </span></span>
 <span><span class="co">#&gt; Reference date: 2022-02-23</span></span></code></pre></div>
 <p><code>SpotRateCurve</code> plots can be easily done by calling <code>plot</code>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">curve</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-10-1.png" width="100%"></p>
-<p>For another date.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">curve</span> <span class="op">&lt;-</span> <span class="fu">get_curve_from_web</span><span class="op">(</span><span class="st">"2011-02-23"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">curve</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-11-1.png" width="100%"></p>
-<p>It can show the forward rates for the short term by selecting the first two years.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">curve</span> <span class="op">&lt;-</span> <span class="fu">get_curve_from_web</span><span class="op">(</span><span class="st">"2022-02-23"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">fixedincome</span><span class="fu">::</span><span class="fu"><a href="reference/spotratecurve-helpers.html">first</a></span><span class="op">(</span><span class="va">curve</span>, <span class="st">"2 years"</span><span class="op">)</span>, show_forward <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">curve</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-12-1.png" width="100%"></p>
-<p>Once interpolation is set, it can be used in the plot.</p>
+<p>For another date.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">curve</span> <span class="op">&lt;-</span> <span class="va">curves</span><span class="op">[[</span><span class="st">"2011-02-23"</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">curve</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-13-1.png" width="100%"></p>
+<p>It can show the forward rates for the short term by selecting the first two years.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">curve</span> <span class="op">&lt;-</span> <span class="va">curves</span><span class="op">[[</span><span class="st">"2022-02-23"</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">fixedincome</span><span class="fu">::</span><span class="fu"><a href="reference/spotratecurve-helpers.html">first</a></span><span class="op">(</span><span class="va">curve</span>, <span class="st">"2 years"</span><span class="op">)</span>, show_forward <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-14-1.png" width="100%"></p>
+<p>Once interpolation is set, it can be used in the plot.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">curve_2y</span> <span class="op">&lt;-</span> <span class="fu">fixedincome</span><span class="fu">::</span><span class="fu"><a href="reference/spotratecurve-helpers.html">first</a></span><span class="op">(</span><span class="va">curve</span>, <span class="st">"2 years"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">curve_2y</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/interpolation-constructor.html">interp_flatforward</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">curve_2y</span>, use_interpolation <span class="op">=</span> <span class="cn">TRUE</span>, legend_location <span class="op">=</span> <span class="st">"bottomright"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-13-1.png" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-15-1.png" width="100%"></p>
 <p>Parametric models like the Nelson-Siegel-Svensson model can be fitted to the curve.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">beta1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu">fixedincome</span><span class="fu">::</span><span class="fu"><a href="reference/spotratecurve-helpers.html">last</a></span><span class="op">(</span><span class="va">curve</span>, <span class="st">"1 day"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">beta2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">curve</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">-</span> <span class="va">beta1</span></span>
 <span><span class="fu"><a href="reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fit_interpolation.html">fit_interpolation</a></span><span class="op">(</span></span>
@@ -238,27 +261,27 @@
 <span><span class="co">#&gt; &lt;Interpolation: nelsonsiegelsvensson &gt; </span></span>
 <span><span class="co">#&gt;  Parameters:</span></span>
 <span><span class="co">#&gt;   beta1   beta2   beta3   beta4 lambda1 lambda2 </span></span>
-<span><span class="co">#&gt;   0.119  -0.013   1.000  -0.975   1.195   1.122</span></span></code></pre></div>
+<span><span class="co">#&gt;   0.119  -0.014   1.000  -0.975   1.202   1.129</span></span></code></pre></div>
 <p>Once set to the curve it is used in the plot to show daily forward rates.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">curve</span>, use_interpolation <span class="op">=</span> <span class="cn">TRUE</span>, show_forward <span class="op">=</span> <span class="cn">TRUE</span>, legend_location <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-15-1.png" width="100%"></p>
-<p>The interpolation can be changed in order to compare different interpolations and the effects in forward rates.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">curve</span>, use_interpolation <span class="op">=</span> <span class="cn">TRUE</span>, show_forward <span class="op">=</span> <span class="cn">TRUE</span>, legend_location <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-17-1.png" width="100%"></p>
+<p>The interpolation can be changed in order to compare different interpolations and the effects in forward rates.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/interpolation-constructor.html">interp_flatforward</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
 <span>  <span class="va">curve</span>,</span>
 <span>  use_interpolation <span class="op">=</span> <span class="cn">TRUE</span>, show_forward <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  legend_location <span class="op">=</span> <span class="st">"bottomright"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-16-1.png" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-18-1.png" width="100%"></p>
 <p>Interpolation enables the creation of standardized curves, commonly used in risk management to build risk factors.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">risk_terms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">9</span><span class="op">)</span> <span class="op">*</span> <span class="fl">21</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span> <span class="op">*</span> <span class="fl">252</span><span class="op">)</span></span>
 <span><span class="va">risk_curve</span> <span class="op">&lt;-</span> <span class="va">curve</span><span class="op">[[</span><span class="va">risk_terms</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="fu"><a href="reference/interpolation.html">interpolation</a></span><span class="op">(</span><span class="va">risk_curve</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/interpolation-constructor.html">interp_flatforward</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">risk_curve</span>, use_interpolation <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-17-1.png" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-19-1.png" width="100%"></p>
 </div>
 </div>
 </div>
