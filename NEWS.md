@@ -1,5 +1,6 @@
 # fixedincome 0.0.5
 
+* Arithmetic (`+`, `-`, `%%`, `/`, `%/%`) and comparison between `Term` objects with the same units. Terms with different units raise an error asking to convert them first. (Issue #28)
 * `[[` and `[[<-` on `SpotRateCurve` now convert `Term` objects to days before indexing. Before, `curve[[term(1, "years")]]` silently returned the rate at 1 day. (Issue #22)
 * `forwardrate(curve, t1, t2)` accepts numeric or `Term` vectors and uses the curve's interpolation. (Issue #17)
 * `[` on `SpotRateCurve` gives a clear error for NA or out of range indices. (Issue #24)

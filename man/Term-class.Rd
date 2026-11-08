@@ -34,11 +34,26 @@ Numeric values can be summed or subtracted from a Term object numeric part.
 #> [1] "2 days"
 }\if{html}{\out{</div>}}
 
-Arithmetic and comparison operations between Term object are not implemented,
-so these operations raise an error.
+Arithmetic and comparison operations between Term objects work when both
+have the same units. \code{+}, \code{-} and \code{\%\%} return a Term, \code{/} and \code{\%/\%} return
+a numeric and comparisons return a logical.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{try(term(1, "days") + term(2 , "days"))
-#> Error in term(1, "days") + term(2, "days") : Not implemented
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{term(1, "days") + term(2, "days")
+#> [1] "3 days"
+term(10, "days") / term(5, "days")
+#> [1] 2
+term(10, "days") > term(5, "days")
+#> [1] TRUE
+}\if{html}{\out{</div>}}
+
+Terms with different units raise an error, because converting them
+requires a daycount; use \code{todays()}, \code{tomonths()} or \code{toyears()} first.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{try(term(1, "months") + term(12, "days"))
+#> Error in term_common_units(e1, e2) : 
+#>   Terms with different units: convert them first with todays(), tomonths() or toyears()
+todays(daycount("business/252"), term(1, "months")) + term(12, "days")
+#> [1] "33 days"
 }\if{html}{\out{</div>}}
 \subsection{DateRangeTerm objects}{
 

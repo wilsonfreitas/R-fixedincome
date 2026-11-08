@@ -10,6 +10,8 @@ hidden_aliases <- NULL
 #' @name hidden_aliases
 #' @aliases
 #' Ops,Term,Term-method
+#' Arith,Term,Term-method
+#' Compare,Term,Term-method
 #' Arith,SpotRate,SpotRate-method
 #' Arith,SpotRate,numeric-method
 #' Arith,numeric,SpotRate-method

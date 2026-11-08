@@ -89,11 +89,46 @@ test_that("it should not create terms with different units", {
   expect_error(t1 <- term(c(1, 2), c("day", "month", "year")))
 })
 
-test_that("it should ops terms", {
-  t1 <- term(1, "day")
-  t2 <- term(2, "days")
-  expect_error(t1 < t2)
-  expect_error(t1 + t2)
+test_that("it should do arithmetic with terms of the same units (#28)", {
+  t1 <- term(c(10, 20), "days")
+  t2 <- term(c(4, 5), "days")
+  expect_equal(t1 + t2, term(c(14, 25), "days"))
+  expect_equal(t1 - t2, term(c(6, 15), "days"))
+  expect_equal(t1 %% t2, term(c(2, 0), "days"))
+  expect_equal(t1 / t2, c(2.5, 4))
+  expect_equal(t1 %/% t2, c(2, 4))
+  expect_equal(term(42, "days") - term(21, "days"), term(21, "days"))
+  expect_equal(t1 + term(1, "day"), term(c(11, 21), "days"))
+  expect_equal(term(1:2, c("day", "month")) + term(c(1, 1), c("day", "month")),
+    term(2:3, c("day", "month")))
+  expect_error(t1 * t2, "not defined for two Terms")
+  expect_error(t1^t2, "not defined for two Terms")
+})
+
+test_that("it should compare terms of the same units (#28)", {
+  t1 <- term(c(10, 20), "days")
+  t2 <- term(15, "days")
+  expect_equal(t1 > t2, c(FALSE, TRUE))
+  expect_equal(t1 <= t2, c(TRUE, FALSE))
+  expect_equal(t1 == term(c(10, 21), "days"), c(TRUE, FALSE))
+  expect_equal(t1 != t2, c(TRUE, TRUE))
+})
+
+test_that("it should raise error for terms with different units (#28)", {
+  expect_error(term(1, "month") + term(12, "days"), "different units")
+  expect_error(term(1, "year") > term(252, "days"), "different units")
+  expect_error(term(1:2, c("day", "month")) + term(1, "day"), "different units")
+})
+
+test_that("it should keep DateRangeTerm arithmetic as Term (#28)", {
+  dr <- term(as.Date("2022-02-14"), as.Date("2022-02-18"), "actual")
+  expect_equal(dr + term(1, "day"), term(5, "days"))
+  expect_true(dr > term(1, "day"))
+})
+
+test_that("it should format negative terms in plural (#28)", {
+  expect_equal(format(term(c(-10, -1, 1, 10), "days")),
+    c("-10 days", "-1 day", "1 day", "10 days"))
 })
 
 test_that("it should create a DateRangeTerm", {

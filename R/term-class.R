@@ -84,11 +84,22 @@ term.Date <- function(x, end_date, calendar, ...) {
 #' term(1, "days") + 1
 #' ```
 #'
-#' Arithmetic and comparison operations between Term object are not implemented,
-#' so these operations raise an error.
+#' Arithmetic and comparison operations between Term objects work when both
+#' have the same units. `+`, `-` and `%%` return a Term, `/` and `%/%` return
+#' a numeric and comparisons return a logical.
 #'
 #' ```{r}
-#' try(term(1, "days") + term(2 , "days"))
+#' term(1, "days") + term(2, "days")
+#' term(10, "days") / term(5, "days")
+#' term(10, "days") > term(5, "days")
+#' ```
+#'
+#' Terms with different units raise an error, because converting them
+#' requires a daycount; use `todays()`, `tomonths()` or `toyears()` first.
+#'
+#' ```{r}
+#' try(term(1, "months") + term(12, "days"))
+#' todays(daycount("business/252"), term(1, "months")) + term(12, "days")
 #' ```
 #'
 #' ## DateRangeTerm objects
@@ -221,7 +232,7 @@ setMethod(
 format.Term <- function(x, ...) {
   value <- x@.Data
   abrev <- x@units
-  abrev <- ifelse(value > 1, paste0(abrev, "s"), abrev)
+  abrev <- ifelse(abs(value) > 1, paste0(abrev, "s"), abrev)
   paste(value, abrev, sep = " ")
 }
 
@@ -254,11 +265,53 @@ c.Term <- function(x, ...) {
   term(values_, x@units)
 }
 
+# Units of the result of an operation between two Terms. Terms with
+# different units need a daycount to be converted, so they raise an error.
+term_common_units <- function(e1, e2) {
+  n <- max(length(e1), length(e2))
+  u1 <- rep_len(e1@units, n)
+  if (!all(u1 == rep_len(e2@units, n))) {
+    stop(
+      "Terms with different units: convert them first ",
+      "with todays(), tomonths() or toyears()"
+    )
+  }
+  if (length(unique(u1)) == 1) u1[1] else u1
+}
+
+#' @export
+setMethod(
+  "Arith",
+  signature(e1 = "Term", e2 = "Term"),
+  function(e1, e2) {
+    units <- term_common_units(e1, e2)
+    value <- callGeneric(as.numeric(e1), as.numeric(e2))
+    switch(.Generic,
+      "+" = ,
+      "-" = ,
+      "%%" = term(value, units),
+      "/" = ,
+      "%/%" = value,
+      stop("Operation ", .Generic, " is not defined for two Terms")
+    )
+  }
+)
+
+#' @export
+setMethod(
+  "Compare",
+  signature(e1 = "Term", e2 = "Term"),
+  function(e1, e2) {
+    term_common_units(e1, e2)
+    callGeneric(as.numeric(e1), as.numeric(e2))
+  }
+)
+
 #' @export
 setMethod(
   "Ops",
   signature(e1 = "Term", e2 = "Term"),
   function(e1, e2) {
-    stop("Not implemented")
+    stop("Operation ", .Generic, " is not defined for two Terms")
   }
 )
