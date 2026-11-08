@@ -277,7 +277,8 @@ term_common_units <- function(e1, e2) {
   if (!all(u1 == rep_len(e2@units, n))) {
     stop(
       "Terms with different units: convert them first ",
-      "with todays(), tomonths() or toyears()"
+      "with todays(), tomonths() or toyears()",
+      call. = FALSE
     )
   }
   if (length(unique(u1)) == 1) u1[1] else u1

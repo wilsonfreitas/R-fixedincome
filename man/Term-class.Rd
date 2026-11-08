@@ -50,8 +50,7 @@ Terms with different units raise an error, because converting them
 requires a daycount; use \code{todays()}, \code{tomonths()} or \code{toyears()} first.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{try(term(1, "months") + term(12, "days"))
-#> Error in term_common_units(e1, e2) : 
-#>   Terms with different units: convert them first with todays(), tomonths() or toyears()
+#> Error : Terms with different units: convert them first with todays(), tomonths() or toyears()
 todays(daycount("business/252"), term(1, "months")) + term(12, "days")
 #> [1] "33 days"
 }\if{html}{\out{</div>}}
