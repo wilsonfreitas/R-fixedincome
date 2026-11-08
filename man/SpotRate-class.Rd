@@ -92,7 +92,7 @@ and can be put into a \code{data.frame}
 
 once in a \code{data.frame}, dplyr verbs can be used to manipulate it.
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{require(dplyr, warn.conflicts = FALSE)
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(dplyr, warn.conflicts = FALSE)
 
 data.frame(spot_rate = sr_vec) |>
    mutate(comp = compound(spot_rate, term(5, "months")))

@@ -73,7 +73,7 @@
 #' once in a `data.frame`, dplyr verbs can be used to manipulate it.
 #'
 #' ```{r}
-#' require(dplyr, warn.conflicts = FALSE)
+#' library(dplyr, warn.conflicts = FALSE)
 #'
 #' data.frame(spot_rate = sr_vec) |>
 #'    mutate(comp = compound(spot_rate, term(5, "months")))
