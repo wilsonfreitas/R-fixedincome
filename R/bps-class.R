@@ -10,7 +10,7 @@
 #' returns the same object with the rates shifted; compounding, daycount,
 #' calendar, terms and interpolation are kept.
 #' Two `Bps` objects can be added or subtracted, and divided (returning a
-#' numeric).
+#' numeric). `c()` combines `Bps` objects.
 #'
 #' @param x a numeric with the number of basis points (`bps()`), or a rate
 #'   difference as a decimal, like a `SpotRate` spread (`as.bps()`).
@@ -44,10 +44,20 @@ setClass("Bps", contains = "numeric")
 
 #' @export
 format.Bps <- function(x, ...) {
-  paste(format(x@.Data * 1e4, ...), "bps")
+  paste(format(x@.Data * 1e4, trim = TRUE, ...), "bps")
 }
 
 setMethod("show", "Bps", function(object) print(format(object)))
+
+# Plain numbers are rejected: it is not clear if they are bps or decimals.
+#' @export
+c.Bps <- function(x, ...) {
+  elements <- c(list(x), list(...))
+  if (!all(vapply(elements, is, logical(1), "Bps"))) {
+    stop("Only Bps objects can be combined with Bps: use bps() first")
+  }
+  new("Bps", unlist(lapply(elements, as.numeric)))
+}
 
 #' @export
 setMethod(

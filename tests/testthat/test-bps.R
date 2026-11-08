@@ -42,3 +42,8 @@ test_that("it should shift a curve and its interpolation (#33)", {
   # the same holds for plain numbers
   expect_equal(as.numeric((crv + 0.01)[[21]]), 0.12)
 })
+
+test_that("c() combines Bps objects", {
+  expect_equal(c(bps(10), bps(c(20, 30))), bps(c(10, 20, 30)))
+  expect_error(c(bps(10), 5), "use bps\\(\\) first")
+})

@@ -121,6 +121,34 @@ interpolation(sp_curve) <- interp_naturalspline()
 sp_curve[[c(21, 42, 63)]]
 ```
 
+## Shift the curve with basis points
+
+A basis point (bp) is 0.01%, and rate changes are usually given in basis
+points.
+`bps()` creates basis points, and adding them to the curve shifts all its
+rates.
+The result is still a spot rate curve with the same terms and interpolation,
+so the interpolated rates also move.
+
+```{r}
+shifted <- sp_curve + bps(50)
+shifted[[c(21, 42, 63)]]
+```
+
+`as.bps()` shows the difference between two curves in basis points.
+
+```{r}
+as.bps(shifted[[c(21, 42, 63)]] - sp_curve[[c(21, 42, 63)]])
+```
+
+A vector of basis points, one for each term, changes the shape of the curve.
+Here the short rates don't move, and the long rates go up by up to 100 bps.
+
+```{r}
+steeper <- sp_curve + bps(seq(0, 100, length.out = length(sp_curve)))
+as.bps(steeper - sp_curve)[c(1, length(sp_curve))]
+```
+
 ## Unset interpolation
 
 Set interpolation to `NULL` to unset the interpolation.

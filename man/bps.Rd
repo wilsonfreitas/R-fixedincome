@@ -29,7 +29,7 @@ Adding or subtracting basis points to a \code{SpotRate} (or a \code{SpotRateCurv
 returns the same object with the rates shifted; compounding, daycount,
 calendar, terms and interpolation are kept.
 Two \code{Bps} objects can be added or subtracted, and divided (returning a
-numeric).
+numeric). \code{c()} combines \code{Bps} objects.
 }
 \examples{
 bps(10)

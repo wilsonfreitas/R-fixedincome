@@ -4,7 +4,7 @@
 * `c()` on `Term` objects keeps the units of each element; before, all elements took the units of the first one.
 * Arithmetic (`+`, `-`, `%%`, `/`, `%/%`) and comparison between `Term` objects with the same units. Terms with different units raise an error asking to convert them first. (Issue #28)
 * New `with_daycount()` evaluates operations between `Term` objects with different units using a daycount, e.g. `with_daycount("business/252", term(1, "month") + term(12, "days"))` gives 33 days. (Issue #27)
-* New `Bps` class for basis points: `bps(10)` is 0.001, `as.bps()` converts a rate difference. Adding or subtracting `Bps` to a `SpotRate` or `SpotRateCurve` shifts the rates and keeps the other slots. (Issue #33)
+* New `Bps` class for basis points: `bps(10)` is 0.001, `as.bps()` converts a rate difference, and `c()` combines them. Adding or subtracting `Bps` to a `SpotRate` or `SpotRateCurve` shifts the rates and keeps the other slots. (Issue #33)
 * Arithmetic on a `SpotRateCurve` with an interpolation now prepares the interpolation again; before, `curve + 0.01` kept returning the old rates from `[[`.
 * `[[` and `[[<-` on `SpotRateCurve` now convert `Term` objects to days before indexing. Before, `curve[[term(1, "years")]]` silently returned the rate at 1 day. (Issue #22)
 * `forwardrate(curve, t1, t2)` accepts numeric or `Term` vectors and uses the curve's interpolation. (Issue #17)
