@@ -137,16 +137,36 @@ setClass(
 #' @param compounding a \code{Compounding} object.
 #' @param daycount a \code{Daycount} object.
 #' @param calendar a \code{bizdays} calendar.
+#' @param period the period of the rates in `x`, a `Term` object or a string
+#'        like `"1 month"`. The rates are converted to the equivalent annual
+#'        rates, using `compounding` and `daycount`. A `DateRangeTerm` gives
+#'        the rate for a fixed period between two dates. Defaults to one year,
+#'        meaning that `x` is already annual.
 #' @param .copyfrom a \code{SpotRate} object used as reference to copy
 #'        attributes.
 #'
-#' @return A `SpotRate` object.
+#' @return A `SpotRate` object. Its rates are always annual.
 #'
 #' @examples
 #' spotrate(0.06, "continuous", "actual/365", "actual")
 #' spotrate(c(0.06, 0.07, 0.08), "continuous", "actual/365", "actual")
+#'
+#' # a monthly inflation rate, stored as the equivalent annual rate
+#' infl <- spotrate(0.0045, "discrete", "business/252", "Brazil/ANBIMA",
+#'   period = "1 month"
+#' )
+#' infl
+#' compound(infl, term(1, "month"))
+#'
+#' # a rate for a fixed period: January 2024 has 22 business days
+#' jan <- term(as.Date("2024-01-01"), as.Date("2024-02-01"), "Brazil/ANBIMA")
+#' infl_jan <- spotrate(0.0045, "discrete", "business/252", "Brazil/ANBIMA",
+#'   period = jan
+#' )
+#' compound(infl_jan, as.Date("2024-01-01"), as.Date("2024-02-01"))
 #' @export
-spotrate <- function(x, compounding, daycount, calendar, .copyfrom = NULL) {
+spotrate <- function(x, compounding, daycount, calendar, period = NULL,
+                     .copyfrom = NULL) {
   if (!is.null(.copyfrom)) {
     x <- if (missing(x)) .copyfrom@.Data else x
     compounding <- if (missing(compounding)) {
@@ -164,10 +184,24 @@ spotrate <- function(x, compounding, daycount, calendar, .copyfrom = NULL) {
     compounding
   }
   daycount <- if (is.character(daycount)) daycount(daycount) else daycount
+  if (!is.null(period)) {
+    x <- annual_rate(x, compounding, daycount, period)
+  }
   new("SpotRate", x,
     compounding = compounding, daycount = daycount,
     calendar = calendar
   )
+}
+
+# Converts rates for a period to the equivalent annual rates: same
+# compounding factor over the period.
+annual_rate <- function(x, compounding, daycount, period) {
+  if (is.character(period)) period <- as.term(period)
+  if (!is(period, "Term")) {
+    stop("period must be a Term or a string like \"1 month\"", call. = FALSE)
+  }
+  tf <- as.numeric(toyears(daycount, period))
+  implied_rate(compounding, tf, compound(compounding, 1, x))
 }
 
 #' @export

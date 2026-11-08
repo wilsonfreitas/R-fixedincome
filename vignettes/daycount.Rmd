@@ -116,6 +116,60 @@ compound(sr365, d1, d2)
 Both rates give the same factor for these dates, but the equivalent rate
 depends on the dates: another period has another number of business days.
 
+## Rates for other periods
+
+`SpotRate` objects are always annual, but many rates are quoted for other
+periods: inflation per month, the DI rate per day, coupons per semester.
+The `period` argument of `spotrate()` takes the rate for one period and
+stores the equivalent annual rate: the rate with the same compounding factor
+over that period.
+The period is a `Term`, or a string like `"1 month"`, and the daycount of
+the rate turns it into a fraction of a year.
+
+```{r}
+inflation <- spotrate(0.0045, "discrete", "business/252", "Brazil/ANBIMA",
+  period = "1 month"
+)
+inflation
+compound(inflation, term(1, "month"))
+```
+
+With `business/252` one month is 21 business days, but calendar months have
+17 to 23 business days in Brazil.
+For a rate tied to a specific month, use a `Term` created from two dates:
+the rate is converted with the business days of that month, so compounding
+between those dates gives back the monthly rate.
+
+```{r}
+jan <- term(as.Date("2024-01-01"), as.Date("2024-02-01"), "Brazil/ANBIMA")
+jan
+inflation_jan <- spotrate(0.0045, "discrete", "business/252", "Brazil/ANBIMA",
+  period = jan
+)
+compound(inflation_jan, as.Date("2024-01-01"), as.Date("2024-02-01"))
+```
+
+## Real interest rates
+
+The real rate is the nominal rate discounted by inflation:
+$(1 + \text{real}) = (1 + \text{nominal}) / (1 + \text{inflation})$.
+With discrete compounding this holds for any period, so it can be computed
+directly with annual `SpotRate` objects that have the same compounding,
+daycount and calendar.
+
+```{r}
+nominal <- spotrate(0.1065, "discrete", "business/252", "Brazil/ANBIMA")
+real <- (1 + nominal) / (1 + inflation) - 1
+real
+```
+
+The real rate for one month is the same with both ways of computing it.
+
+```{r}
+compound(real, term(1, "month")) - 1
+compound(nominal, term(1, "month")) / compound(inflation, term(1, "month")) - 1
+```
+
 ## Converting Terms
 
 A `Term` can be in days, months or years, and the daycount says how many days

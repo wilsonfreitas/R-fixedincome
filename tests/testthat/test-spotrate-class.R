@@ -284,3 +284,36 @@ test_that("it should return the spotrate\'s tail", {
   expect_equal(length(hr), 3)
   expect_equal(as.numeric(hr), c(0.06, 0.06, 0.01))
 })
+test_that("it should create spotrates for other periods (#25)", {
+  br <- function(x, comp = "discrete", period = NULL) {
+    spotrate(x, comp, "business/252", "Brazil/ANBIMA", period = period)
+  }
+  # default: x is annual and is not converted
+  expect_equal(as.numeric(br(0.1)), 0.1)
+  expect_equal(as.numeric(br(0.1, period = term(1, "year"))), 0.1)
+  # monthly rates, all compoundings
+  m <- 0.0045
+  expect_equal(as.numeric(br(m, period = term(1, "month"))), (1 + m)^12 - 1)
+  expect_equal(as.numeric(br(m, "simple", term(1, "month"))), 12 * m)
+  expect_equal(as.numeric(br(m, "continuous", term(1, "month"))), 12 * m)
+  expect_equal(compound(br(m, period = "1 month"), term(1, "month")), 1 + m)
+  # strings are parsed with as.term()
+  expect_equal(br(m, period = "1 month"), br(m, period = term(1, "month")))
+  # daily and quarterly rates, vectors
+  expect_equal(as.numeric(br(0.0004, period = "1 day")), 1.0004^252 - 1)
+  expect_equal(
+    as.numeric(br(c(0.02, 0.03), period = "3 months")),
+    c(1.02, 1.03)^4 - 1
+  )
+  # a fixed period: January 2024 has 22 business days
+  d1 <- as.Date("2024-01-01")
+  d2 <- as.Date("2024-02-01")
+  jan <- br(m, period = term(d1, d2, "Brazil/ANBIMA"))
+  expect_equal(as.numeric(jan), (1 + m)^(252 / 22) - 1)
+  expect_equal(compound(jan, d1, d2), 1 + m)
+  # other daycounts
+  sr <- spotrate(0.01, "simple", "actual/360", "actual", period = "1 month")
+  expect_equal(as.numeric(sr), 0.12)
+  expect_error(br(m, period = 30), "period must be a Term")
+  expect_error(br(m, period = "month"), "Invalid term")
+})

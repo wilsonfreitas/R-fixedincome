@@ -4,7 +4,7 @@
 \alias{spotrate}
 \title{Create SpotRate objects}
 \usage{
-spotrate(x, compounding, daycount, calendar, .copyfrom = NULL)
+spotrate(x, compounding, daycount, calendar, period = NULL, .copyfrom = NULL)
 }
 \arguments{
 \item{x}{a numeric vector representing spot rate values.}
@@ -15,11 +15,17 @@ spotrate(x, compounding, daycount, calendar, .copyfrom = NULL)
 
 \item{calendar}{a \code{bizdays} calendar.}
 
+\item{period}{the period of the rates in \code{x}, a \code{Term} object or a string
+like \code{"1 month"}. The rates are converted to the equivalent annual
+rates, using \code{compounding} and \code{daycount}. A \code{DateRangeTerm} gives
+the rate for a fixed period between two dates. Defaults to one year,
+meaning that \code{x} is already annual.}
+
 \item{.copyfrom}{a \code{SpotRate} object used as reference to copy
 attributes.}
 }
 \value{
-A \code{SpotRate} object.
+A \code{SpotRate} object. Its rates are always annual.
 }
 \description{
 \code{spotrate()} function creates \code{SpotRate} objects.
@@ -27,4 +33,18 @@ A \code{SpotRate} object.
 \examples{
 spotrate(0.06, "continuous", "actual/365", "actual")
 spotrate(c(0.06, 0.07, 0.08), "continuous", "actual/365", "actual")
+
+# a monthly inflation rate, stored as the equivalent annual rate
+infl <- spotrate(0.0045, "discrete", "business/252", "Brazil/ANBIMA",
+  period = "1 month"
+)
+infl
+compound(infl, term(1, "month"))
+
+# a rate for a fixed period: January 2024 has 22 business days
+jan <- term(as.Date("2024-01-01"), as.Date("2024-02-01"), "Brazil/ANBIMA")
+infl_jan <- spotrate(0.0045, "discrete", "business/252", "Brazil/ANBIMA",
+  period = jan
+)
+compound(infl_jan, as.Date("2024-01-01"), as.Date("2024-02-01"))
 }
