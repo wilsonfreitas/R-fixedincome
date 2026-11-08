@@ -65,7 +65,8 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.5" id="fixedincome-005">fixedincome 0.0.5<small>2023-06-30</small><a class="anchor" aria-label="anchor" href="#fixedincome-005"></a></h2>
-<ul><li>
+<ul><li>Arithmetic (<code>+</code>, <code>-</code>, <code>%%</code>, <code>/</code>, <code>%/%</code>) and comparison between <code>Term</code> objects with the same units. Terms with different units raise an error asking to convert them first. (Issue <a href="https://github.com/wilsonfreitas/R-fixedincome/issues/28" class="external-link">#28</a>)</li>
+<li>
 <code>[[</code> and <code>[[&lt;-</code> on <code>SpotRateCurve</code> now convert <code>Term</code> objects to days before indexing. Before, <code>curve[[term(1, "years")]]</code> silently returned the rate at 1 day. (Issue <a href="https://github.com/wilsonfreitas/R-fixedincome/issues/22" class="external-link">#22</a>)</li>
 <li>
 <code>forwardrate(curve, t1, t2)</code> accepts numeric or <code>Term</code> vectors and uses the curve’s interpolation. (Issue <a href="https://github.com/wilsonfreitas/R-fixedincome/issues/17" class="external-link">#17</a>)</li>
