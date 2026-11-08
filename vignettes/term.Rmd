@@ -111,6 +111,9 @@ tomonths(daycount("business/252"), term(63, "days"))
 A month is one twelfth of a year, so with `business/252` one month has
 21 days.
 
+The article [Day Count Conventions](daycount.html) explains daycounts in
+detail.
+
 ## Operations
 
 ### Terms and numbers

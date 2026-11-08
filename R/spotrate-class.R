@@ -489,7 +489,7 @@ warn_if_spotrate_slots_differ <- function(e1, e2, msg) {
 
 stop_if_spotrate_slots_differ <- function(e1, e2, msg) {
   if (!check_slots(e1, e2)) {
-    stop(msg)
+    stop(msg, " (compounding, daycount or calendar)", call. = FALSE)
   }
 }
 

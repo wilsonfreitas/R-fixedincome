@@ -1,0 +1,176 @@
+---
+title: "Day Count Conventions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Day Count Conventions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, message=FALSE}
+library(fixedincome)
+```
+
+Interest rates are quoted per year, but money is lent for some number of days.
+To compound a rate we need the period in years, and the day count convention
+(the *daycount*) is the rule that turns a period between two dates into a
+fraction of a year.
+
+The same annual rate, for the same two dates, gives different amounts of
+interest with different daycounts.
+That is why every `SpotRate` in `fixedincome` carries its daycount.
+
+## How a daycount works
+
+A daycount has two parts, written as `"<days>/<days in base>"`:
+
+- how the **days** between two dates are counted: actual days, business days,
+  or 30 days per month;
+- the **days in base**: how many of these days make one year.
+
+The year fraction is the number of days divided by the days in base.
+
+```{r}
+dc <- daycount("actual/360")
+dc
+dib(dc)
+```
+
+`fixedincome` supports these daycounts:
+
+| Daycount | Days counted | Days in base | Used for |
+|---|---|---|---|
+| `actual/360` | calendar days | 360 | money markets in USD and EUR |
+| `actual/365` | calendar days | 365 | GBP money markets, many bonds |
+| `business/252` | business days | 252 | Brazilian rates (DI, Selic, bonds) |
+| `30E/360` | 30 days per month | 360 | Eurobonds |
+
+Other bases also work with `actual` and `business`, for example
+`actual/366` or `business/250`.
+
+## Counting the days between two dates
+
+For `actual/...` and `business/...` the days are counted with the **calendar**
+of the rate, using the [bizdays](https://CRAN.R-project.org/package=bizdays)
+package.
+The `"actual"` calendar counts every day, and `"Brazil/ANBIMA"` counts only
+business days in Brazil.
+
+```{r}
+d1 <- as.Date("2024-01-31")
+d2 <- as.Date("2024-07-31")
+term(d1, d2, "actual")
+term(d1, d2, "Brazil/ANBIMA")
+```
+
+With `30E/360` every month has 30 days, and a date on the 31st is moved to
+the 30th, so from 2024-01-31 to 2024-07-31 there are exactly 6 × 30 = 180
+days.
+The calendar is not used.
+
+## Same rate, different daycounts
+
+Let's compound a simple rate of 10% from `d1` to `d2` with each daycount.
+
+```{r}
+compound(spotrate(0.10, "simple", "actual/360", "actual"), d1, d2)
+compound(spotrate(0.10, "simple", "actual/365", "actual"), d1, d2)
+compound(spotrate(0.10, "simple", "business/252", "Brazil/ANBIMA"), d1, d2)
+compound(spotrate(0.10, "simple", "30E/360", "actual"), d1, d2)
+```
+
+The year fractions are 182/360, 182/365, 125/252 and 180/360.
+So `actual/360` pays the most interest: it counts every day, but its year
+has only 360 days.
+A rate of 10% is not the same rate under different daycounts.
+
+## Equivalent rates
+
+To compare rates with different daycounts, find the rate that gives the same
+compounding factor for the same dates.
+`implied_rate()` returns the rate for a compounding factor and a year
+fraction.
+
+Here a Brazilian rate of 10% (`business/252`) is converted to an
+`actual/365` rate for the same period.
+
+```{r}
+sr <- spotrate(0.10, "discrete", "business/252", "Brazil/ANBIMA")
+factor <- compound(sr, d1, d2)
+factor
+
+years <- as.numeric(term(d1, d2, "actual")) / 365
+rate <- implied_rate("discrete", years, factor)
+sr365 <- spotrate(rate, "discrete", "actual/365", "actual")
+sr365
+compound(sr365, d1, d2)
+```
+
+Both rates give the same factor for these dates, but the equivalent rate
+depends on the dates: another period has another number of business days.
+
+## Converting Terms
+
+A `Term` can be in days, months or years, and the daycount says how many days
+there are in one year (or in one month, which is one twelfth of a year).
+`todays()`, `tomonths()` and `toyears()` convert Terms with a daycount.
+
+```{r}
+todays(daycount("business/252"), term(1, "year"))
+todays(daycount("actual/365"), term(1, "year"))
+toyears(daycount("30E/360"), term(90, "days"))
+```
+
+`with_daycount()` evaluates operations between Terms with different units.
+
+```{r}
+with_daycount("business/252", term(1, "month") + term(12, "days"))
+with_daycount("actual/360", term(6, "months") == term(180, "days"))
+```
+
+The article [Working with Terms](term.html) has more about Terms.
+
+## Things to watch
+
+**The daycount and the calendar must agree.**
+For `actual/...` and `business/...` the days come from the calendar, so an
+`actual/360` rate with the `"Brazil/ANBIMA"` calendar counts business days,
+and gives a smaller factor than the `actual/360` rate above.
+
+```{r}
+compound(spotrate(0.10, "simple", "actual/360", "Brazil/ANBIMA"), d1, d2)
+```
+
+Use the `"actual"` calendar with `actual/...` daycounts, and a business
+calendar with `business/...`.
+
+**Rates with different daycounts can't be combined.**
+Arithmetic and comparison between two SpotRates require the same
+compounding, daycount and calendar.
+Convert one of them first, as in "Equivalent rates".
+
+```{r}
+sr1 <- spotrate(0.10, "discrete", "business/252", "Brazil/ANBIMA")
+sr2 <- spotrate(0.10, "discrete", "actual/365", "actual")
+try(sr1 - sr2)
+```
+
+**Only 30E/360 is supported among the 30/360 variants.**
+The US (NASD) and ISDA versions treat the end of the month differently, and
+`daycount()` rejects them.
+
+```{r}
+try(daycount("30/360"))
+```
+
+**Dates of a curve use the calendar.**
+The terms of a `SpotRateCurve` are kept in days, and functions that turn them
+into dates, like `maturities()`, use the calendar of the curve, even with
+`30E/360`.
