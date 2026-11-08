@@ -13,7 +13,7 @@ Description: Fixed income mathematics made easy. A rich set of functions
 URL: https://github.com/wilsonfreitas/R-fixedincome
 BugReports: https://github.com/wilsonfreitas/R-fixedincome/issues
 Depends:
-    R (>= 4.0.0),
+    R (>= 4.1.0),
 Imports:
     bizdays (>= 1.0.0),
     methods,
@@ -26,7 +26,7 @@ Imports:
 Suggests: 
     knitr,
     rmarkdown,
-    rb3,
+    rb3 (>= 0.1.0),
     dplyr,
     testthat (>= 3.0.0)
 Collate:
@@ -47,7 +47,7 @@ Collate:
     "hidden.R"
     "zzz.R"
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.3
 Encoding: UTF-8
 LazyData: true
 Config/testthat/edition: 3

@@ -30,16 +30,23 @@ library(ggplot2)
 
 As the second step, the yield curve must be created and this is done with data from {rb3} package.
 
-```{r}
+```{r eval=FALSE}
 refdate <- as.Date("2022-08-09")
-yc_ <- yc_get(refdate)
-fut_ <- futures_get(refdate)
-yc_ss <- yc_superset(yc_, fut_)
+fetch_marketdata("b3-reference-rates", refdate = refdate, curve_name = "PRE")
+fetch_marketdata("b3-futures-settlement-prices", refdate = refdate)
+yc_ss <- yc_brl_with_futures_get(refdate) |>
+  filter(!is.na(biz_days))
 yc <- bind_rows(
   yc_ss |> slice(1),
   yc_ss |> filter(!is.na(symbol))
 ) |>
   filter(!duplicated(biz_days))
+```
+
+```{r echo=FALSE}
+# Saved output of the chunk above: B3 no longer serves these 2022 files to an empty rb3 cache
+refdate <- as.Date("2022-08-09")
+yc <- readRDS("yc-2022-08-09.rds")
 
 curve <- spotratecurve(
   yc$r_252, yc$biz_days, "discrete", "business/252", "Brazil/ANBIMA",
@@ -123,16 +130,23 @@ autoplot(curve_2y, curve.geom = "point") +
 
 ### Plotting Multiple Curves
 
-```{r}
+```{r eval=FALSE}
 refdate2 <- as.Date("2022-03-09")
-yc_ <- yc_get(refdate2)
-fut_ <- futures_get(refdate2)
-yc_ss <- yc_superset(yc_, fut_)
+fetch_marketdata("b3-reference-rates", refdate = refdate2, curve_name = "PRE")
+fetch_marketdata("b3-futures-settlement-prices", refdate = refdate2)
+yc_ss <- yc_brl_with_futures_get(refdate2) |>
+  filter(!is.na(biz_days))
 yc <- bind_rows(
   yc_ss |> slice(1),
   yc_ss |> filter(!is.na(symbol))
 ) |>
   filter(!duplicated(biz_days))
+```
+
+```{r echo=FALSE}
+# Saved output of the chunk above: B3 no longer serves these 2022 files to an empty rb3 cache
+refdate2 <- as.Date("2022-03-09")
+yc <- readRDS("yc-2022-03-09.rds")
 
 curve2 <- spotratecurve(
   yc$r_252, yc$biz_days, "discrete", "business/252", "Brazil/ANBIMA",

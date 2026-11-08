@@ -29,3 +29,5 @@ images
 ^\.github$
 ^resources$
 ^README\.Rmd$
+^CLAUDE\.md$
+^\.gitattributes$

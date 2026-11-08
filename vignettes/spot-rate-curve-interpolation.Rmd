@@ -46,20 +46,28 @@ library(fixedincome)
 ```
 
 In order to build a term structure formed only by futures maturities, the yield curve data and
-futures data have to be mixed and this is done with the `rb3::yc_superset` function.
-Once the superset is returned, the rows related to futures maturities can be filtered.
+futures data have to be mixed and this is done with the `rb3::yc_brl_with_futures_get` function,
+after the data is downloaded with `rb3::fetch_marketdata`.
+Once the curve is returned, the rows related to futures maturities can be filtered.
 The first term, usually 1 business day term, is also used to anchor the curve's short part.
 
-```{r}
+```{r eval=FALSE}
 refdate <- as.Date("2022-08-05")
-yc_ <- yc_get(refdate)
-fut_ <- futures_get(refdate)
-yc_ss <- yc_superset(yc_, fut_)
+fetch_marketdata("b3-reference-rates", refdate = refdate, curve_name = "PRE")
+fetch_marketdata("b3-futures-settlement-prices", refdate = refdate)
+yc_ss <- yc_brl_with_futures_get(refdate) |>
+  filter(!is.na(biz_days))
 yc <- bind_rows(
   yc_ss |> slice(1),
   yc_ss |> filter(!is.na(symbol))
 ) |>
   filter(!duplicated(biz_days))
+```
+
+```{r echo=FALSE}
+# Saved output of the chunk above: B3 no longer serves these 2022 files to an empty rb3 cache
+refdate <- as.Date("2022-08-05")
+yc <- readRDS("yc-2022-08-05.rds")
 
 yc
 ```

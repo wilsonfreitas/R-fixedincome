@@ -20,6 +20,14 @@ Frank Fabozzi. Fixed Income Mathematics, Wiley, 1994.
 
 Bruce Tuckman. Fixed Income Securities, Wiley, 1994.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/wilsonfreitas/R-fixedincome}
+  \item Report bugs at \url{https://github.com/wilsonfreitas/R-fixedincome/issues}
+}
+
+}
 \author{
 Wilson Freitas \email{wilson.freitas@gmail.com}
 }
